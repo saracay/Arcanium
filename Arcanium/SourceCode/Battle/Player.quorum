@@ -1,0 +1,15 @@
+class Player 
+
+    text name = "Player"
+    integer HP = 500
+    integer MP = 5
+
+    action SetStatus(integer health, integer mana)
+        HP = health
+        MP = mana
+    end
+
+    action GetName returns text
+        return name
+    end
+end

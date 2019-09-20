@@ -1,0 +1,18 @@
+use Libraries.Game.Game
+use Libraries.Interface.Controls.Button
+use Libraries.Interface.Layouts.ManualLayout
+use Libraries.Game.Graphics.Label
+
+class Main is Game
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        Battle testBattle
+    end
+
+    action Update(number seconds)
+    end
+end

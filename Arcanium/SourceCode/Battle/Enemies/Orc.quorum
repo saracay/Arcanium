@@ -1,0 +1,10 @@
+class Orc is Enemy
+
+    on create
+        SetStats("Orc", 1000, 0, 50, 1.3, 0.5, 1, 0.8, 1.5, 1)
+    end
+
+    action AI
+
+    end
+end

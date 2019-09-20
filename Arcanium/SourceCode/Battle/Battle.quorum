@@ -1,0 +1,29 @@
+use Libraries.Containers.Array
+
+class Battle 
+    
+    Player player
+    Array<Enemy> enemies
+
+    on create
+        Goblin goblin
+        Orc orc
+        Slime slime
+
+        enemies:Add(goblin)
+        enemies:Add(orc)
+        enemies:Add(slime)
+    end
+
+    action PlayerTurn
+        
+    end
+
+    action EnemyTurn
+        
+    end
+
+    action IsOver
+        
+    end
+end

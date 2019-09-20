@@ -1,0 +1,10 @@
+class Goblin is Enemy
+
+    on create
+        SetStats("Goblin", 300, 0, 20, 1, 1, 1, 1, 1, 1)
+    end
+
+    action AI
+
+    end
+end
