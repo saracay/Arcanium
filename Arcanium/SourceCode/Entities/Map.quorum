@@ -1,0 +1,10 @@
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Game
+
+class Map 
+    public Drawable testMap
+
+    action loadMap()
+        testMap:Load("Assets\Maps\Testmap.png")     
+    end
+end

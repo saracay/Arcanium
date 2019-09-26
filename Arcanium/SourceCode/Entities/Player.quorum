@@ -1,8 +1,11 @@
-class Player 
+use Libraries.Game.Graphics.Drawable
+
+class Player
 
     text name = "Player"
     integer HP = 500
     integer MP = 5
+    public Drawable playerSprite
 
     action SetStatus(integer health, integer mana)
         HP = health
@@ -11,5 +14,9 @@ class Player
 
     action GetName returns text
         return name
+    end
+
+    action DrawPlayer()
+        playerSprite:Load("Assets\Sprites\SkeletonWalk.png")
     end
 end

@@ -1,18 +1,93 @@
 use Libraries.Game.Game
-use Libraries.Interface.Controls.Button
-use Libraries.Interface.Layouts.ManualLayout
 use Libraries.Game.Graphics.Label
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Game.InputMonitor
+use Libraries.Game.Collision.Shapes.CollisionShape2D
+use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Interface.Events.CollisionListener2D
+use Libraries.Interface.Events.CollisionEvent2D
+use Libraries.Interface.Controls.Button
+use Libraries.Interface.Layouts.Layout
+use Libraries.System.Console
 
-class Main is Game
+class Main is Game, CollisionListener2D
+    
+    //Entities
+    Map map1
+    Player player1
+
+    //For drawing images
+    Drawable testmap
+    Drawable player
+    Drawable box
+    Color color   
+
+    //For player movement
+    number newX = 0
+    number newY = 0
+    number plyrSpeed = 100
+    KeyboardEvent keys
+    InputMonitor monitor
+ 
 
     action Main
+
         StartGame()
     end
 
     action CreateGame
-        Battle testBattle
+
+        //Allows for collisions
+        EnablePhysics2D(true)
+        
+        map1:loadMap()
+        player1:DrawPlayer()
+        
+        box:SetName("Box")
+        box:LoadRectangle(200, 100)
+        box:SetColor(color:Blue())
+        box:SetPosition(100,200)
+        
+        //Add the drawables to the default layer
+        Add(map1:testMap) 
+        Add(box)
+        Add(player1:playerSprite)
+
+        //Makes the box collidable but not responsive
+        box:EnablePhysics(true)
+        
+        //Makes the player collidable and responsive to collisions
+        player1:playerSprite:EnablePhysics(true)
+        player1:playerSprite:SetResponsive()
+        
+        AddCollisionListener(me)
+        
     end
 
     action Update(number seconds)
+        
+        //Movement using WASD
+        if monitor:IsKeyPressed(keys:W)
+            newY = player1:playerSprite:GetY() + plyrSpeed * seconds
+
+        elseif monitor:IsKeyPressed(keys:S)
+            newY = player1:playerSprite:GetY() - plyrSpeed * seconds
+
+        elseif monitor:IsKeyPressed(keys:D)
+            newX = player1:playerSprite:GetX() + plyrSpeed * seconds
+
+        elseif monitor:IsKeyPressed(keys:A)
+            newX = player1:playerSprite:GetX() - plyrSpeed * seconds
+        end
+        
+        player1:playerSprite:SetPosition(newX,newY)
+        
+
+
+    end
+
+    action BeginCollision(CollisionEvent2D event)
+        output "OW!"
     end
 end
