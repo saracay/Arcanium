@@ -25,124 +25,78 @@ class Enemy
         darkEff = newDarkEff
     end
 
-    action RecieveAttack(integer spellCode, Player player) returns Array<Log>
+    action RecieveAttack(integer spellCode, Player player) returns Array<text>
         //use spell code to find spell
         //for now, we will simply use base elements and a few combinations
 
         Array<text> log
+        integer baseDamage = 0
+        integer damage = 0
+        text spellName = ""
 
         if spellCode = 1100000
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * fireEff)
-
-            text incomingAttack = player:GetName() + " cast Fireball on enemy " + name + "!"
-            log:Add(incomingAttack)
-
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
-
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
+            damage = cast(integer, baseDamage * fireEff)
+            
+            spellName = "Fireball"
+            
         elseif spellCode = 1010000
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * waterEff)
+            damage = cast(integer, baseDamage * waterEff)
 
-            text incomingAttack = player:GetName() + " cast Waterbolt on enemy " + name + "!"
-            log:Add(incomingAttack)
+            spellName = "Waterbolt"
 
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
-
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
         elseif spellCode = 1001000
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * earthEff)
+            damage = cast(integer, baseDamage * earthEff)
 
-            text incomingAttack = player:GetName() + " cast Rock Blast on enemy " + name + "!"
-            log:Add(incomingAttack)
+            spellName = "Rock Blast"
 
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
-
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
         elseif spellCode = 1000100
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * windEff)
+            damage = cast(integer, baseDamage * windEff)
 
-            text incomingAttack = player:GetName() + " cast Razor Wind on enemy " + name + "!"
-            log:Add(incomingAttack)
+            spellName = "Razor Wind"
 
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
-
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
         elseif spellCode = 1000010
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * lightEff)
+            damage = cast(integer, baseDamage * lightEff)
 
-            text incomingAttack = player:GetName() + " cast Smite on enemy " + name + "!"
-            log:Add(incomingAttack)
+            spellName = "Smite"
 
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
-
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
         elseif spellCode = 1000001
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * darkEff)
+            damage = cast(integer, baseDamage * darkEff)
 
-            text incomingAttack = player:GetName() + " cast Dark Blast on enemy " + name + "!"
-            log:Add(incomingAttack)
+            spellName = "Dark Blast"
 
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
-
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
-        elseif spellCode = 1110000
-            integer baseDamage = 0
-
-            integer damage = cast(integer, baseDamage * fireEff * waterEff)
-
-            text incomingAttack = player:GetName() + " failed to cast the spell!"
-            log:Add(incomingAttack)
         elseif spellCode = 1011000
-            integer baseDamage = 5
+            baseDamage = 5
 
-            integer damage = cast(integer, baseDamage * waterEff * earthEff)
+            damage = cast(integer, baseDamage * waterEff * earthEff)
 
-            text incomingAttack = player:GetName() + " cast Ice Beam on enemy " + name + "!"
-            log:Add(incomingAttack)
+            spellName = "Ice Beam"
 
-            text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
-            log:Add(incomingAttack)
+        end
 
-            if CheckDefeated(damage)
-                text defeated = "Enemy " + name + " was defeated!"
-                log:Add(defeated)
-            end
+        //Adds text to display to player into the array
+        //Results in log[incomingAttack, incomingDamage, defeated]
+
+        text incomingAttack = player:GetName() + " cast " + spellName + " on enemy " + name + "!"
+        log:Add(incomingAttack)
+
+        text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
+        log:Add(incomingDamage)
+
+        if CheckDefeated(damage)
+            text defeated = "Enemy " + name + " was defeated!"
+            log:Add(defeated)
         end
 
         return log
