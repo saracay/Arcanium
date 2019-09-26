@@ -10,9 +10,16 @@ use Libraries.Interface.Events.CollisionEvent2D
 use Libraries.Interface.Controls.Button
 use Libraries.Interface.Layouts.Layout
 use Libraries.System.Console
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
 
 class Main is Game, CollisionListener2D
     
+    //Queues for removing objects
+    BehaviorQueue behaviorQueue
+    Array<Item2D> removalQueue
+
     //Entities
     Map map1
     Player player1
@@ -66,6 +73,12 @@ class Main is Game, CollisionListener2D
     end
 
     action Update(number seconds)
+        //Necessary for removing unneeded objects
+        behaviorQueue:Update(seconds)
+
+        repeat until removalQueue:IsEmpty()
+            Remove(removalQueue:RemoveFromFront())
+        end
         
         //Movement using WASD
         if monitor:IsKeyPressed(keys:W)
@@ -85,6 +98,14 @@ class Main is Game, CollisionListener2D
         
 
 
+    end
+
+    action AddBehavior(Behavior behavior)
+        behaviorQueue:AddBehavior(behavior)
+    end
+
+    action AddToRemove(Item2D item)
+        removalQueue:Add(item)
     end
 
     action BeginCollision(CollisionEvent2D event)

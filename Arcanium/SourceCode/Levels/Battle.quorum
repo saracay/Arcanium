@@ -1,11 +1,12 @@
 use Libraries.Containers.Array
 
-class Battle 
+class Battle is Level
     
     Player player
     Array<Enemy> enemies
+    Array<text> log
 
-    on create
+    on create   //sample for testing only
         Goblin goblin
         Orc orc
         Slime slime
@@ -13,9 +14,17 @@ class Battle
         enemies:Add(goblin)
         enemies:Add(orc)
         enemies:Add(slime)
+
+        log:Add("An enemy golbin, orc, and slime appeared!")
+        //display log
+
+        PlayerTurn()
     end
 
     action PlayerTurn
+        log:Add("What will <player> do?")
+        //display log
+        
         
     end
 

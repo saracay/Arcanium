@@ -1,0 +1,11 @@
+use Libraries.Containers.Array
+
+class Spell 
+    
+    integer spellID = 0                     //combination code for spell identification (e.g., 1100000 = fire ball)
+    text name = ""                          //spell name
+    integer baseDamage = 1                  //base damage used in calculations
+    Array<integer> statusCodes = undefined  //contains codes for status effects applied by the spell
+    boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
+
+end
