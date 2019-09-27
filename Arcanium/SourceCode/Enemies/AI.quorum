@@ -1,0 +1,22 @@
+class AI 
+
+    action AI(integer ID)
+
+        if (ID = 1)     //Goblin ID = 1
+            Goblin()
+        elseif (ID = 2) //Orc ID = 2
+            Orc()
+        end
+
+    end
+
+
+    action Goblin
+
+    end
+
+    action Orc
+
+    end
+
+end
