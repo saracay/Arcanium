@@ -49,21 +49,22 @@ class Main is Game, CollisionListener2D
         EnablePhysics2D(true)
         
         map1:loadMap()
+        map1:loadCollisionLayer()
+
         player1:DrawPlayer()
-        
-        box:SetName("Box")
-        box:LoadRectangle(200, 100)
-        box:SetColor(color:Blue())
-        box:SetPosition(100,200)
-        
+
         //Add the drawables to the default layer
         Add(map1:testMap) 
-        Add(box)
+
+        //Render all of the collision objects
+        i = 0
+        repeat map1:collisions:GetSize() times
+            Add(map1:collisions:Get(i))
+            i = i + 1
+        end
+
         Add(player1:playerSprite)
 
-        //Makes the box collidable but not responsive
-        box:EnablePhysics(true)
-        
         //Makes the player collidable and responsive to collisions
         player1:playerSprite:EnablePhysics(true)
         player1:playerSprite:SetResponsive()

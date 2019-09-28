@@ -1,10 +1,75 @@
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Game
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
+use Libraries.Containers.Array
+use Libraries.Game.Graphics.Color
+
 
 class Map 
     public Drawable testMap
+    public Array<Drawable> collisions
 
     action loadMap()
         testMap:Load("Assets\Maps\Testmap.png")     
+    end
+
+    action loadCollisionLayer() 
+        JavaScriptObjectNotation mapData
+        File data
+        data:SetPath("Assets\Maps\Data\TestMap.json")
+        mapData:Read(data)
+
+        JavaScriptObjectNotation layersData = mapData:GetObject("layers")
+        JavaScriptObjectNotation collisionLayer
+
+        // this is used for resetting the origin to top-left because Quorum's origin is bottom-left while Tiled's is top-left
+        number tileSize = cast(number, mapData:GetValue("tileheight"))
+        number mapY = cast(number, layersData:Get(0):GetValue("height")) * tileSize
+        number mapX = cast(number, layersData:Get(0):GetValue("width")) * tileSize
+
+        i = 0
+        repeat layersData:GetSize() times
+            JavaScriptObjectNotation curr = layersData:Get(i)
+            if curr:GetValue("name") = "Collision"
+                collisionLayer = layersData:Get(i)
+            end
+            i = i + 1
+        end
+
+        JavaScriptObjectNotation collisionObjects = collisionLayer:GetObject("objects")
+
+        i = 0
+        repeat collisionObjects:GetSize() times
+            JavaScriptObjectNotation curr = collisionObjects:Get(i)
+
+            // get the values from the collision object
+            number x = cast(number, curr:GetValue("x"))
+            number y = cast(number, curr:GetValue("y"))
+
+            number numHeight = cast(number, curr:GetValue("height"))
+            number numWidth = cast(number, curr:GetValue("width"))
+            integer height = cast(integer, numHeight)
+            integer width = cast(integer, numWidth)
+            text name = curr:GetValue("name")
+
+            number rotation = cast(number, curr:GetValue("rotation")) 
+
+            Drawable collision
+            Color color
+            
+            // save the value of each collision object's x, y, height, and width
+            collision:SetPosition(x, mapY - y - height)
+            collision:LoadRectangle(width, height)
+          
+            collision:SetColor(color:Clear())
+            
+            collision:SetRotation(rotation)
+            collision:SetName(name)
+            collision:EnablePhysics(true)
+
+            collisions:Add(collision)
+            i = i + 1
+        end
     end
 end
