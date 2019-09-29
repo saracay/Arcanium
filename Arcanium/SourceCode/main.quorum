@@ -45,6 +45,28 @@ class Main is Game, CollisionListener2D
 
     action CreateGame
 
+        /***********************************************************************
+        Setup for loading a Battle (test version for now, will be adapted to
+        the generalized loading a Level setup in the future.
+
+        NOTE: For now, if working within the main class, just comment out this
+        section of code to avoid my stuff screwing yours up.
+
+                                                            - Matt
+        ***********************************************************************/
+
+//        Player player   //placeholder for now
+//        
+//        Battle battle
+//        Slime sampleSlime
+//        battle:SetGame(me)
+//        battle:LoadLevel()
+//        battle:Initialize(player, sampleSlime)
+
+        /***********************************************************************
+        End of Matt's Testing Section
+        ***********************************************************************/
+
         //Allows for collisions
         EnablePhysics2D(true)
         
@@ -76,7 +98,6 @@ class Main is Game, CollisionListener2D
     action Update(number seconds)
         //Necessary for removing unneeded objects
         behaviorQueue:Update(seconds)
-
         repeat until removalQueue:IsEmpty()
             Remove(removalQueue:RemoveFromFront())
         end

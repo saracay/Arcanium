@@ -3,17 +3,35 @@ use Libraries.Game.Graphics.Drawable
 class Player
 
     text name = "Player"
-    integer HP = 500
-    integer MP = 5
+    integer currentHealth = 500
+    integer maxHealth = 500
+    integer currentMana = 5
+    integer maxMana = 5
     public Drawable playerSprite
 
     action SetStatus(integer health, integer mana)
-        HP = health
-        MP = mana
+        currentHealth = health
+        currentMana = mana
     end
 
     action GetName returns text
         return name
+    end
+
+    action GetCurrentHealth returns integer
+        return currentHealth
+    end
+
+    action GetMaxHealth returns integer
+        return maxHealth
+    end
+
+    action GetCurrentMana returns integer
+        return currentMana
+    end
+
+    action GetMaxMana returns integer
+        return maxMana
     end
 
     action DrawPlayer()

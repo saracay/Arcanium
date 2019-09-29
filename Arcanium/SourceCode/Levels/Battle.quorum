@@ -1,12 +1,56 @@
 use Libraries.Containers.Array
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Interface.Controls.TextBox
+use Libraries.Game.Graphics.Color
+use Libraries.Game.Graphics.Label
+use Libraries.Compute.Math
 
 class Battle is Level
     
     Player player
     Array<Enemy> enemies
     Array<text> log
+    Drawable background
+    Game game
+    Color color
 
-    on create   //sample for testing only
+    on create
+        //background:Load("Assets\Maps\Battle.png")
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action Initialize(Player newPlayer, Enemy overworldEnemy)   //sample for testing only
+
+        //placeholder for player, just loads a square instead for now
+
+        Drawable playerSquare
+        playerSquare:LoadFilledRectangle(150, 150, color:Blue())
+        playerSquare:SetPosition(50, 200)
+        game:Add(playerSquare)
+
+        //displays player health and mana
+
+        Drawable playerHealthBackground
+        playerHealthBackground:LoadFilledRectangle(120, 40, color:LightGray())
+        playerHealthBackground:SetPosition(225, 300)
+        game:Add(playerHealthBackground)
+
+        Label playerHealth
+        playerHealth:SetText("Health: " + newPlayer:GetCurrentHealth() + "/" + newPlayer:GetMaxHealth())
+        playerHealth:SetPosition(230, 325)
+        game:Add(playerHealth)
+
+        Label playerMana
+        playerMana:SetText("Mana: " + newPlayer:GetCurrentMana() + "/" + newPlayer:GetMaxMana())
+        playerMana:SetPosition(230, 305)
+        game:Add(playerMana)
+
+        //later on, will load different enemies based on the enemy encountered
+
         Goblin goblin
         Orc orc
         Slime slime
@@ -15,8 +59,39 @@ class Battle is Level
         enemies:Add(orc)
         enemies:Add(slime)
 
-        log:Add("An enemy golbin, orc, and slime appeared!")
-        //display log
+        integer enemyIndex = 0
+        Math math
+
+        repeat while enemyIndex < enemies:GetSize()
+            Drawable enemySprite
+            enemySprite:LoadFilledCircle(50, color:Red())
+            enemySprite:SetPosition(400 + 120 * enemyIndex, 400 + 50 * (enemyIndex mod 2))
+            game:Add(enemySprite)
+
+            Drawable enemyHealthBackground
+            enemyHealthBackground:LoadFilledRectangle(120, 30, color:LightGray())
+            enemyHealthBackground:SetPosition(225, 500 - 40 * enemyIndex)
+            game:Add(enemyHealthBackground)
+
+            Label enemyHealth
+            enemyHealth:SetText("Health: ")// + enemies:Get(enemyIndex):GetCurrentHealth() + "/" + enemies:Get(enemyIndex):GetMaxHealth())
+            enemyHealth:SetPosition(230, 500 + 15 - 40 * enemyIndex)
+            game:Add(enemyHealth)
+
+            enemyIndex = enemyIndex + 1
+        end
+
+        log:Add("An enemy Golbin, Orc, and Slime appeared!")
+
+        Drawable dialogueBackground
+        dialogueBackground:LoadFilledRectangle(800, 180, color:LightGray())
+        game:Add(dialogueBackground)
+
+        Label dialogue
+        dialogue:SetText(log:Get(0))
+        dialogue:SetFontSize(22)
+        dialogue:SetPosition(10, 150)
+        game:Add(dialogue)
 
         PlayerTurn()
     end
