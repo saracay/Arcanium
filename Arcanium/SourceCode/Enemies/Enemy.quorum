@@ -5,90 +5,52 @@ class Enemy
     integer HP = 1
     integer MP = 1
     integer attack = 1
-    number fireEff = 1
-    number waterEff = 1
-    number earthEff = 1
-    number windEff = 1
-    number lightEff = 1
-    number darkEff = 1
+    Array<number> elementsEffectiveness //fire, water, earth, air, light, dark
 
-    action SetStats(text newName, integer newHP, integer newMP, integer newAttack, number newFireEff, number newWaterEff, number newEarthEff, number newWindEff, number newLightEff, number newDarkEff)
+    action Enemy()
+        repeat 6 times
+            elementsEffectiveness:Add(1)
+        end
+    end
+
+    action SetStats(text newName, integer newHP, integer newMP, integer newAttack, 
+     number newFireEff, number newWaterEff, number newEarthEff, number newWindEff, 
+     number newLightEff, number newDarkEff)
         name = newName
         HP = newHP
         MP = newMP
-        attack = newAttack
-        fireEff = newFireEff
-        waterEff = newWaterEff
-        earthEff = newEarthEff
-        windEff = newWindEff
-        lightEff = newLightEff
-        darkEff = newDarkEff
+        attack = newAttack      //No idea what to use this for
+        elementsEffectiveness:Set(0, newFireEff)
+        elementsEffectiveness:Set(1, newWaterEff)
+        elementsEffectiveness:Set(2, newEarthEff)
+        elementsEffectiveness:Set(3, newWindEff)
+        elementsEffectiveness:Set(4, newLightEff)
+        elementsEffectiveness:Set(5, newDarkEff)
     end
 
-    action RecieveAttack(integer spellCode, Player player) returns Array<text>
-        //use spell code to find spell
-        //for now, we will simply use base elements and a few combinations
+    action RecieveAttack(Spell playerSpell, Player player) returns Array<text>
 
         Array<text> log
-        integer baseDamage = 0
         integer damage = 0
-        text spellName = ""
+        integer charPlace = 1       //Start at second place to avoid first 1
+        integer elementCount = 0
+        text spellID = cast(text, playerSpell:GetSpellID())
 
-        if spellCode = 1100000
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * fireEff)
-            
-            spellName = "Fireball"
-            
-        elseif spellCode = 1010000
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * waterEff)
-
-            spellName = "Waterbolt"
-
-        elseif spellCode = 1001000
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * earthEff)
-
-            spellName = "Rock Blast"
-
-        elseif spellCode = 1000100
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * windEff)
-
-            spellName = "Razor Wind"
-
-        elseif spellCode = 1000010
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * lightEff)
-
-            spellName = "Smite"
-
-        elseif spellCode = 1000001
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * darkEff)
-
-            spellName = "Dark Blast"
-
-        elseif spellCode = 1011000
-            baseDamage = 5
-
-            damage = cast(integer, baseDamage * waterEff * earthEff)
-
-            spellName = "Ice Beam"
-
+        //SpellID order: 1 fire water earth air light dark
+        repeat 6 times
+            elementCount = cast(integer, spellID:GetCharacter(charPlace))
+            if elementCount >= 1
+                damage = damage + cast(integer, elementCount * 
+                 elementsEffectiveness:Get(charPlace))
+            end
+            charPlace = charPlace + 1
         end
-
+        
         //Adds text to display to player into the array
         //Results in log[incomingAttack, incomingDamage, defeated]
 
-        text incomingAttack = player:GetName() + " cast " + spellName + " on enemy " + name + "!"
+        text incomingAttack = player:GetName() + " cast " + playerSpell:GetName() 
+         + " on enemy " + name + "!"
         log:Add(incomingAttack)
 
         text incomingDamage = "Enemy " + name + " took " + damage + " damage!"
