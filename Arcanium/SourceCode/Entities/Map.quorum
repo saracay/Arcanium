@@ -14,6 +14,12 @@ class Map
         testMap:Load("Assets\Maps\Testmap.png")     
     end
 
+    /*
+    NOTE: For this function to work properly, you must do the following:
+        1. When exporting your map in Tiled as PNG, export it at its actual size, NOT at the zoomed level.
+        2. You must have a separate layer named "Collision" that contains all of your collision objects.
+        TO-DO: Update this function so that it accepts a file or path as a parameter when loading the collision layer.
+    */
     action loadCollisionLayer() 
         JavaScriptObjectNotation mapData
         File data
