@@ -7,7 +7,7 @@ class Enemy
     integer attack = 1
     Array<number> elementsEffectiveness //fire, water, earth, air, light, dark
 
-    action Enemy()
+    on create
         repeat 6 times
             elementsEffectiveness:Add(1)
         end
