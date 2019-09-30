@@ -28,23 +28,30 @@ class Enemy
         elementsEffectiveness:Set(5, newDarkEff)
     end
 
-    action RecieveAttack(Spell playerSpell, Player player) returns Array<text>
+    action ReceiveAttack(Spell playerSpell, Player player) returns Array<text>
 
         Array<text> log
-        integer damage = 0
-        integer charPlace = 1       //Start at second place to avoid first 1
-        integer elementCount = 0
-        text spellID = cast(text, playerSpell:GetSpellID())
+        number damageModifier = 0
+        integer tokens = 0
+        integer spellID = playerSpell:GetSpellID()
 
         //SpellID order: 1 fire water earth air light dark
+        integer counter = 5
+
         repeat 6 times
-            elementCount = cast(integer, spellID:GetCharacter(charPlace))
-            if elementCount >= 1
-                damage = damage + cast(integer, elementCount * 
-                 elementsEffectiveness:Get(charPlace))
+            integer elementCount = spellID mod 10
+            
+            if (elementCount > 0)
+                damageModifier = damageModifier + cast(number, elementCount) * elementsEffectiveness:Get(counter)
+
+                tokens = tokens + elementCount
             end
-            charPlace = charPlace + 1
+
+            spellID = spellID / 10
+            counter = counter - 1
         end
+
+        integer damage = cast(integer, damageModifier/tokens * playerSpell:GetBaseDamage())
         
         //Adds text to display to player into the array
         //Results in log[incomingAttack, incomingDamage, defeated]
