@@ -10,8 +10,8 @@ class Map
     public Drawable testMap
     public Array<Drawable> collisions
 
-    action loadMap()
-        testMap:Load("Assets\Maps\Testmap.png")     
+    action loadMap(text map)
+        testMap:Load("Assets\Maps\" + map + ".png")     
     end
 
     /*
@@ -20,10 +20,10 @@ class Map
         2. You must have a separate layer named "Collision" that contains all of your collision objects.
         TO-DO: Update this function so that it accepts a file or path as a parameter when loading the collision layer.
     */
-    action loadCollisionLayer() 
+    action loadCollisionLayer(text map) 
         JavaScriptObjectNotation mapData
         File data
-        data:SetPath("Assets\Maps\Data\TestMap.json")
+        data:SetPath("Assets\Maps\Data\" + map  + ".json")
         mapData:Read(data)
 
         JavaScriptObjectNotation layersData = mapData:GetObject("layers")

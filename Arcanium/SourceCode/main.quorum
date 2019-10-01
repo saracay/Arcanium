@@ -36,7 +36,11 @@ class Main is Game, CollisionListener2D
     number plyrSpeed = 100
     KeyboardEvent keys
     InputMonitor monitor
- 
+
+    //Map Names
+    //TO-DO: Export this in the future to a file that we can directly reference in this file
+    text TEST_MAP = "Testmap"
+    text FOREST_MAP = "Forest"
 
     action Main
 
@@ -70,8 +74,8 @@ class Main is Game, CollisionListener2D
         //Allows for collisions
         EnablePhysics2D(true)
         
-        map1:loadMap()
-        map1:loadCollisionLayer()
+        map1:loadMap(TEST_MAP)
+        map1:loadCollisionLayer(TEST_MAP)
 
         player1:DrawPlayer()
 
