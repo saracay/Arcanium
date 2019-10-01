@@ -13,6 +13,7 @@ use Libraries.System.Console
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Containers.Array
 use Libraries.Interface.Item2D
+use Libraries.Game.Graphics.ImageSheet
 
 class Main is Game, CollisionListener2D
     
@@ -41,6 +42,13 @@ class Main is Game, CollisionListener2D
     //TO-DO: Export this in the future to a file that we can directly reference in this file
     text TEST_MAP = "Testmap"
     text FOREST_MAP = "Forest"
+ 
+    //For animations
+    Animation testAnimation
+    number elapsedTime = 0
+    number fps = 4
+    number frame = 1
+    
 
     action Main
 
@@ -96,6 +104,11 @@ class Main is Game, CollisionListener2D
         player1:playerSprite:SetResponsive()
         
         AddCollisionListener(me)
+
+        //For animations
+        testAnimation:LoadImageSheet()
+        testAnimation:LoadFrame()
+        Add(testAnimation:girl)
         
     end
 
@@ -105,10 +118,25 @@ class Main is Game, CollisionListener2D
         repeat until removalQueue:IsEmpty()
             Remove(removalQueue:RemoveFromFront())
         end
-        
+       
+        //for animation
+        //elapsedTime = elapsedTime + seconds
+
         //Movement using WASD
         if monitor:IsKeyPressed(keys:W)
             newY = player1:playerSprite:GetY() + plyrSpeed * seconds
+            
+            // for animation -- commented out for testing
+            /*newY = testAnimation:girl:GetY() + plyrSpeed * seconds
+            //for animation
+            if elapsedTime >= 1/fps
+                frame = frame + 1
+            if frame > 3
+                frame = 1 
+            end
+            testAnimation:ChangeFrame()
+            elapsedTime = elapsedTime - 1/fps
+            end*/
 
         elseif monitor:IsKeyPressed(keys:S)
             newY = player1:playerSprite:GetY() - plyrSpeed * seconds
@@ -121,7 +149,8 @@ class Main is Game, CollisionListener2D
         end
         
         player1:playerSprite:SetPosition(newX,newY)
-        
+        //testAnimation:girl:SetPosition(newX, newY)
+
 
 
     end
