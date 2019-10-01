@@ -1,205 +1,204 @@
 {
-  "spells": {
-    "spellID": 100000,
-    "name": "Fireball",
-    "baseDamage": 100,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 1
-  },
-
-  {
-    "spellID": 10000,
-    "name": "Water Bolt",
-    "baseDamage": 100,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 1
-  },
-
-  {
-    "spellID": 1000,
-    "name": "Rock Blast",
-    "baseDamage": 100,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 1
-  },
-  {
-    "spellID": 100,
-    "name": "Air Slash",
-    "baseDamage": 100,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 1
-  },
-  {
-    "spellID": 10,
-    "name": "Judgement",
-    "baseDamage": 100,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 1
-  },
-  {
-    "spellID": 1,
-    "name": "Dark Blast",
-    "baseDamage": 100,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 1
-  },
-  {
-    "spellID": 200000,
-    "name": "Scorch",
-    "baseDamage": 200,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 3
-  },
-  {
-    "spellID": 101000,
-    "name": "Fire Bomb",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": true,
-    "manaCost": 3
-  },
-  {
-    "spellID": 100100,
-    "name": "Lightning Bolt",
-    "baseDamage": 175,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 100010,
-    "name": "Purge",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 100001,
-    "name": "Unholy Fire",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 3
-  },
-  {
-    "spellID": 20000,
-    "name": "High Tide",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": true,
-    "manaCost": 3
-  },
-  {
-    "spellID": 11000,
-    "name": "Ice Sphere",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 10010,
-    "name": "Cleanse",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 10001,
-    "name": "Poison",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 3
-  },
-  {
-    "spellID": 2000,
-    "name": "Boulder",
-    "baseDamage": 175,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 1010,
-    "name": "Sacred Ground",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 1001,
-    "name": "Cursed Land",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": true,
-    "manaCost": 3
-  },
-  {
-    "spellID": 200,
-    "name": "Windblast",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": true,
-    "manaCost": 4
-  },
-  {
-    "spellID": 110,
-    "name": "Holy Aura",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 3
-  },
-  {
-    "spellID": 101,
-    "name": "Infection",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": true,
-    "manaCost": 3
-  },
-  {
-    "spellID": 20,
-    "name": "Shield",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 3
-  },
-  {
-    "spellID": 2,
-    "name": "Siphon Life",
-    "baseDamage": 150,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 2
-  },
-  {
-    "spellID": 300000,
-    "name": "Incinerate",
-    "baseDamage": 300,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 5
-  },
-  {
-    "spellID": 210000,
-    "name": "Scorched Earth",
-    "baseDamage": 0,
-    "statusCodes": [],
-    "multiTarget": false,
-    "manaCost": 5
-  },
-
+  "spells": [
+    {
+      "spellID": 100000,
+      "name": "Fireball",
+      "baseDamage": 100,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 1
+    },
+    {
+      "spellID": 10000,
+      "name": "Water Bolt",
+      "baseDamage": 100,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 1
+    },
+    {
+      "spellID": 1000,
+      "name": "Rock Blast",
+      "baseDamage": 100,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 1
+    },
+    {
+      "spellID": 100,
+      "name": "Air Slash",
+      "baseDamage": 100,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 1
+    },
+    {
+      "spellID": 10,
+      "name": "Judgement",
+      "baseDamage": 100,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 1
+    },
+    {
+      "spellID": 1,
+      "name": "Dark Blast",
+      "baseDamage": 100,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 1
+    },
+    {
+      "spellID": 200000,
+      "name": "Scorch",
+      "baseDamage": 200,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 3
+    },
+    {
+      "spellID": 101000,
+      "name": "Fire Bomb",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 3
+    },
+    {
+      "spellID": 100100,
+      "name": "Lightning Bolt",
+      "baseDamage": 175,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 100010,
+      "name": "Purge",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 100001,
+      "name": "Unholy Fire",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 3
+    },
+    {
+      "spellID": 20000,
+      "name": "High Tide",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 3
+    },
+    {
+      "spellID": 11000,
+      "name": "Ice Sphere",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 10010,
+      "name": "Cleanse",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 10001,
+      "name": "Poison",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 3
+    },
+    {
+      "spellID": 2000,
+      "name": "Boulder",
+      "baseDamage": 175,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 1010,
+      "name": "Sacred Ground",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 1001,
+      "name": "Cursed Land",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 3
+    },
+    {
+      "spellID": 200,
+      "name": "Windblast",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 4
+    },
+    {
+      "spellID": 110,
+      "name": "Holy Aura",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 3
+    },
+    {
+      "spellID": 101,
+      "name": "Infection",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 3
+    },
+    {
+      "spellID": 20,
+      "name": "Shield",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 3
+    },
+    {
+      "spellID": 2,
+      "name": "Siphon Life",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 300000,
+      "name": "Incinerate",
+      "baseDamage": 300,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 210000,
+      "name": "Scorched Earth",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    }
+  ]
 }
