@@ -1,0 +1,56 @@
+use Libraries.Containers.Array
+
+class Combatant
+
+    text name = ""          //name to display
+    integer currentHP = 1   //current health
+    integer maxHP = 1       //maximum amount of health
+    number attack = 1       //multiplier for damage dealt
+    Array<number> elementsEffectiveness //fire, water, earth, air, light, dark
+
+    on create
+        repeat 6 times
+            elementsEffectiveness:Add(1)
+        end
+    end
+
+    action SetName(text newName)
+        name = newName
+    end
+
+    action GetName() returns text
+        return name
+    end
+
+    action SetCurrentHP(integer newCurrentHP)
+        currentHP = newCurrentHP
+    end
+
+    action GetCurrentHP() returns integer
+        return currentHP
+    end
+
+    action SetMaxHP(integer newMaxHP)
+        maxHP = newMaxHP
+    end
+
+    action GetMaxHP() returns integer
+        return maxHP
+    end
+
+    action SetAttack(number newAttack)
+        attack = newAttack
+    end
+
+    action GetAttack() returns number
+        return attack
+    end
+
+    action SetElementsEffectiveness(integer position, number newResistance)
+        elementsEffectiveness:Set(position, newResistance)
+    end
+
+    action GetElementsEffectiveness(integer position) returns number
+        return elementsEffectiveness:Get(position)
+    end
+end

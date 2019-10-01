@@ -1,13 +1,9 @@
 use Libraries.Containers.Array
 
-class Spell 
+class Spell is Attack
     
     integer spellID = 1000000               //combination code for spell identification (e.g., 1100000 = fire ball)
-    text name = ""                          //spell name
-    integer baseDamage = 1                  //base damage used in calculations
     integer manaCost = 1                    //mana cost of a spell
-    Array<integer> statusCodes = undefined  //contains codes for status effects applied by the spell
-    boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
 
     action SetSpellID(integer newSpellID)
         spellID = newSpellID
@@ -15,22 +11,6 @@ class Spell
 
     action GetSpellID() returns integer
         return spellID
-    end
-
-    action SetName(text newName)
-        name = newName
-    end
-
-    action GetName() returns text
-        return name
-    end
-
-    action SetBaseDamage(integer newBaseDamage)
-        baseDamage = newBaseDamage
-    end
-
-    action GetBaseDamage() returns integer
-        return baseDamage
     end
 
     action SetManaCost(integer newManaCost)

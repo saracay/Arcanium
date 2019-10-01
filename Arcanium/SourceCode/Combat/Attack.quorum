@@ -1,0 +1,43 @@
+use Libraries.Containers.Array
+
+class Attack
+    
+    text name = ""                          //attack name
+    integer baseDamage = 1                  //base damage used in calculations
+    Array<integer> statusCodes = undefined  //contains codes for status effects applied by the attack
+    boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
+
+    action SetName(text newName)
+        name = newName
+    end
+
+    action GetName() returns text
+        return name
+    end
+
+    action SetBaseDamage(integer newBaseDamage)
+        baseDamage = newBaseDamage
+    end
+
+    action GetBaseDamage() returns integer
+        return baseDamage
+    end
+
+    action SetMultiTarget(boolean newMultiTarget)
+        multiTarget = newMultiTarget
+    end
+
+    action GetMultiTarget() returns boolean
+        return multiTarget
+    end
+    
+/* Not Yet Implemented/Used
+    action SetStatusCodes(integer position, integer newStatusCode)
+        statusCodes:Set(position, newStatusCode)
+    end
+
+    action GetStatusCodes(integer position) returns integer
+        return statusCodes:Get(position)
+    end
+*/
+end

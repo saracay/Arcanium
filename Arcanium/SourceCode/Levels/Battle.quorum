@@ -40,12 +40,12 @@ class Battle is Level
         game:Add(playerHealthBackground)
 
         Label playerHealth
-        playerHealth:SetText("Health: " + newPlayer:GetCurrentHealth() + "/" + newPlayer:GetMaxHealth())
+        playerHealth:SetText("Health: " + newPlayer:GetCurrentHP() + "/" + newPlayer:GetMaxHP())
         playerHealth:SetPosition(230, 325)
         game:Add(playerHealth)
 
         Label playerMana
-        playerMana:SetText("Mana: " + newPlayer:GetCurrentMana() + "/" + newPlayer:GetMaxMana())
+        playerMana:SetText("Mana: " + newPlayer:GetCurrentMP() + "/" + newPlayer:GetMaxMP())
         playerMana:SetPosition(230, 305)
         game:Add(playerMana)
 

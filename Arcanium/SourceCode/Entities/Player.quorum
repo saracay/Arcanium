@@ -1,37 +1,106 @@
 use Libraries.Game.Graphics.Drawable
+use Libraries.Containers.Array
 
-class Player
+class Player is Combatant
 
-    text name = "Player"
-    integer currentHealth = 500
-    integer maxHealth = 500
-    integer currentMana = 5
-    integer maxMana = 5
+    integer currentMP = 5
+    integer maxMP = 5
     public Drawable playerSprite
 
-    action SetStatus(integer health, integer mana)
-        currentHealth = health
-        currentMana = mana
+    action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
+     integer newCurrentMP, integer newMaxMP, number newAttack, 
+     number newFireEff, number newWaterEff, number newEarthEff, 
+     number newWindEff, number newLightEff, number newDarkEff)
+        SetName(newName)
+        SetCurrentHP(newCurrentHP)
+        SetMaxHP(newMaxHP)
+        currentMP = newCurrentMP
+        maxMP = newMaxMP
+        SetAttack(newAttack)
+        SetElementsEffectiveness(0, newFireEff)
+        SetElementsEffectiveness(1, newWaterEff)
+        SetElementsEffectiveness(2, newEarthEff)
+        SetElementsEffectiveness(3, newWindEff)
+        SetElementsEffectiveness(4, newLightEff)
+        SetElementsEffectiveness(5, newDarkEff)
     end
 
-    action GetName returns text
-        return name
+    action ReceivePhysicalAttack() returns Array<text>
+        Array<text> log
+        log:Add("test1")
+        log:Add("test2")
+        log:Add("test3")
+        return log
     end
 
-    action GetCurrentHealth returns integer
-        return currentHealth
+    action ReceiveSpellAttack(Spell enemySpell, Enemy enemy) 
+     returns Array<text>
+        Array<text> log
+        number damageModifier = 0
+        number tokens = 0
+        integer spellID = enemySpell:GetSpellID()
+        integer counter = 5
+        integer elementCount = 0
+        //SpellID order: 1 fire water earth air light dark
+
+        repeat 6 times
+            elementCount = spellID mod 10
+            
+            if (elementCount > 0)
+                damageModifier = damageModifier + cast(number, elementCount) 
+                 * GetElementsEffectiveness(counter)
+                tokens = tokens + elementCount
+            end
+
+            spellID = spellID / 10
+            counter = counter - 1
+        end
+
+        integer damage = cast(integer, damageModifier/tokens 
+         * enemySpell:GetBaseDamage())
+        
+        //Adds text to display to player into the array
+        //Results in log[incomingAttack, incomingDamage, defeated]
+
+        text incomingAttack = enemy:GetName() + " cast " + enemySpell:GetName() 
+         + " on " + GetName() + "!"
+        log:Add(incomingAttack)
+
+        text incomingDamage = GetName() + " took " + damage + " damage!"
+        log:Add(incomingDamage)
+
+        if CheckDefeated(damage)
+            text defeated = GetName() + " was defeated!"
+            log:Add(defeated)
+        end
+
+        return log
     end
 
-    action GetMaxHealth returns integer
-        return maxHealth
+    action CheckDefeated(integer damage) returns boolean
+        if GetCurrentHP() > damage
+            SetCurrentHP(GetCurrentHP() - damage)
+            return false
+        end
+
+        SetCurrentHP(0)
+        return true
     end
 
-    action GetCurrentMana returns integer
-        return currentMana
+    action SetCurrentMP(integer newCurrentMP)
+        currentMP = newCurrentMP
     end
 
-    action GetMaxMana returns integer
-        return maxMana
+    action GetCurrentMP() returns integer
+        return currentMP
+    end
+
+    action SetMaxMP(integer newMaxMP)
+        maxMP = newMaxMP
+    end
+
+    action GetMaxMP() returns integer
+        return maxMP
     end
 
     action DrawPlayer()
