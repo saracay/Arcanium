@@ -42,6 +42,7 @@ class Main is Game, CollisionListener2D
     //TO-DO: Export this in the future to a file that we can directly reference in this file
     text TEST_MAP = "Testmap"
     text FOREST_MAP = "Forest"
+    text CASTLE_MAP = "Castle"
  
     //For animations
     Animation testAnimation
@@ -84,6 +85,10 @@ class Main is Game, CollisionListener2D
         
         map1:loadMap(TEST_MAP)
         map1:loadCollisionLayer(TEST_MAP)
+        
+        // test if map uploads
+        /*map1:loadMap(CASTLE_MAP)
+        map1:loadCollisionLayer(CASTLE_MAP)*/
 
         player1:DrawPlayer()
 
