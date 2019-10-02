@@ -1,0 +1,81 @@
+/******************************************************
+  Class for any Interactable object (Items, NPC, etc)
+  Inherits from Drawable to be detected w/ collisions
+  Inherits from KeyboardListener to be interactable
+******************************************************/
+use Libraries.Game.Graphics.Drawable
+use Libraries.Containers.Array
+use Libraries.Interface.Events.KeyboardListener
+use Libraries.Interface.Events.KeyboardEvent
+
+class Interactable is Drawable, KeyboardListener
+
+    // List of variables for INTERACTABLE
+    text name = "NPC-01"                    // Name of Interactable
+    Array<text> dialogue                    // Array of Dialogues
+    integer currentDialogue = 0             // Index of Dialogues 
+    boolean currentlyInteracting = false    // Check if Interacting
+
+    // Initializer of an INTERACTABLE Object
+    action CreateInteractable(text setName, text spritePath, number setX, number setY, boolean physicsOn)
+        name = setName
+        SetName("interactable")
+        if spritePath = "default"
+            LoadFilledRectangle(25, 25)
+        else
+            Load(spritePath)
+        end
+        SetX(setX)
+        SetY(setY)
+        EnablePhysics(physicsOn)
+    end
+	
+    // Adds new Dialogue to the array
+    action AddDialogue(text newDialogue)
+        dialogue:Add(newDialogue)
+    end
+	
+    // Returns the current Dialogue, or "..." if empty, repeats if needed
+    action GetDialogue returns text
+        integer i = dialogue:GetSize()
+        if i = 0
+            return "..."
+        end
+		
+        if currentDialogue = i
+            currentDialogue = 0
+        end
+		
+        currentDialogue = currentDialogue + 1
+        return dialogue:Get(currentDialogue - 1)
+    end
+
+    // Returns the Name of INTERACTABLE Object
+    action GetInteractableName returns text
+        return name
+    end
+
+    // Returns whether the INTERACTABLE Object is interacting
+    action IsInteracting returns boolean
+        return currentlyInteracting
+    end
+	
+    // Switches the truth of currentlyInteracting
+    action ToggleInteraction
+        if currentlyInteracting
+            currentDialogue = 0
+            currentlyInteracting = false
+        else
+            currentlyInteracting = true
+        end
+    end
+	
+    action PressedKey(KeyboardEvent event)
+        if currentlyInteracting
+            if event:keyCode = event:SPACE
+                output GetDialogue()
+            end
+        end
+    end
+	
+end
