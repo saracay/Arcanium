@@ -24,6 +24,10 @@ class Main is Game, CollisionListener2D
     //Entities
     Map map1
     Player player1
+	
+    // For Interaction testing      -Ryan
+    Interactable npc1
+    Interactable npc2
 
     //For drawing images
     Drawable testmap
@@ -115,6 +119,30 @@ class Main is Game, CollisionListener2D
         testAnimation:LoadFrame()
         Add(testAnimation:girl)
         
+        /***********************************************************************
+        Start test section
+        It is currently commented-out so that nothing breaks
+                                                                  -Ryan
+        ***********************************************************************/
+/*
+        // For interactable testing
+        player1:playerSprite:SetName("player")
+        player1:playerSprite:CanRotate(false)
+        npc1:CreateInteractable("TestNPC", "default", 9, 2, true)
+        npc1:AddDialogue("You can touch this black box.")
+        npc1:AddDialogue("It shows interaction with physical collision.")
+        Add(npc1)
+        AddKeyboardListener(npc1)
+        npc2:CreateInteractable("TestNPC", "default", 10, 4, false)
+        npc2:AddDialogue("You cannot touch this black box (INTANGIBLE).")
+        npc2:AddDialogue("It shows interaction without physical collision.")
+        npc2:AddDialogue("It covers your sprite (due to being added later).")
+        Add(npc2)
+        AddKeyboardListener(npc2)
+*/
+        /***********************************************************************
+        End test Section
+        ***********************************************************************/
     end
 
     action Update(number seconds)
@@ -170,5 +198,46 @@ class Main is Game, CollisionListener2D
 
     action BeginCollision(CollisionEvent2D event)
         output "OW!"
+        CheckForInteraction(event)
+    end
+	
+    action FinishCollision(CollisionEvent2D event)
+        CheckForInteraction(event)
+    end
+
+    // This action checks if the collision involes the player
+    // and an Interactable Object.  If so, it toggles the
+    // interactable such that presing [SPACE] should proceed
+    // with the given dialoge
+    action CheckForInteraction(CollisionEvent2D event)
+    /***********************************************************************
+    Collision detection for Interactable Objects (NPCs, Objects, etc.)
+    It is currently commented-out so that nothing breaks
+                                                        - Ryan
+    ***********************************************************************/
+/*
+        // Variable used to determine if interaction is available
+        boolean interaction = false
+
+        // Cast collision items as Drawables to use them
+        Drawable itemA = cast(Drawable, event:GetItemA())
+        Drawable itemB = cast(Drawable, event:GetItemB())
+
+        // Check if PLAYER & INTERACTABLE
+        if itemA:GetName() = "player"
+            if itemB:GetName() = "interactable"
+                interaction = true
+            end
+        end
+
+        // If interaction is available, enable/disable it
+        if interaction
+            Interactable newItemB = cast(Interactable, itemB)
+            newItemB:ToggleInteraction()
+        end
+*/
+    /***********************************************************************
+    End of Ryan's Testing Section
+    ***********************************************************************/
     end
 end
