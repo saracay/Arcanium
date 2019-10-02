@@ -1,12 +1,32 @@
-/******************************************************
+/**********************************************************
   Class for any Interactable object (Items, NPC, etc)
   Inherits from Drawable to be detected w/ collisions
   Inherits from KeyboardListener to be interactable
-******************************************************/
+
+  Format of initializer: CreateInteractable(...)
+    1 - Set name to any string
+    2 - Set spritePath to image, or use presets
+        * Use "default" for for Black Box (32x32)
+        * Use "clear" for for Clear Box (32x32)
+   3&4 - X and Y coordinates (then multiplied by 32)
+        * We use 32x32 tiles, thus easier positioning
+    5 - Set true to be physically collidable
+        * Otherwise, it will be visible but intangible
+
+  EXAMPLE FORMATTING: 
+  * npc:CreateInteractable("NPC", "clear", 11, 5.5, true)
+
+  PROBLEMS / MISSING FEATURES OF INTERACTABLE CLASS
+  * If PLAYER is colliding w/ 2+ INTERACTABLEs, then
+      each will display DIALOGUE (No priority / focus)
+  * DIALOGUE is simple OUTPUT (No GUI text box)
+  * No simple INITIALIZER (Manual input, including (X,Y))
+**********************************************************/
 use Libraries.Game.Graphics.Drawable
 use Libraries.Containers.Array
 use Libraries.Interface.Events.KeyboardListener
 use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Game.Graphics.Color
 
 class Interactable is Drawable, KeyboardListener
 
@@ -15,19 +35,29 @@ class Interactable is Drawable, KeyboardListener
     Array<text> dialogue                    // Array of Dialogues
     integer currentDialogue = 0             // Index of Dialogues 
     boolean currentlyInteracting = false    // Check if Interacting
+    Color color                             // Used for setting colors
 
     // Initializer of an INTERACTABLE Object
     action CreateInteractable(text setName, text spritePath, number setX, number setY, boolean physicsOn)
         name = setName
-        SetName("interactable")
+        SetName("interactable")             // Sets drawable name for collision
+
         if spritePath = "default"
-            LoadFilledRectangle(25, 25)
-        else
+            LoadFilledRectangle(32, 32, color:Black())
+        elseif spritePath = "clear"
+            LoadFilledRectangle(32, 32, color:Clear())
+        elseif spritePath not= "default" and spritePath not= "clear"
             Load(spritePath)
         end
-        SetX(setX)
-        SetY(setY)
-        EnablePhysics(physicsOn)
+
+        SetX(setX * 32)                     // x32 for Tiled positioning
+        SetY(setY * 32)                     // x32 for Tiled positioning
+
+        if physicsOn
+            EnablePhysics(true)             // Tangible
+        else
+            SetCollidable(true)             // Intangible (still interactable)
+        end
     end
 	
     // Adds new Dialogue to the array
@@ -38,15 +68,21 @@ class Interactable is Drawable, KeyboardListener
     // Returns the current Dialogue, or "..." if empty, repeats if needed
     action GetDialogue returns text
         integer i = dialogue:GetSize()
+
+        // If no dialogue is added, say nothing ("...")
         if i = 0
             return "..."
         end
-		
+
+        // If you reached the end dialogue, repeat
         if currentDialogue = i
             currentDialogue = 0
         end
-		
+	
+        // Go to next dialogue before return
         currentDialogue = currentDialogue + 1
+
+        // Give pre-increment dialogue
         return dialogue:Get(currentDialogue - 1)
     end
 
@@ -63,13 +99,15 @@ class Interactable is Drawable, KeyboardListener
     // Switches the truth of currentlyInteracting
     action ToggleInteraction
         if currentlyInteracting
-            currentDialogue = 0
+            currentDialogue = 0             // Reset to 1st dialogue
             currentlyInteracting = false
         else
             currentlyInteracting = true
         end
     end
 	
+    // When SPACE is pressed while currentlyInteracting
+    // it will display the next dialogue
     action PressedKey(KeyboardEvent event)
         if currentlyInteracting
             if event:keyCode = event:SPACE
