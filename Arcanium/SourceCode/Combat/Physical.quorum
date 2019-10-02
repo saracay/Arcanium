@@ -1,0 +1,11 @@
+class Physical is Attack
+    integer elementalType = 0   //0-6 determines if an attack is based off a certain element
+
+    action SetElementalType(integer newElementalType)
+        elementalType = newElementalType
+    end
+
+    action GetElementalType() returns integer
+        return elementalType
+    end
+end

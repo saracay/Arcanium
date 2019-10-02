@@ -4,6 +4,7 @@ class Attack
     
     text name = ""                          //attack name
     integer baseDamage = 1                  //base damage used in calculations
+    integer ID = 9000000                    //attack ID, start with 9 for spell, 8 for physical
     Array<integer> statusCodes = undefined  //contains codes for status effects applied by the attack
     boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
 
@@ -13,6 +14,14 @@ class Attack
 
     action GetName() returns text
         return name
+    end
+
+    action SetID(integer newID)
+        ID = newID
+    end
+
+    action GetID() returns integer
+        return ID
     end
 
     action SetBaseDamage(integer newBaseDamage)

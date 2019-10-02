@@ -13,6 +13,60 @@ class Combatant
             elementsEffectiveness:Add(1)
         end
     end
+    
+    action ReceiveSpellAttack(Spell enemySpell, Combatant attacker) 
+     returns Array<text>
+        Array<text> log
+        number damageModifier = 0
+        number tokens = 0
+        integer spellID = enemySpell:GetID()
+        integer counter = 5
+        integer elementCount = 0
+        //SpellID order: 1 fire water earth air light dark
+
+        repeat 6 times
+            elementCount = spellID mod 10
+            
+            if (elementCount > 0)
+                damageModifier = damageModifier + cast(number, elementCount) 
+                 * GetElementsEffectiveness(counter)
+                tokens = tokens + elementCount
+            end
+
+            spellID = spellID / 10
+            counter = counter - 1
+        end
+
+        integer damage = cast(integer, damageModifier/tokens 
+         * enemySpell:GetBaseDamage())
+        
+        //Adds text to display to player into the array
+        //Results in log[incomingAttack, incomingDamage, defeated]
+
+        text incomingAttack = attacker:GetName() + " cast " + enemySpell:GetName() 
+         + " on " + GetName() + "!"
+        log:Add(incomingAttack)
+
+        text incomingDamage = GetName() + " took " + damage + " damage!"
+        log:Add(incomingDamage)
+
+        if CheckDefeated(damage)
+            text defeated = GetName() + " was defeated!"
+            log:Add(defeated)
+        end
+
+        return log
+    end
+
+    action CheckDefeated(integer damage) returns boolean
+        if GetCurrentHP() > damage
+            SetCurrentHP(GetCurrentHP() - damage)
+            return false
+        end
+
+        SetCurrentHP(0)
+        return true
+    end
 
     action SetName(text newName)
         name = newName

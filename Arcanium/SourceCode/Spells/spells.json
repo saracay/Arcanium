@@ -1,7 +1,7 @@
 {
   "spells": [
     {
-      "spellID": 100000,
+      "spellID": 9100000,
       "name": "Fireball",
       "baseDamage": 100,
       "statusCodes": [],
@@ -9,7 +9,7 @@
       "manaCost": 1
     },
     {
-      "spellID": 10000,
+      "spellID": 9010000,
       "name": "Water Bolt",
       "baseDamage": 100,
       "statusCodes": [],
@@ -17,7 +17,7 @@
       "manaCost": 1
     },
     {
-      "spellID": 1000,
+      "spellID": 9001000,
       "name": "Rock Blast",
       "baseDamage": 100,
       "statusCodes": [],
@@ -25,7 +25,7 @@
       "manaCost": 1
     },
     {
-      "spellID": 100,
+      "spellID": 9000100,
       "name": "Air Slash",
       "baseDamage": 100,
       "statusCodes": [],
@@ -33,7 +33,7 @@
       "manaCost": 1
     },
     {
-      "spellID": 10,
+      "spellID": 9000010,
       "name": "Judgement",
       "baseDamage": 100,
       "statusCodes": [],
@@ -41,7 +41,7 @@
       "manaCost": 1
     },
     {
-      "spellID": 1,
+      "spellID": 9000001,
       "name": "Dark Blast",
       "baseDamage": 100,
       "statusCodes": [],
@@ -49,7 +49,7 @@
       "manaCost": 1
     },
     {
-      "spellID": 200000,
+      "spellID": 9200000,
       "name": "Scorch",
       "baseDamage": 200,
       "statusCodes": [],
@@ -57,7 +57,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 101000,
+      "spellID": 9101000,
       "name": "Fire Bomb",
       "baseDamage": 150,
       "statusCodes": [],
@@ -65,7 +65,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 100100,
+      "spellID": 9100100,
       "name": "Lightning Bolt",
       "baseDamage": 175,
       "statusCodes": [],
@@ -73,7 +73,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 100010,
+      "spellID": 9100010,
       "name": "Purge",
       "baseDamage": 0,
       "statusCodes": [],
@@ -81,7 +81,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 100001,
+      "spellID": 9100001,
       "name": "Unholy Fire",
       "baseDamage": 150,
       "statusCodes": [],
@@ -89,7 +89,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 20000,
+      "spellID": 9020000,
       "name": "High Tide",
       "baseDamage": 150,
       "statusCodes": [],
@@ -97,7 +97,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 11000,
+      "spellID": 9011000,
       "name": "Ice Sphere",
       "baseDamage": 150,
       "statusCodes": [],
@@ -105,7 +105,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 10010,
+      "spellID": 9010010,
       "name": "Cleanse",
       "baseDamage": 0,
       "statusCodes": [],
@@ -113,7 +113,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 10001,
+      "spellID": 9010001,
       "name": "Poison",
       "baseDamage": 150,
       "statusCodes": [],
@@ -121,7 +121,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 2000,
+      "spellID": 9002000,
       "name": "Boulder",
       "baseDamage": 175,
       "statusCodes": [],
@@ -129,7 +129,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 1010,
+      "spellID": 9001010,
       "name": "Sacred Ground",
       "baseDamage": 0,
       "statusCodes": [],
@@ -137,7 +137,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 1001,
+      "spellID": 9001001,
       "name": "Cursed Land",
       "baseDamage": 0,
       "statusCodes": [],
@@ -145,7 +145,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 200,
+      "spellID": 9000200,
       "name": "Windblast",
       "baseDamage": 150,
       "statusCodes": [],
@@ -153,7 +153,7 @@
       "manaCost": 4
     },
     {
-      "spellID": 110,
+      "spellID": 9000110,
       "name": "Holy Aura",
       "baseDamage": 0,
       "statusCodes": [],
@@ -161,7 +161,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 101,
+      "spellID": 9000101,
       "name": "Infection",
       "baseDamage": 0,
       "statusCodes": [],
@@ -169,7 +169,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 20,
+      "spellID": 9000020,
       "name": "Shield",
       "baseDamage": 0,
       "statusCodes": [],
@@ -177,7 +177,7 @@
       "manaCost": 3
     },
     {
-      "spellID": 2,
+      "spellID": 9000002,
       "name": "Siphon Life",
       "baseDamage": 150,
       "statusCodes": [],
@@ -185,7 +185,7 @@
       "manaCost": 2
     },
     {
-      "spellID": 300000,
+      "spellID": 9300000,
       "name": "Incinerate",
       "baseDamage": 300,
       "statusCodes": [],
@@ -193,7 +193,7 @@
       "manaCost": 5
     },
     {
-      "spellID": 210000,
+      "spellID": 9210000,
       "name": "Scorched Earth",
       "baseDamage": 0,
       "statusCodes": [],

@@ -2,16 +2,7 @@ use Libraries.Containers.Array
 
 class Spell is Attack
     
-    integer spellID = 1000000               //combination code for spell identification (e.g., 1100000 = fire ball)
     integer manaCost = 1                    //mana cost of a spell
-
-    action SetSpellID(integer newSpellID)
-        spellID = newSpellID
-    end
-
-    action GetSpellID() returns integer
-        return spellID
-    end
 
     action SetManaCost(integer newManaCost)
         manaCost = newManaCost
