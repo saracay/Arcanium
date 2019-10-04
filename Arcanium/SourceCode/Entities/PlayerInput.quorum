@@ -1,0 +1,34 @@
+use Libraries.Game.InputTable
+use Libraries.Game.InputSet
+use Libraries.Interface.Events.KeyboardEvent
+
+class PlayerInput 
+
+    KeyboardEvent keys
+
+    InputSet up
+    InputSet down
+    InputSet left
+    InputSet right
+
+    MoveUp moveUp
+    MoveDown moveDown
+    MoveLeft moveLeft
+    MoveRight moveRight
+    PlayerMovement playerMovement
+
+    action SetInput(PlayerDrawable player, InputTable inputTable)    
+     
+        up:SetKeyboardInput(keys:W)
+        up:SetInputTrigger(up:CONTINUE)
+        down:SetKeyboardInput(keys:S)
+        left:SetKeyboardInput(keys:A)
+        right:SetKeyboardInput(keys:D)
+
+        inputTable:Add(up, moveUp)
+        inputTable:Add(down, moveDown)
+        inputTable:Add(left, moveLeft)
+        inputTable:Add(right, moveRight)
+
+    end
+end

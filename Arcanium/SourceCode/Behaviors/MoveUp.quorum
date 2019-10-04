@@ -1,0 +1,20 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Interface.Item
+use Libraries.Game.Graphics.Drawable
+use Libraries.Interface.Events.KeyboardEvent
+
+class MoveUp is Behavior
+
+    PlayerDrawable player
+    KeyboardEvent keys
+    action Run (BehaviorEvent event)
+        number Y = 0
+        output "LOL"
+        output "G"
+           
+    end
+
+    action Update(number seconds)
+    end
+end

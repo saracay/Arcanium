@@ -1,0 +1,19 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Interface.Item
+use Libraries.Game.Graphics.Drawable
+
+class MoveLeft is Behavior
+
+    PlayerDrawable player
+
+    action Run (BehaviorEvent event)
+        Item item = event:GetItem()
+        player = cast(PlayerDrawable, event:GetItem())
+             
+    end
+
+    action Update(number seconds)
+
+    end
+end
