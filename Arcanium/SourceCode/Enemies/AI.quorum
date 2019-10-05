@@ -1,22 +1,122 @@
+/*
+NOTE: AI decisions will require input later on to account for additions such as
+cooldowns, limited resources, and actions related to other entities. Most of
+which I assume will need addressing on an individual enemy basis by adding
+and then checking flags in the enemy's class. Checking other entities in combat
+will rely on when and how combat is set up
+*/
+use Libraries.Compute.Random
+
 class AI 
 
-    action AI(integer ID)
+    action AI(integer ID, Enemy actor)
+        //get the enemy's current hp percent
+        number percent = (actor:GetMaxHP() / actor:GetCurrentHP()) * 100
 
         if (ID = 1)     //Goblin ID = 1
-            Goblin()
+            Goblin(percent, actor)
         elseif (ID = 2) //Orc ID = 2
-            Orc()
+            Orc(percent, actor)
+        elseif (ID = 3) //Slime ID = 3
+            Slime(percent, actor)
         end
 
     end
 
 
-    action Goblin
+    action Goblin(number percent, Enemy actor)
+        number threshold1 = 50  //first hp percent where behavior changes
+        number threshold2 = 20  //second hp percent where behavior changes
 
+        Random random
+        integer r = random:RandomIntegerBetween(1, 100)
+        
+        if (percent > threshold1)   //hp between full and threshold 1
+            if (r <= 60)        //60% of the time option 1 will be done
+                //actor:attack1
+            else                //option 2 will be done the remaining 40%
+                //actor:action1
+            end
+        elseif (percent > threshold2)   //hp between threshold 1 and 2
+            if (r <= 33)        //33% option 1
+                //actor:attack1
+            elseif (r <= 66)    //33% option 2
+                //actor:action1
+            else                //34% option 3
+                //actor:heal
+            end
+        else                        //hp between threshold 2 and 0
+            if (r <= 10)        //10%
+                //actor:attack1
+            elseif (r <= 20)    //10%
+                //actor:flee
+            else                //80%
+                //actor:heal
+            end
+        end
     end
 
-    action Orc
+    action Orc(number percent, Enemy actor)
+        number threshold1 = 40  //first hp percent where behavior changes
+        number threshold2 = 10  //second hp percent where behavior changes
 
+        Random random
+        integer r = random:RandomIntegerBetween(1, 100)
+        
+        if (percent > threshold1)   //hp between full and threshold 1
+            if (r <= 90)        //90% of the time option 1 will be done
+                //actor:attack1
+            else                //option 2 will be done the remaining 10%
+                //actor:action1
+            end
+        elseif (percent > threshold2)   //hp between threshold 1 and 2
+            if (r <= 50)        //50% option 1
+                //actor:attack1
+            elseif (r <= 75)    //25% option 2
+                //actor:action1
+            else                //25% option 3
+                //actor:rage
+            end
+        else                        //hp between threshold 2 and 0
+            if (r <= 5)        //5%
+                //actor:attack1
+            elseif (r <= 10)    //5%
+                //actor:attack2
+            else                //90%
+                //actor:rage
+            end
+        end
     end
 
+    action Slime(number percent, Enemy actor)
+        number threshold1 = 50  //first hp percent where behavior changes
+        number threshold2 = 20  //second hp percent where behavior changes
+        
+        Random random
+        integer r = random:RandomIntegerBetween(1, 100)
+        
+        if (percent > threshold1)   //hp between full and threshold 1
+            if (r <= 80)        //80% of the time option 1 will be done
+                //actor:attack1
+            else                //option 2 will be done the remaining 20%
+                //actor:action1
+            end
+        elseif (percent > threshold2)   //hp between threshold 1 and 2
+            if (r <= 20)        //20% option 1
+                //actor:attack1
+            elseif (r <= 50)    //30% option 2
+                //actor:action1
+            else                //50% option 3
+                //actor:heal
+            end
+        else                        //hp between threshold 2 and dead
+            if (r <= 10)        //10%
+                //actor:attack1
+            elseif (r <= 85)    //75%
+                //actor:action1
+            else                //15%
+                //actor:heal
+            end
+        end
+    end
 end
