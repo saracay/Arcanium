@@ -34,7 +34,7 @@
     },
     {
       "spellID": 9000010,
-      "name": "Judgement",
+      "name": "Heal",
       "baseDamage": 100,
       "statusCodes": [],
       "multiTarget": false,
@@ -57,6 +57,14 @@
       "manaCost": 3
     },
     {
+      "spellID": 9110000,
+      "name": "Steam Blast",
+      "baseDamage": 150,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 3
+    },
+    {
       "spellID": 9101000,
       "name": "Fire Bomb",
       "baseDamage": 150,
@@ -75,10 +83,10 @@
     {
       "spellID": 9100010,
       "name": "Purge",
-      "baseDamage": 0,
+      "baseDamage": 150,
       "statusCodes": [],
       "multiTarget": false,
-      "manaCost": 2
+      "manaCost": 3
     },
     {
       "spellID": 9100001,
@@ -105,6 +113,14 @@
       "manaCost": 2
     },
     {
+      "spellID": 9010100,
+      "name": "Protective Bubble",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 2
+    },
+    {
       "spellID": 9010010,
       "name": "Cleanse",
       "baseDamage": 0,
@@ -126,6 +142,14 @@
       "baseDamage": 175,
       "statusCodes": [],
       "multiTarget": false,
+      "manaCost": 2
+    },
+    {
+      "spellID": 9001100,
+      "name": "Sandstorm",
+      "baseDamage": 25,
+      "statusCodes": [],
+      "multiTarget": true,
       "manaCost": 2
     },
     {
@@ -177,6 +201,14 @@
       "manaCost": 3
     },
     {
+      "spellID": 9000011,
+      "name": "Judgement",
+      "baseDamage": 125,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 3
+    },
+    {
       "spellID": 9000002,
       "name": "Siphon Life",
       "baseDamage": 150,
@@ -190,15 +222,247 @@
       "baseDamage": 300,
       "statusCodes": [],
       "multiTarget": false,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9201000,
+      "name": "Scorched Earth",
+      "baseDamage": 50,
+      "statusCodes": [],
+      "multiTarget": false,
       "manaCost": 5
     },
     {
-      "spellID": 9210000,
-      "name": "Scorched Earth",
+      "spellID": 9200100,
+      "name": "Thunder",
+      "baseDamage": 350,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9200010,
+      "name": "Holy Fire",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9200001,
+      "name": "Ignite",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9120000,
+      "name": "Slow Cook",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9111000,
+      "name": "Pressure Bomb",
+      "baseDamage": 225,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9110100,
+      "name": "Thunderstorm",
+      "baseDamage": 175,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9102000,
+      "name": "Meteorite Storm",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9100200,
+      "name": "Sparks",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9100110,
+      "name": "Light Speed",
       "baseDamage": 0,
       "statusCodes": [],
       "multiTarget": false,
       "manaCost": 5
+    },
+    {
+      "spellID": 9100101,
+      "name": "Paralyze",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9100020,
+      "name": "Fire Shield",
+      "baseDamage": 50,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9100002,
+      "name": "Conflagration",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9021000,
+      "name": "Ice Spear",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9012000,
+      "name": "Ice Shards",
+      "baseDamage": 250,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9011100,
+      "name": "Hailstorm",
+      "baseDamage": 50,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9011001,
+      "name": "Freeze",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 5
+    },
+    {
+      "spellID": 9400000,
+      "name": "Inferno",
+      "baseDamage": 375,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9100002,
+      "name": "Eruption",
+      "baseDamage": 275,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9300100,
+      "name": "Blue Lightning",
+      "baseDamage": 375,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9120100,
+      "name": "Flash Flood",
+      "baseDamage": 325,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9111100,
+      "name": "Aether",
+      "baseDamage": 350,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9110200,
+      "name": "Hurricane",
+      "baseDamage": 350,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9100102,
+      "name": "Mass Paralysis",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9040000,
+      "name": "Tsunami",
+      "baseDamage": 325,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9020002,
+      "name": "Plaguewater",
+      "baseDamage": 300,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9004000,
+      "name": "Earthquake",
+      "baseDamage": 375,
+      "statusCodes": [],
+      "multiTarget": true,
+      "manaCost": 7
+    },
+    {
+      "spellID": 9100002,
+      "name": "Jetstream",
+      "baseDamage": 0,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9000040,
+      "name": "Smite",
+      "baseDamage": 350,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 6
+    },
+    {
+      "spellID": 9000004,
+      "name": "Curse",
+      "baseDamage": 400,
+      "statusCodes": [],
+      "multiTarget": false,
+      "manaCost": 6
     }
   ]
 }
