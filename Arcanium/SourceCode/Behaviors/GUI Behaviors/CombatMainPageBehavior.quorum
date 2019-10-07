@@ -1,0 +1,69 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.Game
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
+use Libraries.Interface.Controls.Button
+use Libraries.Interface.Layouts.ManualLayout
+
+class CombatMainPageBehavior is Behavior
+
+    Game game = undefined
+    Battle battle = undefined
+    Array<Item2D> removalArray
+    Array<Item2D> currentPage
+    Array<Item2D> previousPage
+
+    action Run(BehaviorEvent event)
+        ManualLayout layout
+        game:SetLayout(layout)
+
+        Button spellButton
+        CombatSpellsPageBehavior spellBehavior
+        spellBehavior:SetGame(game)
+        spellBehavior:SetBattle(battle)
+        spellBehavior:SetRemovalArray(removalArray)
+        spellBehavior:SetPreviousPage(currentPage)
+        spellButton:SetBehavior(spellBehavior)
+        spellButton:SetPosition(650, 120)
+        spellButton:SetName("Spells")
+        game:Add(spellButton)
+        currentPage:Add(spellButton)
+
+        Button runButton
+        CombatRunBehavior runBehavior
+        runButton:SetBehavior(runBehavior)
+        runButton:SetPosition(650, 80)
+        runButton:SetName("Run")
+        game:Add(runButton)
+        currentPage:Add(runButton)
+
+        battle:SetPreviousBehavior(undefined)
+        Dispose()
+    end
+
+    action Dispose
+        integer counter = 0
+
+        repeat while counter < previousPage:GetSize()
+            removalArray:Add(previousPage:Get(counter))
+            counter = counter + 1
+        end
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action GetPreviousBehavior returns Behavior
+        return undefined
+    end
+end

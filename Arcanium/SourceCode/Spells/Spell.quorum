@@ -11,4 +11,8 @@ class Spell is Attack
     action GetManaCost() returns integer
         return manaCost
     end
+
+    action ParseJSON
+        
+    end
 end

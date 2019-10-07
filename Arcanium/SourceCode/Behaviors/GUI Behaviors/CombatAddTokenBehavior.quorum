@@ -1,0 +1,216 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.Game
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Interface.Controls.Button
+
+class CombatAddTokenBehavior is Behavior
+    
+    Game game
+    Battle battle
+    Array<Item2D> removalArray
+    Array<Item2D> previousPage
+    Array<CombatAddTokenBehavior> previousBehaviors
+    integer maxTokens = 0
+    integer currentTokens = 0
+    integer spellID = 0
+    integer elementID = 0
+    Array<Drawable> tokenDrawables
+
+    constant integer fire = 100000
+    constant integer water = 10000
+    constant integer earth = 1000
+    constant integer wind = 100
+    constant integer light = 10
+    constant integer dark = 1
+
+    action Run(BehaviorEvent event)
+        spellID = spellID + elementID
+
+        Color color
+
+        if elementID < 0
+            currentTokens = currentTokens - 1
+        end
+
+        if elementID = fire
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Red())
+        elseif elementID = water
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Blue())
+        elseif elementID = earth
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Gray())
+        elseif elementID = wind
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Green())
+        elseif elementID = light
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Yellow())
+        elseif elementID = dark
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Black())
+        elseif elementID < 0
+            tokenDrawables:Get(currentTokens):LoadCircle(20)
+        end
+
+
+        if elementID > 0
+            currentTokens = currentTokens + 1
+        end
+
+        integer counter = 0
+
+        repeat while counter < previousBehaviors:GetSize()
+            previousBehaviors:Get(counter):SetSpellID(spellID)
+            previousBehaviors:Get(counter):SetCurrentTokens(currentTokens)
+
+            counter = counter + 1
+        end
+
+        battle:SetPreviousBehavior(GetPreviousBehavior())
+        if currentTokens = maxTokens
+            Dispose()
+            StartTargeting()
+        end
+    end
+
+    action Dispose
+        integer counter = 0
+
+        repeat while counter < previousPage:GetSize()
+            removalArray:Add(previousPage:Get(counter))
+            counter = counter + 1
+        end
+    end
+
+    action StartTargeting
+        integer counter = 0
+
+        Spell spell
+        spell:SetID(spellID)
+        spell:ParseJSON()
+
+        // look up and obtain spell information
+
+        integer numberOfTargets = 1     // later on, takes from spell
+
+        Array<Combatant> combatants = battle:GetCombatants()
+        Array<MenuButton> targets
+        
+        counter = 0
+
+        repeat while counter < previousPage:GetSize()
+            previousPage:RemoveFromFront()
+
+            counter = counter + 1
+        end
+
+        counter = 0
+
+        repeat while counter < combatants:GetSize()
+            MenuButton button
+            CombatTargetingBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetBattle(battle)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetPreviousPage(previousPage)
+            behavior:SetCaster(combatants:Get(0))
+            behavior:SetTarget(combatants:Get(counter))
+            behavior:SetSpell(spell)
+            button:SetDrawable(battle:GetDrawables():Get(counter))
+            button:SetBehavior(behavior)
+            button:SetPosition(-100, -100)
+            button:SetName(combatants:Get(counter):GetName())
+            button:SetGame(game)
+            game:Add(button)
+            targets:Add(button)
+            previousPage:Add(button)
+            
+            counter = counter + 1
+        end
+
+        counter = 0
+
+        repeat while counter < combatants:GetSize()
+            if counter = 0
+                targets:Get(counter):SetPreviousFocus(targets:Get(targets:GetSize()-1))
+                targets:Get(counter):SetNextFocus(targets:Get(counter+1))
+            elseif counter = combatants:GetSize()-1
+                targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
+                targets:Get(counter):SetNextFocus(targets:Get(0))
+            else
+                targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
+                targets:Get(counter):SetNextFocus(targets:Get(counter+1))
+            end
+
+            counter = counter + 1
+        end
+
+        game:SetFocus(targets:Get(1))
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
+    end
+
+    action SetElementID(integer newID)
+        elementID = newID
+    end
+
+    action SetSpellID(integer newID)
+        spellID = newID
+    end
+
+    action SetMaxTokens(integer newMax)
+        maxTokens = newMax
+    end
+
+    action SetCurrentTokens(integer newTokens)
+        currentTokens = newTokens
+    end
+
+    action SetTokenDrawables(Array<Drawable> newArray)
+        tokenDrawables = newArray
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetPreviousBehaviors(Array<CombatAddTokenBehavior> newArray)
+        previousBehaviors = newArray
+    end
+
+    action SetPreviousPage(Array<Item2D> newArray)
+        previousPage = newArray
+    end
+
+    action GetPreviousBehavior returns Behavior
+        if currentTokens = 0
+            CombatSpellsPageBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetBattle(battle)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetPreviousPage(previousPage)
+
+            return behavior 
+        else
+            CombatAddTokenBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetBattle(battle)
+            behavior:SetElementID(0 - elementID)
+            behavior:SetSpellID(spellID)
+            behavior:SetMaxTokens(maxTokens)
+            behavior:SetCurrentTokens(currentTokens)
+            behavior:SetTokenDrawables(tokenDrawables)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetPreviousBehaviors(previousBehaviors)
+            behavior:SetPreviousPage(previousPage)
+
+            return behavior
+        end
+    end
+end

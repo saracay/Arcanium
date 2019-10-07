@@ -1,0 +1,90 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Label
+use Libraries.Interface.Item2D
+use Libraries.Interface.Controls.Button
+
+class DisplayLogBehavior is Behavior
+
+    Button button
+    DisplayLogBehavior nextLog = undefined
+    BehaviorQueue behaviorQueue
+    Array<text> log
+    Array<Item2D> removalArray
+    Label label
+    integer currentIndex = 0
+    Game game
+    boolean finished = false
+
+    action Run(BehaviorEvent event)
+        finished = true
+        Dispose()
+    end
+
+    action Display
+        if currentIndex < log:GetSize()
+            button:SetName(label:GetText())
+            button:SetPosition(-100, -100)
+            button:SetBehavior(me)
+            game:Add(button)
+            game:SetFocus(button)
+
+            label:SetText(log:Get(currentIndex))
+            label:SetFontSize(22)
+            label:SetPosition(10, 150)
+            game:Add(label)
+
+            currentIndex = currentIndex + 1
+
+            if currentIndex < log:GetSize()
+                DisplayLogBehavior temp
+                nextLog = temp
+                nextLog:SetGame(game)
+                nextLog:SetLog(log)
+                nextLog:SetCurrentIndex(currentIndex)
+                nextLog:SetRemovalArray(removalArray)
+                nextLog:SetBehaviorQueue(behaviorQueue)
+                behaviorQueue:AddBehavior(nextLog)
+            else
+                finished = true
+            end
+        else
+            finished = true
+        end
+    end
+
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action Dispose
+        removalArray:Add(button)
+        removalArray:Add(label)
+
+        if nextLog not= undefined
+            nextLog:Display()
+        end
+    end
+
+    action SetLog(Array<text> newLog)
+        log = newLog
+    end
+
+    action SetCurrentIndex(integer newIndex)
+        currentIndex = newIndex
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> array)
+        removalArray = array
+    end
+
+    action SetBehaviorQueue(BehaviorQueue queue)
+        behaviorQueue = queue
+    end
+end

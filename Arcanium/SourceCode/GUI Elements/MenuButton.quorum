@@ -1,0 +1,42 @@
+use Libraries.Interface.Controls.Button
+use Libraries.Interface.Events.FocusListener
+use Libraries.Interface.Events.FocusEvent
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+
+class MenuButton is Button, FocusListener
+
+    Game game
+    Drawable indicator
+    Color color
+    Drawable sprite
+    boolean noIndicator = true
+
+    on create
+        indicator:LoadFilledCircle(10, color:Red())
+        indicator:SetPosition(-100, -100)
+    end
+
+    action GainedFocus(FocusEvent event)
+        if noIndicator
+            game:Add(indicator)
+        end
+
+        indicator:SetPosition(sprite:GetX() + sprite:GetWidth()/2 - 10, sprite:GetY() + sprite:GetHeight()+ 30)
+
+        noIndicator = false
+    end
+
+    action LostFocus(FocusEvent event)
+        indicator:SetPosition(-100, -100)
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetDrawable(Drawable enemy)
+        sprite = enemy
+    end
+end

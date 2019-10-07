@@ -21,7 +21,6 @@ class BehaviorQueue
 
     action AddBehavior(Behavior behavior)
         boolean shouldRun = queue:IsEmpty() and currentBehavior = undefined
-        
         queue:Add(behavior)
         if shouldRun
             NextBehavior()

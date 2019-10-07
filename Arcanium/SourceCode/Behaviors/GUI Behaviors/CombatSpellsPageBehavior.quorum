@@ -1,0 +1,191 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
+use Libraries.Game.Game
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Interface.Controls.Button
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+
+class CombatSpellsPageBehavior is Behavior 
+
+    Game game
+    Battle battle
+    Array<Item2D> removalArray
+    Array<Item2D> currentPage
+    Array<Item2D> previousPage
+    Array<CombatAddTokenBehavior> behaviors
+    integer maxTokens = 2
+    integer currentTokens = 0
+    integer spellID = 9000000
+    Array<Drawable> tokenDrawables
+
+    action Run(BehaviorEvent event)
+        //clear log text
+
+        integer counter = 0
+
+        repeat while counter < maxTokens
+            Drawable tokenDrawable
+            Color color
+            tokenDrawable:LoadCircle(20)
+            tokenDrawable:SetColor(color:Blue())
+            tokenDrawable:SetPosition(220 + 50*counter, 200)
+            tokenDrawables:Add(tokenDrawable)
+            game:Add(tokenDrawable)
+
+            counter = counter + 1
+        end
+
+        Button fireButton
+        CombatAddTokenBehavior fireBehavior
+        fireBehavior:SetGame(game)
+        fireBehavior:SetBattle(battle)
+        fireBehavior:SetElementID(100000)
+        fireBehavior:SetSpellID(spellID)
+        fireBehavior:SetMaxTokens(maxTokens)
+        fireBehavior:SetCurrentTokens(currentTokens)
+        fireBehavior:SetTokenDrawables(tokenDrawables)
+        fireBehavior:SetRemovalArray(removalArray)
+        fireBehavior:SetPreviousBehaviors(behaviors)
+        fireBehavior:SetPreviousPage(currentPage)
+        fireButton:SetBehavior(fireBehavior)
+        fireButton:SetName("Fire")
+        fireButton:SetPosition(100, 100)
+        game:Add(fireButton)
+        currentPage:Add(fireButton)
+        behaviors:Add(fireBehavior)
+
+        Button waterButton
+        CombatAddTokenBehavior waterBehavior
+        waterBehavior:SetGame(game)
+        waterBehavior:SetBattle(battle)
+        waterBehavior:SetElementID(10000)
+        waterBehavior:SetSpellID(spellID)
+        waterBehavior:SetMaxTokens(maxTokens)
+        waterBehavior:SetCurrentTokens(currentTokens)
+        waterBehavior:SetTokenDrawables(tokenDrawables)
+        waterBehavior:SetRemovalArray(removalArray)
+        waterBehavior:SetPreviousBehaviors(behaviors)
+        waterBehavior:SetPreviousPage(currentPage)
+        waterButton:SetBehavior(waterBehavior)
+        waterButton:SetName("Water")
+        waterButton:SetPosition(100, 50)
+        game:Add(waterButton)
+        currentPage:Add(waterButton)
+        behaviors:Add(waterBehavior)
+
+        Button earthButton
+        CombatAddTokenBehavior earthBehavior
+        earthBehavior:SetGame(game)
+        earthBehavior:SetBattle(battle)
+        earthBehavior:SetElementID(1000)
+        earthBehavior:SetSpellID(spellID)
+        earthBehavior:SetMaxTokens(maxTokens)
+        earthBehavior:SetCurrentTokens(currentTokens)
+        earthBehavior:SetTokenDrawables(tokenDrawables)
+        earthBehavior:SetRemovalArray(removalArray)
+        earthBehavior:SetPreviousBehaviors(behaviors)
+        earthBehavior:SetPreviousPage(currentPage)
+        earthButton:SetBehavior(earthBehavior)
+        earthButton:SetName("Earth")
+        earthButton:SetPosition(200, 100)
+        game:Add(earthButton)
+        currentPage:Add(earthButton)
+        behaviors:Add(earthBehavior)
+
+        Button windButton
+        CombatAddTokenBehavior windBehavior
+        windBehavior:SetGame(game)
+        windBehavior:SetBattle(battle)
+        windBehavior:SetElementID(100)
+        windBehavior:SetSpellID(spellID)
+        windBehavior:SetMaxTokens(maxTokens)
+        windBehavior:SetCurrentTokens(currentTokens)
+        windBehavior:SetTokenDrawables(tokenDrawables)
+        windBehavior:SetRemovalArray(removalArray)
+        windBehavior:SetPreviousBehaviors(behaviors)
+        windBehavior:SetPreviousPage(currentPage)
+        windButton:SetBehavior(windBehavior)
+        windButton:SetName("Wind")
+        windButton:SetPosition(200, 50)
+        game:Add(windButton)
+        currentPage:Add(windButton)
+        behaviors:Add(windBehavior)
+
+        Button lightButton
+        CombatAddTokenBehavior lightBehavior
+        lightBehavior:SetGame(game)
+        lightBehavior:SetBattle(battle)
+        lightBehavior:SetElementID(10)
+        lightBehavior:SetSpellID(spellID)
+        lightBehavior:SetMaxTokens(maxTokens)
+        lightBehavior:SetCurrentTokens(currentTokens)
+        lightBehavior:SetTokenDrawables(tokenDrawables)
+        lightBehavior:SetRemovalArray(removalArray)
+        lightBehavior:SetPreviousBehaviors(behaviors)
+        lightBehavior:SetPreviousPage(currentPage)
+        lightButton:SetBehavior(lightBehavior)
+        lightButton:SetName("Light")
+        lightButton:SetPosition(300, 100)
+        game:Add(lightButton)
+        currentPage:Add(lightButton)
+        behaviors:Add(lightBehavior)
+
+        Button darkButton
+        CombatAddTokenBehavior darkBehavior
+        darkBehavior:SetGame(game)
+        darkBehavior:SetBattle(battle)
+        darkBehavior:SetElementID(1)
+        darkBehavior:SetSpellID(spellID)
+        darkBehavior:SetMaxTokens(maxTokens)
+        darkBehavior:SetCurrentTokens(currentTokens)
+        darkBehavior:SetTokenDrawables(tokenDrawables)
+        darkBehavior:SetRemovalArray(removalArray)
+        darkBehavior:SetPreviousBehaviors(behaviors)
+        darkBehavior:SetPreviousPage(currentPage)
+        darkButton:SetBehavior(darkBehavior)
+        darkButton:SetName("Dark")
+        darkButton:SetPosition(300, 50)
+        game:Add(darkButton)
+        currentPage:Add(darkButton)
+        behaviors:Add(darkBehavior)
+
+        battle:SetPreviousBehavior(GetPreviousBehavior())
+        Dispose()
+    end
+
+    action Dispose
+        integer counter = 0
+
+        repeat while counter < previousPage:GetSize()
+            removalArray:Add(previousPage:Get(counter))
+            counter = counter + 1
+        end
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetPreviousPage(Array<Item2D> newArray)
+        previousPage = newArray
+    end
+    
+    action GetPreviousBehavior returns Behavior
+        CombatMainPageBehavior behavior
+        behavior:SetGame(game)
+        behavior:SetRemovalArray(removalArray)
+        behavior:SetBattle(battle)
+
+        return behavior
+    end
+end

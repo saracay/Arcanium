@@ -5,16 +5,25 @@ use Libraries.Interface.Controls.TextBox
 use Libraries.Game.Graphics.Color
 use Libraries.Game.Graphics.Label
 use Libraries.Compute.Math
+use Libraries.Interface.Item2D
+use Libraries.Interface.Events.KeyboardListener
+use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Game.InputMonitor
+use Libraries.Interface.Behaviors.Behavior
 
 class Battle is Level
     
-    Player player
-    Array<Enemy> enemies
+    BehaviorQueue behaviorQueue
+    Array<Item2D> removalArray
+    Behavior previousBehavior
+    Array<Item2D> currentPage
+    Array<Combatant> combatants
+    Array<Drawable> drawables
     Array<text> log
     Drawable background
     Game game
     Color color
-
+    
     on create
         //background:Load("Assets\Maps\Battle.png")
     end
@@ -23,14 +32,20 @@ class Battle is Level
         game = newGame
     end
 
-    action Initialize(Player newPlayer, Enemy overworldEnemy)   //sample for testing only
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
 
+    action Initialize(Player player, Enemy overworldEnemy)   //sample for testing only
+
+        combatants:Add(player)
         //placeholder for player, just loads a square instead for now
 
         Drawable playerSquare
         playerSquare:LoadFilledRectangle(150, 150, color:Blue())
         playerSquare:SetPosition(50, 200)
         game:Add(playerSquare)
+        drawables:Add(playerSquare)
 
         //displays player health and mana
 
@@ -40,12 +55,12 @@ class Battle is Level
         game:Add(playerHealthBackground)
 
         Label playerHealth
-        playerHealth:SetText("Health: " + newPlayer:GetCurrentHP() + "/" + newPlayer:GetMaxHP())
+        playerHealth:SetText("Health: " + player:GetCurrentHP() + "/" + player:GetMaxHP())
         playerHealth:SetPosition(230, 325)
         game:Add(playerHealth)
 
         Label playerMana
-        playerMana:SetText("Mana: " + newPlayer:GetCurrentMP() + "/" + newPlayer:GetMaxMP())
+        playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
         playerMana:SetPosition(230, 305)
         game:Add(playerMana)
 
@@ -55,30 +70,31 @@ class Battle is Level
         Orc orc
         Slime slime
 
-        enemies:Add(goblin)
-        enemies:Add(orc)
-        enemies:Add(slime)
+        combatants:Add(goblin)
+        combatants:Add(orc)
+        combatants:Add(slime)
 
-        integer enemyIndex = 0
+        integer combatantIndex = 1
         Math math
 
-        repeat while enemyIndex < enemies:GetSize()
+        repeat while combatantIndex < combatants:GetSize()
             Drawable enemySprite
             enemySprite:LoadFilledCircle(50, color:Red())
-            enemySprite:SetPosition(400 + 120 * enemyIndex, 400 + 50 * (enemyIndex mod 2))
+            enemySprite:SetPosition(400 + 120 * (combatantIndex - 1), 400 + 50 * ((combatantIndex - 1) mod 2))
             game:Add(enemySprite)
+            drawables:Add(enemySprite)
 
             Drawable enemyHealthBackground
             enemyHealthBackground:LoadFilledRectangle(120, 30, color:LightGray())
-            enemyHealthBackground:SetPosition(225, 500 - 40 * enemyIndex)
+            enemyHealthBackground:SetPosition(225, 500 - 40 * (combatantIndex - 1))
             game:Add(enemyHealthBackground)
 
             Label enemyHealth
-            enemyHealth:SetText("Health: ")// + enemies:Get(enemyIndex):GetCurrentHealth() + "/" + enemies:Get(enemyIndex):GetMaxHealth())
-            enemyHealth:SetPosition(230, 500 + 15 - 40 * enemyIndex)
+            enemyHealth:SetText("Health: " + combatants:Get(combatantIndex):GetCurrentHP() + "/" + combatants:Get(combatantIndex):GetMaxHP())
+            enemyHealth:SetPosition(230, 500 + 15 - 40 * (combatantIndex - 1))
             game:Add(enemyHealth)
 
-            enemyIndex = enemyIndex + 1
+            combatantIndex = combatantIndex + 1
         end
 
         log:Add("An enemy Golbin, Orc, and Slime appeared!")
@@ -87,27 +103,58 @@ class Battle is Level
         dialogueBackground:LoadFilledRectangle(800, 180, color:LightGray())
         game:Add(dialogueBackground)
 
-        Label dialogue
-        dialogue:SetText(log:Get(0))
-        dialogue:SetFontSize(22)
-        dialogue:SetPosition(10, 150)
-        game:Add(dialogue)
-
         PlayerTurn()
     end
 
     action PlayerTurn
         log:Add("What will <player> do?")
-        //display log
-        
-        
+
+        DisplayLogBehavior logBehavior
+        logBehavior:SetGame(game)
+        logBehavior:SetLog(log)
+        logBehavior:SetCurrentIndex(0)
+        logBehavior:SetBehaviorQueue(behaviorQueue)
+        logBehavior:SetRemovalArray(removalArray)
+        logBehavior:Display()
+        behaviorQueue:AddBehavior(logBehavior)
+
+        CombatMainPageBehavior combatBehavior
+        combatBehavior:SetGame(game)
+        combatBehavior:SetRemovalArray(removalArray)
+        combatBehavior:SetBattle(me)
+        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
         
     end
 
-    action IsOver
-        
+    action GetCombatants returns Array<Combatant>
+        return combatants
     end
+
+    action GetDrawables returns Array<Drawable>
+        return drawables
+    end
+
+    action SetBehaviorQueue(BehaviorQueue queue)
+        behaviorQueue = queue
+    end
+
+    action SetCurrentPage(Array<Item2D> array)
+        currentPage = array
+    end
+
+    action SetPreviousBehavior(Behavior behavior)
+        previousBehavior = behavior
+    end
+
+    action GetPreviousBehavior returns Behavior
+        return previousBehavior
+    end
+
+    action GetCurrentPage returns Array<Item2D>
+        return currentPage
+    end
+
 end

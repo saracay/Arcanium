@@ -1,0 +1,7 @@
+use Libraries.Interface.Behaviors.Behavior
+
+class CombatRunBehavior is Behavior
+    action Main
+        
+    end
+end

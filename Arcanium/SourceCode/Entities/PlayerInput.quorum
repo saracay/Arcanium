@@ -15,7 +15,7 @@ class PlayerInput
     MoveDown moveDown
     MoveLeft moveLeft
     MoveRight moveRight
-    PlayerMovement playerMovement
+//    PlayerMovement playerMovement
 
     action SetInput(PlayerDrawable player, InputTable inputTable)    
      

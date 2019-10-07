@@ -17,16 +17,19 @@ use Libraries.Game.Graphics.ImageSheet
 
 class Main is Game, CollisionListener2D
     
-    //Queues for removing objects
+    //Queue for storing subsequent Behaviors
     BehaviorQueue behaviorQueue
-    Array<Item2D> removalQueue
+
+    //Queue for removing objects
+    Array<Item2D> removalArray
 
     //Entities
     Map map1
     Player player1
 	
     // For Interaction testing      -Ryan
-    Array<Interactable> npcList
+    Interactable npc1
+    Interactable npc2
 
     //For drawing images
     Drawable testmap
@@ -71,116 +74,76 @@ class Main is Game, CollisionListener2D
                                                             - Matt
         ***********************************************************************/
 
-//        Player player   //placeholder for now
-//        
-//        Battle battle
-//        Slime sampleSlime
-//        battle:SetGame(me)
-//        battle:LoadLevel()
-//        battle:Initialize(player, sampleSlime)
+        Player player   //placeholder for now
+        Enemy enemy
+        
+        Battle battle
+        battle:SetGame(me)
+        battle:SetRemovalArray(removalArray)
+        battle:LoadLevel()
+        battle:Initialize(player, enemy)
+        inCombat = true
 
         /***********************************************************************
         End of Matt's Testing Section
         ***********************************************************************/
 
-        //Allows for collisions
-        EnablePhysics2D(true)
-        
-        map1:loadMap(TEST_MAP)
-        map1:loadCollisionLayer(TEST_MAP)
-        
-        // test if map uploads
-        /*map1:loadMap(CASTLE_MAP)
-        map1:loadCollisionLayer(CASTLE_MAP)*/
-
-        player1:DrawPlayer()
-
-        //Add the drawables to the default layer
-        Add(map1:testMap) 
-
-        //Render all of the collision objects
-        i = 0
-        repeat map1:collisions:GetSize() times
-            Add(map1:collisions:Get(i))
-            i = i + 1
-        end
-
-        Add(player1:playerSprite)
-
-        //Makes the player collidable and responsive to collisions
-        player1:playerSprite:EnablePhysics(true)
-        player1:playerSprite:CanRotate(false)
-        player1:playerSprite:SetResponsive()
-        
-        AddCollisionListener(me)
-
-        //For animations
+//        //Allows for collisions
+//        EnablePhysics2D(true)
+//        
+//        map1:loadMap(TEST_MAP)
+//        map1:loadCollisionLayer(TEST_MAP)
+//        
+//        // test if map uploads
+//        /*map1:loadMap(CASTLE_MAP)
+//        map1:loadCollisionLayer(CASTLE_MAP)*/
+//
+//        player1:DrawPlayer()
+//
+//        //Add the drawables to the default layer
+//        Add(map1:testMap) 
+//
+//        //Render all of the collision objects
+//        i = 0
+//        repeat map1:collisions:GetSize() times
+//            Add(map1:collisions:Get(i))
+//            i = i + 1
+//        end
+//
+//        Add(player1:playerSprite)
+//
+//        //Makes the player collidable and responsive to collisions
+//        player1:playerSprite:EnablePhysics(true)
+//        player1:playerSprite:SetResponsive()
+//        
+//        AddCollisionListener(me)
+//
+//        //For animations
 //        testAnimation:LoadImageSheet()
 //        testAnimation:LoadFrame()
 //        Add(testAnimation:girl)
         
         /***********************************************************************
         Start test section
-        * It should load the FOREST with 3 objects with different interactions
-        * PLAYER should use [SPACE] to trigger behaviors
-          1. Black box, no collision    (dialogue)
-            - 3 Lines of dialogue
-          2. Clear box, with collision  (dialogue)
-            - 2 Lines of dialogue (overlaps the chair in the map)
-          3. White box, no collision    (transition)
-            - Transitions to CASTLE
+        It is currently commented-out so that nothing breaks
                                                                   -Ryan
         ***********************************************************************/
-/*      Currently Commented   [COMMENT-OUT / REMOVE THIS LINE TO TEST!]
-        Remove(player1:playerSprite)
-        Remove(map1:testMap)
-        i = 0
-        repeat map1:collisions:GetSize() times
-            Remove(map1:collisions:Get(i))
-            i = i + 1
-        end
-        map1:loadMap(FOREST_MAP)
-        map1:loadCollisionLayer(FOREST_MAP)
-        Add(map1:testMap)
-        i = 0
-        repeat map1:collisions:GetSize() times
-            Add(map1:collisions:Get(i))
-            i = i + 1
-        end
-        Add(player1:playerSprite)
-        player1:playerSprite:EnablePhysics(true)
-        player1:playerSprite:CanRotate(false)
-        player1:playerSprite:SetResponsive()
+/*
+        // For interactable testing
         player1:playerSprite:SetName("player")
-        integer index = 0
-        repeat until index = 3
-            Interactable fillerInteractable
-            npcList:Add(fillerInteractable)
-            if index = 0
-                npcList:Get(index):CreateInteractable("TestNPC", "clear", 11, 5.5, true)
-                DialogueBehavior newDialogue1
-                newDialogue1:AddDialogue("There is a chair infront of you.")
-                newDialogue1:AddDialogue("It is TANGIBLE.")
-                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
-            elseif index = 1
-                npcList:Get(index):CreateInteractable("TestNPC", "default", 5, 4, false)
-                DialogueBehavior newDialogue1
-                newDialogue1:AddDialogue("You cannot touch this black box (INTANGIBLE).")
-                newDialogue1:AddDialogue("It shows interaction without physical collision.")
-                newDialogue1:AddDialogue("It covers your sprite (due to being added later).")
-                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
-            elseif index = 2
-                npcList:Get(index):CreateInteractable("TestTransition", "clear", 0, 4, false)
-                npcList:Get(index):LoadFilledRectangle(32,32,color:White())
-                MapTransitionBehavior newTransition1
-                newTransition1:SetTransition(map1, CASTLE_MAP, npcList)
-                newTransition1:SetCoordinates(16, 12)
-                npcList:Get(index):SetInteractableBehavior(newTransition1, "transition")
-            end
-            Add(npcList:Get(index))
-            AddKeyboardListener(npcList:Get(index))
-            index = index + 1
-        end
+        player1:playerSprite:CanRotate(false)
+        npc1:CreateInteractable("TestNPC", "default", 9, 2, true)
+        npc1:AddDialogue("You can touch this black box.")
+        npc1:AddDialogue("It shows interaction with physical collision.")
+        Add(npc1)
+        AddKeyboardListener(npc1)
+        npc2:CreateInteractable("TestNPC", "default", 10, 4, false)
+        npc2:AddDialogue("You cannot touch this black box (INTANGIBLE).")
+        npc2:AddDialogue("It shows interaction without physical collision.")
+        npc2:AddDialogue("It covers your sprite (due to being added later).")
+        Add(npc2)
+        AddKeyboardListener(npc2)
+*/
         /***********************************************************************
         End test Section
         ***********************************************************************/
@@ -189,60 +152,41 @@ class Main is Game, CollisionListener2D
     action Update(number seconds)
         //Necessary for removing unneeded objects
         behaviorQueue:Update(seconds)
-        repeat until removalQueue:IsEmpty()
-            Remove(removalQueue:RemoveFromFront())
+        repeat until removalArray:IsEmpty()
+            Remove(removalArray:RemoveFromFront())
         end
        
-        //for animation
-        //elapsedTime = elapsedTime + seconds
-
-        // Movement using WASD
-        // Get current location
-        newY = player1:playerSprite:GetY()
-        newX = player1:playerSprite:GetX()
-
-        // Add/Sub to both X and Y based on keys
-        if monitor:IsKeyPressed(keys:W)
-            newY = newY + plyrSpeed * seconds
-            
-            // for animation -- commented out for testing
-            /*newY = testAnimation:girl:GetY() + plyrSpeed * seconds
-            //for animation
-            if elapsedTime >= 1/fps
-                frame = frame + 1
-            if frame > 3
-                frame = 1 
-            end
-            testAnimation:ChangeFrame()
-            elapsedTime = elapsedTime - 1/fps
-            end*/
-        end
-        if monitor:IsKeyPressed(keys:S)
-            newY = newY - plyrSpeed * seconds
-        end
-        if monitor:IsKeyPressed(keys:D)
-            newX = newX + plyrSpeed * seconds
-        end
-        if monitor:IsKeyPressed(keys:A)
-            newX = newX - plyrSpeed * seconds
-        end
-
-        // Checks if PLAYER is out of bounds
-        if newY < 0
-            newY = 0
-        end
-        if newX < 0
-            newX = 0
-        end
-        if newY > map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
-            newY = map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
-        end
-        if newX > map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
-            newX = map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
-        end
-        
-        player1:playerSprite:SetPosition(newX,newY)
-//        testAnimation:girl:SetPosition(newX, newY)
+//        //for animation
+//        //elapsedTime = elapsedTime + seconds
+//
+//        //Movement using WASD
+//        if monitor:IsKeyPressed(keys:W)
+//            newY = player1:playerSprite:GetY() + plyrSpeed * seconds
+//            
+//            // for animation -- commented out for testing
+//            /*newY = testAnimation:girl:GetY() + plyrSpeed * seconds
+//            //for animation
+//            if elapsedTime >= 1/fps
+//                frame = frame + 1
+//            if frame > 3
+//                frame = 1 
+//            end
+//            testAnimation:ChangeFrame()
+//            elapsedTime = elapsedTime - 1/fps
+//            end*/
+//
+//        elseif monitor:IsKeyPressed(keys:S)
+//            newY = player1:playerSprite:GetY() - plyrSpeed * seconds
+//
+//        elseif monitor:IsKeyPressed(keys:D)
+//            newX = player1:playerSprite:GetX() + plyrSpeed * seconds
+//
+//        elseif monitor:IsKeyPressed(keys:A)
+//            newX = player1:playerSprite:GetX() - plyrSpeed * seconds
+//        end
+//        
+//        player1:playerSprite:SetPosition(newX,newY)
+//        //testAnimation:girl:SetPosition(newX, newY)
     end
 
     action AddBehavior(Behavior behavior)
@@ -250,7 +194,7 @@ class Main is Game, CollisionListener2D
     end
 
     action AddToRemove(Item2D item)
-        removalQueue:Add(item)
+        removalArray:Add(item)
     end
 
     action BeginCollision(CollisionEvent2D event)
@@ -276,24 +220,24 @@ class Main is Game, CollisionListener2D
     ***********************************************************************/
 ///*      MAIN INTERACTABLE ACITON - ALLOWS FOR INTERACTIONS W/ PLAYER
         // Variable used to determine if interaction is available
-        boolean interaction = false
-
-        // Cast collision items as Drawables to use them
-        Drawable itemA = cast(Drawable, event:GetItemA())
-        Drawable itemB = cast(Drawable, event:GetItemB())
-
-        // Check if PLAYER & INTERACTABLE
-        if itemA:GetName() = "player"
-            if itemB:GetName() = "interactable"
-                interaction = true
-            end
-        end
-
-        // If interaction is available, enable/disable it
-        if interaction
-            Interactable newItemB = cast(Interactable, itemB)
-            newItemB:ToggleInteraction()
-        end
+//        boolean interaction = false
+//
+//        // Cast collision items as Drawables to use them
+//        Drawable itemA = cast(Drawable, event:GetItemA())
+//        Drawable itemB = cast(Drawable, event:GetItemB())
+//
+//        // Check if PLAYER & INTERACTABLE
+//        if itemA:GetName() = "player"
+//            if itemB:GetName() = "interactable"
+//                interaction = true
+//            end
+//        end
+//
+//        // If interaction is available, enable/disable it
+//        if interaction
+//            Interactable newItemB = cast(Interactable, itemB)
+//            newItemB:ToggleInteraction()
+//        end
     /***********************************************************************
     End of Ryan's Testing Section
     ***********************************************************************/
