@@ -3,44 +3,64 @@
   Inherits from Drawable to be detected w/ collisions
   Inherits from KeyboardListener to be interactable
 
-  Format of initializer: CreateInteractable(...)
-    1 - Set name to any string
-    2 - Set spritePath to image, or use presets
-        * Use "default" for for Black Box (32x32)
-        * Use "clear" for for Clear Box (32x32)
-   3&4 - X and Y coordinates (then multiplied by 32)
-        * We use 32x32 tiles, thus easier positioning
-    5 - Set true to be physically collidable
-        * Otherwise, it will be visible but intangible
+  Initialize with CreateInteractable(1, 2, 3, 4, 5)
+   1. TEXT (name) of this INTERACTABLE
+   2. TEXT (path) to the sprite / image
+       * Use "default" for for Black Box (32x32)
+       * Use "clear" for for Clear Box (32x32)
+   3. NUMBER of x coordinate
+       * Will be multipled by 32 for Tiled posiitoning
+   4. NUMBER of y coordinate
+       * Will be multipled by 32 for Tiled posiitoning
+   5. BOOLEAN determining physical collisions
+       * TRUE will be visible and tangible
+       * FALSE will be visible but intangible
 
   EXAMPLE FORMATTING: 
   * npc:CreateInteractable("NPC", "clear", 11, 5.5, true)
 
   PROBLEMS / MISSING FEATURES OF INTERACTABLE CLASS
-  * If PLAYER is colliding w/ 2+ INTERACTABLEs, then
-      each will display DIALOGUE (No priority / focus)
-  * DIALOGUE is simple OUTPUT (No GUI text box)
-  * No simple INITIALIZER (Manual input, including (X,Y))
+  > DIALOGUE
+    * If PLAYER is colliding w/ 2+ INTERACTABLEs, then
+        each will display DIALOGUE (No priority / focus)
+    * DIALOGUE is simple OUTPUT (No GUI text box)
+    * No simple INITIALIZER (Manual input, including (X,Y))
+      # Could be fine with JSON file for input
+  > MAP TRANSITION
+    * Essentially uses the MAIN to remove / load maps
+    * Currently cannot load INTERACTABLES w/ maps
+
+  LIST OF BEHAVIORS ON INTERACTION / COLLISION
+  * Dialogue                        [ Completed ]
+  * Map Transition                  [In-Progress]
+  * Scripted Events                 [ - - - - - ]
+  * Battle                          [ - - - - - ]
+  * Getting an Item                 [ - - - - - ]
+  * Stores / Storage / Crafting     [ - - - - - ]
 **********************************************************/
 use Libraries.Game.Graphics.Drawable
 use Libraries.Containers.Array
 use Libraries.Interface.Events.KeyboardListener
 use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Game.Graphics.Color
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
 
 class Interactable is Drawable, KeyboardListener
 
     // List of variables for INTERACTABLE
-    text name = "NPC-01"                    // Name of Interactable
-    Array<text> dialogue                    // Array of Dialogues
-    integer currentDialogue = 0             // Index of Dialogues 
+    text name = "NPC-01"                    // Name of Interactable	
     boolean currentlyInteracting = false    // Check if Interacting
     Color color                             // Used for setting colors
 
+    // List of varibles for BEHAVIORs
+    Behavior currentBehavior                // Behavior to trigger
+    text typeOfBehavior = ""                // Behavior type ID
+
     // Initializer of an INTERACTABLE Object
     action CreateInteractable(text setName, text spritePath, number setX, number setY, boolean physicsOn)
-        name = setName
-        SetName("interactable")             // Sets drawable name for collision
+        name = setName                      // Sets the name of the Interactable
+        SetName("interactable")             // Sets the name for Drawable
 
         if spritePath = "default"
             LoadFilledRectangle(32, 32, color:Black())
@@ -59,32 +79,6 @@ class Interactable is Drawable, KeyboardListener
             SetCollidable(true)             // Intangible (still interactable)
         end
     end
-	
-    // Adds new Dialogue to the array
-    action AddDialogue(text newDialogue)
-        dialogue:Add(newDialogue)
-    end
-	
-    // Returns the current Dialogue, or "..." if empty, repeats if needed
-    action GetDialogue returns text
-        integer i = dialogue:GetSize()
-
-        // If no dialogue is added, say nothing ("...")
-        if i = 0
-            return "..."
-        end
-
-        // If you reached the end dialogue, repeat
-        if currentDialogue = i
-            currentDialogue = 0
-        end
-	
-        // Go to next dialogue before return
-        currentDialogue = currentDialogue + 1
-
-        // Give pre-increment dialogue
-        return dialogue:Get(currentDialogue - 1)
-    end
 
     // Returns the Name of INTERACTABLE Object
     action GetInteractableName returns text
@@ -97,23 +91,34 @@ class Interactable is Drawable, KeyboardListener
     end
 	
     // Switches the truth of currentlyInteracting
+    // * If BEHAVIOR is DIALOGUE, reset to beginning
     action ToggleInteraction
         if currentlyInteracting
-            currentDialogue = 0             // Reset to 1st dialogue
             currentlyInteracting = false
+            if currentBehavior is DialogueBehavior
+                integer currentDialogue = 0
+                DialogueBehavior newBehavior = cast(DialogueBehavior, currentBehavior)
+                newBehavior:ResetDialogue()
+            end
         else
             currentlyInteracting = true
+            output "(Press [SPACE] to interact)"
         end
     end
 	
-    // When SPACE is pressed while currentlyInteracting
-    // it will display the next dialogue
+    // When SPACE is pressed while currentlyInteracting, trigger behavior
     action PressedKey(KeyboardEvent event)
         if currentlyInteracting
             if event:keyCode = event:SPACE
-                output GetDialogue()
+                BehaviorEvent newEvent
+                currentBehavior:Run(newEvent)
             end
         end
     end
-	
+
+    // Add behavior to INTERACTABLE, and set behavior TYPE
+    action SetInteractableBehavior(Behavior newBehavior, text behaviorType)
+        currentBehavior = newBehavior
+        typeOfBehavior = behaviorType
+    end
 end
