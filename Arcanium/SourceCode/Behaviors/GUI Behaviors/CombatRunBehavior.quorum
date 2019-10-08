@@ -1,7 +1,8 @@
 use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
 
 class CombatRunBehavior is Behavior
-    action Main
+    action Run(BehaviorEvent event)
         
     end
 end

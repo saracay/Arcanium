@@ -4,10 +4,12 @@ use Libraries.Interface.Events.FocusEvent
 use Libraries.Game.Game
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
+use Libraries.Containers.Array
 
 class MenuButton is Button, FocusListener
 
     Game game
+    Array<Item2D> removalArray
     Drawable indicator
     Color color
     Drawable sprite
@@ -16,6 +18,10 @@ class MenuButton is Button, FocusListener
     on create
         indicator:LoadFilledCircle(10, color:Red())
         indicator:SetPosition(-100, -100)
+    end
+
+    action Dispose
+        removalArray:Add(indicator)
     end
 
     action GainedFocus(FocusEvent event)
@@ -34,6 +40,10 @@ class MenuButton is Button, FocusListener
 
     action SetGame(Game newGame)
         game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> array)
+        removalArray = array
     end
 
     action SetDrawable(Drawable enemy)

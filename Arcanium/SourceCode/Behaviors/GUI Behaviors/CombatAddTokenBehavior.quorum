@@ -13,6 +13,7 @@ class CombatAddTokenBehavior is Behavior
     Battle battle
     Array<Item2D> removalArray
     Array<Item2D> previousPage
+    Array<Item2D> currentPage
     Array<CombatAddTokenBehavior> previousBehaviors
     integer maxTokens = 0
     integer currentTokens = 0
@@ -52,7 +53,6 @@ class CombatAddTokenBehavior is Behavior
             tokenDrawables:Get(currentTokens):LoadCircle(20)
         end
 
-
         if elementID > 0
             currentTokens = currentTokens + 1
         end
@@ -67,9 +67,63 @@ class CombatAddTokenBehavior is Behavior
         end
 
         battle:SetPreviousBehavior(GetPreviousBehavior())
+
         if currentTokens = maxTokens
+            Spell spell
+            spell:SetID(spellID)
+            spell:ParseJSON()
+
+            // look up and obtain spell information
+
+            integer numberOfTargets = 1     // later on, takes from spell
+
+            Array<Combatant> combatants = battle:GetCombatants()
+            Array<MenuButton> targets
+
+            counter = 0
+
+            repeat while counter < combatants:GetSize()
+                MenuButton button
+                DamageCalculationBehavior behavior
+                behavior:SetGame(game)
+                behavior:SetBattle(battle)
+                behavior:SetRemovalArray(removalArray)
+                behavior:SetPreviousPage(currentPage)
+                behavior:SetCaster(combatants:Get(0))
+                behavior:SetTarget(combatants:Get(counter))
+                behavior:SetSpell(spell)
+                button:SetDrawable(battle:GetDrawables():Get(counter))
+                button:SetBehavior(behavior)
+                button:SetPosition(-100, -100)
+                button:SetName(combatants:Get(counter):GetName())
+                button:SetGame(game)
+                game:Add(button)
+                targets:Add(button)
+                currentPage:Add(cast(Item2D, button))
+
+                counter = counter + 1
+            end
+
+            counter = 0
+
+            repeat while counter < combatants:GetSize()
+                if counter = 0
+                    targets:Get(counter):SetPreviousFocus(targets:Get(targets:GetSize()-1))
+                    targets:Get(counter):SetNextFocus(targets:Get(counter+1))
+                elseif counter = combatants:GetSize()-1
+                    targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
+                    targets:Get(counter):SetNextFocus(targets:Get(0))
+                else
+                    targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
+                    targets:Get(counter):SetNextFocus(targets:Get(counter+1))
+                end
+
+                counter = counter + 1
+            end
+
+            game:SetFocus(targets:Get(1))
+
             Dispose()
-            StartTargeting()
         end
     end
 
@@ -80,72 +134,6 @@ class CombatAddTokenBehavior is Behavior
             removalArray:Add(previousPage:Get(counter))
             counter = counter + 1
         end
-    end
-
-    action StartTargeting
-        integer counter = 0
-
-        Spell spell
-        spell:SetID(spellID)
-        spell:ParseJSON()
-
-        // look up and obtain spell information
-
-        integer numberOfTargets = 1     // later on, takes from spell
-
-        Array<Combatant> combatants = battle:GetCombatants()
-        Array<MenuButton> targets
-        
-        counter = 0
-
-        repeat while counter < previousPage:GetSize()
-            previousPage:RemoveFromFront()
-
-            counter = counter + 1
-        end
-
-        counter = 0
-
-        repeat while counter < combatants:GetSize()
-            MenuButton button
-            CombatTargetingBehavior behavior
-            behavior:SetGame(game)
-            behavior:SetBattle(battle)
-            behavior:SetRemovalArray(removalArray)
-            behavior:SetPreviousPage(previousPage)
-            behavior:SetCaster(combatants:Get(0))
-            behavior:SetTarget(combatants:Get(counter))
-            behavior:SetSpell(spell)
-            button:SetDrawable(battle:GetDrawables():Get(counter))
-            button:SetBehavior(behavior)
-            button:SetPosition(-100, -100)
-            button:SetName(combatants:Get(counter):GetName())
-            button:SetGame(game)
-            game:Add(button)
-            targets:Add(button)
-            previousPage:Add(button)
-            
-            counter = counter + 1
-        end
-
-        counter = 0
-
-        repeat while counter < combatants:GetSize()
-            if counter = 0
-                targets:Get(counter):SetPreviousFocus(targets:Get(targets:GetSize()-1))
-                targets:Get(counter):SetNextFocus(targets:Get(counter+1))
-            elseif counter = combatants:GetSize()-1
-                targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
-                targets:Get(counter):SetNextFocus(targets:Get(0))
-            else
-                targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
-                targets:Get(counter):SetNextFocus(targets:Get(counter+1))
-            end
-
-            counter = counter + 1
-        end
-
-        game:SetFocus(targets:Get(1))
     end
 
     action SetGame(Game newGame)

@@ -109,24 +109,25 @@ class Battle is Level
     action PlayerTurn
         log:Add("What will <player> do?")
 
-        DisplayLogBehavior logBehavior
-        logBehavior:SetGame(game)
-        logBehavior:SetLog(log)
-        logBehavior:SetCurrentIndex(0)
-        logBehavior:SetBehaviorQueue(behaviorQueue)
-        logBehavior:SetRemovalArray(removalArray)
-        logBehavior:Display()
-        behaviorQueue:AddBehavior(logBehavior)
+//        DisplayLogBehavior logBehavior
+//        logBehavior:SetGame(game)
+//        logBehavior:SetLog(log)
+//        logBehavior:SetCurrentIndex(0)
+//        logBehavior:SetBehaviorQueue(behaviorQueue)
+//        logBehavior:SetRemovalArray(removalArray)
+//        logBehavior:Display()
+//        behaviorQueue:AddBehavior(logBehavior)
 
         CombatMainPageBehavior combatBehavior
         combatBehavior:SetGame(game)
         combatBehavior:SetRemovalArray(removalArray)
         combatBehavior:SetBattle(me)
-        behaviorQueue:AddBehavior(combatBehavior)
+        combatBehavior:Run(undefined)
+//        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
-        
+output "EnemyTurn test"
     end
 
     action GetCombatants returns Array<Combatant>
