@@ -14,7 +14,27 @@ class Combatant
         end
     end
     
-    action ReceiveSpellAttack(Spell enemySpell, Combatant attacker) 
+    action ReceiveHeal(Spell healSpell, Combatant caster) 
+     returns Array<text>
+        Array<text> log
+        integer healAmount = healSpell:GetBaseDamage()
+
+        if currentHP + healAmount > maxHP
+            healAmount = maxHP - currentHP
+        end
+        SetCurrentHP(currentHP + healAmount)
+
+        text incomingSpell = caster:GetName() + " cast " + healSpell:GetName() 
+         + " on " + GetName() + "!"
+        log:Add(incomingSpell)
+
+        text incomingHeal = GetName() + " recieved " + healAmount + " health!"
+        log:Add(incomingHeal)
+
+        return log
+    end
+
+    action ReceiveSpellAttack(Spell enemySpell, Combatant caster) 
      returns Array<text>
         Array<text> log
         number damageModifier = 0
@@ -22,8 +42,13 @@ class Combatant
         integer spellID = enemySpell:GetID()
         integer counter = 5
         integer elementCount = 0
-        //SpellID order: 1 fire water earth air light dark
+        
+        //TODO place check below for spells that heal self/friendlies but damage enemies
+        if enemySpell:GetCanHeal()
+            return ReceiveHeal(enemySpell, caster)
+        end
 
+        //SpellID order: 1 fire water earth air light dark
         repeat 6 times
             elementCount = spellID mod 10
             
@@ -43,9 +68,9 @@ class Combatant
         //Adds text to display to player into the array
         //Results in log[incomingAttack, incomingDamage, defeated]
 
-        text incomingAttack = attacker:GetName() + " cast " + enemySpell:GetName() 
+        text incomingSpell = caster:GetName() + " cast " + enemySpell:GetName() 
          + " on " + GetName() + "!"
-        log:Add(incomingAttack)
+        log:Add(incomingSpell)
 
         text incomingDamage = GetName() + " took " + damage + " damage!"
         log:Add(incomingDamage)

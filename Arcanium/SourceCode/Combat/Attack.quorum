@@ -7,6 +7,7 @@ class Attack
     integer ID = 9000000                    //attack ID, start with 9 for spell, 8 for physical
     Array<integer> statusCodes              //contains codes for status effects applied by the attack
     boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
+    boolean canHeal = false                 //true if attack can heal
 
     action SetName(text newName)
         name = newName
@@ -38,6 +39,14 @@ class Attack
 
     action GetMultiTarget() returns boolean
         return multiTarget
+    end
+
+    action SetCanHeal(boolean newCanHeal)
+        canHeal = newCanHeal
+    end
+
+    action GetCanHeal() returns boolean
+        return canHeal
     end
     
 /* Not Yet Implemented/Used

@@ -1,0 +1,47 @@
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
+
+class Spell is Attack
+    
+    integer manaCost = 1                    //mana cost of a spell
+
+    action SetManaCost(integer newManaCost)
+        manaCost = newManaCost
+    end
+
+    action GetManaCost() returns integer
+        return manaCost
+    end
+
+    action ParseJSON()
+        integer ID = GetID()
+        JavaScriptObjectNotation spells
+        File spellsList
+        spellsList:SetPath("Assets\Attacks\Attacks.json")
+        spells:Read(spellsList)
+        JavaScriptObjectNotation spellData = spells:GetObject("spells")
+
+        JavaScriptObjectNotation currentSpell
+        integer i = 0
+        boolean found = false
+        repeat while i < spellData:GetSize() and not found
+            currentSpell = spellData:Get(i)
+            if currentSpell:GetValue("spellID") = ID:GetText()
+                found = true
+            else
+                i = i + 1
+            end
+        end
+
+        if not found
+            output "Temporary Error: spell not found"
+        else
+            SetName(currentSpell:GetValue("name"))
+            SetBaseDamage(currentSpell:GetValue("baseDamage"):ParseInteger())
+            //TODO SetStatusCodes()
+            SetMultiTarget(currentSpell:GetValue("multiTarget"):ParseBoolean())
+            SetCanHeal(currentSpell:GetValue("canHeal"):ParseBoolean())
+            SetManaCost(currentSpell:GetValue("manaCost"):ParseInteger())
+        end
+    end
+end
