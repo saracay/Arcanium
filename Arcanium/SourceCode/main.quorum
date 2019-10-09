@@ -51,7 +51,9 @@ class Main is Game, CollisionListener2D
     text CASTLE_MAP = "Castle"
  
     //For animations
-    Animation testAnimation
+    ImageSheet sheet
+    Drawable p1
+    //Animation testAnimation
     number elapsedTime = 0
     number fps = 4
     number frame = 1
@@ -122,6 +124,9 @@ class Main is Game, CollisionListener2D
 //        testAnimation:LoadImageSheet()
 //        testAnimation:LoadFrame()
 //        Add(testAnimation:girl)
+//        sheet:Load("/Assets/ImageSheets/girl.atlas")
+//        p1:Load(sheet:GetDrawable("Girl frame 1"))
+//        Add(p1)
         
         /***********************************************************************
         Start test section
@@ -164,29 +169,63 @@ class Main is Game, CollisionListener2D
 //            newY = player1:playerSprite:GetY() + plyrSpeed * seconds
 //            
 //            // for animation -- commented out for testing
-//            /*newY = testAnimation:girl:GetY() + plyrSpeed * seconds
+//            /*newY = p1:GetY() + plyrSpeed * seconds
 //            //for animation
 //            if elapsedTime >= 1/fps
 //                frame = frame + 1
 //            if frame > 3
 //                frame = 1 
 //            end
-//            testAnimation:ChangeFrame()
+//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
 //            elapsedTime = elapsedTime - 1/fps
 //            end*/
 //
 //        elseif monitor:IsKeyPressed(keys:S)
 //            newY = player1:playerSprite:GetY() - plyrSpeed * seconds
+              // for animation -- commented out for testing
+//            /*newY = p1:GetY() - plyrSpeed * seconds
+//            //for animation
+//            if elapsedTime >= 1/fps
+//                frame = frame + 1
+//            if frame > 3
+//                frame = 1 
+//            end
+//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
+//            elapsedTime = elapsedTime - 1/fps
+//            end*/  
 //
 //        elseif monitor:IsKeyPressed(keys:D)
 //            newX = player1:playerSprite:GetX() + plyrSpeed * seconds
+              // for animation -- commented out for testing
+//            /*newX = p1:GetX() + plyrSpeed * seconds
+//            //for animation
+//            if elapsedTime >= 1/fps
+//                frame = frame + 1
+//            if frame > 3
+//                frame = 1 
+//            end
+//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
+//            elapsedTime = elapsedTime - 1/fps
+//            end*/
 //
 //        elseif monitor:IsKeyPressed(keys:A)
 //            newX = player1:playerSprite:GetX() - plyrSpeed * seconds
+//
+              // for animation -- commented out for testing
+//            /*newX = p1:GetY() - plyrSpeed * seconds
+//            //for animation
+//            if elapsedTime >= 1/fps
+//                frame = frame + 1
+//            if frame > 3
+//                frame = 1 
+//            end
+//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
+//            elapsedTime = elapsedTime - 1/fps
+//            end*/
 //        end
 //        
 //        player1:playerSprite:SetPosition(newX,newY)
-//        //testAnimation:girl:SetPosition(newX, newY)
+//        //p1:SetPosition(newX, newY)
     end
 
     action AddBehavior(Behavior behavior)
