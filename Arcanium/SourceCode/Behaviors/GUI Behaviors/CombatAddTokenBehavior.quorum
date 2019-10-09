@@ -11,15 +11,13 @@ class CombatAddTokenBehavior is Behavior
     
     Game game
     Battle battle
-    Array<Item2D> removalArray
-    Array<Item2D> previousPage
-    Array<Item2D> currentPage
-    Array<CombatAddTokenBehavior> previousBehaviors
+    Array<CombatAddTokenBehavior> otherBehaviors
+    Array<Drawable> tokenDrawables
+    MenuButton doneButton
     integer maxTokens = 0
     integer currentTokens = 0
     integer spellID = 0
     integer elementID = 0
-    Array<Drawable> tokenDrawables
 
     constant integer fire = 100000
     constant integer water = 10000
@@ -59,89 +57,24 @@ class CombatAddTokenBehavior is Behavior
 
         integer counter = 0
 
-        repeat while counter < previousBehaviors:GetSize()
-            previousBehaviors:Get(counter):SetSpellID(spellID)
-            previousBehaviors:Get(counter):SetCurrentTokens(currentTokens)
+        repeat while counter < otherBehaviors:GetSize()
+            otherBehaviors:Get(counter):SetSpellID(spellID)
+            otherBehaviors:Get(counter):SetCurrentTokens(currentTokens)
 
             counter = counter + 1
         end
 
-        battle:SetPreviousBehavior(GetPreviousBehavior())
-
         if currentTokens = maxTokens
-            Spell spell
-            spell:SetID(spellID)
-            spell:ParseJSON()
-
-            // look up and obtain spell information
-
-            integer numberOfTargets = 1     // later on, takes from spell
-
-            Array<Combatant> combatants = battle:GetCombatants()
-            Array<MenuButton> targets
-
-            counter = 0
-
-            repeat while counter < combatants:GetSize()
-                MenuButton button
-                DamageCalculationBehavior behavior
-                behavior:SetGame(game)
-                behavior:SetBattle(battle)
-                behavior:SetRemovalArray(removalArray)
-                behavior:SetPreviousPage(currentPage)
-                behavior:SetCaster(combatants:Get(0))
-                behavior:SetTarget(combatants:Get(counter))
-                behavior:SetSpell(spell)
-                button:SetDrawable(battle:GetDrawables():Get(counter))
-                button:SetBehavior(behavior)
-                button:SetPosition(-100, -100)
-                button:SetName(combatants:Get(counter):GetName())
-                button:SetGame(game)
-                game:Add(button)
-                targets:Add(button)
-                currentPage:Add(cast(Item2D, button))
-
-                counter = counter + 1
-            end
-
-            counter = 0
-
-            repeat while counter < combatants:GetSize()
-                if counter = 0
-                    targets:Get(counter):SetPreviousFocus(targets:Get(targets:GetSize()-1))
-                    targets:Get(counter):SetNextFocus(targets:Get(counter+1))
-                elseif counter = combatants:GetSize()-1
-                    targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
-                    targets:Get(counter):SetNextFocus(targets:Get(0))
-                else
-                    targets:Get(counter):SetPreviousFocus(targets:Get(counter-1))
-                    targets:Get(counter):SetNextFocus(targets:Get(counter+1))
-                end
-
-                counter = counter + 1
-            end
-
-            game:SetFocus(targets:Get(1))
-
             Dispose()
         end
     end
 
     action Dispose
-        integer counter = 0
-
-        repeat while counter < previousPage:GetSize()
-            removalArray:Add(previousPage:Get(counter))
-            counter = counter + 1
-        end
+        doneButton:Activate()
     end
 
-    action SetGame(Game newGame)
-        game = newGame
-    end
-
-    action SetBattle(Battle newBattle)
-        battle = newBattle
+    action SetDoneButton(MenuButton button)
+        doneButton = button
     end
 
     action SetElementID(integer newID)
@@ -150,6 +83,10 @@ class CombatAddTokenBehavior is Behavior
 
     action SetSpellID(integer newID)
         spellID = newID
+    end
+
+    action GetSpellID returns integer
+        return spellID
     end
 
     action SetMaxTokens(integer newMax)
@@ -164,41 +101,7 @@ class CombatAddTokenBehavior is Behavior
         tokenDrawables = newArray
     end
 
-    action SetRemovalArray(Array<Item2D> newArray)
-        removalArray = newArray
-    end
-
-    action SetPreviousBehaviors(Array<CombatAddTokenBehavior> newArray)
-        previousBehaviors = newArray
-    end
-
-    action SetPreviousPage(Array<Item2D> newArray)
-        previousPage = newArray
-    end
-
-    action GetPreviousBehavior returns Behavior
-        if currentTokens = 0
-            CombatSpellsPageBehavior behavior
-            behavior:SetGame(game)
-            behavior:SetBattle(battle)
-            behavior:SetRemovalArray(removalArray)
-            behavior:SetPreviousPage(previousPage)
-
-            return behavior 
-        else
-            CombatAddTokenBehavior behavior
-            behavior:SetGame(game)
-            behavior:SetBattle(battle)
-            behavior:SetElementID(0 - elementID)
-            behavior:SetSpellID(spellID)
-            behavior:SetMaxTokens(maxTokens)
-            behavior:SetCurrentTokens(currentTokens)
-            behavior:SetTokenDrawables(tokenDrawables)
-            behavior:SetRemovalArray(removalArray)
-            behavior:SetPreviousBehaviors(previousBehaviors)
-            behavior:SetPreviousPage(previousPage)
-
-            return behavior
-        end
+    action SetOtherBehaviors(Array<CombatAddTokenBehavior> newArray)
+        otherBehaviors = newArray
     end
 end

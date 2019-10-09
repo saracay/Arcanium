@@ -12,12 +12,13 @@ class MenuButton is Button, FocusListener
     Array<Item2D> removalArray
     Drawable indicator
     Color color
-    Drawable sprite
+    Item2D target
+    boolean horizontal = false
     boolean noIndicator = true
 
     on create
         indicator:LoadFilledCircle(10, color:Red())
-        indicator:SetPosition(-100, -100)
+        indicator:SetPosition(-1000, -1000)
     end
 
     action Dispose
@@ -29,13 +30,17 @@ class MenuButton is Button, FocusListener
             game:Add(indicator)
         end
 
-        indicator:SetPosition(sprite:GetX() + sprite:GetWidth()/2 - 10, sprite:GetY() + sprite:GetHeight()+ 30)
+        if horizontal
+            indicator:SetPosition(target:GetX() - 30, target:GetY())
+        else
+            indicator:SetPosition(target:GetX() + target:GetWidth()/2 - 10, target:GetY() + target:GetHeight()+ 30)
+        end
 
         noIndicator = false
     end
 
     action LostFocus(FocusEvent event)
-        indicator:SetPosition(-100, -100)
+        indicator:SetPosition(-1000, -1000)
     end
 
     action SetGame(Game newGame)
@@ -46,7 +51,11 @@ class MenuButton is Button, FocusListener
         removalArray = array
     end
 
-    action SetDrawable(Drawable enemy)
-        sprite = enemy
+    action SetTarget(Item2D item)
+        target = item
+    end
+
+    action SetHorizontal(boolean bool)
+        horizontal = bool
     end
 end

@@ -1,0 +1,51 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+
+class CombatDamageTargetBehavior is Behavior
+
+    Battle battle
+    CombatMainPageBehavior mainPage
+    integer spellID = 0
+    Combatant caster
+    Combatant target
+
+    action Run(BehaviorEvent event)
+        Spell spell
+        spell:SetID(spellID)
+        spell:ParseJSON()
+
+output spell:GetName()
+output spell:GetBaseDamage()
+
+        Player player = cast(Player, caster)
+
+        if player:GetCurrentMP() >= spell:GetManaCost()
+            player:SetCurrentMP(player:GetCurrentMP() - spell:GetManaCost())
+
+            target:ReceiveSpellAttack(spell, caster)
+        end
+
+        battle:UpdateStatus()
+        mainPage:Dispose()
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
+    end
+
+    action SetMainPage(CombatMainPageBehavior behavior)
+        mainPage = behavior
+    end
+
+    action SetSpellID(integer ID)
+        spellID = ID
+    end
+
+    action SetCaster(Combatant attacker)
+        caster = attacker
+    end
+
+    action SetTarget(Combatant defender)
+        target = defender
+    end
+end

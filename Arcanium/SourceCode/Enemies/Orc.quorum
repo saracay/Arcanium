@@ -5,6 +5,10 @@ class Orc is Enemy
     end
 
     action AI
+        Spell spell
+        spell:SetID(9001000)
+        spell:ParseJSON()
 
+        SetSpell(spell)
     end
 end

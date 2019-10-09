@@ -5,50 +5,363 @@ use Libraries.Containers.Array
 use Libraries.Interface.Item2D
 use Libraries.Interface.Controls.Button
 use Libraries.Interface.Layouts.ManualLayout
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
 
-class CombatMainPageBehavior is Behavior
+class CombatMainPageBehavior is Behavior, MainPage
 
     Game game = undefined
     Battle battle = undefined
     Array<Item2D> removalArray
     Array<Item2D> currentPage
-    Array<Item2D> previousPage
+    Array<Array <Item2D>> pages
+    Array<Array <integer>> xPositions
+    Array<Array <integer>> yPositions
+    Array<Combatant> combatants
+    Array<Drawable> sprites
+    Array<CombatDamageTargetBehavior> damageBehaviors
+    boolean finishedTurn = false
+    integer maxTokens = 0
 
     action Run(BehaviorEvent event)
         ManualLayout layout
         game:SetLayout(layout)
 
-        Button spellButton
-        CombatSpellsPageBehavior spellBehavior
-        spellBehavior:SetGame(game)
-        spellBehavior:SetBattle(battle)
-        spellBehavior:SetRemovalArray(removalArray)
-        spellBehavior:SetPreviousPage(currentPage)
-        spellButton:SetBehavior(spellBehavior)
+        /***********************************************************************
+
+        Start of main battle page
+            - Spells Button
+            - Inventory Button (not yet implemented)
+            - Run Button (not yet implemented)
+
+        ***********************************************************************/
+        Array<Item2D> mainPage
+        Array<integer> mainPageX
+        Array<integer> mainPageY
+        pages:Add(mainPage)
+        xPositions:Add(mainPageX)
+        yPositions:Add(mainPageY)
+
+        MenuButton spellButton
+        NextMenuPageBehavior toSpellPage
+        toSpellPage:SetGame(game)
+        toSpellPage:SetPages(pages)
+        toSpellPage:SetXPosition(xPositions)
+        toSpellPage:SetYPosition(yPositions)
+        toSpellPage:SetCurrentIndex(0)
+        spellButton:SetBehavior(toSpellPage)
+        pages:Get(0):Add(spellButton)
+        xPositions:Get(0):Add(650)
+        yPositions:Get(0):Add(120)
         spellButton:SetPosition(650, 120)
         spellButton:SetName("Spells")
+        spellButton:SetTarget(spellButton)
+        spellButton:SetHorizontal(true)
+        spellButton:SetGame(game)
         game:Add(spellButton)
-        currentPage:Add(spellButton)
 
-        Button runButton
-        CombatRunBehavior runBehavior
-        runButton:SetBehavior(runBehavior)
-        runButton:SetPosition(650, 80)
+        MenuButton runButton
+        pages:Get(0):Add(runButton)
+        xPositions:Get(0):Add(650)
+        yPositions:Get(0):Add(60)
+        runButton:SetPosition(650, 60)
         runButton:SetName("Run")
+        runButton:SetTarget(runButton)
+        runButton:SetHorizontal(true)
+        runButton:SetGame(game)
         game:Add(runButton)
-        currentPage:Add(runButton)
 
-        battle:SetPreviousBehavior(undefined)
-        Dispose()
+        spellButton:SetNextFocus(runButton)
+        spellButton:SetPreviousFocus(runButton)
+        runButton:SetNextFocus(spellButton)
+        runButton:SetPreviousFocus(runButton)
+
+        game:SetFocus(spellButton)
+
+        /***********************************************************************
+
+        Start of spells battle page
+            - Fire Button
+            - Water Button
+            - Earth Button
+            - Wind Button
+            - Light Button
+            - Dark Button
+            - Done Combining Button
+
+        ***********************************************************************/
+
+        Array<Item2D> spellPage
+        Array<integer> spellPageX
+        Array<integer> spellPageY
+        pages:Add(spellPage)
+        xPositions:Add(spellPageX)
+        yPositions:Add(spellPageY)
+        
+        Array<CombatAddTokenBehavior> tokenBehaviors
+        Array<Drawable> tokenDrawables
+        
+        MenuButton doneCombiningButton
+        CombatCheckTokensBehavior toTargetingPage
+        tokenBehaviors:Add(toTargetingPage)
+        toTargetingPage:SetGame(game)
+        toTargetingPage:SetPages(pages)
+        toTargetingPage:SetXPosition(xPositions)
+        toTargetingPage:SetYPosition(yPositions)
+        toTargetingPage:SetCurrentIndex(1)
+        toTargetingPage:SetDamageBehaviors(damageBehaviors)
+        doneCombiningButton:SetBehavior(toTargetingPage)
+        doneCombiningButton:SetName("Done Combining")
+        doneCombiningButton:SetPosition(-1000, -1000)
+        doneCombiningButton:SetTarget(doneCombiningButton)
+        doneCombiningButton:SetHorizontal(true)
+        doneCombiningButton:SetGame(game)
+        game:Add(doneCombiningButton)
+
+        MenuButton fireButton
+        CombatAddTokenBehavior fireBehavior
+        tokenBehaviors:Add(fireBehavior)
+        fireBehavior:SetDoneButton(doneCombiningButton)
+        fireBehavior:SetElementID(100000)
+        fireBehavior:SetSpellID(9000000)
+        fireBehavior:SetMaxTokens(maxTokens)
+        fireBehavior:SetTokenDrawables(tokenDrawables)
+        fireBehavior:SetOtherBehaviors(tokenBehaviors)
+        fireButton:SetBehavior(fireBehavior)
+        pages:Get(1):Add(fireButton)
+        xPositions:Get(1):Add(100)
+        yPositions:Get(1):Add(100)
+        fireButton:SetName("Fire")
+        fireButton:SetPosition(-1000, -1000)
+        fireButton:SetTarget(fireButton)
+        fireButton:SetHorizontal(true)
+        fireButton:SetGame(game)
+        game:Add(fireButton)
+
+        MenuButton waterButton
+        CombatAddTokenBehavior waterBehavior
+        tokenBehaviors:Add(waterBehavior)
+        waterBehavior:SetDoneButton(doneCombiningButton)
+        waterBehavior:SetElementID(10000)
+        waterBehavior:SetSpellID(9000000)
+        waterBehavior:SetMaxTokens(maxTokens)
+        waterBehavior:SetTokenDrawables(tokenDrawables)
+        waterBehavior:SetOtherBehaviors(tokenBehaviors)
+        waterButton:SetBehavior(waterBehavior)
+        pages:Get(1):Add(waterButton)
+        xPositions:Get(1):Add(100)
+        yPositions:Get(1):Add(50)
+        waterButton:SetName("Water")
+        waterButton:SetPosition(-1000, -1000)
+        waterButton:SetTarget(waterButton)
+        waterButton:SetHorizontal(true)
+        waterButton:SetGame(game)
+        game:Add(waterButton)
+
+        MenuButton earthButton
+        CombatAddTokenBehavior earthBehavior
+        tokenBehaviors:Add(earthBehavior)
+        earthBehavior:SetDoneButton(doneCombiningButton)
+        earthBehavior:SetElementID(1000)
+        earthBehavior:SetSpellID(9000000)
+        earthBehavior:SetMaxTokens(maxTokens)
+        earthBehavior:SetTokenDrawables(tokenDrawables)
+        earthBehavior:SetOtherBehaviors(tokenBehaviors)
+        earthButton:SetBehavior(earthBehavior)
+        pages:Get(1):Add(earthButton)
+        xPositions:Get(1):Add(200)
+        yPositions:Get(1):Add(100)
+        earthButton:SetName("Earth")
+        earthButton:SetPosition(-1000, -1000)
+        earthButton:SetTarget(earthButton)
+        earthButton:SetHorizontal(true)
+        earthButton:SetGame(game)
+        game:Add(earthButton)
+
+        MenuButton windButton
+        CombatAddTokenBehavior windBehavior
+        tokenBehaviors:Add(windBehavior)
+        windBehavior:SetDoneButton(doneCombiningButton)
+        windBehavior:SetElementID(100)
+        windBehavior:SetSpellID(9000000)
+        windBehavior:SetMaxTokens(maxTokens)
+        windBehavior:SetTokenDrawables(tokenDrawables)
+        windBehavior:SetOtherBehaviors(tokenBehaviors)
+        windButton:SetBehavior(windBehavior)
+        pages:Get(1):Add(windButton)
+        xPositions:Get(1):Add(200)
+        yPositions:Get(1):Add(50)
+        windButton:SetName("Wind")
+        windButton:SetPosition(-1000, -1000)
+        windButton:SetTarget(windButton)
+        windButton:SetHorizontal(true)
+        windButton:SetGame(game)
+        game:Add(windButton)
+
+        MenuButton lightButton
+        CombatAddTokenBehavior lightBehavior
+        tokenBehaviors:Add(lightBehavior)
+        lightBehavior:SetDoneButton(doneCombiningButton)
+        lightBehavior:SetElementID(10)
+        lightBehavior:SetSpellID(9000000)
+        lightBehavior:SetMaxTokens(maxTokens)
+        lightBehavior:SetTokenDrawables(tokenDrawables)
+        lightBehavior:SetOtherBehaviors(tokenBehaviors)
+        lightButton:SetBehavior(lightBehavior)
+        pages:Get(1):Add(lightButton)
+        xPositions:Get(1):Add(300)
+        yPositions:Get(1):Add(100)
+        lightButton:SetName("Light")
+        lightButton:SetPosition(-1000, -1000)
+        lightButton:SetTarget(lightButton)
+        lightButton:SetHorizontal(true)
+        lightButton:SetGame(game)
+        game:Add(lightButton)
+
+        MenuButton darkButton
+        CombatAddTokenBehavior darkBehavior
+        tokenBehaviors:Add(darkBehavior)
+        darkBehavior:SetDoneButton(doneCombiningButton)
+        darkBehavior:SetElementID(1)
+        darkBehavior:SetSpellID(9000000)
+        darkBehavior:SetMaxTokens(maxTokens)
+        darkBehavior:SetTokenDrawables(tokenDrawables)
+        darkBehavior:SetOtherBehaviors(tokenBehaviors)
+        darkButton:SetBehavior(darkBehavior)
+        pages:Get(1):Add(darkButton)
+        xPositions:Get(1):Add(300)
+        yPositions:Get(1):Add(50)
+        darkButton:SetName("Dark")
+        darkButton:SetPosition(-1000, -1000)
+        darkButton:SetTarget(darkButton)
+        darkButton:SetHorizontal(true)
+        darkButton:SetGame(game)
+        game:Add(darkButton)
+    
+        // adds Done Combining Button to page
+        pages:Get(1):Add(doneCombiningButton)
+        xPositions:Get(1):Add(400)
+        yPositions:Get(1):Add(75)
+
+        integer counter = 0
+
+        repeat while counter < maxTokens
+            Drawable tokenDrawable
+            Color color
+            tokenDrawable:LoadCircle(20)
+            tokenDrawable:SetColor(color:Blue())
+            tokenDrawable:SetPosition(-1000, -1000)
+            pages:Get(1):Add(tokenDrawable)
+            xPositions:Get(1):Add(220 + (50 * counter))
+            yPositions:Get(1):Add(200)
+            tokenDrawables:Add(tokenDrawable)
+            game:Add(tokenDrawable)
+
+            counter = counter + 1
+        end
+
+        fireButton:SetNextFocus(waterButton)
+        fireButton:SetPreviousFocus(doneCombiningButton)
+        waterButton:SetNextFocus(earthButton)
+        waterButton:SetPreviousFocus(fireButton)
+        earthButton:SetNextFocus(windButton)
+        earthButton:SetPreviousFocus(waterButton)
+        windButton:SetNextFocus(lightButton)
+        windButton:SetPreviousFocus(earthButton)
+        lightButton:SetNextFocus(darkButton)
+        lightButton:SetPreviousFocus(windButton)
+        darkButton:SetNextFocus(doneCombiningButton)
+        darkButton:SetPreviousFocus(lightButton)
+        doneCombiningButton:SetNextFocus(fireButton)
+        doneCombiningButton:SetPreviousFocus(darkButton)
+
+        /***********************************************************************
+
+        Start of targeting page
+            - (Hidden Buttons for targets)
+
+        ***********************************************************************/
+
+        Array<Item2D> targetingPage
+        Array<integer> targetingX
+        Array<integer> targetingY
+        pages:Add(targetingPage)
+        xPositions:Add(targetingX)
+        yPositions:Add(targetingY)
+        
+        counter = 0
+
+        repeat while counter < combatants:GetSize()
+            if combatants:Get(counter) not= undefined
+                MenuButton button
+                CombatDamageTargetBehavior damageBehavior
+                damageBehavior:SetBattle(battle)
+                damageBehavior:SetMainPage(me)
+                damageBehavior:SetCaster(combatants:Get(0))
+                damageBehavior:SetTarget(combatants:Get(counter))
+                damageBehaviors:Add(damageBehavior)
+                pages:Get(2):Add(button)
+                xPositions:Get(2):Add(-1000)
+                yPositions:Get(2):Add(-1000)
+                button:SetName(combatants:Get(counter):GetName())
+                button:SetPosition(-1000, -1000)
+                button:SetTarget(sprites:Get(counter))
+                button:SetHorizontal(false)
+                button:SetGame(game)
+                button:SetBehavior(damageBehavior)
+                game:Add(button)
+            end
+
+            counter = counter + 1
+        end
+
+        counter = 0
+
+        repeat while counter < pages:Get(2):GetSize()
+            if counter = 0
+                pages:Get(2):Get(counter):SetNextFocus(pages:Get(2):Get(counter+1))
+                pages:Get(2):Get(counter):SetPreviousFocus(pages:Get(2):Get(pages:Get(2):GetSize()-1))
+            elseif counter = pages:Get(2):GetSize() - 1
+                pages:Get(2):Get(counter):SetNextFocus(pages:Get(2):Get(0))
+                pages:Get(2):Get(counter):SetPreviousFocus(pages:Get(2):Get(counter-1))
+            else
+                pages:Get(2):Get(counter):SetNextFocus(pages:Get(2):Get(counter+1))
+                pages:Get(2):Get(counter):SetPreviousFocus(pages:Get(2):Get(counter-1))
+            end
+
+            counter = counter + 1
+        end
+
+        counter = 0
+
+        repeat while counter < tokenDrawables:GetSize()
+            pages:Get(2):Add(tokenDrawables:Get(counter))
+            xPositions:Get(2):Add(220 + (50 * counter))
+            yPositions:Get(2):Add(200)
+
+            counter = counter + 1
+        end
+    end
+
+    action IsFinished returns boolean
+        return GetFinished()
     end
 
     action Dispose
-        integer counter = 0
+        integer outerCounter = 0
+        integer innerCounter = 0
 
-        repeat while counter < previousPage:GetSize()
-            removalArray:Add(previousPage:Get(counter))
-            counter = counter + 1
+        repeat while outerCounter < pages:GetSize()
+            repeat while innerCounter < pages:Get(outerCounter):GetSize()
+                removalArray:Add(pages:Get(outerCounter):Get(innerCounter))
+
+                innerCounter = innerCounter + 1
+            end
+
+            outerCounter = outerCounter + 1
         end
+
+        battle:EnemyTurn()
     end
 
     action SetGame(Game newGame)
@@ -63,7 +376,15 @@ class CombatMainPageBehavior is Behavior
         removalArray = newArray
     end
 
-    action GetPreviousBehavior returns Behavior
-        return undefined
+    action SetMaxTokens(integer tokens)
+        maxTokens = tokens
+    end
+
+    action SetCombatants(Array<Combatant> newArray)
+        combatants = newArray
+    end
+
+    action SetSprites(Array<Drawable> newArray)
+        sprites = newArray
     end
 end

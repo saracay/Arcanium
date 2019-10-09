@@ -2,6 +2,8 @@ use Libraries.Containers.Array
 
 class Enemy is Combatant
 
+    Spell spell
+
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
      number newAttack, number newFireEff, number newWaterEff, 
      number newEarthEff, number newWindEff, number newLightEff, number newDarkEff)
@@ -15,5 +17,16 @@ class Enemy is Combatant
         SetElementsEffectiveness(3, newWindEff)
         SetElementsEffectiveness(4, newLightEff)
         SetElementsEffectiveness(5, newDarkEff)
+    end
+
+    action AI
+    end
+
+    action GetSpell returns Spell
+        return spell
+    end
+
+    action SetSpell(Spell newSpell)
+        spell = newSpell
     end
 end

@@ -18,11 +18,15 @@ class Battle is Level
     Behavior previousBehavior
     Array<Item2D> currentPage
     Array<Combatant> combatants
-    Array<Drawable> drawables
+    Array<Label> statusInfo
+    Array<Drawable> statusWindows
+    Array<Drawable> sprites
     Array<text> log
     Drawable background
     Game game
     Color color
+    Label playerMana
+
     
     on create
         //background:Load("Assets\Maps\Battle.png")
@@ -45,7 +49,7 @@ class Battle is Level
         playerSquare:LoadFilledRectangle(150, 150, color:Blue())
         playerSquare:SetPosition(50, 200)
         game:Add(playerSquare)
-        drawables:Add(playerSquare)
+        sprites:Add(playerSquare)
 
         //displays player health and mana
 
@@ -53,13 +57,14 @@ class Battle is Level
         playerHealthBackground:LoadFilledRectangle(120, 40, color:LightGray())
         playerHealthBackground:SetPosition(225, 300)
         game:Add(playerHealthBackground)
+        statusWindows:Add(playerHealthBackground)
 
         Label playerHealth
         playerHealth:SetText("Health: " + player:GetCurrentHP() + "/" + player:GetMaxHP())
         playerHealth:SetPosition(230, 325)
         game:Add(playerHealth)
+        statusInfo:Add(playerHealth)
 
-        Label playerMana
         playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
         playerMana:SetPosition(230, 305)
         game:Add(playerMana)
@@ -82,17 +87,19 @@ class Battle is Level
             enemySprite:LoadFilledCircle(50, color:Red())
             enemySprite:SetPosition(400 + 120 * (combatantIndex - 1), 400 + 50 * ((combatantIndex - 1) mod 2))
             game:Add(enemySprite)
-            drawables:Add(enemySprite)
+            sprites:Add(enemySprite)
 
             Drawable enemyHealthBackground
             enemyHealthBackground:LoadFilledRectangle(120, 30, color:LightGray())
             enemyHealthBackground:SetPosition(225, 500 - 40 * (combatantIndex - 1))
             game:Add(enemyHealthBackground)
+            statusWindows:Add(enemyHealthBackground)
 
             Label enemyHealth
             enemyHealth:SetText("Health: " + combatants:Get(combatantIndex):GetCurrentHP() + "/" + combatants:Get(combatantIndex):GetMaxHP())
             enemyHealth:SetPosition(230, 500 + 15 - 40 * (combatantIndex - 1))
             game:Add(enemyHealth)
+            statusInfo:Add(enemyHealth)
 
             combatantIndex = combatantIndex + 1
         end
@@ -104,6 +111,33 @@ class Battle is Level
         game:Add(dialogueBackground)
 
         PlayerTurn()
+    end
+
+    action UpdateStatus
+        integer counter = 0
+
+        Player player = cast(Player, combatants:Get(0))
+        playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
+
+        repeat while counter < statusWindows:GetSize()
+            if (combatants:Get(counter) not= undefined) and (not combatants:Get(counter):CheckDefeated(0))
+                statusInfo:Get(counter):SetText("Health: " + combatants:Get(counter):GetCurrentHP() + "/" + combatants:Get(counter):GetMaxHP())
+
+            elseif (combatants:Get(counter) not= undefined)
+                combatants:Set(counter, undefined)
+
+                removalArray:Add(statusWindows:Get(counter))
+                statusWindows:Set(counter, undefined)
+
+                removalArray:Add(statusInfo:Get(counter))
+                statusInfo:Set(counter, undefined)
+
+                removalArray:Add(sprites:Get(counter))
+                sprites:Set(counter, undefined)
+            end
+
+            counter = counter + 1
+        end
     end
 
     action PlayerTurn
@@ -122,20 +156,40 @@ class Battle is Level
         combatBehavior:SetGame(game)
         combatBehavior:SetRemovalArray(removalArray)
         combatBehavior:SetBattle(me)
+        combatBehavior:SetMaxTokens(2)
+        combatBehavior:SetCombatants(combatants)
+        combatBehavior:SetSprites(sprites)
         combatBehavior:Run(undefined)
 //        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
-output "EnemyTurn test"
+        counter = 1
+        Player player = cast(Player, combatants:Get(0))
+
+        repeat while counter < combatants:GetSize()
+            if combatants:Get(counter) not= undefined
+                Enemy enemy = cast(Enemy, combatants:Get(counter))
+                enemy:AI()
+                Spell enemySpell = enemy:GetSpell()
+
+                player:ReceiveSpellAttack(enemySpell, combatants:Get(counter))
+            end
+
+            counter = counter + 1
+        end
+
+        player:SetCurrentMP(player:GetCurrentMP() + 1)
+        UpdateStatus()
+        PlayerTurn()
     end
 
     action GetCombatants returns Array<Combatant>
         return combatants
     end
 
-    action GetDrawables returns Array<Drawable>
-        return drawables
+    action GetSprites returns Array<Drawable>
+        return sprites
     end
 
     action SetBehaviorQueue(BehaviorQueue queue)

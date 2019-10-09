@@ -5,6 +5,10 @@ class Goblin is Enemy
     end
 
     action AI
+        Spell spell
+        spell:SetID(9000001)
+        spell:ParseJSON()
 
+        SetSpell(spell)
     end
 end

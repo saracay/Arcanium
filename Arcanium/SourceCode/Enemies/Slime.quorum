@@ -5,6 +5,10 @@ class Slime is Enemy
     end
 
     action AI
+        Spell spell
+        spell:SetID(9010000)
+        spell:ParseJSON()
 
+        SetSpell(spell)
     end
 end
