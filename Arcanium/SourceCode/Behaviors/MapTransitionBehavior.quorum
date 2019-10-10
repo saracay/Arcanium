@@ -23,6 +23,7 @@ class MapTransitionBehavior is Behavior
     Map currentMap                      // Current MAP
     text mapName = ""                   // New map name
     Array<Drawable> mapInteractables    // List of current INTERACTABLEs
+    Array<Interactable> npcList
 
     // New player position
     number playerX = 0
@@ -71,9 +72,15 @@ class MapTransitionBehavior is Behavior
         main:SetMap(nextMap)
         main:GetPlayer():playerSprite:SetX(playerX * 32)
         main:GetPlayer():playerSprite:SetY(playerY * 32)
-        main:Add(main:GetPlayer():playerSprite)
 
         // ADD INTERACTABLES HERE
+        i = 0
+        repeat npcList:GetSize() times
+            main:Add(npcList:Get(i))
+            main:AddKeyboardListener(npcList:Get(i))
+        end
+        main:SetNpcList(npcList)
+        main:Add(main:GetPlayer():playerSprite)
     end
 
     // Initializer of MAPTRANSITIONBEHAVIOR
@@ -87,5 +94,10 @@ class MapTransitionBehavior is Behavior
     action SetCoordinates(number newX, number newY)
         playerX = newX
         playerY = newY
+    end
+
+	// Add an INTERACTABLE to the LIST for the new MAP
+    action AddNPC(Interactable newNPC)
+        npcList:Add(newNPC)
     end
 end
