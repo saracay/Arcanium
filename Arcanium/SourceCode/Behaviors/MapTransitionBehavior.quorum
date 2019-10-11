@@ -51,6 +51,12 @@ class MapTransitionBehavior is Behavior
             i = i + 1
         end
 
+        // if the map name exists in the array of maps, then also load in the above layer
+        if nextMap:inAboveMaps(mapName)
+            nextMap:loadAboveLayer(mapName)
+        end
+
+
         // Remove the current MAP
         main:AddToRemove(currentMap:testMap)
 

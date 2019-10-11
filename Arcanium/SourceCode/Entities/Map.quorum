@@ -8,10 +8,37 @@ use Libraries.Game.Graphics.Color
 
 class Map 
     public Drawable testMap
+    public Drawable aboveLayer
     public Array<Drawable> collisions
+    public Array<Text> aboveMaps
+
+    text TEST_MAP = "Testmap"
+    text FOREST_MAP = "Forest"
+    text CASTLE_MAP = "Castle"
+
+    on create
+        setAboveMaps()
+    end
+
+    action setAboveMaps() 
+        aboveMaps:Add(FOREST_MAP)
+    end
+
+    action inAboveMaps(text map) returns boolean
+        if aboveMaps:Has(map) 
+            return true
+        end
+
+        return false
+    end
 
     action loadMap(text map)
         testMap:Load("Assets\Maps\" + map + ".png")     
+        
+    end
+
+    action loadAboveLayer(text map)
+        aboveLayer:Load("Assets\Maps\" + map + "Above.png")
     end
 
     /*
