@@ -1,0 +1,17 @@
+class Status
+    
+//    integer baseDamage = 0
+//    integer turnCounter = 0
+//    boolean isActive = true
+//    Spell sourceSpell
+////should have other fields
+//
+//    action SetSpell(Spell source)
+//        sourceSpell = source
+//    end
+//
+//    action ParseJSON
+//        baseDamage = status:modifier * sourceSpell:GetBaseDamage()
+////parses through JSON to set other fields
+//    end
+end

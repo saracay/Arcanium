@@ -1,7 +1,7 @@
 class Slime is Enemy
 
     on create
-        SetStats("Slime", 100, 0, 10, 0.25, 0.0, 0.35, 0.2, 1, 1)
+        SetStats("Slime", 100, 100, 10, 0.25, 0.0, 0.35, 0.2, 1, 1)
     end
 
     action AI

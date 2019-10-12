@@ -1,90 +1,81 @@
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
-use Libraries.Containers.Array
+use Libraries.Interface.Layouts.ManualLayout
 use Libraries.Game.Game
-use Libraries.Game.Graphics.Label
+use Libraries.Containers.Array
 use Libraries.Interface.Item2D
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Game.Graphics.Label
 use Libraries.Interface.Controls.Button
 
 class DisplayLogBehavior is Behavior
-
-    Button button
-    DisplayLogBehavior nextLog = undefined
-    BehaviorQueue behaviorQueue
-    Array<text> log
-    Array<Item2D> removalArray
-    Label label
-    integer currentIndex = 0
+    
     Game game
-    boolean finished = false
-
+    Array<Item2D> removalArray
+    Array<text> log
+    Array<Button> buttons
+    Array<Label> labels
+    Drawable displayBox = undefined
+    Color color
+    
     action Run(BehaviorEvent event)
-        finished = true
-        Dispose()
-    end
-
-    action Display
-        if currentIndex < log:GetSize()
-            button:SetName(label:GetText())
-            button:SetPosition(-100, -100)
-            button:SetBehavior(me)
-            game:Add(button)
-            game:SetFocus(button)
-
-            label:SetText(log:Get(currentIndex))
-            label:SetFontSize(22)
-            label:SetPosition(10, 150)
+        ManualLayout layout
+        
+        if displayBox = undefined
+            displayBox:LoadFilledRectangle(800, 180, color:LightGray())
+            game:Add(displayBox)
+        end
+        
+        integer counter = 0
+        
+        repeat while counter < log:GetSize()
+            Label label
+            label:SetText(log:Get(counter))
+            label:SetPosition(-1000, -1000)
+            labels:Add(label)
             game:Add(label)
-
-            currentIndex = currentIndex + 1
-
-            if currentIndex < log:GetSize()
-                DisplayLogBehavior temp
-                nextLog = temp
-                nextLog:SetGame(game)
-                nextLog:SetLog(log)
-                nextLog:SetCurrentIndex(currentIndex)
-                nextLog:SetRemovalArray(removalArray)
-                nextLog:SetBehaviorQueue(behaviorQueue)
-                behaviorQueue:AddBehavior(nextLog)
-            else
-                finished = true
-            end
-        else
-            finished = true
+            
+            Button button
+            NextLogBehavior behavior
+            behavior:SetLabels(labels)
+            behavior:SetCurrentIndex(counter)
+            button:SetName(log:RemoveFromFront())
+            button:SetPosition(-1000, -1000)
+            buttons:Add(button)
+            game:Add(button)
+            
+            counter = counter + 1
         end
+        
+        game:SetFocus(buttons:Get(0))
+        labels:Get(0):SetPosition(100, 100)
     end
-
-    action IsFinished returns boolean
-        return finished
-    end
-
+    
     action Dispose
-        removalArray:Add(button)
-        removalArray:Add(label)
-
-        if nextLog not= undefined
-            nextLog:Display()
+        integer counter = 0
+        
+        repeat while counter < buttons:GetSize()
+            removalArray:Add(buttons:Get(counter))
+            removalArray:Add(labels:Get(counter))
+            
+            counter = counter + 1
         end
     end
-
-    action SetLog(Array<text> newLog)
-        log = newLog
-    end
-
-    action SetCurrentIndex(integer newIndex)
-        currentIndex = newIndex
-    end
-
+    
     action SetGame(Game newGame)
         game = newGame
     end
-
+    
     action SetRemovalArray(Array<Item2D> array)
         removalArray = array
     end
 
-    action SetBehaviorQueue(BehaviorQueue queue)
-        behaviorQueue = queue
+    action SetDisplayBox(Drawable item)
+        displayBox = item
+    end
+
+    action SetLog(Array<text> newLog)
+        log = newLog
     end
 end

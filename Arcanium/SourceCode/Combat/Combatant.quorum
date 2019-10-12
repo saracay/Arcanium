@@ -7,12 +7,47 @@ class Combatant
     integer maxHP = 1       //maximum amount of health
     number attack = 1       //multiplier for damage dealt
     Array<number> elementsEffectiveness //fire, water, earth, air, light, dark
+    Array<Status> statuses
 
     on create
         repeat 6 times
             elementsEffectiveness:Add(1)
         end
     end
+
+//    action CalculateEffectiveness(integer ID) returns number
+//
+//    end
+//
+//    action UpdateStatus
+//        counter = 0
+//
+//        repeat while counter < status:GetSize()
+//
+//            /*******************************************************************
+//            Check what type of status (damage, changes status, etc.) that the
+//            status is, then do what it's supposed to do for that type.
+//            *******************************************************************/
+//            if (statusID mod 1000000 = 7)
+//                //do damage at end of turn
+//                currentHP = currentHP - CalculateEffectiveness(status:ID) * statuses:BaseDamage
+//            elseif (statusID mod 1000000 = 6)
+//                //alters stats
+//                currentAttack = normalAttack * statuses:Modifier
+//            end
+//
+//            /*******************************************************************
+//            Decrement the turn counter for all statuses
+//            *******************************************************************/
+//            statuses:Get(counter):DecrementTurnCounter()
+//
+//            if statuses:Get(counter):GetTurnsRemaining = 0
+//                statuses:Remove(counter)
+//            end
+//
+//            counter = counter + 1
+//        end
+//    end
     
     action ReceiveHeal(Spell healSpell, Combatant caster) 
      returns Array<text>
@@ -62,8 +97,14 @@ class Combatant
             counter = counter - 1
         end
 
-        integer damage = cast(integer, damageModifier/tokens 
-         * enemySpell:GetBaseDamage())
+        integer damage = 0
+
+        if (tokens not= 0)
+            damage = cast(integer, damageModifier/tokens 
+             * enemySpell:GetBaseDamage())
+        else
+            damage = enemySpell:GetBaseDamage()
+        end
         
         //Adds text to display to player into the array
         //Results in log[incomingAttack, incomingDamage, defeated]

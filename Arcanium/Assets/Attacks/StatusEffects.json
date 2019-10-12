@@ -1,0 +1,44 @@
+{
+  "statusEffects": [
+    {
+      "statusID": 101,
+      "elementID": 7100000,
+      "name": "Burn",
+      "modifier": 0.25,
+      "applicationChance": 0.5,
+      "turnsAffected": 3
+    },
+    {
+      "statusID": 102,
+      "elementID": 7100000,
+      "name": "Burn",
+      "modifier": 0.5,
+      "applicationChance": 0.5,
+      "turnsAffected": 3
+    },
+    {
+      "statusID": 103,
+      "elementID": 7100000,
+      "name": "Burn",
+      "modifier": 0.5,
+      "applicationChance": 0.5,
+      "turnsAffected": 5
+    },
+    {
+      "statusID": 104,
+      "elementID": 7000001,
+      "name": "Poison",
+      "modifier": 0.5,
+      "applicationChance": 0.5,
+      "turnsAffected": 3
+    },
+    {
+      "statusID": 105,
+      "elementID": 6000000,
+      "name": "Weaken",
+      "modifier": 0.5,
+      "applicationChance": 0.5,
+      "turnsAffected": 2
+    }
+  ]
+}

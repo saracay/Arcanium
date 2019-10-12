@@ -26,7 +26,6 @@ class Battle is Level
     Game game
     Color color
     Label playerMana
-
     
     on create
         //background:Load("Assets\Maps\Battle.png")
@@ -124,6 +123,10 @@ class Battle is Level
                 statusInfo:Get(counter):SetText("Health: " + combatants:Get(counter):GetCurrentHP() + "/" + combatants:Get(counter):GetMaxHP())
 
             elseif (combatants:Get(counter) not= undefined)
+                if counter = 0
+                    removalArray:Add(playerMana)
+                end
+
                 combatants:Set(counter, undefined)
 
                 removalArray:Add(statusWindows:Get(counter))
@@ -141,16 +144,12 @@ class Battle is Level
     end
 
     action PlayerTurn
-        log:Add("What will <player> do?")
-
+//        log:Add("What will <player> do?")
+//
 //        DisplayLogBehavior logBehavior
 //        logBehavior:SetGame(game)
 //        logBehavior:SetLog(log)
-//        logBehavior:SetCurrentIndex(0)
-//        logBehavior:SetBehaviorQueue(behaviorQueue)
 //        logBehavior:SetRemovalArray(removalArray)
-//        logBehavior:Display()
-//        behaviorQueue:AddBehavior(logBehavior)
 
         CombatMainPageBehavior combatBehavior
         combatBehavior:SetGame(game)
@@ -160,7 +159,6 @@ class Battle is Level
         combatBehavior:SetCombatants(combatants)
         combatBehavior:SetSprites(sprites)
         combatBehavior:Run(undefined)
-//        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
