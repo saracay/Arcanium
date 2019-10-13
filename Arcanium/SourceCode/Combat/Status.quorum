@@ -1,17 +1,149 @@
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
+use Libraries.Containers.Array
+
 class Status
     
-//    integer baseDamage = 0
-//    integer turnCounter = 0
-//    boolean isActive = true
-//    Spell sourceSpell
-////should have other fields
-//
-//    action SetSpell(Spell source)
-//        sourceSpell = source
-//    end
-//
-//    action ParseJSON
-//        baseDamage = status:modifier * sourceSpell:GetBaseDamage()
-////parses through JSON to set other fields
-//    end
+    text name = ""                  //status name
+    integer statusID = 0            //the status's ID in the JSON list
+    integer elementID = 7000000     //7 for damaging, 6 for (de)buffing followed by elements
+    integer baseDamage = 0          //base damage of this status off of the sourceAttack's damage
+    integer turnCounter = 0         //number of turns remaining on this status
+    number applicationChance = 0    //chance for this status to be inflicted
+    number baseModifier = 0         //affects either damage or target's attack stat
+    boolean isActive = false        //true if current applied, false otherwise
+    Array<number> effectivenessStatModifiers //multipliers to lower/raise target's effectiveness stats
+    Attack sourceAttack             //attack this status originates from
+
+    on create
+        repeat 6 times
+            effectivenessStatModifiers:Add(1)
+        end
+    end
+
+    action ParseJSON()
+        JavaScriptObjectNotation statuses
+        File statusesList
+        statusesList:SetPath("Assets\Attacks\StatusEffects.json")
+        statuses:Read(statusesList)
+        JavaScriptObjectNotation statusData = statuses:GetObject("statusEffects")
+
+        JavaScriptObjectNotation currentStatus
+        integer i = 0
+        boolean found = false
+        repeat while (i < statusData:GetSize() and not found)
+            currentStatus = statusData:Get(i)
+            if currentStatus:GetValue("statusID") = statusID:GetText()
+                found = true
+            else
+                i = i + 1
+            end
+        end
+
+        if not found
+            output "Temporary Error: status effect not found"
+        else
+            SetElementID(currentStatus:GetValue("elementID"):ParseInteger())
+            SetName(currentStatus:GetValue("name"))
+            SetBaseModifier(currentStatus:GetValue("modifier"):ParseNumber())
+            SetApplicationChance(currentStatus:GetValue("applicationChance"):ParseNumber())
+            SetTurnCounter(currentStatus:GetValue("turnsAffected"):ParseInteger())
+            baseDamage = cast(integer, baseModifier * sourceAttack:GetBaseDamage())
+            statusData = currentStatus:GetObject("effectivenessStatModifiers")
+            i = 0
+            repeat while (i < statusData:GetSize())
+                SetEffectivenessStatModifiersAtPosition(i, 
+                 statusData:Get(i):GetValue():ParseNumber())
+                i = i + 1
+            end
+        end
+    end
+
+    action DecrementTurnCounter()
+        turnCounter = turnCounter - 1
+    end
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
+
+    action SetName(text newName)
+        name = newName
+    end
+
+    action GetName() returns text
+        return name
+    end
+
+    action SetStatusID(integer newStatusID)
+        statusID = newStatusID
+    end
+
+    action GetStatusID() returns integer
+        return statusID
+    end
+
+    action SetElementID(integer newElementID)
+        elementID = newElementID
+    end
+
+    action GetElementID() returns integer
+        return elementID
+    end
+
+    action SetBaseDamage(integer newBaseDamage)
+        baseDamage = newBaseDamage
+    end
+
+    action GetBaseDamage() returns integer
+        return baseDamage
+    end
+
+    action SetTurnCounter(integer newTurnCounter)
+        turnCounter = newTurnCounter
+    end
+
+    action GetTurnCounter() returns integer
+        return turnCounter
+    end
+
+    action SetApplicationChance(number newApplicationChance)
+        applicationChance = newApplicationChance
+    end
+
+    action GetApplicationChance() returns number
+        return applicationChance
+    end
+
+    action SetBaseModifier(number newBaseModifier)
+        baseModifier = newBaseModifier
+    end
+
+    action GetBaseModifier() returns number
+        return baseModifier
+    end
+
+    action SetIsActive(boolean newIsActive)
+        isActive = newIsActive
+    end
+
+    action GetIsActive() returns boolean
+        return isActive
+    end
+
+    action SetEffectivenessStatModifiersAtPosition(integer position, number newModifier)
+        effectivenessStatModifiers:Set(position, newModifier)
+    end
+
+    action GetEffectivenessStatModifiersAtPosition(integer position) returns number
+        return effectivenessStatModifiers:Get(position)
+    end
+
+    action SetSourceAttack(Attack newSourceAttack)
+        sourceAttack = newSourceAttack
+    end
+
+    action GetSourceAttack() returns Attack
+        return sourceAttack
+    end
 end

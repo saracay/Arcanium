@@ -171,7 +171,7 @@ class Battle is Level
                 enemy:AI()
                 Spell enemySpell = enemy:GetSpell()
 
-                player:ReceiveSpellAttack(enemySpell, combatants:Get(counter))
+                player:ReceiveAttack(enemySpell, combatants:Get(counter))
             end
 
             counter = counter + 1

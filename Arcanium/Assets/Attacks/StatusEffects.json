@@ -1,43 +1,48 @@
 {
   "statusEffects": [
     {
-      "statusID": 101,
+      "statusID": 1,
       "elementID": 7100000,
       "name": "Burn",
       "modifier": 0.25,
       "applicationChance": 0.5,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 3
     },
     {
-      "statusID": 102,
+      "statusID": 2,
       "elementID": 7100000,
       "name": "Burn",
       "modifier": 0.5,
       "applicationChance": 0.5,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 3
     },
     {
-      "statusID": 103,
+      "statusID": 3,
       "elementID": 7100000,
       "name": "Burn",
       "modifier": 0.5,
       "applicationChance": 0.5,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 5
     },
     {
-      "statusID": 104,
+      "statusID": 4,
       "elementID": 7000001,
       "name": "Poison",
       "modifier": 0.5,
       "applicationChance": 0.5,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 3
     },
     {
-      "statusID": 105,
+      "statusID": 5,
       "elementID": 6000000,
       "name": "Weaken",
       "modifier": 0.5,
       "applicationChance": 0.5,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 2
     }
   ]

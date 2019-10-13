@@ -8,28 +8,33 @@ class Player is Combatant
     public Drawable playerSprite
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     integer newCurrentMP, integer newMaxMP, number newAttack, 
-     number newFireEff, number newWaterEff, number newEarthEff, 
-     number newWindEff, number newLightEff, number newDarkEff)
+     integer newCurrentMP, integer newMaxMP, number newCurrentAttack,
+     number newBaseAttack, Array<number> newCurrentElementsEffectiveness,
+     Array<number> newBaseElementsEffectiveness)
         SetName(newName)
         SetCurrentHP(newCurrentHP)
         SetMaxHP(newMaxHP)
-        currentMP = newCurrentMP
-        maxMP = newMaxMP
-        SetAttack(newAttack)
-        SetElementsEffectiveness(0, newFireEff)
-        SetElementsEffectiveness(1, newWaterEff)
-        SetElementsEffectiveness(2, newEarthEff)
-        SetElementsEffectiveness(3, newWindEff)
-        SetElementsEffectiveness(4, newLightEff)
-        SetElementsEffectiveness(5, newDarkEff)
+        SetCurrentMP(newCurrentMP)
+        SetMaxMP(newMaxMP)
+        SetCurrentAttack(newCurrentAttack)
+        SetBaseAttack(newBaseAttack)
+        integer i = 0
+        repeat while (i < 6)
+            SetCurrentElementsEffectivenessAtPosition(i,
+             newCurrentElementsEffectiveness:Get(i))
+            SetBaseElementsEffectivenessAtPosition(i,
+             newBaseElementsEffectiveness:Get(i))
+            i = i + 1
+        end
     end
 
-    action ReceivePhysicalAttack(Physical enemyPhysical, Enemy enemy) returns Array<text>
-        Array<text> log
-        //Not setup yet
-        return log
+    action DrawPlayer()
+        playerSprite:Load("Assets\Sprites\SkeletonWalk.png")
     end
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
 
     action SetCurrentMP(integer newCurrentMP)
         currentMP = newCurrentMP
@@ -45,9 +50,5 @@ class Player is Combatant
 
     action GetMaxMP() returns integer
         return maxMP
-    end
-
-    action DrawPlayer()
-        playerSprite:Load("Assets\Sprites\SkeletonWalk.png")
     end
 end

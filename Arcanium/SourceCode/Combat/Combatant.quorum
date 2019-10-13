@@ -1,122 +1,54 @@
 use Libraries.Containers.Array
+use Libraries.Compute.Random
 
 class Combatant
 
     text name = ""          //name to display
     integer currentHP = 1   //current health
     integer maxHP = 1       //maximum amount of health
-    number attack = 1       //multiplier for damage dealt
-    Array<number> elementsEffectiveness //fire, water, earth, air, light, dark
-    Array<Status> statuses
+    number currentAttack = 1 //temporary, changing multiplier for outgoing damage
+    number baseAttack = 1   //base multiplier for outgoing damage
+    Array<number> currentElementsEffectiveness //temporary, changing multiplier for incoming damage
+    Array<number> baseElementsEffectiveness //base multiplier for incoming damage
+    Array<Status> statuses  //statuses currently inflicted on this combatant
 
     on create
         repeat 6 times
-            elementsEffectiveness:Add(1)
+            currentElementsEffectiveness:Add(1)
+            baseElementsEffectiveness:Add(1)
         end
     end
 
-//    action CalculateEffectiveness(integer ID) returns number
-//
-//    end
-//
-//    action UpdateStatus
-//        counter = 0
-//
-//        repeat while counter < status:GetSize()
-//
-//            /*******************************************************************
-//            Check what type of status (damage, changes status, etc.) that the
-//            status is, then do what it's supposed to do for that type.
-//            *******************************************************************/
-//            if (statusID mod 1000000 = 7)
-//                //do damage at end of turn
-//                currentHP = currentHP - CalculateEffectiveness(status:ID) * statuses:BaseDamage
-//            elseif (statusID mod 1000000 = 6)
-//                //alters stats
-//                currentAttack = normalAttack * statuses:Modifier
-//            end
-//
-//            /*******************************************************************
-//            Decrement the turn counter for all statuses
-//            *******************************************************************/
-//            statuses:Get(counter):DecrementTurnCounter()
-//
-//            if statuses:Get(counter):GetTurnsRemaining = 0
-//                statuses:Remove(counter)
-//            end
-//
-//            counter = counter + 1
-//        end
-//    end
-    
-    action ReceiveHeal(Spell healSpell, Combatant caster) 
-     returns Array<text>
-        Array<text> log
-        integer healAmount = healSpell:GetBaseDamage()
-
-        if currentHP + healAmount > maxHP
-            healAmount = maxHP - currentHP
-        end
-        SetCurrentHP(currentHP + healAmount)
-
-        text incomingSpell = caster:GetName() + " cast " + healSpell:GetName() 
-         + " on " + GetName() + "!"
-        log:Add(incomingSpell)
-
-        text incomingHeal = GetName() + " recieved " + healAmount + " health!"
-        log:Add(incomingHeal)
-
-        return log
-    end
-
-    action ReceiveSpellAttack(Spell enemySpell, Combatant caster) 
+    action ReceiveAttack(Attack attack, Combatant user) 
      returns Array<text>
         Array<text> log
         number damageModifier = 0
-        number tokens = 0
-        integer spellID = enemySpell:GetID()
-        integer counter = 5
-        integer elementCount = 0
+        integer damageRecieved = 0
+        integer attackID = attack:GetID()
         
         //TODO place check below for spells that heal self/friendlies but damage enemies
-        if enemySpell:GetCanHeal()
-            return ReceiveHeal(enemySpell, caster)
+        if (attack:GetCanHeal())
+            return ReceiveHeal(attack, user)
         end
 
-        //SpellID order: 1 fire water earth air light dark
-        repeat 6 times
-            elementCount = spellID mod 10
-            
-            if (elementCount > 0)
-                damageModifier = damageModifier + cast(number, elementCount) 
-                 * GetElementsEffectiveness(counter)
-                tokens = tokens + elementCount
-            end
+        damageModifier = CalculateDamageModifier(attackID)
+        damageRecieved = cast(integer, damageModifier
+         * attack:GetBaseDamage())
 
-            spellID = spellID / 10
-            counter = counter - 1
-        end
-
-        integer damage = 0
-
-        if (tokens not= 0)
-            damage = cast(integer, damageModifier/tokens 
-             * enemySpell:GetBaseDamage())
+        text incomingAttack = ""
+        if (attack is Spell)
+            incomingAttack = user:GetName() + " cast "
+             + attack:GetName() + " on " + GetName() + "!"
         else
-            damage = enemySpell:GetBaseDamage()
+            incomingAttack = user:GetName() + " used "
+             + attack:GetName() + " on " + GetName() + "!"
         end
-        
-        //Adds text to display to player into the array
-        //Results in log[incomingAttack, incomingDamage, defeated]
+        log:Add(incomingAttack)
 
-        text incomingSpell = caster:GetName() + " cast " + enemySpell:GetName() 
-         + " on " + GetName() + "!"
-        log:Add(incomingSpell)
-
-        text incomingDamage = GetName() + " took " + damage + " damage!"
+        text incomingDamage = GetName() + " took " + damageRecieved + " damage!"
         log:Add(incomingDamage)
 
-        if CheckDefeated(damage)
+        if CheckDefeated(damageRecieved)
             text defeated = GetName() + " was defeated!"
             log:Add(defeated)
         end
@@ -124,8 +56,147 @@ class Combatant
         return log
     end
 
+    action ReceiveHeal(Attack healMove, Combatant user) 
+     returns Array<text>
+        Array<text> log
+        integer healReceived = healMove:GetBaseDamage()
+
+        if (currentHP + healReceived > maxHP)
+            healReceived = maxHP - currentHP
+        end
+
+        SetCurrentHP(currentHP + healReceived)
+
+        text incomingMove = ""
+        if (healMove is Spell)
+            incomingMove = user:GetName() + " cast "
+             + healMove:GetName() + " on " + GetName() + "!"
+        else
+            incomingMove = user:GetName() + " used "
+             + healMove:GetName() + " on " + GetName() + "!"
+        end
+        log:Add(incomingMove)
+
+        text incomingHeal = GetName() + " recieved " + healReceived + " health!"
+        log:Add(incomingHeal)
+
+        return log
+    end
+
+    action CalculateDamageModifier(integer elementID) returns number
+        number damageModifier = 0
+        integer tokens = 0
+        integer counter = 5
+        integer elementCount = 0
+
+        //elementID order: 6/7/8/9 fire water earth air light dark
+        repeat 6 times
+            elementCount = elementID mod 10
+            
+            if (elementCount > 0)
+                damageModifier = damageModifier + (cast(number, elementCount) 
+                 * currentElementsEffectiveness:Get(counter))
+                tokens = tokens + elementCount
+            end
+
+            elementID = elementID / 10
+            counter = counter - 1
+        end
+
+        if (tokens not= 0)
+            damageModifier = damageModifier / cast(number, tokens)
+        else
+            damageModifier = 1
+        end
+
+        return damageModifier
+    end
+
+    /*Apply the basic results of a status being inflicted, also stacks effects 
+    with others and checks if the application chance works in the first place.
+    will return true if status succesfully applied, false if target resisted*/
+    action ApplyStatus(Status newStatus) returns boolean
+        Random randomSelection
+        integer randomNumber = randomSelection:RandomIntegerBetween(1, 100)
+        integer applyChance = cast(integer, newStatus:GetApplicationChance() * 100)
+
+        if (randomNumber > applyChance)
+            return false
+        end
+        //TODO status replacement with the same name
+        if (newStatus:GetElementID() / 1000000 = 6)
+            currentAttack = currentAttack * newStatus:GetBaseModifier()
+        end
+
+        integer i = 0
+        number newElementEffectiveness = 0
+        repeat while (i < 6)
+            newElementEffectiveness = currentElementsEffectiveness:Get(i)
+             * newStatus:GetEffectivenessStatModifiersAtPosition(i)
+            currentElementsEffectiveness:Set(i, newElementEffectiveness)
+            i = i + 1
+        end
+
+        newStatus:SetIsActive(true)
+        statuses:Add(newStatus)
+
+        return true
+    end
+
+    action UpdateStatus()
+        integer elementID = 0
+        integer damageRecieved = 0
+
+        integer i = 0
+        Status currentStatus
+        repeat while (i < statuses:GetSize())
+            currentStatus = statuses:Get(i)
+            elementID = currentStatus:GetElementID()
+
+            if (elementID / 1000000 = 7)
+                damageRecieved = cast(integer, CalculateDamageModifier(elementID) 
+                 * currentStatus:GetBaseDamage())
+                CheckDefeated(damageRecieved)
+            end
+            
+            currentStatus:DecrementTurnCounter()
+            if (currentStatus:GetTurnCounter() <= 0)
+                if (elementID / 1000000 = 6)
+                    currentAttack = currentAttack / currentStatus:GetBaseModifier()
+                end
+
+                integer j = 0
+                number newElementEffectiveness = 0
+                repeat while (j < 6)
+                    newElementEffectiveness = currentElementsEffectiveness:Get(j)
+                     / currentStatus:GetEffectivenessStatModifiersAtPosition(j) 
+                    currentElementsEffectiveness:Set(i, newElementEffectiveness)
+                    j = j + 1
+                end
+
+                currentStatus:SetIsActive(false)
+                statuses:RemoveAt(i)
+            else
+                i = i + 1
+            end
+        end
+    end
+
+    //Revert all stats to base and remove all status effects
+    action clearStatus()
+        statuses:Empty()
+        currentAttack = baseAttack
+
+        integer i = 0
+        repeat while (i < 6)
+            currentElementsEffectiveness:Set(i, baseElementsEffectiveness:Get(i))
+            i = i + 1
+        end
+    end
+
+    //Applies damage and checks if that defeats the target
     action CheckDefeated(integer damage) returns boolean
-        if GetCurrentHP() > damage
+        if (GetCurrentHP() > damage)
             SetCurrentHP(GetCurrentHP() - damage)
             return false
         end
@@ -133,6 +204,10 @@ class Combatant
         SetCurrentHP(0)
         return true
     end
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
 
     action SetName(text newName)
         name = newName
@@ -158,19 +233,34 @@ class Combatant
         return maxHP
     end
 
-    action SetAttack(number newAttack)
-        attack = newAttack
+    action SetCurrentAttack(number newCurrentAttack)
+        currentAttack = newCurrentAttack
     end
 
-    action GetAttack() returns number
-        return attack
+    action GetCurrentAttack() returns number
+        return currentAttack
+    end
+    action SetBaseAttack(number newBaseAttack)
+        baseAttack = newBaseAttack
     end
 
-    action SetElementsEffectiveness(integer position, number newResistance)
-        elementsEffectiveness:Set(position, newResistance)
+    action GetBaseAttack() returns number
+        return baseAttack
     end
 
-    action GetElementsEffectiveness(integer position) returns number
-        return elementsEffectiveness:Get(position)
+    action SetCurrentElementsEffectivenessAtPosition(integer position, number newCurrentResistance)
+        currentElementsEffectiveness:Set(position, newCurrentResistance)
+    end
+
+    action GetCurrentElementsEffectivenessAtPosition(integer position) returns number
+        return currentElementsEffectiveness:Get(position)
+    end
+
+    action SetBaseElementsEffectivenessAtPosition(integer position, number newBaseResistance)
+        baseElementsEffectiveness:Set(position, newBaseResistance)
+    end
+
+    action GetBaseElementsEffectivenessAtPosition(integer position) returns number
+        return baseElementsEffectiveness:Get(position)
     end
 end

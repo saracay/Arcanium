@@ -5,18 +5,26 @@ class Enemy is Combatant
     Spell spell
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     number newAttack, number newFireEff, number newWaterEff, 
-     number newEarthEff, number newWindEff, number newLightEff, number newDarkEff)
+     number newCurrentAttack, number newBaseAttack, 
+     Array<number> newCurrentElementsEffectiveness, 
+     Array<number> newBaseElementsEffectiveness)
         SetName(newName)
         SetCurrentHP(newCurrentHP)
         SetMaxHP(newMaxHP)
-        SetAttack(newAttack)
-        SetElementsEffectiveness(0, newFireEff)
-        SetElementsEffectiveness(1, newWaterEff)
-        SetElementsEffectiveness(2, newEarthEff)
-        SetElementsEffectiveness(3, newWindEff)
-        SetElementsEffectiveness(4, newLightEff)
-        SetElementsEffectiveness(5, newDarkEff)
+        SetCurrentAttack(newCurrentAttack)
+        SetBaseAttack(newBaseAttack)
+        integer i = 0
+        repeat while (i < 6)
+            SetCurrentElementsEffectivenessAtPosition(i,
+             newCurrentElementsEffectiveness:Get(i))
+            SetBaseElementsEffectivenessAtPosition(i,
+             newBaseElementsEffectiveness:Get(i))
+            i = i + 1
+        end
+    end
+
+    action ParseJSON()
+    //TODO setup parsing enemies.json here once implemented
     end
 
     action AI

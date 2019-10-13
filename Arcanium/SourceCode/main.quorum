@@ -75,9 +75,22 @@ class Main is Game, CollisionListener2D
 
                                                             - Matt
         ***********************************************************************/
-
         Player player   //placeholder for now
-        player:SetStats("<Player>", 2000, 2000, 5, 5, 100, 1.0, 0.7, 1.0, 1.0, 0.5, 1.0)
+        Array<number> baseElementsEffectiveness
+        baseElementsEffectiveness:Add(1.0)
+        baseElementsEffectiveness:Add(0.7)
+        baseElementsEffectiveness:Add(1.0)
+        baseElementsEffectiveness:Add(1.0)
+        baseElementsEffectiveness:Add(0.5)
+        baseElementsEffectiveness:Add(1.0)
+        Array<number> currentElementsEffectiveness
+        currentElementsEffectiveness:Add(1.0)
+        currentElementsEffectiveness:Add(0.7)
+        currentElementsEffectiveness:Add(1.0)
+        currentElementsEffectiveness:Add(1.0)
+        currentElementsEffectiveness:Add(0.5)
+        currentElementsEffectiveness:Add(1.0)
+        player:SetStats("<Player>", 2000, 2000, 5, 5, 1, 1, currentElementsEffectiveness, baseElementsEffectiveness)
         Enemy enemy
 
         Battle battle

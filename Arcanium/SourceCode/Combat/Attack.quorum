@@ -5,9 +5,14 @@ class Attack
     text name = ""                          //attack name
     integer baseDamage = 1                  //base damage used in calculations
     integer ID = 9000000                    //attack ID, start with 9 for spell, 8 for physical
-    Array<integer> statusCodes              //contains codes for status effects applied by the attack
+    Array<Status> statuses                  //contains status effects applied by the attack
     boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
-    boolean canHeal = false                 //true if attack can heal
+    boolean canHeal = false                 //true if attack can heal target
+    boolean canDamage = false               //true if attack can damage target
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
 
     action SetName(text newName)
         name = newName
@@ -48,14 +53,24 @@ class Attack
     action GetCanHeal() returns boolean
         return canHeal
     end
-    
-/* Not Yet Implemented/Used
-    action SetStatusCodes(integer position, integer newStatusCode)
-        statusCodes:Set(position, newStatusCode)
+
+    action SetCanDamage(boolean newCanDamage)
+        canDamage = newCanDamage
     end
 
-    action GetStatusCodes(integer position) returns integer
-        return statusCodes:Get(position)
+    action GetCanDamage() returns boolean
+        return canDamage
     end
-*/
+    
+    action AddToStatuses(Status newStatus)
+        statuses:Add(newStatus)
+    end
+
+    action SetStatusesAtPosition(integer position, Status newStatus)
+        statuses:Set(position, newStatus)
+    end
+
+    action GetStatusCodesAtPosition(integer position) returns Status
+        return statuses:Get(position)
+    end
 end

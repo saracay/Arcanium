@@ -5,26 +5,18 @@ class Spell is Attack
     
     integer manaCost = 1                    //mana cost of a spell
 
-    action SetManaCost(integer newManaCost)
-        manaCost = newManaCost
-    end
-
-    action GetManaCost() returns integer
-        return manaCost
-    end
-
     action ParseJSON()
-        integer ID = GetID()
-        JavaScriptObjectNotation spells
-        File spellsList
-        spellsList:SetPath("Assets\Attacks\Attacks.json")
-        spells:Read(spellsList)
-        JavaScriptObjectNotation spellData = spells:GetObject("spells")
+        integer ID = GetID()                //Spell's ID must be set before call
+        JavaScriptObjectNotation attackTypes
+        File attacksList
+        attacksList:SetPath("Assets\Attacks\Attacks.json")
+        attackTypes:Read(attacksList)
+        JavaScriptObjectNotation spellData = attackTypes:GetObject("spells")
 
         JavaScriptObjectNotation currentSpell
         integer i = 0
         boolean found = false
-        repeat while i < spellData:GetSize() and not found
+        repeat while (i < spellData:GetSize() and not found)
             currentSpell = spellData:Get(i)
             if currentSpell:GetValue("spellID") = ID:GetText()
                 found = true
@@ -38,10 +30,31 @@ class Spell is Attack
         else
             SetName(currentSpell:GetValue("name"))
             SetBaseDamage(currentSpell:GetValue("baseDamage"):ParseInteger())
-            //TODO SetStatusCodes()
             SetMultiTarget(currentSpell:GetValue("multiTarget"):ParseBoolean())
             SetCanHeal(currentSpell:GetValue("canHeal"):ParseBoolean())
+            SetCanDamage(currentSpell:GetValue("canDamage"):ParseBoolean())
             SetManaCost(currentSpell:GetValue("manaCost"):ParseInteger())
+            spellData = currentSpell:GetObject("statusCodes")
+            i = 0
+            Status currentStatus
+            repeat while (i < spellData:GetSize())
+                currentStatus:SetStatusID(spellData:Get(i):GetValue():ParseInteger())
+                currentStatus:ParseJSON()
+                AddToStatuses(currentStatus)
+                i = i + 1
+            end
         end
+    end
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
+
+    action SetManaCost(integer newManaCost)
+        manaCost = newManaCost
+    end
+
+    action GetManaCost() returns integer
+        return manaCost
     end
 end

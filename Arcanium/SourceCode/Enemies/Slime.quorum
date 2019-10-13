@@ -1,7 +1,22 @@
-class Slime is Enemy
+use Libraries.Containers.Array
 
+class Slime is Enemy
     on create
-        SetStats("Slime", 100, 100, 10, 0.25, 0.0, 0.35, 0.2, 1, 1)
+        Array<number> baseElementsEffectiveness
+        baseElementsEffectiveness:Add(0.25)
+        baseElementsEffectiveness:Add(0.0)
+        baseElementsEffectiveness:Add(0.35)
+        baseElementsEffectiveness:Add(0.2)
+        baseElementsEffectiveness:Add(1.0)
+        baseElementsEffectiveness:Add(1.0)
+        Array<number> currentElementsEffectiveness
+        currentElementsEffectiveness:Add(0.25)
+        currentElementsEffectiveness:Add(0.0)
+        currentElementsEffectiveness:Add(0.35)
+        currentElementsEffectiveness:Add(0.2)
+        currentElementsEffectiveness:Add(1.0)
+        currentElementsEffectiveness:Add(1.0)
+        SetStats("Slime", 100, 100, 1, 1, currentElementsEffectiveness, baseElementsEffectiveness)
     end
 
     action AI

@@ -21,8 +21,7 @@ output spell:GetBaseDamage()
 
         if player:GetCurrentMP() >= spell:GetManaCost()
             player:SetCurrentMP(player:GetCurrentMP() - spell:GetManaCost())
-
-            target:ReceiveSpellAttack(spell, caster)
+            target:ReceiveAttack(spell, caster)
         end
 
         battle:UpdateStatus()

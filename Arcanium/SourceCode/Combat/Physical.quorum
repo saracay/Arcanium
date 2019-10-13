@@ -1,11 +1,45 @@
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
+
 class Physical is Attack
-    integer elementalType = 0   //0-6 determines if an attack is based off a certain element
 
-    action SetElementalType(integer newElementalType)
-        elementalType = newElementalType
-    end
+    action ParseJSON()
+        integer ID = GetID()            //Physical's ID must be set before call
+        JavaScriptObjectNotation attackTypes
+        File attacksList
+        attacksList:SetPath("Assets\Attacks\Attacks.json")
+        attackTypes:Read(attacksList)
+        JavaScriptObjectNotation physicalData = attackTypes:GetObject("physicals")
 
-    action GetElementalType() returns integer
-        return elementalType
+        JavaScriptObjectNotation currentPhysical
+        integer i = 0
+        boolean found = false
+        repeat while (i < physicalData:GetSize() and not found)
+            currentPhysical = physicalData:Get(i)
+            if currentPhysical:GetValue("physicalID") = ID:GetText()
+                found = true
+            else
+                i = i + 1
+            end
+        end
+
+        if not found
+            output "Temporary Error: physical not found"
+        else
+            SetName(currentPhysical:GetValue("name"))
+            SetBaseDamage(currentPhysical:GetValue("baseDamage"):ParseInteger())
+            SetMultiTarget(currentPhysical:GetValue("multiTarget"):ParseBoolean())
+            SetCanHeal(currentPhysical:GetValue("canHeal"):ParseBoolean())
+            SetCanDamage(currentPhysical:GetValue("canDamage"):ParseBoolean())
+            physicalData = currentPhysical:GetObject("statusCodes")
+            i = 0
+            Status currentStatus
+            repeat while (i < physicalData:GetSize())
+                currentStatus:SetStatusID(physicalData:Get(i):GetValue():ParseInteger())
+                currentStatus:ParseJSON()
+                AddToStatuses(currentStatus)
+                i = i + 1
+            end
+        end
     end
 end
