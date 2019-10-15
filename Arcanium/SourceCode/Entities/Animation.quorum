@@ -1,0 +1,34 @@
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.Interface.Behaviors.Behavior
+
+class Animation
+    public ImageSheet sheet
+    public Drawable girl
+
+    integer frame = 1
+
+    action GetFrame returns integer
+        return frame
+    end 
+
+    action SetFrame(integer frame)
+        me:frame = frame
+    end
+
+    action LoadImageSheet
+        sheet:Load("resources/girl.atlas")
+    end 
+
+    action LoadFrame
+        girl:Load(sheet:GetDrawable("Girl frame 1"))
+    end
+
+    action ChangeFrame
+        if frame > 3
+            frame = 1
+        end
+        girl:Load(sheet:GetDrawable("Girl frame " + frame)) 
+    end
+end
