@@ -1,6 +1,5 @@
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
-use Libraries.Interface.Layouts.ManualLayout
 use Libraries.Game.Game
 use Libraries.Containers.Array
 use Libraries.Interface.Item2D
@@ -20,9 +19,10 @@ class DisplayLogBehavior is Behavior
     Color color
     
     action Run(BehaviorEvent event)
-        ManualLayout layout
         
         if displayBox = undefined
+            Drawable newBox
+            displayBox = newBox
             displayBox:LoadFilledRectangle(800, 180, color:LightGray())
             game:Add(displayBox)
         end
@@ -32,32 +32,39 @@ class DisplayLogBehavior is Behavior
         repeat while counter < log:GetSize()
             Label label
             label:SetText(log:Get(counter))
+            label:SetFontSize(20)
             label:SetPosition(-1000, -1000)
             labels:Add(label)
-            game:Add(label)
-            
+            displayBox:Add(label)
+
             Button button
             NextLogBehavior behavior
             behavior:SetLabels(labels)
+            behavior:SetButtons(buttons)
             behavior:SetCurrentIndex(counter)
-            button:SetName(log:RemoveFromFront())
+            behavior:SetLogBehavior(me)
+            behavior:SetDisplayBox(displayBox)
+            behavior:SetGame(game)
+            button:SetBehavior(behavior)
+            button:SetName(log:Get(counter))
             button:SetPosition(-1000, -1000)
             buttons:Add(button)
             game:Add(button)
             
             counter = counter + 1
         end
-        
+
         game:SetFocus(buttons:Get(0))
-        labels:Get(0):SetPosition(100, 100)
+        labels:Get(0):SetPosition(10, displayBox:GetHeight() - 30)
     end
     
     action Dispose
         integer counter = 0
-        
+
         repeat while counter < buttons:GetSize()
             removalArray:Add(buttons:Get(counter))
-            removalArray:Add(labels:Get(counter))
+            removalArray:Add(displayBox)
+//            removalArray:Add(labels:Get(counter))
             
             counter = counter + 1
         end

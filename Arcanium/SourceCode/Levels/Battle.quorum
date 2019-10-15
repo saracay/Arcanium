@@ -144,12 +144,15 @@ class Battle is Level
     end
 
     action PlayerTurn
-//        log:Add("What will <player> do?")
-//
-//        DisplayLogBehavior logBehavior
-//        logBehavior:SetGame(game)
-//        logBehavior:SetLog(log)
-//        logBehavior:SetRemovalArray(removalArray)
+        log:Add("Test")
+        log:Add("What will <player> do?")
+        log:Add("Another test")
+        DisplayLogBehavior logBehavior
+        logBehavior:SetGame(game)
+        logBehavior:SetLog(log)
+        logBehavior:SetRemovalArray(removalArray)
+        logBehavior:Run(undefined)
+//        behaviorQueue:AddBehavior(logBehavior)
 
         CombatMainPageBehavior combatBehavior
         combatBehavior:SetGame(game)
@@ -158,7 +161,8 @@ class Battle is Level
         combatBehavior:SetMaxTokens(2)
         combatBehavior:SetCombatants(combatants)
         combatBehavior:SetSprites(sprites)
-        combatBehavior:Run(undefined)
+//        combatBehavior:Run(undefined)
+//        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
