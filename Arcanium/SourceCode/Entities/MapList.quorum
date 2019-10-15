@@ -1,0 +1,19 @@
+use Libraries.Containers.Array
+
+class MapList 
+    public Array<Text> ALL_MAPS
+
+    public text TEST_MAP = "Testmap"
+    public text FOREST_MAP = "Forest"
+    public text CASTLE_MAP = "Castle"
+
+    on create
+        setMapList()
+    end
+
+    action setMapList()
+        ALL_MAPS:Add(TEST_MAP)
+        ALL_MAPS:Add(FOREST_MAP)
+        ALL_MAPS:Add(CASTLE_MAP)
+    end
+end

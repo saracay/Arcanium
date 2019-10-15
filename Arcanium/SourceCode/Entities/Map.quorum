@@ -12,16 +12,14 @@ class Map
     public Array<Drawable> collisions
     public Array<Text> aboveMaps
 
-    text TEST_MAP = "Testmap"
-    text FOREST_MAP = "Forest"
-    text CASTLE_MAP = "Castle"
+    MapList maps
 
     on create
         setAboveMaps()
     end
 
     action setAboveMaps() 
-        aboveMaps:Add(FOREST_MAP)
+        aboveMaps:Add(maps:FOREST_MAP)
     end
 
     action inAboveMaps(text map) returns boolean
@@ -34,7 +32,6 @@ class Map
 
     action loadMap(text map)
         testMap:Load("Assets\Maps\" + map + ".png")     
-        
     end
 
     action loadAboveLayer(text map)
