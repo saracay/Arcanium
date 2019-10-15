@@ -175,73 +175,81 @@ class Main is Game, CollisionListener2D
             Remove(removalArray:RemoveFromFront())
         end
        
-//        //for animation
-//        //elapsedTime = elapsedTime + seconds
-//
-//        //Movement using WASD
-//        if monitor:IsKeyPressed(keys:W)
-//            newY = player1:playerSprite:GetY() + plyrSpeed * seconds
-//            
-//            // for animation -- commented out for testing
-//            /*newY = p1:GetY() + plyrSpeed * seconds
-//            //for animation
-//            if elapsedTime >= 1/fps
-//                frame = frame + 1
-//            if frame > 3
-//                frame = 1 
-//            end
-//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
-//            elapsedTime = elapsedTime - 1/fps
-//            end*/
-//
-//        elseif monitor:IsKeyPressed(keys:S)
-//            newY = player1:playerSprite:GetY() - plyrSpeed * seconds
-              // for animation -- commented out for testing
-//            /*newY = p1:GetY() - plyrSpeed * seconds
-//            //for animation
-//            if elapsedTime >= 1/fps
-//                frame = frame + 1
-//            if frame > 3
-//                frame = 1 
-//            end
-//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
-//            elapsedTime = elapsedTime - 1/fps
-//            end*/  
-//
-//        elseif monitor:IsKeyPressed(keys:D)
-//            newX = player1:playerSprite:GetX() + plyrSpeed * seconds
-              // for animation -- commented out for testing
-//            /*newX = p1:GetX() + plyrSpeed * seconds
-//            //for animation
-//            if elapsedTime >= 1/fps
-//                frame = frame + 1
-//            if frame > 3
-//                frame = 1 
-//            end
-//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
-//            elapsedTime = elapsedTime - 1/fps
-//            end*/
-//
-//        elseif monitor:IsKeyPressed(keys:A)
-//            newX = player1:playerSprite:GetX() - plyrSpeed * seconds
-//
-              // for animation -- commented out for testing
-//            /*newX = p1:GetY() - plyrSpeed * seconds
-//            //for animation
-//            if elapsedTime >= 1/fps
-//                frame = frame + 1
-//            if frame > 3
-//                frame = 1 
-//            end
-//            p1:Load(sheet:GetDrawable("Girl frame " + frame))
-//            elapsedTime = elapsedTime - 1/fps
-//            end*/
-//        end
-//        
-//        player1:playerSprite:SetPosition(newX,newY)
-//        //p1:SetPosition(newX, newY)
-    end
+	   
+	   
+	/***********************************************************************
+        Sprite Animation
+		- Jania & Maria
+    ***********************************************************************/	
+	
+	/*
+	// 	UPDATED - commented out for testing
+		if monitor:IsKeyPressed(keys:W)
+            newY = testAnimation:girl:GetY() + plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+            if elapsedTime >= 1/fps
+                frame = frame + 1
+            if frame > 3
+                frame = 1 
+            end
+            currentFrame = testAnimation:GetFrame()
+            testAnimation:SetFrame(currentFrame + 1)
+            testAnimation:ChangeFrame()
+            elapsedTime = elapsedTime - 1/fps
+            end
 
+        elseif monitor:IsKeyPressed(keys:S)
+            newY = testAnimation:girl:GetY() - plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+            if elapsedTime >= 1/fps
+                frame = frame + 1
+            if frame > 3
+                frame = 1 
+            end
+            currentFrame = testAnimation:GetFrame()
+            testAnimation:SetFrame(currentFrame + 1)
+            testAnimation:ChangeFrame()
+            elapsedTime = elapsedTime - 1/fps
+            end
+
+        elseif monitor:IsKeyPressed(keys:D)
+            newX = testAnimation:girl:GetX() + plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+            if elapsedTime >= 1/fps
+                frame = frame + 1
+            if frame > 3
+                frame = 1 
+            end
+            currentFrame = testAnimation:GetFrame()
+            testAnimation:SetFrame(currentFrame + 1)
+            testAnimation:ChangeFrame()
+            elapsedTime = elapsedTime - 1/fps
+            end
+
+        elseif monitor:IsKeyPressed(keys:A)
+            newX = testAnimation:girl:GetX() - plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+        if elapsedTime >= 1/fps
+            frame = frame + 1
+            if frame > 3
+                frame = 1 
+            end
+            currentFrame = testAnimation:GetFrame()
+            testAnimation:SetFrame(currentFrame + 1)
+            testAnimation:ChangeFrame()
+            elapsedTime = elapsedTime - 1/fps
+            end
+        end
+        
+        testAnimation:girl:SetPosition(newX,newY)
+    */
+    
+    end
+	
+	/***********************************************************************
+        END Sprite Animation
+    ***********************************************************************/
+	  
     action AddBehavior(Behavior behavior)
         behaviorQueue:AddBehavior(behavior)
     end
