@@ -50,9 +50,7 @@ class Main is Game, CollisionListener2D
     MapList maps
  
     //For animations
-    ImageSheet sheet
-    Drawable p1
-    //Animation testAnimation
+    Animation testAnimation
     number elapsedTime = 0
     number fps = 4
     number frame = 1
@@ -137,9 +135,6 @@ class Main is Game, CollisionListener2D
 //        testAnimation:LoadImageSheet()
 //        testAnimation:LoadFrame()
 //        Add(testAnimation:girl)
-//        sheet:Load("/Assets/ImageSheets/girl.atlas")
-//        p1:Load(sheet:GetDrawable("Girl frame 1"))
-//        Add(p1)
         
         /***********************************************************************
         Start test section
