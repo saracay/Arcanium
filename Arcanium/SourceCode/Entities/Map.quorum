@@ -20,6 +20,7 @@ class Map
 
     action setAboveMaps() 
         aboveMaps:Add(maps:FOREST_MAP)
+        aboveMaps:Add(maps:LIBRARY_MAP)
     end
 
     action inAboveMaps(text map) returns boolean

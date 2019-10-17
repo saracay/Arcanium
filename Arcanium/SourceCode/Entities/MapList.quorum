@@ -6,6 +6,7 @@ class MapList
     public text TEST_MAP = "Testmap"
     public text FOREST_MAP = "Forest"
     public text CASTLE_MAP = "Castle"
+    public text LIBRARY_MAP = "Library"
 
     on create
         setMapList()
@@ -15,5 +16,6 @@ class MapList
         ALL_MAPS:Add(TEST_MAP)
         ALL_MAPS:Add(FOREST_MAP)
         ALL_MAPS:Add(CASTLE_MAP)
+        ALL_MAPS:Add(LIBRARY_MAP)
     end
 end

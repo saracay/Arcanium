@@ -101,6 +101,50 @@
          "visible":false,
          "x":0,
          "y":0
+        },
+        {
+         "draworder":"topdown",
+         "id":5,
+         "name":"Transitions",
+         "objects":[
+                {
+                 "height":65.5,
+                 "id":1,
+                 "name":"Library",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":40,
+                 "x":215.5,
+                 "y":207
+                }, 
+                {
+                 "height":66.5,
+                 "id":3,
+                 "name":"Not Ready Yet",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":36.5,
+                 "x":576.5,
+                 "y":207.5
+                }, 
+                {
+                 "height":11.5,
+                 "id":4,
+                 "name":"Forest",
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":98.5,
+                 "x":383,
+                 "y":437.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
         }],
  "nextlayerid":15,
  "nextobjectid":18,
