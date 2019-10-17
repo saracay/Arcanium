@@ -3,13 +3,6 @@ use Libraries.Containers.Array
 class Goblin is Enemy
 
     on create
-        Array<number> baseElementsEffectiveness
-        baseElementsEffectiveness:Add(1.0)
-        baseElementsEffectiveness:Add(1.0)
-        baseElementsEffectiveness:Add(1.0)
-        baseElementsEffectiveness:Add(1.0)
-        baseElementsEffectiveness:Add(1.0)
-        baseElementsEffectiveness:Add(1.0)
         Array<number> currentElementsEffectiveness
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(1.0)
@@ -17,7 +10,7 @@ class Goblin is Enemy
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(1.0)
-        SetStats("Goblin", 300, 300, 1, 1, currentElementsEffectiveness, baseElementsEffectiveness)
+        SetStats("Goblin", 300, 300, 1, currentElementsEffectiveness)
     end
 
     action AI

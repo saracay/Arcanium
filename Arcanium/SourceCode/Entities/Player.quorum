@@ -8,22 +8,18 @@ class Player is Combatant
     public Drawable playerSprite
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     integer newCurrentMP, integer newMaxMP, number newCurrentAttack,
-     number newBaseAttack, Array<number> newCurrentElementsEffectiveness,
-     Array<number> newBaseElementsEffectiveness)
+     integer newCurrentMP, integer newMaxMP, number newCurrentAttack, 
+     Array<number> newCurrentElementsEffectiveness)
         SetName(newName)
         SetCurrentHP(newCurrentHP)
         SetMaxHP(newMaxHP)
         SetCurrentMP(newCurrentMP)
         SetMaxMP(newMaxMP)
         SetCurrentAttack(newCurrentAttack)
-        SetBaseAttack(newBaseAttack)
         integer i = 0
         repeat while (i < 6)
             SetCurrentElementsEffectivenessAtPosition(i,
              newCurrentElementsEffectiveness:Get(i))
-            SetBaseElementsEffectivenessAtPosition(i,
-             newBaseElementsEffectiveness:Get(i))
             i = i + 1
         end
     end

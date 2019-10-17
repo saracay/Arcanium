@@ -1,4 +1,5 @@
 use Libraries.Containers.Array
+use Libraries.Containers.Iterator
 use Libraries.Compute.Random
 
 class Combatant
@@ -6,19 +7,20 @@ class Combatant
     text name = ""          //name to display
     integer currentHP = 1   //current health
     integer maxHP = 1       //maximum amount of health
-    number currentAttack = 1 //temporary, changing multiplier for outgoing damage
-    number baseAttack = 1   //base multiplier for outgoing damage
-    Array<number> currentElementsEffectiveness //temporary, changing multiplier for incoming damage
-    Array<number> baseElementsEffectiveness //base multiplier for incoming damage
+    number currentAttack = 1 //current multiplier for outgoing damage
+    Array<number> currentElementsEffectiveness //current multiplier for incoming damage
     Array<Status> statuses  //statuses currently inflicted on this combatant
 
+    /*When initialized the currentElementsEffectiveness array is given 
+    6 undefined values, it also cannot grow larger or smaller*/
     on create
-        repeat 6 times
-            currentElementsEffectiveness:Add(1)
-            baseElementsEffectiveness:Add(1)
-        end
+        currentElementsEffectiveness:SetSize(6)
+        currentElementsEffectiveness:SetMaxSize(6)
+        currentElementsEffectiveness:SetAutoResize(false)
     end
 
+    /*Take an attack from potentially an enemy, ally, or theirself, determines
+    if it heals or damages, and if damaging calculates and applies it*/
     action ReceiveAttack(Attack attack, Combatant user) 
      returns Array<text>
         Array<text> log
@@ -83,6 +85,8 @@ class Combatant
         return log
     end
 
+    /*Calculate what percentage of its base damage an attack will deal
+    NOTE: DOES NOT CURRENT TAKE INTO ACCOUNT THE ATTACK STAT*/
     action CalculateDamageModifier(integer elementID) returns number
         number damageModifier = 0
         integer tokens = 0
@@ -143,6 +147,9 @@ class Combatant
         return true
     end
 
+    /*Go through the status array, if the status inflicts damage apply it,
+    update the turn counter, if turn counter hits 0 remove the status effect
+    and its stat changes*/
     action UpdateStatus()
         integer elementID = 0
         integer damageRecieved = 0
@@ -170,7 +177,7 @@ class Combatant
                 repeat while (j < 6)
                     newElementEffectiveness = currentElementsEffectiveness:Get(j)
                      / currentStatus:GetEffectivenessStatModifiersAtPosition(j) 
-                    currentElementsEffectiveness:Set(i, newElementEffectiveness)
+                    currentElementsEffectiveness:Set(j, newElementEffectiveness)
                     j = j + 1
                 end
 
@@ -182,19 +189,60 @@ class Combatant
         end
     end
 
-    //Revert all stats to base and remove all status effects
-    action clearStatus()
-        statuses:Empty()
-        currentAttack = baseAttack
+    /*Remove a specific status effect and its stat changes, return true if
+    the status effect was found and removed, false otherwise*/
+    action RemoveStatus(integer statusID) returns boolean
+        Iterator<Status> it = statuses:GetIterator()
+        Status currentStatus
+        repeat while it:HasNext()
+            currentStatus = it:Next()
 
-        integer i = 0
-        repeat while (i < 6)
-            currentElementsEffectiveness:Set(i, baseElementsEffectiveness:Get(i))
-            i = i + 1
+            if (currentStatus:GetStatusID() = statusID)
+                if (currentStatus:GetElementID() / 1000000 = 6)
+                    currentAttack = currentAttack / currentStatus:GetBaseModifier()
+                end
+
+                integer i = 0
+                number newElementEffectiveness = 0
+                repeat while (i < 6)
+                    newElementEffectiveness = currentElementsEffectiveness:Get(i)
+                     / currentStatus:GetEffectivenessStatModifiersAtPosition(i) 
+                    currentElementsEffectiveness:Set(i, newElementEffectiveness)
+                    i = i + 1
+                end
+                statuses:Remove(currentStatus)
+                return true
+            end
         end
+
+        return false
     end
 
-    //Applies damage and checks if that defeats the target
+    /*Remove all status effects and their stat changes*/
+    action ClearAllStatus()
+        Iterator<Status> it = statuses:GetIterator()
+        Status currentStatus
+        repeat while it:HasNext()
+            currentStatus = it:Next()
+
+            if (currentStatus:GetElementID() / 1000000 = 6)
+                currentAttack = currentAttack / currentStatus:GetBaseModifier()
+            end
+
+            integer i = 0
+            number newElementEffectiveness = 0
+            repeat while (i < 6)
+                newElementEffectiveness = currentElementsEffectiveness:Get(i)
+                 / currentStatus:GetEffectivenessStatModifiersAtPosition(i) 
+                currentElementsEffectiveness:Set(i, newElementEffectiveness)
+                i = i + 1
+            end
+        end
+
+        statuses:Empty()
+    end
+
+    /*Applies damage and checks if that defeats the target*/
     action CheckDefeated(integer damage) returns boolean
         if (GetCurrentHP() > damage)
             SetCurrentHP(GetCurrentHP() - damage)
@@ -240,13 +288,6 @@ class Combatant
     action GetCurrentAttack() returns number
         return currentAttack
     end
-    action SetBaseAttack(number newBaseAttack)
-        baseAttack = newBaseAttack
-    end
-
-    action GetBaseAttack() returns number
-        return baseAttack
-    end
 
     action SetCurrentElementsEffectivenessAtPosition(integer position, number newCurrentResistance)
         currentElementsEffectiveness:Set(position, newCurrentResistance)
@@ -254,13 +295,5 @@ class Combatant
 
     action GetCurrentElementsEffectivenessAtPosition(integer position) returns number
         return currentElementsEffectiveness:Get(position)
-    end
-
-    action SetBaseElementsEffectivenessAtPosition(integer position, number newBaseResistance)
-        baseElementsEffectiveness:Set(position, newBaseResistance)
-    end
-
-    action GetBaseElementsEffectivenessAtPosition(integer position) returns number
-        return baseElementsEffectiveness:Get(position)
     end
 end

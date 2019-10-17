@@ -15,10 +15,12 @@ class Status
     Array<number> effectivenessStatModifiers //multipliers to lower/raise target's effectiveness stats
     Attack sourceAttack             //attack this status originates from
 
+    /*When initialized the effectivenessStatModifiers array is given 
+    6 undefined values, it also cannot grow larger or smaller*/
     on create
-        repeat 6 times
-            effectivenessStatModifiers:Add(1)
-        end
+        effectivenessStatModifiers:SetSize(6)
+        effectivenessStatModifiers:SetMaxSize(6)
+        effectivenessStatModifiers:SetAutoResize(false)
     end
 
     action ParseJSON()

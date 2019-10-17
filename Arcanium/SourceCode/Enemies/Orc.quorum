@@ -3,13 +3,6 @@ use Libraries.Containers.Array
 class Orc is Enemy
 
     on create
-        Array<number> baseElementsEffectiveness
-        baseElementsEffectiveness:Add(1.3)
-        baseElementsEffectiveness:Add(0.5)
-        baseElementsEffectiveness:Add(1)
-        baseElementsEffectiveness:Add(0.8)
-        baseElementsEffectiveness:Add(1.5)
-        baseElementsEffectiveness:Add(1)
         Array<number> currentElementsEffectiveness
         currentElementsEffectiveness:Add(1.3)
         currentElementsEffectiveness:Add(0.5)
@@ -18,7 +11,7 @@ class Orc is Enemy
         currentElementsEffectiveness:Add(1.5)
         currentElementsEffectiveness:Add(1)
 
-        SetStats("Orc", 1000, 1000, 1, 1, currentElementsEffectiveness, baseElementsEffectiveness)
+        SetStats("Orc", 1000, 1000, 1, currentElementsEffectiveness)
     end
 
     action AI
