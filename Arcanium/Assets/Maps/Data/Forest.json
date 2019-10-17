@@ -204,9 +204,53 @@
          "visible":false,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":9,
+         "name":"Interactables",
+         "objects":[
+                {
+                 "height":19,
+                 "id":16,
+                 "name":"Fruit",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":20,
+                 "x":421.5,
+                 "y":456
+                }, 
+                {
+                 "height":33,
+                 "id":17,
+                 "name":"Chair",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":25,
+                 "x":355,
+                 "y":430.5
+                }, 
+                {
+                 "height":8.5,
+                 "id":18,
+                 "name":"Pond",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":50.5,
+                 "x":96.5,
+                 "y":145
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":9,
- "nextobjectid":16,
+ "nextlayerid":10,
+ "nextobjectid":19,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

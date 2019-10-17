@@ -254,28 +254,6 @@
                 }, 
                 {
                  "height":7,
-                 "id":19,
-                 "name":"Bookshelf 13",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":96.125,
-                 "y":514
-                }, 
-                {
-                 "height":7,
-                 "id":20,
-                 "name":"Empty Bookshelf 3",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":128.307,
-                 "y":514.045
-                }, 
-                {
-                 "height":7,
                  "id":21,
                  "name":"Bookshelf 20",
                  "rotation":0,
@@ -621,7 +599,7 @@
                  "name":"Not Ready Yet",
                  "rotation":0,
                  "type":"",
-                 "visible":false,
+                 "visible":true,
                  "width":33,
                  "x":766,
                  "y":352.5
@@ -632,7 +610,7 @@
                  "name":"Castle",
                  "rotation":0,
                  "type":"",
-                 "visible":false,
+                 "visible":true,
                  "width":95,
                  "x":639.5,
                  "y":0
@@ -642,9 +620,42 @@
          "visible":false,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":7,
+         "name":"Interactables",
+         "objects":[
+                {
+                 "height":7,
+                 "id":62,
+                 "name":"Interactable Bookshelf",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":96.0908181818182,
+                 "y":514.022954545455
+                }, 
+                {
+                 "height":7,
+                 "id":63,
+                 "name":"Interactable Empty Bookshelf",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":128.272818181818,
+                 "y":514.067954545455
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":62,
+ "nextlayerid":8,
+ "nextobjectid":64,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
