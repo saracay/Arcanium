@@ -589,7 +589,8 @@
       "statusCodes": [],
       "multiTarget": false,
       "canHeal": false,
-      "canDamage": true
+      "canDamage": true,
+      "elementalType": 0
     }
   ]
 }
