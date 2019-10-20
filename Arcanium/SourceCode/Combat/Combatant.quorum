@@ -20,7 +20,8 @@ class Combatant
     end
 
     /*Take an attack from potentially an enemy, ally, or theirself, determines
-    if it heals or damages, and if damaging calculates and applies it*/
+    if it heals or damages, and if damaging calculates and applies it along
+    with its status effects*/
     action ReceiveAttack(Attack attack, Combatant user) 
      returns Array<text>
         Array<text> log
@@ -53,11 +54,19 @@ class Combatant
         if CheckDefeated(damageRecieved)
             text defeated = GetName() + " was defeated!"
             log:Add(defeated)
+        else
+            Array<text> statusResults = ApplyAttackStatus(attack)
+            Iterator<text> it = statusResults:GetIterator()
+            repeat while (it:HasNext())
+                log:Add(it:Next())
+            end
         end
 
         return log
     end
 
+    /*Takes a healing attack from an enemy, ally, or theirself, applies/removes
+    status. Note: currently only goes off spell base damage*/
     action ReceiveHeal(Attack healMove, Combatant user) 
      returns Array<text>
         Array<text> log
@@ -82,11 +91,17 @@ class Combatant
         text incomingHeal = GetName() + " recieved " + healReceived + " health!"
         log:Add(incomingHeal)
 
+        Array<text> statusResults = ApplyAttackStatus(healMove)
+        Iterator<text> it = statusResults:GetIterator()
+        repeat while (it:HasNext())
+            log:Add(it:Next())
+        end
+
         return log
     end
 
-    /*Calculate what percentage of its base damage an attack will deal
-    NOTE: DOES NOT CURRENT TAKE INTO ACCOUNT THE ATTACK STAT*/
+    /*Calculate what percentage of its base damage an attack will deal,
+    does not consider the attack stat*/
     action CalculateDamageModifier(integer elementID) returns number
         number damageModifier = 0
         integer tokens = 0
@@ -116,6 +131,36 @@ class Combatant
         return damageModifier
     end
 
+    /*Apply/remove all status effects attached to a given attack*/
+    action ApplyAttackStatus(Attack attack) returns Array<text>
+        Array<text> statusChange
+        text statusApplied = ""
+        Iterator<Status> it = attack:GetAppliedStatuses():GetIterator()
+        Status currentStatus
+        repeat while it:HasNext()
+            currentStatus = it:Next()
+            if (ApplyStatus(currentStatus))
+                statusApplied = GetName() + " was inflicted with the status "
+                 + currentStatus:GetName()
+            else
+                statusApplied = GetName() + " resisted the status "
+                 + currentStatus:GetName()
+            end
+            statusChange:Add(statusApplied)
+        end
+
+        it = attack:GetCuredStatuses():GetIterator()
+        repeat while it:HasNext()
+            currentStatus = it:Next()
+            if (RemoveStatus(currentStatus:GetStatusID()))
+                statusApplied = GetName() + " was cured of the status "
+                 + currentStatus:GetName()
+                statusChange:Add(statusApplied)
+            end
+        end
+
+        return statusChange
+    end
     /*Apply the basic results of a status being inflicted, also stacks effects 
     with others and checks if the application chance works in the first place.
     will return true if status succesfully applied, false if target resisted*/

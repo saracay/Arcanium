@@ -5,7 +5,8 @@ class Attack
     text name = ""                          //attack name
     integer baseDamage = 1                  //base damage used in calculations
     integer ID = 9000000                    //attack ID, start with 9 for spell, 8 for physical
-    Array<Status> statuses                  //contains status effects applied by the attack
+    Array<Status> appliedStatuses           //contains status effects applied by the attack
+    Array<Status> curedStatuses             //contains status effects removed by the attack
     boolean multiTarget = false             //true if it hits multiple (all) enemies, false if it is single-target
     boolean canHeal = false                 //true if attack can heal target
     boolean canDamage = false               //true if attack can damage target
@@ -62,15 +63,35 @@ class Attack
         return canDamage
     end
     
-    action AddToStatuses(Status newStatus)
-        statuses:Add(newStatus)
+    action AddToAppliedStatuses(Status newStatus)
+        appliedStatuses:Add(newStatus)
     end
 
-    action SetStatusesAtPosition(integer position, Status newStatus)
-        statuses:Set(position, newStatus)
+    action GetAppliedStatuses() returns Array<Status>
+        return appliedStatuses
     end
 
-    action GetStatusCodesAtPosition(integer position) returns Status
-        return statuses:Get(position)
+    action SetAppliedStatusesAtPosition(integer position, Status newStatus)
+        appliedStatuses:Set(position, newStatus)
+    end
+
+    action GetAppliedStatusesAtPosition(integer position) returns Status
+        return appliedStatuses:Get(position)
+    end
+
+    action AddToCuredStatuses(Status newStatus)
+        curedStatuses:Add(newStatus)
+    end
+
+    action GetCuredStatuses() returns Array<Status>
+        return curedStatuses
+    end
+
+    action SetCuredStatusesAtPosition(integer position, Status newStatus)
+        curedStatuses:Set(position, newStatus)
+    end
+
+    action GetCuredStatusesAtPosition(integer position) returns Status
+        return curedStatuses:Get(position)
     end
 end

@@ -13,7 +13,6 @@ class Status
     number baseModifier = 0         //affects either damage or target's attack stat
     boolean isActive = false        //true if current applied, false otherwise
     Array<number> effectivenessStatModifiers //multipliers to lower/raise target's effectiveness stats
-    Attack sourceAttack             //attack this status originates from
 
     /*When initialized the effectivenessStatModifiers array is given 
     6 undefined values, it also cannot grow larger or smaller*/
@@ -50,7 +49,6 @@ class Status
             SetBaseModifier(currentStatus:GetValue("modifier"):ParseNumber())
             SetApplicationChance(currentStatus:GetValue("applicationChance"):ParseNumber())
             SetTurnCounter(currentStatus:GetValue("turnsAffected"):ParseInteger())
-            baseDamage = cast(integer, baseModifier * sourceAttack:GetBaseDamage())
             statusData = currentStatus:GetObject("effectivenessStatModifiers")
             i = 0
             repeat while (i < statusData:GetSize())
@@ -139,13 +137,5 @@ class Status
 
     action GetEffectivenessStatModifiersAtPosition(integer position) returns number
         return effectivenessStatModifiers:Get(position)
-    end
-
-    action SetSourceAttack(Attack newSourceAttack)
-        sourceAttack = newSourceAttack
-    end
-
-    action GetSourceAttack() returns Attack
-        return sourceAttack
     end
 end
