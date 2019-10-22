@@ -1,20 +1,27 @@
 use Libraries.Game.Graphics.Drawable
 use Libraries.Containers.Array
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
 
 class Player is Combatant
 
     integer currentMP = 5
     integer maxMP = 5
+    integer expToNextLevel = 1
     public Drawable playerSprite
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     integer newCurrentMP, integer newMaxMP, number newCurrentAttack, 
+     integer newCurrentMP, integer newMaxMP, integer newExpToNextLevel, 
+     integer newExperienceValue, integer newLevel, number newCurrentAttack, 
      Array<number> newCurrentElementsEffectiveness)
         SetName(newName)
         SetCurrentHP(newCurrentHP)
         SetMaxHP(newMaxHP)
         SetCurrentMP(newCurrentMP)
         SetMaxMP(newMaxMP)
+        SetExpToNextLevel(newExpToNextLevel)
+        SetExperienceValue(newExperienceValue)
+        SetLevel(newLevel)
         SetCurrentAttack(newCurrentAttack)
         integer i = 0
         repeat while (i < 6)
@@ -26,6 +33,59 @@ class Player is Combatant
 
     action DrawPlayer()
         playerSprite:Load("Assets\Sprites\SkeletonWalk.png")
+    end
+
+    /*Update player's experience, leveling them up if they have reached the
+    required amount*/
+    action AddExperience(integer expEarned, integer enemyLevel)
+        if (expToNextLevel > 0)
+            expEarned = CalculateExperience(expEarned, enemyLevel)
+            SetExperienceValue(GetExperienceValue() + expEarned)
+            if (GetExperienceValue() >= expToNextLevel)
+                SetExperienceValue(GetExperienceValue() - expToNextLevel)
+                LevelUp()
+            end
+        end
+    end
+
+    /*Calculate the actual amount of experience earned by defeating an enemy
+    based off the relative levels of the player and enemy*/
+    action CalculateExperience(integer expEarned, integer enemyLevel) returns integer
+        number multiplier = 1
+        number levelDifference = cast(number, GetLevel() - enemyLevel)
+
+        if (levelDifference >= 0)
+            multiplier = 1 + (levelDifference * 0.25)
+        else
+            multiplier = 1 - (levelDifference * 0.25)
+        end
+
+        if (multiplier > 2.0)
+            multiplier = 2.0
+        elseif (multiplier < 0.25)
+            multiplier = 0.25
+        end
+
+        expEarned = cast(integer, expEarned * multiplier)
+
+        return expEarned
+    end
+
+    /*Updates stats according to new level and sets next experience requirement*/
+    action LevelUp()
+        JavaScriptObjectNotation rewards
+        File levelsList
+        levelsList:SetPath("Assets\Experience\LevelUpRewards.json")
+        rewards:Read(levelsList)
+        JavaScriptObjectNotation levels = rewards:GetObject("Levels")
+        JavaScriptObjectNotation nextLevel = levels:Get(GetLevel())
+
+        SetMaxHP(nextLevel:GetValue("healthIncrease"):ParseInteger() + GetMaxHP())
+        SetCurrentHP(nextLevel:GetValue("healthIncrease"):ParseInteger() + GetCurrentHP())
+        SetMaxMP(nextLevel:GetValue("manaIncrease"):ParseInteger() + GetMaxMP())
+        SetCurrentMP(nextLevel:GetValue("manaIncrease"):ParseInteger() + GetCurrentMP())
+        SetExpToNextLevel(nextLevel:GetValue("expToNextLevel"):ParseInteger())
+        SetCurrentAttack(nextLevel:GetValue("currentAttackMultiplier"):ParseNumber() * GetCurrentAttack())
     end
 
 /*******************************************************************************
@@ -46,5 +106,13 @@ class Player is Combatant
 
     action GetMaxMP() returns integer
         return maxMP
+    end
+
+    action SetExpToNextLevel(integer newExpToNextLevel)
+        expToNextLevel = newExpToNextLevel
+    end
+
+    action GetExpToNextLevel() returns integer
+        return expToNextLevel
     end
 end

@@ -10,7 +10,7 @@ class Goblin is Enemy
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(1.0)
-        SetStats("Goblin", 300, 300, 1, currentElementsEffectiveness)
+        SetStats("Goblin", 300, 300, 10, 2, 1, currentElementsEffectiveness)
     end
 
     action AI

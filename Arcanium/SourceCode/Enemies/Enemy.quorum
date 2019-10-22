@@ -5,10 +5,13 @@ class Enemy is Combatant
     Spell spell
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     number newCurrentAttack, Array<number> newCurrentElementsEffectiveness)
+     integer newExperienceValue, integer newLevel, number newCurrentAttack, 
+     Array<number> newCurrentElementsEffectiveness)
         SetName(newName)
         SetCurrentHP(newCurrentHP)
         SetMaxHP(newMaxHP)
+        SetExperienceValue(newExperienceValue)
+        SetLevel(newLevel)
         SetCurrentAttack(newCurrentAttack)
         integer i = 0
         repeat while (i < 6)

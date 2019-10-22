@@ -11,7 +11,7 @@ class Orc is Enemy
         currentElementsEffectiveness:Add(1.5)
         currentElementsEffectiveness:Add(1)
 
-        SetStats("Orc", 1000, 1000, 1, currentElementsEffectiveness)
+        SetStats("Orc", 1000, 1000, 25, 3, 1, currentElementsEffectiveness)
     end
 
     action AI

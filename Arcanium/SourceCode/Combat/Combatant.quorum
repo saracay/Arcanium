@@ -7,6 +7,8 @@ class Combatant
     text name = ""          //name to display
     integer currentHP = 1   //current health
     integer maxHP = 1       //maximum amount of health
+    integer experienceValue = 1 //how much exp an enemy will give or how much the player currently has
+    integer level = 1       //current level of the enemy/player
     number currentAttack = 1 //current multiplier for outgoing damage
     Array<number> currentElementsEffectiveness //current multiplier for incoming damage
     Array<Status> statuses  //statuses currently inflicted on this combatant
@@ -36,7 +38,7 @@ class Combatant
 
         damageModifier = CalculateDamageModifier(attackID)
         damageRecieved = cast(integer, damageModifier
-         * attack:GetBaseDamage())
+         * attack:GetBaseDamage() * user:GetCurrentAttack())
 
         text incomingAttack = ""
         if (attack is Spell)
@@ -324,6 +326,22 @@ class Combatant
 
     action GetMaxHP() returns integer
         return maxHP
+    end
+
+    action SetExperienceValue(integer newExperienceValue)
+        experienceValue = newExperienceValue
+    end
+
+    action GetExperienceValue() returns integer
+        return experienceValue
+    end
+
+    action SetLevel(integer newLevel)
+        level = newLevel
+    end
+
+    action GetLevel() returns integer
+        return level
     end
 
     action SetCurrentAttack(number newCurrentAttack)

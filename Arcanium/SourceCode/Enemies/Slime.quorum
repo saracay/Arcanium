@@ -9,7 +9,7 @@ class Slime is Enemy
         currentElementsEffectiveness:Add(0.2)
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(1.0)
-        SetStats("Slime", 100, 100, 1, currentElementsEffectiveness)
+        SetStats("Slime", 100, 100, 10, 1, 1, currentElementsEffectiveness)
     end
 
     action AI
