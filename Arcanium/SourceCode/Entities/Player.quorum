@@ -7,19 +7,18 @@ class Player is Combatant
 
     integer currentMP = 5
     integer maxMP = 5
-    integer expToNextLevel = 1
+    integer expToNextLevel = 100    //Experience to get to next level
     public Drawable playerSprite
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     integer newCurrentMP, integer newMaxMP, integer newExpToNextLevel, 
-     integer newExperienceValue, integer newLevel, number newCurrentAttack, 
+     integer newCurrentMP, integer newMaxMP, integer newExperienceValue, 
+     integer newLevel, number newCurrentAttack, 
      Array<number> newCurrentElementsEffectiveness)
         SetName(newName)
         SetCurrentHP(newCurrentHP)
         SetMaxHP(newMaxHP)
         SetCurrentMP(newCurrentMP)
         SetMaxMP(newMaxMP)
-        SetExpToNextLevel(newExpToNextLevel)
         SetExperienceValue(newExperienceValue)
         SetLevel(newLevel)
         SetCurrentAttack(newCurrentAttack)
@@ -54,11 +53,7 @@ class Player is Combatant
         number multiplier = 1
         number levelDifference = cast(number, GetLevel() - enemyLevel)
 
-        if (levelDifference >= 0)
-            multiplier = 1 + (levelDifference * 0.25)
-        else
-            multiplier = 1 - (levelDifference * 0.25)
-        end
+        multiplier = 1 + (levelDifference * 0.25)
 
         if (multiplier > 2.0)
             multiplier = 2.0
@@ -86,6 +81,7 @@ class Player is Combatant
         SetCurrentMP(nextLevel:GetValue("manaIncrease"):ParseInteger() + GetCurrentMP())
         SetExpToNextLevel(nextLevel:GetValue("expToNextLevel"):ParseInteger())
         SetCurrentAttack(nextLevel:GetValue("currentAttackMultiplier"):ParseNumber() * GetCurrentAttack())
+        SetLevel(GetLevel() + 1)
     end
 
 /*******************************************************************************

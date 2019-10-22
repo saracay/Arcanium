@@ -80,7 +80,7 @@ class Main is Game, CollisionListener2D
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(0.5)
         currentElementsEffectiveness:Add(1.0)
-        player:SetStats("<Player>", 2000, 2000, 5, 5, 100, 0, 1, 1, currentElementsEffectiveness)
+        player:SetStats("<Player>", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness)
         Enemy enemy
 
         Battle battle
