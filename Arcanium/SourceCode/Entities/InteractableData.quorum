@@ -4,15 +4,15 @@ use Libraries.Containers.Array
 This class is used for defining the interactableData, and so far only supports dialogue related interactables
 */
 class InteractableData 
-    public Text name
-    public Text type
-    public Array<Text> dialogue
+    public text name = ""
+    public text type = ""
+    public Array<text> dialogue
 
     /*
         Sets the name, type, and dialog strings for the interactable
         NOTE: The order of the interactable data in the interactable data JSON file should reflect the order of the interactable objects in the map's JSON file
     */
-    action SetInteractableData(Text n, Text t, Array <Text> d)
+    action SetInteractableData(text n, text t, Array <text> d)
         name = n
         type = t
 

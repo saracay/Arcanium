@@ -22,7 +22,7 @@ class MapTransitionBehavior is Behavior
     GameStateManager manager            // Used to get MAIN
     Map currentMap                      // Current MAP
     text mapName = ""                   // New map name
-    Array<Drawable> mapInteractables    // List of current INTERACTABLEs
+//    Array<Drawable> mapInteractables    // List of current INTERACTABLEs
     Array<Interactable> npcList
 
     // New player position
@@ -56,7 +56,6 @@ class MapTransitionBehavior is Behavior
             nextMap:loadAboveLayer(mapName)
         end
 
-
         // Remove the current MAP
         main:AddToRemove(currentMap:testMap)
 
@@ -67,10 +66,17 @@ class MapTransitionBehavior is Behavior
             i = i + 1
         end
 
-        // Remove the current INTERACTABLEs
+        // Remove the current interactables
         i = 0
-        repeat mapInteractables:GetSize() times
-            main:AddToRemove(mapInteractables:Get(i))
+        repeat currentMap:interactables:GetSize() times
+            main:AddToRemove(currentMap:interactables:Get(i))
+            i = i + 1
+        end
+
+        // Remove the current transitions
+        i = 0
+        repeat currentMap:transitions:GetSize() times
+            main:AddToRemove(currentMap:transitions:Get(i))
             i = i + 1
         end
 
@@ -89,11 +95,15 @@ class MapTransitionBehavior is Behavior
         main:Add(main:GetPlayer():playerSprite)
     end
 
-    // Initializer of MAPTRANSITIONBEHAVIOR
-    action SetTransition(Map oldMap, text newName, Array<Drawable> newList)
+    // Initializer of MAPTRANSITIONBEHAVIOR 
+    // EDITED: will no longer need this newList parameter because the map carries all of the information about all of the layers already
+    action SetTransition(Map oldMap, text newName)
         currentMap = oldMap
         mapName = newName
-        mapInteractables = newList
+
+        output newName
+        output "in setTransition"
+//        mapInteractables = newList
     end
 
     // Sets the PLAYER's new position

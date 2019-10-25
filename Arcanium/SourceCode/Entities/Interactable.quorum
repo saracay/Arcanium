@@ -54,7 +54,7 @@ class Interactable is Drawable, KeyboardListener
     Color color                             // Used for setting colors
 
     // List of varibles for BEHAVIORs
-    Behavior currentBehavior                // Behavior to trigger
+    public Behavior currentBehavior                // Behavior to trigger
     text typeOfBehavior = ""                // Behavior type ID
 
     // Initializer of an INTERACTABLE Object
@@ -120,5 +120,25 @@ class Interactable is Drawable, KeyboardListener
     action SetInteractableBehavior(Behavior newBehavior, text behaviorType)
         currentBehavior = newBehavior
         typeOfBehavior = behaviorType
+    end
+
+    // Creates a specific interactable behavior and then calls SetInteractableBehavior()
+    action CreateDialogueBehavior(InteractableData data)
+        DialogueBehavior temp
+
+        i = 0
+        repeat data:dialogue:GetSize() times // adds the array of dialog from the data
+            temp:AddDialogue(data:dialogue:Get(i))
+            i = i + 1
+        end
+
+        SetInteractableBehavior(temp, "dialogue")
+    end
+
+    action CreateMapTransitionBehavior(Map oldMap, text newMapName)
+        MapTransitionBehavior temp
+        temp:SetTransition(oldMap, newMapName)
+
+        SetInteractableBehavior(temp, "transition")
     end
 end

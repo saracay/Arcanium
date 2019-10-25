@@ -34,6 +34,7 @@ class DialogueBehavior is Behavior
 
     // Adds a new line to the dialogue list
     action AddDialogue(text newDialogue)
+        output newDialogue
         dialogue:Add(newDialogue)
     end
 
