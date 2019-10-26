@@ -2312,5 +2312,71 @@
       "canDamage": true,
       "elementalType": 0
     }
+    {
+      "physicalID": 8100000,
+      "name": "Slash",
+      "baseDamage": 100,
+      "appliedStatusCodes": [],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    }
+    {
+      "physicalID": 8010000,
+      "name": "Big Slash",
+      "baseDamage": 300,
+      "appliedStatusCodes": [],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    }
+    {
+      "physicalID": 8001000,
+      "name": "Double Slash",
+      "baseDamage": 150,
+      "appliedStatusCodes": [],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    }
+    {
+      "physicalID": 8000100,
+      "name": "Medkit",
+      "baseDamage": 200,
+      "appliedStatusCodes": [],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": true,
+      "canDamage": false,
+      "elementalType": 0
+    }
+    {
+      "physicalID": 8000010,
+      "name": "Lick Wounds",
+      "baseDamage": 100,
+      "appliedStatusCodes": [],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": true,
+      "canDamage": false,
+      "elementalType": 0
+    }
+    {
+      "physicalID": 8000001,
+      "name": "Cower",
+      "baseDamage": 0,
+      "appliedStatusCodes": [],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    }
   ]
 }
