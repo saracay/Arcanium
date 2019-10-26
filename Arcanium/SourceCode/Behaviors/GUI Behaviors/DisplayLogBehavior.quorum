@@ -17,9 +17,10 @@ class DisplayLogBehavior is Behavior
     Array<Label> labels
     Drawable displayBox = undefined
     Color color
+    boolean finished = false
     
     action Run(BehaviorEvent event)
-        
+
         if displayBox = undefined
             Drawable newBox
             displayBox = newBox
@@ -64,10 +65,20 @@ class DisplayLogBehavior is Behavior
         repeat while counter < buttons:GetSize()
             removalArray:Add(buttons:Get(counter))
             removalArray:Add(displayBox)
-//            removalArray:Add(labels:Get(counter))
+            removalArray:Add(labels:Get(counter))
             
             counter = counter + 1
         end
+output "disposed"
+    end
+
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action SetFinished(boolean bool)
+output "called"
+        finished = bool
     end
     
     action SetGame(Game newGame)

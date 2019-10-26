@@ -344,7 +344,11 @@ class CombatMainPageBehavior is Behavior, MainPage
     end
 
     action IsFinished returns boolean
-        return GetFinished()
+        return finishedTurn
+    end
+
+    action SetFinished(boolean bool)
+        finishedTurn = bool
     end
 
     action Dispose
