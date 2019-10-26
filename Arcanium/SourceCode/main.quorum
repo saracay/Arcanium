@@ -55,7 +55,6 @@ class Main is Game, CollisionListener2D
     number fps = 4
     number frame = 1
     
-
     action Main
 
         StartGame()
@@ -86,6 +85,7 @@ class Main is Game, CollisionListener2D
         Battle battle
         battle:SetGame(me)
         battle:SetRemovalArray(removalArray)
+        battle:SetBehaviorQueue(behaviorQueue)
         battle:LoadLevel()
         battle:Initialize(player, enemy)
         inCombat = true
@@ -244,8 +244,11 @@ class Main is Game, CollisionListener2D
     end
 
     action Update(number seconds)
-        //Necessary for removing unneeded objects
+
+        // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
+
+        // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
             Remove(removalArray:RemoveFromFront())
         end

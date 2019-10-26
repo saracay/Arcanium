@@ -25,7 +25,7 @@ output spell:GetBaseDamage()
         end
 
         battle:UpdateStatus()
-        mainPage:Dispose()
+        mainPage:SetFinished(true)
     end
 
     action SetBattle(Battle newBattle)

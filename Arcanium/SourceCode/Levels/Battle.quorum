@@ -13,8 +13,8 @@ use Libraries.Interface.Behaviors.Behavior
 
 class Battle is Level
     
-    BehaviorQueue behaviorQueue
-    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue = undefined
+    Array<Item2D> removalArray = undefined
     Behavior previousBehavior
     Array<Item2D> currentPage
     Array<Combatant> combatants
@@ -144,15 +144,11 @@ class Battle is Level
     end
 
     action PlayerTurn
-        log:Add("Test")
-        log:Add("What will <player> do?")
-        log:Add("Another test")
         DisplayLogBehavior logBehavior
         logBehavior:SetGame(game)
         logBehavior:SetLog(log)
         logBehavior:SetRemovalArray(removalArray)
-        logBehavior:Run(undefined)
-//        behaviorQueue:AddBehavior(logBehavior)
+        behaviorQueue:AddBehavior(logBehavior)
 
         CombatMainPageBehavior combatBehavior
         combatBehavior:SetGame(game)
@@ -161,8 +157,7 @@ class Battle is Level
         combatBehavior:SetMaxTokens(2)
         combatBehavior:SetCombatants(combatants)
         combatBehavior:SetSprites(sprites)
-//        combatBehavior:Run(undefined)
-//        behaviorQueue:AddBehavior(combatBehavior)
+        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
