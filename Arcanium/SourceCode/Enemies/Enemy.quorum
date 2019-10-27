@@ -1,7 +1,10 @@
 use Libraries.Containers.Array
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
 
 class Enemy is Combatant
 
+    Array<Attack> usableAttacks    //Array of attacks that the enemy can use
     Spell spell
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
@@ -21,8 +24,63 @@ class Enemy is Combatant
         end
     end
 
-    action ParseJSON()
-    //TODO setup parsing enemies.json here once implemented
+    /*Parse through the JSON to find an enemy with the given name and 
+    use that information to fill out the enemy's fields*/    
+    action FillEnemy(text name)
+        SetName(name)
+        JavaScriptObjectNotation enemies
+        File enemiesList
+        enemiesList:SetPath("Assets\EnemyTypes\Enemies.json")
+        enemies:Read(enemiesList)
+        JavaScriptObjectNotation enemyData = enemies:GetObject("enemies")
+
+        JavaScriptObjectNotation currentEnemy
+        integer i = 0
+        boolean found = false
+        repeat while (i < enemyData:GetSize() and not found)
+            currentEnemy = enemyData:Get(i)
+            if (currentEnemy:GetValue("name") = GetName())
+                found = true
+            else
+                i = i + 1
+            end
+        end
+
+        if (not found)
+            output "Temporary Error: enemy not found"
+        else
+            SetCurrentHP(currentEnemy:GetValue("currentHP"):ParseInteger())
+            SetMaxHP(currentEnemy:GetValue("maxHP"):ParseInteger())
+            SetExperienceValue(currentEnemy:GetValue("experienceValue"):ParseInteger())
+            SetLevel(currentEnemy:GetValue("level"):ParseInteger())
+            SetCurrentAttack(currentEnemy:GetValue("currentAttack"):ParseNumber())
+
+            enemyData = currentEnemy:GetObject("currentElementsEffectiveness")
+            i = 0
+            repeat while (i < enemyData:GetSize())
+                SetCurrentElementsEffectivenessAtPosition(i, 
+                 enemyData:Get(i):GetValue():ParseNumber())
+                i = i + 1
+            end
+
+            enemyData = currentEnemy:GetObject("usableAttacks")
+            i = 0
+            Attack currentAttack
+            integer attackID = 0
+            repeat while (i < enemyData:GetSize())
+                attackID = enemyData:Get(i):GetValue():ParseInteger()
+                if (attackID / 1000000 = 9)
+                    Spell currentSpell
+                    currentSpell:FillSpell(attackID)
+                    usableAttacks:Add(currentSpell)
+                else
+                    Physical currentPhysical
+                    currentPhysical:FillPhysical(attackID)
+                    usableAttacks:Add(currentPhysical)
+                end
+                i = i + 1
+            end
+        end
     end
 
     action AI
@@ -34,5 +92,17 @@ class Enemy is Combatant
 
     action SetSpell(Spell newSpell)
         spell = newSpell
+    end
+
+    action AddToUsableAttacks(Attack newUsableAttack)
+        usableAttacks:Add(newUsableAttack)
+    end
+
+    action SetUsableAttacksAtPosition(integer position, Attack newUsableAttack)
+        usableAttacks:Set(position, newUsableAttack)
+    end
+
+    action GetUsableAttacksAtPosition(integer position) returns Attack
+        return usableAttacks:Get(position)
     end
 end

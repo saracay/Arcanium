@@ -24,8 +24,7 @@ class Combatant
     /*Take an attack from potentially an enemy, ally, or theirself, determines
     if it heals or damages, and if damaging calculates and applies it along
     with its status effects*/
-    action ReceiveAttack(Attack attack, Combatant user) 
-     returns Array<text>
+    action ReceiveAttack(Attack attack, Combatant user) returns Array<text>
         Array<text> log
         number damageModifier = 0
         integer damageRecieved = 0
@@ -36,7 +35,18 @@ class Combatant
             return ReceiveHeal(attack, user)
         end
 
-        damageModifier = CalculateDamageModifier(attackID)
+        if (attack is Physical)
+            Physical physicalAttack = cast(Physical, attack)
+            integer element = physicalAttack:GetElementalType()
+            if(element not= 0)
+                damageModifier = currentElementsEffectiveness:Get(element - 1)
+            else
+                damageModifier = 1
+            end
+        else
+            damageModifier = CalculateDamageModifier(attackID)
+        end
+
         damageRecieved = cast(integer, damageModifier
          * attack:GetBaseDamage() * user:GetCurrentAttack())
 
@@ -103,7 +113,7 @@ class Combatant
     end
 
     /*Calculate what percentage of its base damage an attack will deal,
-    does not consider the attack stat*/
+    does not consider the attack stat. Is not used for physical attacks*/
     action CalculateDamageModifier(integer elementID) returns number
         number damageModifier = 0
         integer tokens = 0

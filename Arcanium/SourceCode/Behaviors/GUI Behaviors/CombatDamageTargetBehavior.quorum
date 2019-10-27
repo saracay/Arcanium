@@ -11,8 +11,7 @@ class CombatDamageTargetBehavior is Behavior
 
     action Run(BehaviorEvent event)
         Spell spell
-        spell:SetID(spellID)
-        spell:ParseJSON()
+        spell:FillSpell(spellID)
 
 output spell:GetName()
 output spell:GetBaseDamage()
