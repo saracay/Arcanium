@@ -70,9 +70,13 @@ class Battle is Level
 
         //later on, will load different enemies based on the enemy encountered
 
-        Goblin goblin
-        Orc orc
-        Slime slime
+        Enemy goblin
+        Enemy orc
+        Enemy slime
+
+        goblin:FillEnemy("Goblin")
+        orc:FillEnemy("Orc")
+        slime:FillEnemy("Slime")
 
         combatants:Add(goblin)
         combatants:Add(orc)
@@ -168,9 +172,8 @@ class Battle is Level
             if combatants:Get(counter) not= undefined
                 Enemy enemy = cast(Enemy, combatants:Get(counter))
                 enemy:AI()
-                Spell enemySpell = enemy:GetSpell()
-
-                player:ReceiveAttack(enemySpell, combatants:Get(counter))
+                //Ean changed this part, currently only picks the first valid attack in array
+                player:ReceiveAttack(enemy:GetUsableAttacksAtPosition(0), combatants:Get(counter))
             end
 
             counter = counter + 1

@@ -200,7 +200,7 @@ class AI
             cd1 = cd1 + 1               //increment cooldown counter
         end
         
-        spell:ParseJSON()
+        spell:FillSpell(spell:GetID())
         actor:SetSpell(spell)
     end
 

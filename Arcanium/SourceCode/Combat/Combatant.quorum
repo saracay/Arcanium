@@ -369,4 +369,8 @@ class Combatant
     action GetCurrentElementsEffectivenessAtPosition(integer position) returns number
         return currentElementsEffectiveness:Get(position)
     end
+
+    action GetCurrentElementsEffectiveness() returns Array<number>
+        return currentElementsEffectiveness
+    end
 end

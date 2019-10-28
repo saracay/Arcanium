@@ -65,7 +65,6 @@ class Enemy is Combatant
 
             enemyData = currentEnemy:GetObject("usableAttacks")
             i = 0
-            Attack currentAttack
             integer attackID = 0
             repeat while (i < enemyData:GetSize())
                 attackID = enemyData:Get(i):GetValue():ParseInteger()
@@ -93,6 +92,10 @@ class Enemy is Combatant
     action SetSpell(Spell newSpell)
         spell = newSpell
     end
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
 
     action AddToUsableAttacks(Attack newUsableAttack)
         usableAttacks:Add(newUsableAttack)
