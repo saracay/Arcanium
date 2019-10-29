@@ -202,22 +202,21 @@ class Map
         i = 0
         repeat interDataJSON:GetSize() times
             JavaScriptObjectNotation curr = interDataJSON:Get(i)
-            JavaScriptObjectNotation dial = curr:GetObject("dialogue")
-            // problem, the dialogue object doesnt translate to an array
-//            output "testing"
-            dial:SetArray()
-            output dial:IsArray()
-            output dial:ToText()
-            output dial:Get(0):ToText()
+            text dial = curr:GetValue("dialogue") // gets the dialogue object and turns it into a string
+            dial = dial:GetSubtext(1, dial:GetSize() - 1) // trims off the double quotes
+            text dq = ""
+            dq = dq:GetDoubleQuote()
+            Array<text> allDialogue = dial:Split(dq + ",") // splits based on a double quote followed by a comma
             Array<Text> d // used for converting the dialog to a text
             
             j = 0
-            repeat dial:GetSize() times // parses the JSON object containing the text
-                text currText = dial:Get(j):ToText()
-                d:Add(currText)
+            repeat allDialogue:GetSize() times // parses the JSON object containing the text
+                text currText = allDialogue:Get(j)
+                currText = currText:Replace(dq, "") // removes the double quote from the text
+                d:Add(currText) // adds it to d
                 j = j + 1
             end
-            
+           
             InteractableData temp // creates a temp interactableData to add to our public array of interactableData
             temp:SetInteractableData(curr:GetValue("name"), curr:GetValue("type"), d) // sets values
             interactableData:Add(temp)
