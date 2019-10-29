@@ -92,7 +92,7 @@ class Interactable is Drawable, KeyboardListener
 	
     // Switches the truth of currentlyInteracting
     // * If BEHAVIOR is DIALOGUE, reset to beginning
-    action ToggleInteraction(text interactableName)
+    action ToggleInteraction
         if currentlyInteracting
             currentlyInteracting = false
             if currentBehavior is DialogueBehavior
@@ -102,7 +102,7 @@ class Interactable is Drawable, KeyboardListener
             end
         else
             currentlyInteracting = true
-            output "( Press [SPACE] to interact with " + interactableName + " )"
+            output "( Press [SPACE] to interact with " + name + " )"
         end
     end
 	
