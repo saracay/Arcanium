@@ -6,8 +6,12 @@ use Libraries.Interface.Behaviors.Behavior
 class Animation
     public ImageSheet sheet
     public Drawable girl
+    public Drawable spaceship
 
     integer frame = 1
+    number xPos = 0
+    number yPos = 0
+    number secs = 0
 
     action GetFrame returns integer
         return frame
@@ -18,8 +22,12 @@ class Animation
     end
 
     action LoadImageSheet
-        sheet:Load("resources/girl.atlas")
+        sheet:Load("Assets/ImageSheets/girl.atlas")
     end 
+
+    action LoadImage
+        spaceship:Load("Assets/Sprites/alien.png")
+    end
 
     action LoadFrame
         girl:Load(sheet:GetDrawable("Girl frame 1"))
@@ -31,4 +39,33 @@ class Animation
         end
         girl:Load(sheet:GetDrawable("Girl frame " + frame)) 
     end
+
+        action MoveDown(number y, number secs)
+    	me:secs = secs
+        xPos = spaceship:GetX()
+    	yPos = spaceship:GetY() - y * secs
+    	spaceship:SetPosition(xPos, yPos)
+    end
+
+    action MoveUp(number y, number secs)
+        me:secs = secs
+        xPos = spaceship:GetX()
+        yPos = spaceship:GetY() + y * secs
+        spaceship:SetPosition(xPos, yPos)
+    end
+
+    action MoveLeft(number x, number secs)
+        me:secs = secs
+        xPos = spaceship:GetX() - x * secs
+        yPos = spaceship:GetY()
+        spaceship:SetPosition(xPos, yPos)
+    end
+
+    action MoveRight(number x, number secs)
+        me:secs = secs
+        xPos = spaceship:GetX() + x * secs
+        yPos = spaceship:GetY()
+        spaceship:SetPosition(xPos, yPos)
+    end
+
 end

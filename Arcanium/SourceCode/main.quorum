@@ -51,9 +51,12 @@ class Main is Game, CollisionListener2D
  
     //For animations
     Animation testAnimation
+    Animation test2
     number elapsedTime = 0
     number fps = 4
     number frame = 1
+    number spaceX = 0
+    number spaceY = 0
     
     action Main
 
@@ -128,6 +131,9 @@ class Main is Game, CollisionListener2D
 //        testAnimation:LoadImageSheet()
 //        testAnimation:LoadFrame()
 //        Add(testAnimation:girl)
+//        test2:LoadImage()
+//        Add(test2:spaceship)
+
         
         /***********************************************************************
         Start test section
@@ -307,7 +313,17 @@ class Main is Game, CollisionListener2D
     /**********************************************************************
         END OF PLAYER INPUT LOGIC
     ***********************************************************************/  
-	   
+	
+
+    /**********************************************************************
+    More sample animations - not finished 
+    ***********************************************************************/
+
+        /*spaceX = test2:spaceship:GetX() + 50 * seconds
+        spaceY = test2:spaceship:GetY() + 50 * seconds
+        test2:spaceship:SetPosition(spaceX, spaceY)
+        */
+    
     /***********************************************************************
         Sprite Animation
 		- Jania & Maria
