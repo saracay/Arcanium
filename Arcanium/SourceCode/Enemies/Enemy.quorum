@@ -4,8 +4,7 @@ use Libraries.System.File
 
 class Enemy is Combatant
 
-    Array<Attack> usableAttacks    //Array of attacks that the enemy can use
-    Spell spell
+    Array<Attack> usableAttacks    //array of attacks that the enemy can use
 
     action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
      integer newExperienceValue, integer newLevel, number newCurrentAttack, 
@@ -83,14 +82,6 @@ class Enemy is Combatant
     end
 
     action AI
-    end
-
-    action GetSpell returns Spell
-        return spell
-    end
-
-    action SetSpell(Spell newSpell)
-        spell = newSpell
     end
 
 /*******************************************************************************
