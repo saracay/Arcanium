@@ -25,7 +25,6 @@ class BehaviorQueue
     end
 
     action AddBehavior(Behavior behavior)
-output "shouldRun = " + shouldRun
         queue:Add(behavior)
         if shouldRun
             NextBehavior()
@@ -34,12 +33,10 @@ output "shouldRun = " + shouldRun
 
     private action NextBehavior
         shouldRun = false
-output "checked undefined"
         if currentBehavior not= undefined
-output "call dispose"
             currentBehavior:Dispose()
         end
-output "after call"
+
         if queue:IsEmpty()
             currentBehavior = undefined
         else

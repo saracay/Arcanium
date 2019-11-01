@@ -1,5 +1,6 @@
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
 
 class CombatDamageTargetBehavior is Behavior
 
@@ -7,20 +8,31 @@ class CombatDamageTargetBehavior is Behavior
     CombatMainPageBehavior mainPage
     integer spellID = 0
     Combatant caster
-    Combatant target
+    Array<Combatant> targets
 
     action Run(BehaviorEvent event)
         Spell spell
         spell:FillSpell(spellID)
 
-output spell:GetName()
-output spell:GetBaseDamage()
-
         Player player = cast(Player, caster)
 
         if player:GetCurrentMP() >= spell:GetManaCost()
             player:SetCurrentMP(player:GetCurrentMP() - spell:GetManaCost())
-            target:ReceiveAttack(spell, caster)
+    
+            counter = 0
+
+            repeat while counter < targets:GetSize()
+                if targets:Get(counter) not= undefined
+output "Target:      " + targets:Get(counter):GetName()
+output "Spell:       " + spell:GetName()
+output "Base Damage: " + spell:GetBaseDamage()
+output "MultiTarget: " + spell:GetMultiTarget()
+output ""
+                    targets:Get(counter):ReceiveAttack(spell, caster)
+                end
+
+                counter = counter + 1
+            end
         end
 
         battle:UpdateStatus()
@@ -43,7 +55,7 @@ output spell:GetBaseDamage()
         caster = attacker
     end
 
-    action SetTarget(Combatant defender)
-        target = defender
+    action SetTargets(Array<Combatant> defenders)
+        targets = defenders
     end
 end
