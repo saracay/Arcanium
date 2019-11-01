@@ -85,12 +85,14 @@ class MapTransitionBehavior is Behavior
         main:GetPlayer():playerSprite:SetX(playerX * 32)
         main:GetPlayer():playerSprite:SetY(playerY * 32)
 
+        // EDIT: Removed this because we no longer need the npcList for interactables
         // ADD INTERACTABLES HERE
-        i = 0
-        repeat npcList:GetSize() times
-            main:Add(npcList:Get(i))
-            main:AddKeyboardListener(npcList:Get(i))
-        end
+//        i = 0
+//        repeat npcList:GetSize() times
+//            main:Add(npcList:Get(i))
+//            main:AddKeyboardListener(npcList:Get(i))
+//        end
+
         //main:SetNpcList(npcList) Causes error, no method SetNpcList
         main:Add(main:GetPlayer():playerSprite)
     end

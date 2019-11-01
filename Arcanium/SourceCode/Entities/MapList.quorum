@@ -1,7 +1,7 @@
 use Libraries.Containers.Array
 
 class MapList 
-    public Array<Text> ALL_MAPS
+    public Array<text> ALL_MAPS
 
     public text TEST_MAP = "Testmap"
     public text FOREST_MAP = "Forest"
@@ -17,5 +17,9 @@ class MapList
         ALL_MAPS:Add(FOREST_MAP)
         ALL_MAPS:Add(CASTLE_MAP)
         ALL_MAPS:Add(LIBRARY_MAP)
+    end
+
+    action Has(text map) returns boolean
+        return ALL_MAPS:Has(map)
     end
 end
