@@ -13,8 +13,8 @@ use Libraries.Interface.Behaviors.Behavior
 
 class Battle is Level
     
-    BehaviorQueue behaviorQueue
-    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue = undefined
+    Array<Item2D> removalArray = undefined
     Behavior previousBehavior
     Array<Item2D> currentPage
     Array<Combatant> combatants
@@ -70,9 +70,13 @@ class Battle is Level
 
         //later on, will load different enemies based on the enemy encountered
 
-        Goblin goblin
-        Orc orc
-        Slime slime
+        Enemy goblin
+        Enemy orc
+        Enemy slime
+
+        goblin:FillEnemy("Goblin")
+        orc:FillEnemy("Orc")
+        slime:FillEnemy("Slime")
 
         combatants:Add(goblin)
         combatants:Add(orc)
@@ -144,15 +148,11 @@ class Battle is Level
     end
 
     action PlayerTurn
-        log:Add("Test")
-        log:Add("What will <player> do?")
-        log:Add("Another test")
         DisplayLogBehavior logBehavior
         logBehavior:SetGame(game)
         logBehavior:SetLog(log)
         logBehavior:SetRemovalArray(removalArray)
-        logBehavior:Run(undefined)
-//        behaviorQueue:AddBehavior(logBehavior)
+        behaviorQueue:AddBehavior(logBehavior)
 
         CombatMainPageBehavior combatBehavior
         combatBehavior:SetGame(game)
@@ -161,8 +161,7 @@ class Battle is Level
         combatBehavior:SetMaxTokens(2)
         combatBehavior:SetCombatants(combatants)
         combatBehavior:SetSprites(sprites)
-//        combatBehavior:Run(undefined)
-//        behaviorQueue:AddBehavior(combatBehavior)
+        behaviorQueue:AddBehavior(combatBehavior)
     end
 
     action EnemyTurn
@@ -173,9 +172,8 @@ class Battle is Level
             if combatants:Get(counter) not= undefined
                 Enemy enemy = cast(Enemy, combatants:Get(counter))
                 enemy:AI()
-                Spell enemySpell = enemy:GetSpell()
-
-                player:ReceiveAttack(enemySpell, combatants:Get(counter))
+                //Ean changed this part, currently only picks the first valid attack in array
+                player:ReceiveAttack(enemy:GetUsableAttacksAtPosition(0), combatants:Get(counter))
             end
 
             counter = counter + 1

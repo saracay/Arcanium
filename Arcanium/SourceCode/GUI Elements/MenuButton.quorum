@@ -10,37 +10,50 @@ class MenuButton is Button, FocusListener
 
     Game game
     Array<Item2D> removalArray
-    Drawable indicator
     Color color
-    Item2D target
+    Array<Drawable> indicators
+    Array<Item2D> targets
     boolean horizontal = false
     boolean noIndicator = true
 
     on create
-        indicator:LoadFilledCircle(10, color:Red())
-        indicator:SetPosition(-1000, -1000)
+
     end
 
     action Dispose
-        removalArray:Add(indicator)
+        integer counter = 0
+
+        repeat while counter < indicators:GetSize()
+            removalArray:Add(indicators:Get(counter))   
+
+            counter = counter + 1
+        end
     end
 
-    action GainedFocus(FocusEvent event)
-        if noIndicator
-            game:Add(indicator)
-        end
+    action GainedFocus(FocusEvent event)      
+        integer counter = 0
 
-        if horizontal
-            indicator:SetPosition(target:GetX() - 30, target:GetY())
-        else
-            indicator:SetPosition(target:GetX() + target:GetWidth()/2 - 10, target:GetY() + target:GetHeight()+ 30)
+        repeat while counter < targets:GetSize()
+            if horizontal and targets:Get(counter) not= undefined
+                indicators:Get(counter):SetPosition(targets:Get(counter):GetX() - 30, targets:Get(counter):GetY())
+            elseif targets:Get(counter) not= undefined
+                indicators:Get(counter):SetPosition(targets:Get(counter):GetX() + targets:Get(counter):GetWidth()/2 - 10, targets:Get(counter):GetY() + targets:Get(counter):GetHeight()+ 30)
+            end
+
+            counter = counter + 1
         end
 
         noIndicator = false
     end
 
     action LostFocus(FocusEvent event)
-        indicator:SetPosition(-1000, -1000)
+        integer counter = 0
+
+        repeat while counter < indicators:GetSize()
+            indicators:Get(counter):SetPosition(-1000, -1000)
+
+            counter = counter + 1
+        end
     end
 
     action SetGame(Game newGame)
@@ -52,7 +65,29 @@ class MenuButton is Button, FocusListener
     end
 
     action SetTarget(Item2D item)
-        target = item
+        targets:Add(item)
+
+        Drawable indicator
+        indicator:LoadFilledCircle(10, color:Red())
+        indicator:SetPosition(-1000, -1000)
+        game:Add(indicator)
+        indicators:Add(indicator)
+    end
+
+    action SetTargets(Array<Item2D> items)
+        targets = items
+
+        integer counter = 0
+
+        repeat while counter < targets:GetSize()
+            Drawable indicator
+            indicator:LoadFilledCircle(10, color:Red())
+            indicator:SetPosition(-1000, -1000)
+            game:Add(indicator)
+            indicators:Add(indicator)
+
+            counter = counter + 1
+        end
     end
 
     action SetHorizontal(boolean bool)

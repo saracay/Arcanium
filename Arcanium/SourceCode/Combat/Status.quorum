@@ -13,15 +13,19 @@ class Status
     number baseModifier = 0         //affects either damage or target's attack stat
     boolean isActive = false        //true if current applied, false otherwise
     Array<number> effectivenessStatModifiers //multipliers to lower/raise target's effectiveness stats
-    Attack sourceAttack             //attack this status originates from
 
+    /*When initialized the effectivenessStatModifiers array is given 
+    6 undefined values, it also cannot grow larger or smaller*/
     on create
-        repeat 6 times
-            effectivenessStatModifiers:Add(1)
-        end
+        effectivenessStatModifiers:SetSize(6)
+        effectivenessStatModifiers:SetMaxSize(6)
+        effectivenessStatModifiers:SetAutoResize(false)
     end
 
-    action ParseJSON()
+    /*Parse through the JSON to find a status effect with the given ID and use 
+    that information to fill out the status effect's fields*/
+    action FillStatus(integer ID)
+        SetStatusID(ID)
         JavaScriptObjectNotation statuses
         File statusesList
         statusesList:SetPath("Assets\Attacks\StatusEffects.json")
@@ -33,14 +37,14 @@ class Status
         boolean found = false
         repeat while (i < statusData:GetSize() and not found)
             currentStatus = statusData:Get(i)
-            if currentStatus:GetValue("statusID") = statusID:GetText()
+            if (currentStatus:GetValue("statusID") = statusID:GetText())
                 found = true
             else
                 i = i + 1
             end
         end
 
-        if not found
+        if (not found)
             output "Temporary Error: status effect not found"
         else
             SetElementID(currentStatus:GetValue("elementID"):ParseInteger())
@@ -48,7 +52,7 @@ class Status
             SetBaseModifier(currentStatus:GetValue("modifier"):ParseNumber())
             SetApplicationChance(currentStatus:GetValue("applicationChance"):ParseNumber())
             SetTurnCounter(currentStatus:GetValue("turnsAffected"):ParseInteger())
-            baseDamage = cast(integer, baseModifier * sourceAttack:GetBaseDamage())
+
             statusData = currentStatus:GetObject("effectivenessStatModifiers")
             i = 0
             repeat while (i < statusData:GetSize())
@@ -137,13 +141,5 @@ class Status
 
     action GetEffectivenessStatModifiersAtPosition(integer position) returns number
         return effectivenessStatModifiers:Get(position)
-    end
-
-    action SetSourceAttack(Attack newSourceAttack)
-        sourceAttack = newSourceAttack
-    end
-
-    action GetSourceAttack() returns Attack
-        return sourceAttack
     end
 end

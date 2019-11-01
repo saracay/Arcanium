@@ -53,22 +53,22 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(0):Add(spellButton)
         xPositions:Get(0):Add(650)
         yPositions:Get(0):Add(120)
+        spellButton:SetGame(game)
         spellButton:SetPosition(650, 120)
         spellButton:SetName("Spells")
         spellButton:SetTarget(spellButton)
         spellButton:SetHorizontal(true)
-        spellButton:SetGame(game)
         game:Add(spellButton)
 
         MenuButton runButton
         pages:Get(0):Add(runButton)
         xPositions:Get(0):Add(650)
         yPositions:Get(0):Add(60)
+        runButton:SetGame(game)
         runButton:SetPosition(650, 60)
         runButton:SetName("Run")
         runButton:SetTarget(runButton)
         runButton:SetHorizontal(true)
-        runButton:SetGame(game)
         game:Add(runButton)
 
         spellButton:SetNextFocus(runButton)
@@ -110,12 +110,12 @@ class CombatMainPageBehavior is Behavior, MainPage
         toTargetingPage:SetYPosition(yPositions)
         toTargetingPage:SetCurrentIndex(1)
         toTargetingPage:SetDamageBehaviors(damageBehaviors)
+        doneCombiningButton:SetGame(game)
         doneCombiningButton:SetBehavior(toTargetingPage)
         doneCombiningButton:SetName("Done Combining")
         doneCombiningButton:SetPosition(-1000, -1000)
         doneCombiningButton:SetTarget(doneCombiningButton)
         doneCombiningButton:SetHorizontal(true)
-        doneCombiningButton:SetGame(game)
         game:Add(doneCombiningButton)
 
         MenuButton fireButton
@@ -131,11 +131,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(1):Add(fireButton)
         xPositions:Get(1):Add(100)
         yPositions:Get(1):Add(100)
+        fireButton:SetGame(game)
         fireButton:SetName("Fire")
         fireButton:SetPosition(-1000, -1000)
         fireButton:SetTarget(fireButton)
         fireButton:SetHorizontal(true)
-        fireButton:SetGame(game)
         game:Add(fireButton)
 
         MenuButton waterButton
@@ -151,11 +151,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(1):Add(waterButton)
         xPositions:Get(1):Add(100)
         yPositions:Get(1):Add(50)
+        waterButton:SetGame(game)
         waterButton:SetName("Water")
         waterButton:SetPosition(-1000, -1000)
         waterButton:SetTarget(waterButton)
         waterButton:SetHorizontal(true)
-        waterButton:SetGame(game)
         game:Add(waterButton)
 
         MenuButton earthButton
@@ -171,11 +171,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(1):Add(earthButton)
         xPositions:Get(1):Add(200)
         yPositions:Get(1):Add(100)
+        earthButton:SetGame(game)
         earthButton:SetName("Earth")
         earthButton:SetPosition(-1000, -1000)
         earthButton:SetTarget(earthButton)
         earthButton:SetHorizontal(true)
-        earthButton:SetGame(game)
         game:Add(earthButton)
 
         MenuButton windButton
@@ -191,11 +191,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(1):Add(windButton)
         xPositions:Get(1):Add(200)
         yPositions:Get(1):Add(50)
+        windButton:SetGame(game)
         windButton:SetName("Wind")
         windButton:SetPosition(-1000, -1000)
         windButton:SetTarget(windButton)
         windButton:SetHorizontal(true)
-        windButton:SetGame(game)
         game:Add(windButton)
 
         MenuButton lightButton
@@ -211,11 +211,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(1):Add(lightButton)
         xPositions:Get(1):Add(300)
         yPositions:Get(1):Add(100)
+        lightButton:SetGame(game)
         lightButton:SetName("Light")
         lightButton:SetPosition(-1000, -1000)
         lightButton:SetTarget(lightButton)
         lightButton:SetHorizontal(true)
-        lightButton:SetGame(game)
         game:Add(lightButton)
 
         MenuButton darkButton
@@ -231,11 +231,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         pages:Get(1):Add(darkButton)
         xPositions:Get(1):Add(300)
         yPositions:Get(1):Add(50)
+        darkButton:SetGame(game)
         darkButton:SetName("Dark")
         darkButton:SetPosition(-1000, -1000)
         darkButton:SetTarget(darkButton)
         darkButton:SetHorizontal(true)
-        darkButton:SetGame(game)
         game:Add(darkButton)
     
         // adds Done Combining Button to page
@@ -277,15 +277,15 @@ class CombatMainPageBehavior is Behavior, MainPage
 
         /***********************************************************************
 
-        Start of targeting page
+        Start of single-targeting page
             - (Hidden Buttons for targets)
 
         ***********************************************************************/
 
-        Array<Item2D> targetingPage
+        Array<Item2D> singleTargetingPage
         Array<integer> targetingX
         Array<integer> targetingY
-        pages:Add(targetingPage)
+        pages:Add(singleTargetingPage)
         xPositions:Add(targetingX)
         yPositions:Add(targetingY)
         
@@ -298,16 +298,18 @@ class CombatMainPageBehavior is Behavior, MainPage
                 damageBehavior:SetBattle(battle)
                 damageBehavior:SetMainPage(me)
                 damageBehavior:SetCaster(combatants:Get(0))
-                damageBehavior:SetTarget(combatants:Get(counter))
+                Array<Combatant> target
+                target:Add(combatants:Get(counter))
+                damageBehavior:SetTargets(target)
                 damageBehaviors:Add(damageBehavior)
                 pages:Get(2):Add(button)
                 xPositions:Get(2):Add(-1000)
                 yPositions:Get(2):Add(-1000)
+                button:SetGame(game)
                 button:SetName(combatants:Get(counter):GetName())
                 button:SetPosition(-1000, -1000)
                 button:SetTarget(sprites:Get(counter))
                 button:SetHorizontal(false)
-                button:SetGame(game)
                 button:SetBehavior(damageBehavior)
                 game:Add(button)
             end
@@ -341,10 +343,103 @@ class CombatMainPageBehavior is Behavior, MainPage
 
             counter = counter + 1
         end
+
+        /***********************************************************************
+
+        Start of multi-targeting page
+            - (Hidden Buttons for targets)
+
+        ***********************************************************************/
+
+        Array<Item2D> multiTargetingPage
+        MenuButton playerTeam
+        Array<Combatant> targets
+        pages:Add(multiTargetingPage)
+
+        Array<integer> multiTargetingX
+        Array<integer> multiTargetingY
+        pages:Add(singleTargetingPage)
+        xPositions:Add(multiTargetingX)
+        yPositions:Add(multiTargetingY)
+
+        playerTeam:SetGame(game)
+
+        if combatants:Get(0) not= undefined
+            CombatDamageTargetBehavior damageBehavior
+            damageBehavior:SetBattle(battle)
+            damageBehavior:SetMainPage(me)
+            damageBehavior:SetCaster(combatants:Get(0))
+
+            Array<Combatant> target
+            target:Add(combatants:Get(0))
+            damageBehavior:SetTargets(target)
+            playerTeam:SetTarget(sprites:Get(0))
+
+            damageBehaviors:Add(damageBehavior)
+            pages:Get(3):Add(playerTeam)
+            xPositions:Get(3):Add(-1000)
+            yPositions:Get(3):Add(-1000)
+            playerTeam:SetName(combatants:Get(0):GetName())
+            playerTeam:SetPosition(-1000, -1000)
+            playerTeam:SetHorizontal(false)
+            playerTeam:SetBehavior(damageBehavior)
+            game:Add(playerTeam)
+        end
+
+        Array<Drawable> targetSprites
+
+        counter = 1
+
+        repeat while counter < combatants:GetSize()   //target is enemy team
+            if combatants:Get(counter) not= undefined
+                targets:Add(combatants:Get(counter))
+                targetSprites:Add(sprites:Get(counter))
+            end
+
+            counter = counter + 1
+        end
+
+        CombatDamageTargetBehavior multiDamageBehavior
+        multiDamageBehavior:SetBattle(battle)
+        multiDamageBehavior:SetMainPage(me)
+        multiDamageBehavior:SetCaster(combatants:Get(0))
+        multiDamageBehavior:SetTargets(targets)
+
+        damageBehaviors:Add(multiDamageBehavior)
+        MenuButton enemyTeam
+        pages:Get(3):Add(enemyTeam)
+        enemyTeam:SetGame(game)
+        xPositions:Get(3):Add(-1000)
+        yPositions:Get(3):Add(-1000)
+        enemyTeam:SetName("Enemy Team")
+        enemyTeam:SetPosition(-1000, -1000)
+        enemyTeam:SetHorizontal(false)
+        enemyTeam:SetBehavior(multiDamageBehavior)
+        enemyTeam:SetTargets(targetSprites)
+        game:Add(enemyTeam)
+
+        pages:Get(3):Get(0):SetNextFocus(pages:Get(3):Get(1))
+        pages:Get(3):Get(0):SetPreviousFocus(pages:Get(3):Get(1))
+        pages:Get(3):Get(1):SetNextFocus(pages:Get(3):Get(0))
+        pages:Get(3):Get(1):SetPreviousFocus(pages:Get(3):Get(0))
+
+        counter = 0
+
+        repeat while counter < tokenDrawables:GetSize()
+            pages:Get(3):Add(tokenDrawables:Get(counter))
+            xPositions:Get(3):Add(220 + (50 * counter))
+            yPositions:Get(3):Add(200)
+
+            counter = counter + 1
+        end
     end
 
     action IsFinished returns boolean
-        return GetFinished()
+        return finishedTurn
+    end
+
+    action SetFinished(boolean bool)
+        finishedTurn = bool
     end
 
     action Dispose

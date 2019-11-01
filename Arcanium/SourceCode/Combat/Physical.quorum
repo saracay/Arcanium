@@ -3,8 +3,12 @@ use Libraries.System.File
 
 class Physical is Attack
 
-    action ParseJSON()
-        integer ID = GetID()            //Physical's ID must be set before call
+    integer elementalType = 0       //element type if applicable (0-6)
+
+    /*Parse through the JSON to find a physical attack with the given ID and 
+    use that information to fill out the physical's fields*/
+    action FillPhysical(integer ID)
+        SetID(ID)
         JavaScriptObjectNotation attackTypes
         File attacksList
         attacksList:SetPath("Assets\Attacks\Attacks.json")
@@ -16,14 +20,14 @@ class Physical is Attack
         boolean found = false
         repeat while (i < physicalData:GetSize() and not found)
             currentPhysical = physicalData:Get(i)
-            if currentPhysical:GetValue("physicalID") = ID:GetText()
+            if (currentPhysical:GetValue("physicalID") = ID:GetText())
                 found = true
-            else
+        else
                 i = i + 1
             end
         end
 
-        if not found
+        if (not found)
             output "Temporary Error: physical not found"
         else
             SetName(currentPhysical:GetValue("name"))
@@ -31,15 +35,40 @@ class Physical is Attack
             SetMultiTarget(currentPhysical:GetValue("multiTarget"):ParseBoolean())
             SetCanHeal(currentPhysical:GetValue("canHeal"):ParseBoolean())
             SetCanDamage(currentPhysical:GetValue("canDamage"):ParseBoolean())
-            physicalData = currentPhysical:GetObject("statusCodes")
+            SetElementalType(currentPhysical:GetValue("elementalType"):ParseInteger())
+
+            physicalData = currentPhysical:GetObject("appliedStatusCodes")
             i = 0
             Status currentStatus
             repeat while (i < physicalData:GetSize())
-                currentStatus:SetStatusID(physicalData:Get(i):GetValue():ParseInteger())
-                currentStatus:ParseJSON()
-                AddToStatuses(currentStatus)
+                currentStatus:FillStatus(physicalData:Get(i):GetValue():ParseInteger())
+                currentStatus:SetBaseDamage(cast(integer, GetBaseDamage()
+                 * currentStatus:GetBaseModifier()))
+                AddToAppliedStatuses(currentStatus)
+                i = i + 1
+            end
+
+            physicalData = currentPhysical:GetObject("curedStatusCodes")
+            i = 0
+            repeat while (i < physicalData:GetSize())
+                currentStatus:FillStatus(physicalData:Get(i):GetValue():ParseInteger())
+                currentStatus:SetBaseDamage(cast(integer, GetBaseDamage()
+                 * currentStatus:GetBaseModifier()))
+                AddToCuredStatuses(currentStatus)
                 i = i + 1
             end
         end
+    end
+
+/*******************************************************************************
+                    Getters and Setters Below This Point
+*******************************************************************************/
+
+    action SetElementalType(integer newElementalType)
+        elementalType = newElementalType
+    end
+
+    action GetElementalType() returns integer
+        return elementalType
     end
 end

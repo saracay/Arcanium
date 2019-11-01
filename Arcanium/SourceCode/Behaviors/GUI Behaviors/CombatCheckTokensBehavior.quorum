@@ -13,6 +13,7 @@ class CombatCheckTokensBehavior is NextMenuPageBehavior, CombatAddTokenBehavior
     Array<CombatDamageTargetBehavior> damageBehaviors
     integer currentIndex = 0
     integer currentTokens = 0
+    integer spellID = 0
 
     action Run(BehaviorEvent event)
         if currentIndex + 1 not= pages:GetSize() and currentTokens not= 0
@@ -24,7 +25,15 @@ class CombatCheckTokensBehavior is NextMenuPageBehavior, CombatAddTokenBehavior
                 counter = counter + 1
             end
 
-            integer tempIndex = currentIndex + 1
+            Spell spell
+            spell:FillSpell(spellID)
+            integer tempIndex = 0
+
+            if spell:GetMultiTarget()
+                tempIndex = currentIndex + 2
+            else
+                tempIndex = currentIndex + 1
+            end
             counter = 0
 
             repeat while counter < pages:Get(tempIndex):GetSize()
@@ -36,8 +45,7 @@ class CombatCheckTokensBehavior is NextMenuPageBehavior, CombatAddTokenBehavior
             counter = 0
 
             repeat while counter < damageBehaviors:GetSize()
-                damageBehaviors:Get(counter):SetSpellID(GetSpellID())
-
+                damageBehaviors:Get(counter):SetSpellID(spellID)
                 counter = counter + 1
             end
 
@@ -67,6 +75,10 @@ class CombatCheckTokensBehavior is NextMenuPageBehavior, CombatAddTokenBehavior
 
     action SetCurrentTokens(integer tokens)
         currentTokens = tokens
+    end
+
+    action SetSpellID(integer id)
+        spellID = id
     end
 
     action SetDamageBehaviors(Array<CombatDamageTargetBehavior> newArray)

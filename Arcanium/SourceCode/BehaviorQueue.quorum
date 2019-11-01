@@ -6,10 +6,15 @@ class BehaviorQueue
 
     Array<Behavior> queue
     Behavior currentBehavior
+    boolean shouldRun = true
 
     action Update(number seconds)
         if currentBehavior = undefined
             return now
+        end
+
+        if queue:IsEmpty()
+            shouldRun = true
         end
 
         if currentBehavior:IsFinished()
@@ -20,7 +25,6 @@ class BehaviorQueue
     end
 
     action AddBehavior(Behavior behavior)
-        boolean shouldRun = queue:IsEmpty() and currentBehavior = undefined
         queue:Add(behavior)
         if shouldRun
             NextBehavior()
@@ -28,6 +32,7 @@ class BehaviorQueue
     end
 
     private action NextBehavior
+        shouldRun = false
         if currentBehavior not= undefined
             currentBehavior:Dispose()
         end
@@ -36,11 +41,9 @@ class BehaviorQueue
             currentBehavior = undefined
         else
             currentBehavior = queue:RemoveFromFront()
+
             BehaviorEvent event
             currentBehavior:Run(event)
-            if currentBehavior:IsFinished()
-                NextBehavior()
-            end
         end
     end
 

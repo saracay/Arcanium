@@ -25,8 +25,190 @@ class AI
 
 
     action Goblin(number percent, Enemy actor)
+        Spell spell
+        
         number threshold1 = 50  //first hp percent where behavior changes
         number threshold2 = 20  //second hp percent where behavior changes
+
+        //these variables could/should be placed into the enemy or Goblin class
+        //replace any instances of them with appropriate "actor:__"
+        integer cooldown1 = 3   //how many turns must wait before using ability again
+        integer cd1 = cooldown1 //counter for current cooldown value (could also set to 0 if ability should not be available turn 1)
+        integer consumable1 = 1 //counter for number of times can use item
+        //=====
+
+        Random random
+        integer r = random:RandomIntegerBetween(1, 100)
+        
+        if (percent > threshold1)       //hp between full and threshold 1 ======
+            if (cd1 >= cooldown1)//if ability is off cooldown
+                if (r <= 70)        //70% of the time option 1 will be done
+                    //cooldownaction
+                    spell:SetID(8010000)
+                    cd1 = 0
+                elseif (r <= 90)    //option 2 will be done 20%
+                    //attack1
+                    spell:SetID(8100000)
+                else                //option 3 will be done the remaining 10%
+                    //action1
+                    spell:SetID(8001000)
+                end
+            else                //if ability is on cooldown
+                if (r <= 60)        //60%
+                    //actor:attack1
+                    spell:SetID(8100000)
+                else
+                    //actor:action1
+                    spell:SetID(8001000)
+                end
+            end
+        elseif (percent > threshold2)   //hp between threshold 1 and 2 =========
+            if (consumable1 > 0)    
+                if (cd1 = cooldown1)//if consumable and cooldown available 
+                    if (r <= 40)        //40%
+                        //actor:cooldownaction1
+                        spell:SetID(8010000)
+                        cd1 = 0
+                    elseif (r <= 60)    //20%
+                        //actor:useconsumable1
+                        spell:SetID(8000100)
+                        consumable1 = consumable1 - 1
+                    elseif (r <=  80)   //20%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 90)    //10%
+                        //actor:action1
+                        spell:SetID(8001000)
+                    else                //10%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end
+                else                //if consumable available
+                    if (r <= 20)        //20%
+                        //actor:useconsumable1
+                        spell:SetID(8000100)
+                        consumable1 = consumable1 - 1
+                    elseif (r <= 50)    //30%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 80)    //30%
+                        //actor:action1
+                        spell:SetID(8001000)
+                    else                //20%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end            
+                end
+            else
+                if (cd1 = cooldown1)//if cooldown available
+                    if (r <= 40)        //40%
+                        //actor:cooldownaction1
+                        spell:SetID(8010000)
+                        cd1 = 0
+                    elseif (r <= 60)    //20%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <=  80)   //20%
+                        //actor:action1
+                        spell:SetID(8001000)
+                    else                //20%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end
+                else                //if neither consumable nor cooldown available
+                    if (r <= 60)        //60%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 80)    //20%
+                        //actor:action1
+                        spell:SetID(8001000)
+                    else                //20%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end
+                end
+            end
+        else                            //hp between threshold 2 and 0 =========
+            if (consumable1 > 0)    
+                if (cd1 = cooldown1)//if consumable and cooldown available 
+                    if (r <= 10)        //10%
+                        //actor:cooldownaction1
+                        spell:SetID(8010000)
+                        cd1 = 0
+                    elseif (r <= 60)    //50%
+                        //actor:useconsumable1
+                        spell:SetID(8000100)
+                        consumable1 = consumable1 - 1
+                    elseif (r <= 70)    //10%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 80)    //10%
+                        //actor:cower
+                        spell:SetID(8000001)
+                    else                //20%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end
+                else                //if consumable available
+                    if (r <= 50)        //50%
+                        //actor:useconsumable1
+                        spell:SetID(8000100)
+                        consumable1 = consumable1 - 1
+                    elseif (r <= 60)    //10%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 70)    //10%
+                        //actor:cower
+                        spell:SetID(8000001)
+                    else                //30%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end            
+                end
+            else
+                if (cd1 = cooldown1)//if cooldown available
+                    if (r <= 10)        //10%
+                        //actor:cooldownaction1
+                        spell:SetID(8010000)
+                        cd1 = 0
+                    elseif (r <= 20)    //10%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 30)    //10%
+                        //actor:cower
+                        spell:SetID(8000001)
+                    else                //70%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end
+                else                //if neither consumable nor cooldown available
+                    if (r <= 10)        //10%
+                        //actor:attack1
+                        spell:SetID(8100000)
+                    elseif (r <= 20)    //10%
+                        //actor:cower
+                        spell:SetID(8000001)
+                    else                //80%
+                        //actor:heal
+                        spell:SetID(8000010)
+                    end
+                end
+            end
+        end
+        
+        if (cd1 < cooldown1)
+            cd1 = cd1 + 1               //increment cooldown counter
+        end
+        
+        spell:FillSpell(spell:GetID())
+        /*Ean: This was matt's temp thing I think, removed because setSpell no
+        longer exists. Should probably instead just have the method return the 
+        attack used. actor:SetSpell(spell)*/
+    end
+
+    action Orc(number percent, Enemy actor)
+        number threshold1 = 40  //first hp percent where behavior changes
+        number threshold2 = 10  //second hp percent where behavior changes
 
         //these variables could/should be placed into the enemy or Goblin class
         //replace any instances of them with appropriate "actor:__"
@@ -46,41 +228,41 @@ class AI
                 elseif (r <= 90)    //option 2 will be done 20%
                     //actor:attack1
                 else                //option 3 will be done the remaining 10%
-                    //actor:action1
+                    //actor:attack2
                 end
             else                //if ability is on cooldown
-                if (r <= 60)        //60%
+                if (r <= 90)        //90%
                     //actor:attack1
-                else
-                    //actor:action1
+                else                //10%
+                    //actor:attack2
                 end
             end
         elseif (percent > threshold2)   //hp between threshold 1 and 2 =========
             if (consumable1 > 0)    
                 if (cd1 = cooldown1)//if consumable and cooldown available 
-                    if (r <= 40)        //40%
+                    if (r <= 50)        //50%
                         //actor:cooldownaction1
                         cd1 = 0
-                    elseif (r <= 60)    //20%
+                    elseif (r <= 60)    //10%
                         //actor:useconsumable1
                         consumable1 = consumable1 - 1
                     elseif (r <=  80)   //20%
                         //actor:attack1
                     elseif (r <= 90)    //10%
-                        //actor:action1
+                        //actor:attack2
                     else                //10%
-                        //actor:heal
+                        //actor:rage
                     end
                 else                //if consumable available
-                    if (r <= 20)        //20%
+                    if (r <= 10)        //10%
                         //actor:useconsumable1
                         consumable1 = consumable1 - 1
-                    elseif (r <= 50)    //30%
+                    elseif (r <= 50)    //40%
                         //actor:attack1
-                    elseif (r <= 80)    //30%
-                        //actor:action1
-                    else                //20%
-                        //actor:heal
+                    elseif (r <= 90)    //40%
+                        //actor:attack2
+                    else                //10%
+                        //actor:rage
                     end            
                 end
             else
@@ -88,49 +270,49 @@ class AI
                     if (r <= 40)        //40%
                         //actor:cooldownaction1
                         cd1 = 0
-                    elseif (r <= 60)    //20%
+                    elseif (r <= 70)    //30%
                         //actor:attack1
-                    elseif (r <=  80)   //20%
-                        //actor:action1
-                    else                //20%
-                        //actor:heal
+                    elseif (r <=  90)   //20%
+                        //actor:attack2
+                    else                //10%
+                        //actor:rage
                     end
                 else                //if neither consumable nor cooldown available
-                    if (r <= 60)        //60%
+                    if (r <= 70)        //70%
                         //actor:attack1
-                    elseif (r <= 80)    //20%
-                        //actor:action1
-                    else                //20%
-                        //actor:heal
+                    elseif (r <= 90)    //20%
+                        //actor:attack2
+                    else                //10%
+                        //actor:rage
                     end
                 end
             end
         else                            //hp between threshold 2 and 0 =========
             if (consumable1 > 0)    
                 if (cd1 = cooldown1)//if consumable and cooldown available 
-                    if (r <= 10)        //10%
+                    if (r <= 15)        //15%
                         //actor:cooldownaction1
                         cd1 = 0
-                    elseif (r <= 60)    //50%
+                    elseif (r <= 30)    //15%
                         //actor:useconsumable1
                         consumable1 = consumable1 - 1
                     elseif (r <= 70)    //10%
                         //actor:attack1
-                    elseif (r <= 80)    //10%
-                        //actor:flee
-                    else                //20%
-                        //actor:heal
+                    elseif (r <= 50)    //10%
+                        //actor:attack2
+                    else                //50%
+                        //actor:rage
                     end
                 else                //if consumable available
-                    if (r <= 50)        //50%
+                    if (r <= 20)        //20%
                         //actor:useconsumable1
                         consumable1 = consumable1 - 1
-                    elseif (r <= 60)    //10%
+                    elseif (r <= 30)    //10%
                         //actor:attack1
-                    elseif (r <= 70)    //10%
-                        //actor:flee
-                    else                //30%
-                        //actor:heal
+                    elseif (r <= 40)    //10%
+                        //actor:attack2
+                    else                //60%
+                        //actor:rage
                     end            
                 end
             else
@@ -141,17 +323,17 @@ class AI
                     elseif (r <= 20)    //10%
                         //actor:attack1
                     elseif (r <= 30)    //10%
-                        //actor:flee
+                        //actor:attack2
                     else                //70%
-                        //actor:heal
+                        //actor:rage
                     end
                 else                //if neither consumable nor cooldown available
                     if (r <= 10)        //10%
                         //actor:attack1
                     elseif (r <= 20)    //10%
-                        //actor:flee
+                        //actor:attack2
                     else                //80%
-                        //actor:heal
+                        //actor:rage
                     end
                 end
             end
@@ -159,38 +341,6 @@ class AI
         
         if (cd1 < cooldown1)
             cd1 = cd1 + 1               //increment cooldown counter
-        end
-    end
-
-    action Orc(number percent, Enemy actor)
-        number threshold1 = 40  //first hp percent where behavior changes
-        number threshold2 = 10  //second hp percent where behavior changes
-
-        Random random
-        integer r = random:RandomIntegerBetween(1, 100)
-        
-        if (percent > threshold1)   //hp between full and threshold 1
-            if (r <= 90)        //90% of the time option 1 will be done
-                //actor:attack1
-            else                //option 2 will be done the remaining 10%
-                //actor:action1
-            end
-        elseif (percent > threshold2)   //hp between threshold 1 and 2
-            if (r <= 50)        //50% option 1
-                //actor:attack1
-            elseif (r <= 75)    //25% option 2
-                //actor:action1
-            else                //25% option 3
-                //actor:rage
-            end
-        else                        //hp between threshold 2 and 0
-            if (r <= 5)        //5%
-                //actor:attack1
-            elseif (r <= 10)    //5%
-                //actor:attack2
-            else                //90%
-                //actor:rage
-            end
         end
     end
 

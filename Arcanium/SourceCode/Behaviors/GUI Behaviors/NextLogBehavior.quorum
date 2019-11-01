@@ -25,7 +25,7 @@ class NextLogBehavior is Behavior
         else
             labels:Get(currentIndex):SetPosition(-1000, -1000)
             game:SetFocus(undefined)
-            logBehavior:Dispose()
+            logBehavior:SetFinished(true)
         end
     end
  
