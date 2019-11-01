@@ -157,100 +157,89 @@ class Main is Game, CollisionListener2D
 ///*      Currently Commented   [COMMENT-OUT / REMOVE THIS LINE TO TEST!]
 
    // Initialize the MAP
-//        EnablePhysics2D(true)
-//        map1:loadMap(maps:FOREST_MAP)
-//        map1:loadCollisionLayer(maps:FOREST_MAP)
-//        Add(map1:testMap)
-//        i = 0
-//        repeat map1:collisions:GetSize() times
-//            Add(map1:collisions:Get(i))
-//            i = i + 1
-//        end
-//		
-//        // Initialize the PLAYER
-//        player1:DrawPlayer()
-//        player1:playerSprite:EnablePhysics(true)
-//        player1:playerSprite:CanRotate(false)
-//        player1:playerSprite:SetResponsive()
-//        player1:playerSprite:SetName("player")
-//		
-//        // Enable Collisions in the game
-//        AddCollisionListener(me)
-//		
-//        // Add INTERACTABLEs to the game (Currently 3)
-//        // * This part is currently HARD-CODED for testing
-//        // * Likely parse a JSON file of INTERACTABLEs info
-//        // * Could store the INTERACTABLE LIST with each map (Edit Map.quorum)
-//        integer index = 0
-//        repeat until index = 3
-//            // Create a new INTERACTABLE to add to the LIST
-//            Interactable fillerInteractable
-//            npcList:Add(fillerInteractable)
-//			
-//            // Hard-Coded Objects to add for testing
-//            if index = 0
-//                // A clear box overlapping the CHAIR in the MAP
-//                // Interacts via DIALOGUE
-//                npcList:Get(index):CreateInteractable("Wooden Chair", "clear", 11, 5.5, true)
-//                DialogueBehavior newDialogue1
-//                newDialogue1:AddDialogue("There is a chair infront of you.")
-//                newDialogue1:AddDialogue("It is TANGIBLE.")
-//                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
-//            elseif index = 1
-//                // A black box that has no collision
-//                // Interacts via DIALOGUE
-//                npcList:Get(index):CreateInteractable("Black Box", "default", 10, 4, false)
-//                DialogueBehavior newDialogue1
-//                newDialogue1:AddDialogue("You cannot touch this black box (INTANGIBLE).")
-//                newDialogue1:AddDialogue("It shows interaction without physical collision.")
-//                newDialogue1:AddDialogue("It is under your sprite (due to being before later).")
-//                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
-//            elseif index = 2
-//                // A cyan box that has no collision
-//                // Interacts via MAP-TRANSITION
-//                npcList:Get(index):CreateInteractable("Back to Castle", "clear", 0, 4, false)
-//                npcList:Get(index):LoadFilledRectangle(32,32,color:Cyan())
-//                MapTransitionBehavior newTransition1
-//                newTransition1:SetTransition(map1, maps:CASTLE_MAP, npcList)
-//                newTransition1:SetCoordinates(16, 12)
+        InitializeMap(map1, maps:FOREST_MAP)
+
+		
+        // Initialize the PLAYER
+        InitializePlayer(player1)
+		
+        // Enable Collisions in the game
+        AddCollisionListener(me)
+		
+        // Add INTERACTABLEs to the game (Currently 3)
+        // * This part is currently HARD-CODED for testing
+        // * Likely parse a JSON file of INTERACTABLEs info
+        // * Could store the INTERACTABLE LIST with each map (Edit Map.quorum)
+        integer index = 0
+        repeat until index = 3
+            // Create a new INTERACTABLE to add to the LIST
+            Interactable fillerInteractable
+            npcList:Add(fillerInteractable)
+			
+            // Hard-Coded Objects to add for testing
+            if index = 0
+                // A clear box overlapping the CHAIR in the MAP
+                // Interacts via DIALOGUE
+                npcList:Get(index):CreateInteractable("Wooden Chair", "clear", 11, 5.5, true)
+                DialogueBehavior newDialogue1
+                newDialogue1:AddDialogue("There is a chair infront of you.")
+                newDialogue1:AddDialogue("It is TANGIBLE.")
+                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
+            elseif index = 1
+                // A black box that has no collision
+                // Interacts via DIALOGUE
+                npcList:Get(index):CreateInteractable("Black Box", "default", 10, 4, false)
+                DialogueBehavior newDialogue1
+                newDialogue1:AddDialogue("You cannot touch this black box (INTANGIBLE).")
+                newDialogue1:AddDialogue("It shows interaction without physical collision.")
+                newDialogue1:AddDialogue("It is under your sprite (due to being before later).")
+                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
+            elseif index = 2
+                // A cyan box that has no collision
+                // Interacts via MAP-TRANSITION
+                npcList:Get(index):CreateInteractable("Back to Castle", "clear", 0, 4, false)
+                npcList:Get(index):LoadFilledRectangle(32,32,color:Cyan())
+                MapTransitionBehavior newTransition1
+                newTransition1:SetTransition(map1, maps:CASTLE_MAP, npcList)
+                newTransition1:SetCoordinates(16, 12)
+
+//                // Test Section of adding INTERACTABLEs to the new MAP
+//                Interactable newInteractable
+//                newInteractable:CreateInteractable("Back to Forest", "clear", 17, 12, false)
+//                newInteractable:LoadFilledRectangle(32,32,color:Cyan())
+//                MapTransitionBehavior newTransition2
+//                newTransition2:SetTransition(map1, maps:FOREST_MAP, npcList)
+//                newTransition2:SetCoordinates(1, 4)
 //
-////                // Test Section of adding INTERACTABLEs to the new MAP
-////                Interactable newInteractable
-////                newInteractable:CreateInteractable("Back to Forest", "clear", 17, 12, false)
-////                newInteractable:LoadFilledRectangle(32,32,color:Cyan())
-////                MapTransitionBehavior newTransition2
-////                newTransition2:SetTransition(map1, maps:FOREST_MAP, npcList)
-////                newTransition2:SetCoordinates(1, 4)
-////
-//////    // THIS PART DOES NOT WORK
-//////    //            j = 0
-//////    //            repeat npcList:GetSize() times
-//////    //                newTransition2:AddNPC(npcList:Get(j))
-//////    //                j = j + 1
-//////    //            end
-////
-////                newInteractable:SetInteractableBehavior(newTransition2, "transition")
-////                newTransition1:AddNPC(newInteractable)
+////    // THIS PART DOES NOT WORK
+////    //            j = 0
+////    //            repeat npcList:GetSize() times
+////    //                newTransition2:AddNPC(npcList:Get(j))
+////    //                j = j + 1
+////    //            end
 //
-//                npcList:Get(index):SetInteractableBehavior(newTransition1, "transition")
-//            end
-//			
-//            // Add the INTERACTABLEs to the game
-//            Add(npcList:Get(index))
-//            AddKeyboardListener(npcList:Get(index))
-//            index = index + 1
-//        end
-//		
-//        // Add the PLAYER after everything to be in the foreground
-//        Add(player1:playerSprite)
-//
-//        // Add the above layers
-//        map1:loadAboveLayer(maps:FOREST_MAP)
-//        Add(map1:aboveLayer)
-//		
-//        // Set the camera
-//        camera = GetCamera2D()
-//        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
+//                newInteractable:SetInteractableBehavior(newTransition2, "transition")
+//                newTransition1:AddNPC(newInteractable)
+
+                npcList:Get(index):SetInteractableBehavior(newTransition1, "transition")
+            end
+			
+            // Add the INTERACTABLEs to the game
+            Add(npcList:Get(index))
+            AddKeyboardListener(npcList:Get(index))
+            index = index + 1
+        end
+		
+        // Add the PLAYER after everything to be in the foreground
+        Add(player1:playerSprite)
+
+        // Add the above layers
+        map1:loadAboveLayer(maps:FOREST_MAP)
+        Add(map1:aboveLayer)
+		
+        // Set the camera
+        camera = GetCamera2D()
+        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
         /***********************************************************************
         End test Section
         ***********************************************************************/
@@ -412,6 +401,27 @@ class Main is Game, CollisionListener2D
         removalArray:Add(item)
     end
 
+    action InitializeMap(Map currMap, Text mapName)
+        EnablePhysics2D(true)
+        currMap:loadMap(mapName)
+        currMap:loadCollisionLayer(mapName)
+        Add(currMap:testMap)
+        i = 0
+        repeat currMap:collisions:GetSize() times
+            Add(currMap:collisions:Get(i))
+            i = i + 1
+        end
+		
+    end
+
+    action InitializePlayer(Player player)
+        player:DrawPlayer()
+        player:playerSprite:EnablePhysics(true)
+        player:playerSprite:CanRotate(false)
+        player:playerSprite:SetResponsive()
+        player:playerSprite:SetName("player")
+    end
+
     action BeginCollision(CollisionEvent2D event)
         output "OW!"
 //        CheckForInteraction(event, true)
@@ -420,6 +430,8 @@ class Main is Game, CollisionListener2D
     action FinishCollision(CollisionEvent2D event)
 //        CheckForInteraction(event, false)
     end
+
+
 
     // This action checks if the collision involes the player
     // and an Interactable Object.  If so, it toggles the
