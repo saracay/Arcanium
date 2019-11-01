@@ -201,7 +201,9 @@ class AI
         end
         
         spell:FillSpell(spell:GetID())
-        actor:SetSpell(spell)
+        /*Ean: This was matt's temp thing I think, removed because setSpell no
+        longer exists. Should probably instead just have the method return the 
+        attack used. actor:SetSpell(spell)*/
     end
 
     action Orc(number percent, Enemy actor)
