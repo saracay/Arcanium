@@ -40,6 +40,9 @@ class MapTransitionBehavior is Behavior
         Map nextMap
         nextMap:loadMap(mapName)
         nextMap:loadCollisionLayer(mapName)
+        // NOTE: these two SHOULD be loaded every single time, but they are currently commented out because not all maps have this data yet
+//        nextMap:loadInteractables(mapName)
+//        nextMap:loadMapTransitions(mapName)
 
         // Add the drawables to the default layer
         main:Add(nextMap:testMap) 
