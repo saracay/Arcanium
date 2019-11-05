@@ -6,23 +6,6 @@ class Enemy is Combatant
 
     Array<Attack> usableAttacks    //array of attacks that the enemy can use
 
-    action SetStats(text newName, integer newCurrentHP, integer newMaxHP, 
-     integer newExperienceValue, integer newLevel, number newCurrentAttack, 
-     Array<number> newCurrentElementsEffectiveness)
-        SetName(newName)
-        SetCurrentHP(newCurrentHP)
-        SetMaxHP(newMaxHP)
-        SetExperienceValue(newExperienceValue)
-        SetLevel(newLevel)
-        SetCurrentAttack(newCurrentAttack)
-        integer i = 0
-        repeat while (i < 6)
-            SetCurrentElementsEffectivenessAtPosition(i,
-             newCurrentElementsEffectiveness:Get(i))
-            i = i + 1
-        end
-    end
-
     /*Parse through the JSON to find an enemy with the given name and 
     use that information to fill out the enemy's fields*/    
     action FillEnemy(text name)

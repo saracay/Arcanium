@@ -6,12 +6,12 @@ class Status
     
     text name = ""                  //status name
     integer statusID = 0            //the status's ID in the JSON list
-    integer elementID = 7000000     //7 for damaging, 6 for (de)buffing followed by elements
+    integer elementID = 7000000     //7 for damaging/healing, 6 for (de)buffing followed by elements
     integer baseDamage = 0          //base damage of this status off of the sourceAttack's damage
     integer turnCounter = 0         //number of turns remaining on this status
     number applicationChance = 0    //chance for this status to be inflicted
     number baseModifier = 0         //affects either damage or target's attack stat
-    boolean isActive = false        //true if current applied, false otherwise
+    boolean isHealing = false       //true if the status effect heals over time, false for damaging over time
     Array<number> effectivenessStatModifiers //multipliers to lower/raise target's effectiveness stats
 
     /*When initialized the effectivenessStatModifiers array is given 
@@ -51,6 +51,7 @@ class Status
             SetName(currentStatus:GetValue("name"))
             SetBaseModifier(currentStatus:GetValue("modifier"):ParseNumber())
             SetApplicationChance(currentStatus:GetValue("applicationChance"):ParseNumber())
+            SetIsHealing(currentStatus:GetValue("isHealing"):ParseBoolean())
             SetTurnCounter(currentStatus:GetValue("turnsAffected"):ParseInteger())
 
             statusData = currentStatus:GetObject("effectivenessStatModifiers")
@@ -127,12 +128,12 @@ class Status
         return baseModifier
     end
 
-    action SetIsActive(boolean newIsActive)
-        isActive = newIsActive
+    action SetIsHealing(boolean newIsHealing)
+        isHealing = newIsHealing
     end
 
-    action GetIsActive() returns boolean
-        return isActive
+    action GetIsHealing() returns boolean
+        return isHealing
     end
 
     action SetEffectivenessStatModifiersAtPosition(integer position, number newModifier)

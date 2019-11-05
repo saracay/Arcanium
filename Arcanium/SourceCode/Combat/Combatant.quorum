@@ -27,47 +27,64 @@ class Combatant
     action ReceiveAttack(Attack attack, Combatant user) returns Array<text>
         Array<text> log
         number damageModifier = 0
-        integer damageRecieved = 0
+        integer damageReceived = 0
         integer attackID = attack:GetID()
         
-        //TODO place check below for spells that heal self/friendlies but damage enemies
-        if (attack:GetCanHeal())
+        //The attack is solely used for healing
+        if (attack:GetCanHeal() and not attack:GetCanDamage())
             return ReceiveHeal(attack, user)
-        end
-
-        if (attack is Physical)
-            Physical physicalAttack = cast(Physical, attack)
-            integer element = physicalAttack:GetElementalType()
-            if(element not= 0)
-                damageModifier = currentElementsEffectiveness:Get(element - 1)
+        elseif (attack:GetCanDamage())
+            if (attack is Physical)
+                Physical physicalAttack = cast(Physical, attack)
+                integer element = physicalAttack:GetElementalType()
+                if(element not= 0)
+                    damageModifier = currentElementsEffectiveness:Get(element - 1)
+                else
+                    damageModifier = 1
+                end
             else
-                damageModifier = 1
+                damageModifier = CalculateDamageModifier(attackID)
             end
-        else
-            damageModifier = CalculateDamageModifier(attackID)
+
+            damageReceived = cast(integer, damageModifier
+             * attack:GetBaseDamage() * user:GetCurrentAttack())
+
+            text incomingAttack = ""
+            if (attack is Spell)
+                incomingAttack = user:GetName() + " cast "
+                 + attack:GetName() + " on " + GetName() + "!"
+            else
+                incomingAttack = user:GetName() + " used "
+                 + attack:GetName() + " on " + GetName() + "!"
+            end
+            log:Add(incomingAttack)
+
+            text incomingDamage = GetName() + " took " + damageReceived + " damage!"
+            log:Add(incomingDamage)
+
+            //Leeching attack
+            if (attack:GetCanHeal())
+                integer healReceived = damageReceived
+
+                if (user:GetCurrentHP() + healReceived > user:GetMaxHP())
+                    healReceived = user:GetMaxHP() - user:GetCurrentHP()
+                end
+
+                user:SetCurrentHP(user:GetCurrentHP() + healReceived)
+
+                text incomingHeal = user:GetName() + " stole " + healReceived 
+                 + " from " + GetName() + "!"
+
+                log:Add(incomingHeal)
+            end
         end
 
-        damageRecieved = cast(integer, damageModifier
-         * attack:GetBaseDamage() * user:GetCurrentAttack())
-
-        text incomingAttack = ""
-        if (attack is Spell)
-            incomingAttack = user:GetName() + " cast "
-             + attack:GetName() + " on " + GetName() + "!"
-        else
-            incomingAttack = user:GetName() + " used "
-             + attack:GetName() + " on " + GetName() + "!"
-        end
-        log:Add(incomingAttack)
-
-        text incomingDamage = GetName() + " took " + damageRecieved + " damage!"
-        log:Add(incomingDamage)
-
-        if CheckDefeated(damageRecieved)
+        //If target dies from the hit don't bother with status effects
+        if (CheckDefeated(damageReceived))
             text defeated = GetName() + " was defeated!"
             log:Add(defeated)
         else
-            Array<text> statusResults = ApplyAttackStatus(attack)
+            Array<text> statusResults = ApplyAttackStatuses(attack)
             Iterator<text> it = statusResults:GetIterator()
             repeat while (it:HasNext())
                 log:Add(it:Next())
@@ -100,10 +117,10 @@ class Combatant
         end
         log:Add(incomingMove)
 
-        text incomingHeal = GetName() + " recieved " + healReceived + " health!"
+        text incomingHeal = GetName() + " Received " + healReceived + " health!"
         log:Add(incomingHeal)
 
-        Array<text> statusResults = ApplyAttackStatus(healMove)
+        Array<text> statusResults = ApplyAttackStatuses(healMove)
         Iterator<text> it = statusResults:GetIterator()
         repeat while (it:HasNext())
             log:Add(it:Next())
@@ -144,39 +161,50 @@ class Combatant
     end
 
     /*Apply/remove all status effects attached to a given attack*/
-    action ApplyAttackStatus(Attack attack) returns Array<text>
+    action ApplyAttackStatuses(Attack attack) returns Array<text>
         Array<text> statusChange
         text statusApplied = ""
-        Iterator<Status> it = attack:GetAppliedStatuses():GetIterator()
+
+        integer i = 0
         Status currentStatus
-        repeat while it:HasNext()
-            currentStatus = it:Next()
+        repeat while (i < attack:GetAppliedStatuses():GetSize())
+            currentStatus = attack:GetAppliedStatusesAtPosition(i)
+            output("currentStatus name attempting to apply is: " + currentStatus:GetName())
             if (ApplyStatus(currentStatus))
                 statusApplied = GetName() + " was inflicted with the status "
-                 + currentStatus:GetName()
+                 + currentStatus:GetName() + "."
             else
                 statusApplied = GetName() + " resisted the status "
-                 + currentStatus:GetName()
+                 + currentStatus:GetName() + "."
             end
+            output(statusApplied)
             statusChange:Add(statusApplied)
+            i = i + 1
         end
 
-        it = attack:GetCuredStatuses():GetIterator()
-        repeat while it:HasNext()
-            currentStatus = it:Next()
+        i = 0
+        repeat while (i < attack:GetCuredStatuses():GetSize())
+            currentStatus = attack:GetCuredStatusesAtPosition(i)
             if (RemoveStatus(currentStatus:GetStatusID()))
-                statusApplied = GetName() + " was cured of the status "
-                 + currentStatus:GetName()
+                statusApplied = GetName() + " had the status "
+                 + currentStatus:GetName() + " removed."
                 statusChange:Add(statusApplied)
             end
+            i = i + 1
         end
 
         return statusChange
     end
+
     /*Apply the basic results of a status being inflicted, also stacks effects 
-    with others and checks if the application chance works in the first place.
-    will return true if status succesfully applied, false if target resisted*/
+    with different statuses and checks if the application chance works in the 
+    first place. If the status being applied already exists it's turn timer is
+    reset, if there exists a weaker version of the status it is overruled, and
+    if there is a stronger version already the new status is not applied.
+    Will return true if status succesfully applied, false if target resisted*/
     action ApplyStatus(Status newStatus) returns boolean
+        integer statusID = newStatus:GetStatusID()
+        text statusName = newStatus:GetName()
         Random randomSelection
         integer randomNumber = randomSelection:RandomIntegerBetween(1, 100)
         integer applyChance = cast(integer, newStatus:GetApplicationChance() * 100)
@@ -184,22 +212,55 @@ class Combatant
         if (randomNumber > applyChance)
             return false
         end
-        //TODO status replacement with the same name
-        if (newStatus:GetElementID() / 1000000 = 6)
-            currentAttack = currentAttack * newStatus:GetBaseModifier()
-        end
 
-        integer i = 0
-        number newElementEffectiveness = 0
-        repeat while (i < 6)
-            newElementEffectiveness = currentElementsEffectiveness:Get(i)
-             * newStatus:GetEffectivenessStatModifiersAtPosition(i)
-            currentElementsEffectiveness:Set(i, newElementEffectiveness)
-            i = i + 1
-        end
+        Status currentStatus
+        Iterator<Status> it = statuses:GetIterator()
+        boolean found = false
+        repeat while (it:HasNext() and not found)
+            currentStatus = it:Next()
 
-        newStatus:SetIsActive(true)
-        statuses:Add(newStatus)
+            if (statusID = currentStatus:GetStatusID())
+                found = true
+                currentStatus:SetTurnCounter(newStatus:GetTurnCounter())
+            elseif (statusName = currentStatus:GetName())
+                found = true
+                if (statusID > currentStatus:GetStatusID())
+                    RemoveStatus(currentStatus:GetStatusID())
+
+                    if (newStatus:GetElementID() / 1000000 = 6)
+                        currentAttack = currentAttack * newStatus:GetBaseModifier()
+                    end
+
+                    integer i = 0
+                    number newElementEffectiveness = 0
+                    repeat while (i < 6)
+                        newElementEffectiveness = currentElementsEffectiveness:Get(i)
+                         * newStatus:GetEffectivenessStatModifiersAtPosition(i)
+                        currentElementsEffectiveness:Set(i, newElementEffectiveness)
+                        i = i + 1
+                    end
+
+                    statuses:Add(newStatus)
+                end
+            end
+        end
+        
+        if (not found)
+            if (newStatus:GetElementID() / 1000000 = 6)
+                currentAttack = currentAttack * newStatus:GetBaseModifier()
+            end
+
+            integer i = 0
+            number newElementEffectiveness = 0
+            repeat while (i < 6)
+                newElementEffectiveness = currentElementsEffectiveness:Get(i)
+                 * newStatus:GetEffectivenessStatModifiersAtPosition(i) 
+                currentElementsEffectiveness:Set(i, newElementEffectiveness)
+                i = i + 1
+            end
+
+            statuses:Add(newStatus)
+        end
 
         return true
     end
@@ -209,7 +270,6 @@ class Combatant
     and its stat changes*/
     action UpdateStatus()
         integer elementID = 0
-        integer damageRecieved = 0
 
         integer i = 0
         Status currentStatus
@@ -218,9 +278,19 @@ class Combatant
             elementID = currentStatus:GetElementID()
 
             if (elementID / 1000000 = 7)
-                damageRecieved = cast(integer, CalculateDamageModifier(elementID) 
-                 * currentStatus:GetBaseDamage())
-                CheckDefeated(damageRecieved)
+                if(currentStatus:GetIsHealing())
+                    integer healReceived = 0
+                    healReceived = currentStatus:GetBaseDamage()
+                    if (currentHP + healReceived > maxHP)
+                        healReceived = maxHP - currentHP
+                    end
+                    SetCurrentHP(currentHP + healReceived)
+                else
+                    integer damageReceived = 0
+                    damageReceived = cast(integer, CalculateDamageModifier(elementID) 
+                     * currentStatus:GetBaseDamage())
+                    CheckDefeated(damageReceived)
+                end
             end
             
             currentStatus:DecrementTurnCounter()
@@ -238,7 +308,6 @@ class Combatant
                     j = j + 1
                 end
 
-                currentStatus:SetIsActive(false)
                 statuses:RemoveAt(i)
             else
                 i = i + 1
@@ -251,7 +320,7 @@ class Combatant
     action RemoveStatus(integer statusID) returns boolean
         Iterator<Status> it = statuses:GetIterator()
         Status currentStatus
-        repeat while it:HasNext()
+        repeat while (it:HasNext())
             currentStatus = it:Next()
 
             if (currentStatus:GetStatusID() = statusID)
@@ -279,7 +348,7 @@ class Combatant
     action ClearAllStatus()
         Iterator<Status> it = statuses:GetIterator()
         Status currentStatus
-        repeat while it:HasNext()
+        repeat while (it:HasNext())
             currentStatus = it:Next()
 
             if (currentStatus:GetElementID() / 1000000 = 6)
@@ -372,5 +441,9 @@ class Combatant
 
     action GetCurrentElementsEffectiveness() returns Array<number>
         return currentElementsEffectiveness
+    end
+
+    action GetStatuses() returns Array<Status>
+        return statuses
     end
 end
