@@ -17,7 +17,9 @@ use Libraries.Game.Graphics.ImageSheet
 use Libraries.Game.Graphics.Camera      // Adds Camera
 
 class Main is Game, CollisionListener2D
-    
+//==============================================================================
+//                             VARIABLE DECLARATION
+//==============================================================================    
     //Queue for storing subsequent Behaviors
     BehaviorQueue behaviorQueue
 
@@ -57,6 +59,10 @@ class Main is Game, CollisionListener2D
     number frame = 1
     number spaceX = 0
     number spaceY = 0
+
+//==============================================================================
+//                             PREBUILT ACTIONS
+//==============================================================================
     
     action Main
 
@@ -65,7 +71,152 @@ class Main is Game, CollisionListener2D
 
     action CreateGame
 
-        /***********************************************************************
+        CombatTest()
+
+        InitializeMap(map1, maps:FOREST_MAP)
+        InitializePlayer(player1)
+        AddCollisionListener(me)
+        
+        // Add the above layers
+        map1:loadAboveLayer(maps:FOREST_MAP)
+        Add(map1:aboveLayer)
+		
+
+
+    end
+
+    action Update(number seconds)
+
+        // Check if Behaviors are queued
+        behaviorQueue:Update(seconds)
+
+        // Necessary for removing unneeded objects
+        repeat until removalArray:IsEmpty()
+            Remove(removalArray:RemoveFromFront())
+        end
+    end
+
+//==============================================================================
+//                             CUSTOM ACTIONS
+//==============================================================================
+	  
+    action AddBehavior(Behavior behavior)
+        behaviorQueue:AddBehavior(behavior)
+    end
+
+    action AddToRemove(Item2D item)
+        removalArray:Add(item)
+    end
+
+    action InitializeMap(Map currMap, Text mapName)
+    //Loads map image, collision, and adds it to layer.
+        EnablePhysics2D(true)
+        currMap:loadMap(mapName)
+        currMap:loadCollisionLayer(mapName)
+        Add(currMap:testMap)
+        i = 0
+        repeat currMap:collisions:GetSize() times
+            Add(currMap:collisions:Get(i))
+            i = i + 1
+        end
+		
+    end
+
+    action InitializePlayer(Player player)
+        //Loads player image, enables collision/movement, does NOT add to layer.
+        player:DrawPlayer()
+        player:playerSprite:EnablePhysics(true)
+        player:playerSprite:CanRotate(false)
+        player:playerSprite:SetResponsive()
+        player:playerSprite:SetName("player")
+        Add(player:playerSprite)
+
+        //Sets camera onto player.
+        camera = GetCamera2D()
+        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
+    end
+
+    action CheckForInteraction(CollisionEvent2D event, boolean entering)
+
+    // This action checks if the collision involes the player
+    // and an Interactable Object.  If so, it toggles the
+    // interactable such that presing [SPACE] should proceed
+    // with the given dialoge.
+    // * The checking is based on the NAME of the DRAWABLES
+    //   > Interactable MUST inherit Drawable for type casting
+
+    /***********************************************************************
+    Collision detection for Interactable Objects (NPCs, Objects, etc.)
+    It is currently commented-out so that nothing breaks
+                                                        - Ryan
+    ***********************************************************************/
+///*      MAIN INTERACTABLE ACITON - ALLOWS FOR INTERACTIONS W/ PLAYER
+        // Variable used to determine if interaction is available
+        boolean interaction = false
+        boolean alreadyInteracting = false
+
+        // Cast collision items as Drawables to use them
+        Drawable itemA = cast(Drawable, event:GetItemA())
+        Drawable itemB = cast(Drawable, event:GetItemB())
+
+        // If PLAYER is in front (added later), swap items
+        if itemB:GetName() = "player"
+            Drawable itemC = itemB
+            itemB = itemA
+            itemA = itemC
+        end
+
+        // Check if PLAYER & INTERACTABLE
+        if itemA:GetName() = "player"
+            if itemB:GetName() = "interactable"
+                interaction = true
+            end
+        end
+        
+        // If interaction is available, enable/disable it
+        if interaction
+            Interactable newItemB = cast(Interactable, itemB)
+
+            i = 0
+            repeat npcList:GetSize() times
+                if npcList:Get(i):IsInteracting()
+                    alreadyInteracting = true
+                end
+                i = i + 1
+            end
+
+            if entering and not alreadyInteracting
+                newItemB:ToggleInteraction("newItemB")
+            elseif not entering
+                if newItemB:IsInteracting()
+                    output ""
+                    newItemB:ToggleInteraction("newItemB")
+                end
+            end
+        end
+    /***********************************************************************
+    End of Ryan's Testing Section
+    ***********************************************************************/
+    end
+
+    action SetMap(Map newMap)
+        map1 = newMap
+    end
+
+    action GetPlayer() returns Player
+        return player1
+    end
+
+    action SetNpcList(Array<Interactable> newList)
+        npcList = newList
+    end
+
+//==============================================================================
+//                             FOR TESTING
+//==============================================================================
+
+    action CombatTest()
+                /***********************************************************************
         Setup for loading a Battle (test version for now, will be adapted to
         the generalized loading a Level setup in the future.
 
@@ -103,105 +254,71 @@ class Main is Game, CollisionListener2D
         /***********************************************************************
         End of Matt's Testing Section
         ***********************************************************************/
+    end
+    
+end
 
-//        //Allows for collisions
-//        EnablePhysics2D(true)
-//        
-//        map1:loadMap(maps:TEST_MAP)
-//        map1:loadCollisionLayer(maps:TEST_MAP)
-//        
-//        // test if map uploads
-//        /*map1:loadMap(maps:CASTLE_MAP)
-//        map1:loadCollisionLayer(maps:CASTLE_MAP)*/
-//
-//        player1:DrawPlayer()
-//
-//        //Add the drawables to the default layer
-//        Add(map1:testMap) 
-//
-//        //Render all of the collision objects
-//        i = 0
-//        repeat map1:collisions:GetSize() times
-//            Add(map1:collisions:Get(i))
-//            i = i + 1
-//        end
-//
-//        Add(player1:playerSprite)
-//
-//        //Makes the player collidable and responsive to collisions
-//        player1:playerSprite:EnablePhysics(true)
-//        player1:playerSprite:SetResponsive()
-//        
-//        AddCollisionListener(me)
-//
-//        //For animations
-//        testAnimation:LoadImageSheet()
-//        testAnimation:LoadFrame()
-//        Add(testAnimation:girl)
-//        test2:LoadImage()
-//        Add(test2:spaceship)
+//==============================================================================
+//               COMMENTED OUT CODE (FOR REUSE OR FOR DELETION)
+//============================================================================== 
 
-        
-        /***********************************************************************
-        Start test section
-        * It should load the FOREST with 3 objects with different interactions
-        * PLAYER should use [SPACE] to trigger behaviors
-          1. Black box, no collision    (dialogue)
-            - 3 Lines of dialogue
-          2. Clear box, with collision  (dialogue)
-            - 2 Lines of dialogue (overlaps the chair in the map)
-          3. White box, no collision    (transition)
-            - Transitions to CASTLE
-                                                                  -Ryan
-        ***********************************************************************/
-///*      Currently Commented   [COMMENT-OUT / REMOVE THIS LINE TO TEST!]
 
-   // Initialize the MAP
-        InitializeMap(map1, maps:FOREST_MAP)
+//--------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
 
-		
-        // Initialize the PLAYER
-        InitializePlayer(player1)
-		
-        // Enable Collisions in the game
-        AddCollisionListener(me)
-		
-        // Add INTERACTABLEs to the game (Currently 3)
-        // * This part is currently HARD-CODED for testing
-        // * Likely parse a JSON file of INTERACTABLEs info
-        // * Could store the INTERACTABLE LIST with each map (Edit Map.quorum)
-        integer index = 0
-        repeat until index = 3
-            // Create a new INTERACTABLE to add to the LIST
-            Interactable fillerInteractable
-            npcList:Add(fillerInteractable)
-			
-            // Hard-Coded Objects to add for testing
-            if index = 0
-                // A clear box overlapping the CHAIR in the MAP
-                // Interacts via DIALOGUE
-                npcList:Get(index):CreateInteractable("Wooden Chair", "clear", 11, 5.5, true)
-                DialogueBehavior newDialogue1
-                newDialogue1:AddDialogue("There is a chair infront of you.")
-                newDialogue1:AddDialogue("It is TANGIBLE.")
-                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
-            elseif index = 1
-                // A black box that has no collision
-                // Interacts via DIALOGUE
-                npcList:Get(index):CreateInteractable("Black Box", "default", 10, 4, false)
-                DialogueBehavior newDialogue1
-                newDialogue1:AddDialogue("You cannot touch this black box (INTANGIBLE).")
-                newDialogue1:AddDialogue("It shows interaction without physical collision.")
-                newDialogue1:AddDialogue("It is under your sprite (due to being before later).")
-                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
-            elseif index = 2
-                // A cyan box that has no collision
-                // Interacts via MAP-TRANSITION
-                npcList:Get(index):CreateInteractable("Back to Castle", "clear", 0, 4, false)
-                npcList:Get(index):LoadFilledRectangle(32,32,color:Cyan())
-                MapTransitionBehavior newTransition1
-                newTransition1:SetTransition(map1, maps:CASTLE_MAP, npcList)
-                newTransition1:SetCoordinates(16, 12)
+//        ***********************************************************************/
+//        INTERACTABLES CODE (MOVE THIS ALL TO A FUNCTION, (CTRL + /) TO UNCOMMENT), MOVED BY ALBERT
+//        ***********************************************************************/
+//
+//        /***********************************************************************
+//        Start test section
+//        * It should load the FOREST with 3 objects with different interactions
+//        * PLAYER should use [SPACE] to trigger behaviors
+//          1. Black box, no collision    (dialogue)
+//            - 3 Lines of dialogue
+//          2. Clear box, with collision  (dialogue)
+//            - 2 Lines of dialogue (overlaps the chair in the map)
+//          3. White box, no collision    (transition)
+//            - Transitions to CASTLE
+//                                                                  -Ryan
+//        ***********************************************************************/
+//
+//        // Add INTERACTABLEs to the game (Currently 3)
+//        // * This part is currently HARD-CODED for testing
+//        // * Likely parse a JSON file of INTERACTABLEs info
+//        // * Could store the INTERACTABLE LIST with each map (Edit Map.quorum)
+//        integer index = 0
+//        repeat until index = 3
+//            // Create a new INTERACTABLE to add to the LIST
+//            Interactable fillerInteractable
+//            npcList:Add(fillerInteractable)
+//			
+//            // Hard-Coded Objects to add for testing
+//            if index = 0
+//                // A clear box overlapping the CHAIR in the MAP
+//                // Interacts via DIALOGUE
+//                npcList:Get(index):CreateInteractable("Wooden Chair", "clear", 11, 5.5, true)
+//                DialogueBehavior newDialogue1
+//                newDialogue1:AddDialogue("There is a chair infront of you.")
+//                newDialogue1:AddDialogue("It is TANGIBLE.")
+//                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
+//            elseif index = 1
+//                // A black box that has no collision
+//                // Interacts via DIALOGUE
+//                npcList:Get(index):CreateInteractable("Black Box", "default", 10, 4, false)
+//                DialogueBehavior newDialogue1
+//                newDialogue1:AddDialogue("You cannot touch this black box (INTANGIBLE).")
+//                newDialogue1:AddDialogue("It shows interaction without physical collision.")
+//                newDialogue1:AddDialogue("It is under your sprite (due to being before later).")
+//                npcList:Get(index):SetInteractableBehavior(newDialogue1, "dialogue")
+//            elseif index = 2
+//                // A cyan box that has no collision
+//                // Interacts via MAP-TRANSITION
+//                npcList:Get(index):CreateInteractable("Back to Castle", "clear", 0, 4, false)
+//                npcList:Get(index):LoadFilledRectangle(32,32,color:Cyan())
+//                MapTransitionBehavior newTransition1
+//                newTransition1:SetTransition(map1, maps:CASTLE_MAP, npcList)
+//                newTransition1:SetCoordinates(16, 12)
 
 //                // Test Section of adding INTERACTABLEs to the new MAP
 //                Interactable newInteractable
@@ -220,40 +337,33 @@ class Main is Game, CollisionListener2D
 //
 //                newInteractable:SetInteractableBehavior(newTransition2, "transition")
 //                newTransition1:AddNPC(newInteractable)
+//
+//                npcList:Get(index):SetInteractableBehavior(newTransition1, "transition")
+//            end
+//			
+//            // Add the INTERACTABLEs to the game
+//            Add(npcList:Get(index))
+//            AddKeyboardListener(npcList:Get(index))
+//            index = index + 1
+//        end
+//		
+//        // Add the PLAYER after everything to be in the foreground
+//        Add(player1:playerSprite)
+//
+//        // Add the above layers
+//        map1:loadAboveLayer(maps:FOREST_MAP)
+//        Add(map1:aboveLayer)
+//		
+//        // Set the camera
+//        camera = GetCamera2D()
+//        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
+//        /***********************************************************************
+//        End test Section
+//        ***********************************************************************/
 
-                npcList:Get(index):SetInteractableBehavior(newTransition1, "transition")
-            end
-			
-            // Add the INTERACTABLEs to the game
-            Add(npcList:Get(index))
-            AddKeyboardListener(npcList:Get(index))
-            index = index + 1
-        end
-		
-        // Add the PLAYER after everything to be in the foreground
-        Add(player1:playerSprite)
 
-        // Add the above layers
-        map1:loadAboveLayer(maps:FOREST_MAP)
-        Add(map1:aboveLayer)
-		
-        // Set the camera
-        camera = GetCamera2D()
-        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
-        /***********************************************************************
-        End test Section
-        ***********************************************************************/
-    end
-
-    action Update(number seconds)
-
-        // Check if Behaviors are queued
-        behaviorQueue:Update(seconds)
-
-        // Necessary for removing unneeded objects
-        repeat until removalArray:IsEmpty()
-            Remove(removalArray:RemoveFromFront())
-        end
+//--------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
 
     /**********************************************************************
         TESTING RYAN'S LOGIC - used to accept player input
@@ -310,6 +420,9 @@ class Main is Game, CollisionListener2D
         END OF PLAYER INPUT LOGIC
     ***********************************************************************/  
 	
+
+//--------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
 
     /**********************************************************************
     More sample animations - not finished 
@@ -386,123 +499,3 @@ class Main is Game, CollisionListener2D
         
         testAnimation:girl:SetPosition(newX,newY)
     */
-    
-    end
-	
-    /***********************************************************************
-        END Sprite Animation
-    ***********************************************************************/
-	  
-    action AddBehavior(Behavior behavior)
-        behaviorQueue:AddBehavior(behavior)
-    end
-
-    action AddToRemove(Item2D item)
-        removalArray:Add(item)
-    end
-
-    action InitializeMap(Map currMap, Text mapName)
-        EnablePhysics2D(true)
-        currMap:loadMap(mapName)
-        currMap:loadCollisionLayer(mapName)
-        Add(currMap:testMap)
-        i = 0
-        repeat currMap:collisions:GetSize() times
-            Add(currMap:collisions:Get(i))
-            i = i + 1
-        end
-		
-    end
-
-    action InitializePlayer(Player player)
-        player:DrawPlayer()
-        player:playerSprite:EnablePhysics(true)
-        player:playerSprite:CanRotate(false)
-        player:playerSprite:SetResponsive()
-        player:playerSprite:SetName("player")
-    end
-
-    action BeginCollision(CollisionEvent2D event)
-        output "OW!"
-//        CheckForInteraction(event, true)
-    end
-	
-    action FinishCollision(CollisionEvent2D event)
-//        CheckForInteraction(event, false)
-    end
-
-
-
-    // This action checks if the collision involes the player
-    // and an Interactable Object.  If so, it toggles the
-    // interactable such that presing [SPACE] should proceed
-    // with the given dialoge.
-    // * The checking is based on the NAME of the DRAWABLES
-    //   > Interactable MUST inherit Drawable for type casting
-   action CheckForInteraction(CollisionEvent2D event, boolean entering)
-    /***********************************************************************
-    Collision detection for Interactable Objects (NPCs, Objects, etc.)
-    It is currently commented-out so that nothing breaks
-                                                        - Ryan
-    ***********************************************************************/
-///*      MAIN INTERACTABLE ACITON - ALLOWS FOR INTERACTIONS W/ PLAYER
-        // Variable used to determine if interaction is available
-        boolean interaction = false
-        boolean alreadyInteracting = false
-
-        // Cast collision items as Drawables to use them
-        Drawable itemA = cast(Drawable, event:GetItemA())
-        Drawable itemB = cast(Drawable, event:GetItemB())
-
-        // If PLAYER is in front (added later), swap items
-        if itemB:GetName() = "player"
-            Drawable itemC = itemB
-            itemB = itemA
-            itemA = itemC
-        end
-
-        // Check if PLAYER & INTERACTABLE
-        if itemA:GetName() = "player"
-            if itemB:GetName() = "interactable"
-                interaction = true
-            end
-        end
-        
-        // If interaction is available, enable/disable it
-        if interaction
-            Interactable newItemB = cast(Interactable, itemB)
-
-            i = 0
-            repeat npcList:GetSize() times
-                if npcList:Get(i):IsInteracting()
-                    alreadyInteracting = true
-                end
-                i = i + 1
-            end
-
-            if entering and not alreadyInteracting
-                newItemB:ToggleInteraction()
-            elseif not entering
-                if newItemB:IsInteracting()
-                    output ""
-                    newItemB:ToggleInteraction()
-                end
-            end
-        end
-    /***********************************************************************
-    End of Ryan's Testing Section
-    ***********************************************************************/
-    end
-
-    action SetMap(Map newMap)
-        map1 = newMap
-    end
-
-    action GetPlayer() returns Player
-        return player1
-    end
-
-    action SetNpcList(Array<Interactable> newList)
-        npcList = newList
-    end
-end
