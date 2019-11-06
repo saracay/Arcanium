@@ -39,22 +39,23 @@ class Spell is Attack
 
             spellData = currentSpell:GetObject("appliedStatusCodes")
             i = 0
-            Status currentStatus
             repeat while (i < spellData:GetSize())
-                currentStatus:FillStatus(spellData:Get(i):GetValue():ParseInteger())
-                currentStatus:SetBaseDamage(cast(integer, GetBaseDamage()
-                 * currentStatus:GetBaseModifier()))
-                AddToAppliedStatuses(currentStatus)
+                Status appliedStatus
+                appliedStatus:FillStatus(spellData:Get(i):GetValue():ParseInteger())
+                appliedStatus:SetBaseDamage(cast(integer, GetBaseDamage()
+                 * appliedStatus:GetBaseModifier()))
+                AddToAppliedStatuses(appliedStatus)
                 i = i + 1
             end
 
             spellData = currentSpell:GetObject("curedStatusCodes")
             i = 0
             repeat while (i < spellData:GetSize())
-                currentStatus:FillStatus(spellData:Get(i):GetValue():ParseInteger())
-                currentStatus:SetBaseDamage(cast(integer, GetBaseDamage()
-                 * currentStatus:GetBaseModifier()))
-                AddToCuredStatuses(currentStatus)
+                Status curedStatus
+                curedStatus:FillStatus(spellData:Get(i):GetValue():ParseInteger())
+                curedStatus:SetBaseDamage(cast(integer, GetBaseDamage()
+                 * curedStatus:GetBaseModifier()))
+                AddToCuredStatuses(curedStatus)
                 i = i + 1
             end
         end

@@ -37,7 +37,7 @@ class Combatant
             if (attack is Physical)
                 Physical physicalAttack = cast(Physical, attack)
                 integer element = physicalAttack:GetElementalType()
-                if(element not= 0)
+                if (element not= 0)
                     damageModifier = currentElementsEffectiveness:Get(element - 1)
                 else
                     damageModifier = 1
@@ -169,7 +169,6 @@ class Combatant
         Status currentStatus
         repeat while (i < attack:GetAppliedStatuses():GetSize())
             currentStatus = attack:GetAppliedStatusesAtPosition(i)
-            output("currentStatus name attempting to apply is: " + currentStatus:GetName())
             if (ApplyStatus(currentStatus))
                 statusApplied = GetName() + " was inflicted with the status "
                  + currentStatus:GetName() + "."
@@ -189,6 +188,7 @@ class Combatant
                 statusApplied = GetName() + " had the status "
                  + currentStatus:GetName() + " removed."
                 statusChange:Add(statusApplied)
+                output(statusApplied)
             end
             i = i + 1
         end
@@ -278,7 +278,7 @@ class Combatant
             elementID = currentStatus:GetElementID()
 
             if (elementID / 1000000 = 7)
-                if(currentStatus:GetIsHealing())
+                if (currentStatus:GetIsHealing())
                     integer healReceived = 0
                     healReceived = currentStatus:GetBaseDamage()
                     if (currentHP + healReceived > maxHP)

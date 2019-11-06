@@ -39,22 +39,23 @@ class Physical is Attack
 
             physicalData = currentPhysical:GetObject("appliedStatusCodes")
             i = 0
-            Status currentStatus
             repeat while (i < physicalData:GetSize())
-                currentStatus:FillStatus(physicalData:Get(i):GetValue():ParseInteger())
-                currentStatus:SetBaseDamage(cast(integer, GetBaseDamage()
-                 * currentStatus:GetBaseModifier()))
-                AddToAppliedStatuses(currentStatus)
+                Status appliedStatus
+                appliedStatus:FillStatus(physicalData:Get(i):GetValue():ParseInteger())
+                appliedStatus:SetBaseDamage(cast(integer, GetBaseDamage()
+                 * appliedStatus:GetBaseModifier()))
+                AddToAppliedStatuses(appliedStatus)
                 i = i + 1
             end
 
             physicalData = currentPhysical:GetObject("curedStatusCodes")
             i = 0
             repeat while (i < physicalData:GetSize())
-                currentStatus:FillStatus(physicalData:Get(i):GetValue():ParseInteger())
-                currentStatus:SetBaseDamage(cast(integer, GetBaseDamage()
-                 * currentStatus:GetBaseModifier()))
-                AddToCuredStatuses(currentStatus)
+                Status curedStatus
+                curedStatus:FillStatus(physicalData:Get(i):GetValue():ParseInteger())
+                curedStatus:SetBaseDamage(cast(integer, GetBaseDamage()
+                 * curedStatus:GetBaseModifier()))
+                AddToCuredStatuses(curedStatus)
                 i = i + 1
             end
         end
