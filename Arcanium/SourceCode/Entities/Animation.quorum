@@ -5,8 +5,8 @@ use Libraries.Interface.Behaviors.Behavior
 
 class Animation
     public ImageSheet sheet
-    public Drawable girl
-    public Drawable spaceship
+    public Drawable sprite1
+    public Drawable sprite2
 
     integer frame = 1
     number xPos = 0
@@ -21,51 +21,22 @@ class Animation
         me:frame = frame
     end
 
-    action LoadImageSheet
-        sheet:Load("Assets/ImageSheets/girl.atlas")
+    action LoadImageSheet(text imgSheet)
+        sheet:Load("resources/" + imgSheet +".atlas")
     end 
 
-    action LoadImage
-        spaceship:Load("Assets/Sprites/alien.png")
+    action LoadImage(text img)
+        sprite2:Load("assets/" + img + ".png")
     end
 
-    action LoadFrame
-        girl:Load(sheet:GetDrawable("Girl frame 1"))
+    action LoadFrame(text frameImg)
+        sprite1:Load(sheet:GetDrawable(frameImg + " frame 1"))
     end
 
-    action ChangeFrame
+    action ChangeFrame(text frameImg)
         if frame > 3
             frame = 1
         end
-        girl:Load(sheet:GetDrawable("Girl frame " + frame)) 
+        sprite1:Load(sheet:GetDrawable(frameImg + " frame " + frame)) 
     end
-
-        action MoveDown(number y, number secs)
-    	me:secs = secs
-        xPos = spaceship:GetX()
-    	yPos = spaceship:GetY() - y * secs
-    	spaceship:SetPosition(xPos, yPos)
-    end
-
-    action MoveUp(number y, number secs)
-        me:secs = secs
-        xPos = spaceship:GetX()
-        yPos = spaceship:GetY() + y * secs
-        spaceship:SetPosition(xPos, yPos)
-    end
-
-    action MoveLeft(number x, number secs)
-        me:secs = secs
-        xPos = spaceship:GetX() - x * secs
-        yPos = spaceship:GetY()
-        spaceship:SetPosition(xPos, yPos)
-    end
-
-    action MoveRight(number x, number secs)
-        me:secs = secs
-        xPos = spaceship:GetX() + x * secs
-        yPos = spaceship:GetY()
-        spaceship:SetPosition(xPos, yPos)
-    end
-
 end
