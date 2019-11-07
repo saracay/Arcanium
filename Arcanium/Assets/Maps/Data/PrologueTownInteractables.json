@@ -1,0 +1,32 @@
+{
+    "interactables": [
+        {
+            "name": "Interactable Door",
+            "type": "dialogue",
+            "dialogue": [
+                "It's locked."
+            ]
+        },
+        {
+            "name": "Interactable Fountain",
+            "type": "dialogue",
+            "dialogue": [
+                "Birds gather on this fountain to bathe sometimes. You have a habit of chasing them away when they group up."
+            ]
+        },
+        {
+            "name": "Interactable Gravestone",
+            "type": "dialogue",
+            "dialogue": [
+                "You cannot make out any letters on the gravestone, so you cannot tell who died."
+            ]
+        },
+        {
+            "name": "Interactable House Door",
+            "type": "dialogue",
+            "dialogue": [
+                "This is your house. You've lived here for as long as you can remember."
+            ]
+        }
+    ]
+}
