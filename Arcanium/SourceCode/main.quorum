@@ -1,4 +1,9 @@
 use Libraries.Game.Game
+use Libraries.Game.GameDisplay
+use Libraries.Game.DesktopConfiguration
+use Libraries.Game.DesktopDisplay
+use Libraries.Game.GameDisplay 
+use Libraries.Game.ScreenResolution
 use Libraries.Game.Graphics.Label
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
@@ -20,6 +25,11 @@ class Main is Game, CollisionListener2D
 //==============================================================================
 //                             VARIABLE DECLARATION
 //==============================================================================    
+   
+    //Application Configurations
+    DesktopConfiguration deskConfig
+    DesktopDisplay deskDisplay
+    
     //Queue for storing subsequent Behaviors
     BehaviorQueue behaviorQueue
 
@@ -38,6 +48,7 @@ class Main is Game, CollisionListener2D
     Drawable testmap
     Drawable player
     Drawable box
+    Drawable background
     Color color   
 
     //For player movement
@@ -74,31 +85,23 @@ class Main is Game, CollisionListener2D
 
     action CreateGame
 
-        CombatTest()
-
+        //SetResolution()
+        CreateBackground()
         InitializeMap(map1, maps:FOREST_MAP)
         InitializePlayer(player1)
-        AddCollisionListener(me)
-        
-        // Add the above layers
-        map1:loadAboveLayer(maps:FOREST_MAP)
-        Add(map1:aboveLayer)
-	
-        // Load images for sample animations
-        /*test1:LoadImageSheet(spriteImgSheet)
-        test1:LoadFrame(spriteFrame)
-        Add(test1:sprite1)
-        test2:LoadImage(spriteImage)
-        Add(test2:sprite2)
-        test2:sprite2:Scale(0.25)*/
+        LoadAboveLayer(map1, maps:FOREST_MAP)
 
-
+        //==TEST CALLS==
+        //CombatTest()
+        //InitializeAnimTest()
     end
 
     action Update(number seconds)
 
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
+
+        PlayerMovement(seconds)
 
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
@@ -129,7 +132,12 @@ class Main is Game, CollisionListener2D
             Add(currMap:collisions:Get(i))
             i = i + 1
         end
-		
+	AddCollisionListener(me)	
+    end
+
+    action LoadAboveLayer(Map currMap, Text mapName)
+        currMap:loadAboveLayer(mapName)
+        Add(currMap:aboveLayer)
     end
 
     action InitializePlayer(Player player)
@@ -143,7 +151,60 @@ class Main is Game, CollisionListener2D
 
         //Sets camera onto player.
         camera = GetCamera2D()
-        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
+        camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
+        //camera:SetZoom(2)
+    end
+
+    action PlayerMovement(number seconds)
+         // Movement using WASD
+        // Get current location
+        newY = player1:playerSprite:GetY()
+        newX = player1:playerSprite:GetX()
+
+        // Add/Sub to both X and Y based on keys
+        if monitor:IsKeyPressed(keys:W)
+            newY = newY + plyrSpeed * seconds
+            
+            // for animation -- commented out for testing
+            /*newY = testAnimation:girl:GetY() + plyrSpeed * seconds
+            //for animation
+            if elapsedTime >= 1/fps
+                frame = frame + 1
+            if frame > 3
+                frame = 1 
+            end
+            testAnimation:ChangeFrame()
+            elapsedTime = elapsedTime - 1/fps
+            end*/
+        end
+        if monitor:IsKeyPressed(keys:S)
+            newY = newY - plyrSpeed * seconds
+        end
+        if monitor:IsKeyPressed(keys:D)
+            newX = newX + plyrSpeed * seconds
+        end
+        if monitor:IsKeyPressed(keys:A)
+            newX = newX - plyrSpeed * seconds
+        end
+
+        // Checks if PLAYER is out of bounds
+        if newY < 0
+            newY = 0
+        end
+        if newX < 0
+            newX = 0
+        end
+        if newY > map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
+            newY = map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
+        end
+        if newX > map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
+            newX = map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
+        end
+
+        player1:playerSprite:SetPosition(newX,newY)
+        camera = GetCamera2D()
+        camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
+
     end
 
     action CheckForInteraction(CollisionEvent2D event, boolean entering)
@@ -204,9 +265,6 @@ class Main is Game, CollisionListener2D
                 end
             end
         end
-    /***********************************************************************
-    End of Ryan's Testing Section
-    ***********************************************************************/
     end
 
     action SetMap(Map newMap)
@@ -219,6 +277,19 @@ class Main is Game, CollisionListener2D
 
     action SetNpcList(Array<Interactable> newList)
         npcList = newList
+    end
+
+    action SetResolution()
+        Array<ScreenResolution> array = GetAvailableResolutions()
+        ScreenResolution resolution = array:Get(21) //800x600 144hz
+        SetScreenResolution(resolution)
+    end
+
+    action CreateBackground()
+        Drawable background
+        background:LoadFilledRectangle(1920*2,1080*2)
+        background:SetPosition(-1920/2, -1080/2)
+        Add(background)
     end
 
 //==============================================================================
@@ -266,6 +337,16 @@ class Main is Game, CollisionListener2D
         ***********************************************************************/
     end
     
+    action InitializeAnimTest()
+        // Load images for sample animations
+        test1:LoadImageSheet(spriteImgSheet)
+        test1:LoadFrame(spriteFrame)
+        Add(test1:sprite1)
+        test2:LoadImage(spriteImage)
+        Add(test2:sprite2)
+        test2:sprite2:Scale(0.25)
+    end
+
 end
 
 //==============================================================================
