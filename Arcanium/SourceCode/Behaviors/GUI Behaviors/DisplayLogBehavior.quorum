@@ -55,8 +55,13 @@ class DisplayLogBehavior is Behavior
             counter = counter + 1
         end
 
-        game:SetFocus(buttons:Get(0))
-        labels:Get(0):SetPosition(10, displayBox:GetHeight() - 30)
+        if buttons:GetSize() > 0
+            game:SetFocus(buttons:Get(0))
+        end
+
+        if labels:GetSize() > 0
+            labels:Get(0):SetPosition(10, displayBox:GetHeight() - 30)
+        end
     end
     
     action Dispose
@@ -92,6 +97,13 @@ class DisplayLogBehavior is Behavior
     end
 
     action SetLog(Array<text> newLog)
-        log = newLog
+//        log = newLog
+        integer counter = 0
+
+        repeat while counter < newLog:GetSize()
+            log:Add(newLog:Get(counter))
+
+            counter = counter + 1
+        end
     end
 end

@@ -9,6 +9,29 @@ use Libraries.Compute.Random
 
 class AI 
 
+    /***************************************************************
+    Matt's note to Ean:
+
+    This AI class is mostly set up, at least in the general sense, but
+    needs to be edited some to meet our specific needs for now.
+    In particular, I believe these needs are: 
+
+        1.  All actions in this class probably need to return
+            an Attack object. The AI action needs to return an
+            Attack object to be used in the CombatEnemyTurnBehavior
+            class's Run action, and this Attack object will need
+            to be specifically obtained from the individual enemy
+            actions.
+
+        2.  Individual enemy actions need to access the possible
+            Attacks that the enemy type can use, currently they
+            are only set up with empty if-statements.
+
+        Naturally, feel free to message me via text or Discord if you
+        have any questions.
+
+                                                    - Matt
+    ***************************************************************/
     action AI(integer ID, Enemy actor)
         //get the enemy's current hp percent
         number percent = (actor:GetMaxHP() / actor:GetCurrentHP()) * 100

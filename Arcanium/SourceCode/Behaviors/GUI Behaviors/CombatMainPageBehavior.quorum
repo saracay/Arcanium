@@ -12,6 +12,7 @@ class CombatMainPageBehavior is Behavior, MainPage
 
     Game game = undefined
     Battle battle = undefined
+    BehaviorQueue behaviorQueue
     Array<Item2D> removalArray
     Array<Item2D> currentPage
     Array<Array <Item2D>> pages
@@ -295,6 +296,9 @@ class CombatMainPageBehavior is Behavior, MainPage
             if combatants:Get(counter) not= undefined
                 MenuButton button
                 CombatDamageTargetBehavior damageBehavior
+                damageBehavior:SetGame(game)
+                damageBehavior:SetRemovalArray(removalArray)
+                damageBehavior:SetBehaviorQueue(behaviorQueue)
                 damageBehavior:SetBattle(battle)
                 damageBehavior:SetMainPage(me)
                 damageBehavior:SetCaster(combatants:Get(0))
@@ -366,6 +370,9 @@ class CombatMainPageBehavior is Behavior, MainPage
 
         if combatants:Get(0) not= undefined
             CombatDamageTargetBehavior damageBehavior
+            damageBehavior:SetGame(game)
+            damageBehavior:SetRemovalArray(removalArray)
+            damageBehavior:SetBehaviorQueue(behaviorQueue)
             damageBehavior:SetBattle(battle)
             damageBehavior:SetMainPage(me)
             damageBehavior:SetCaster(combatants:Get(0))
@@ -465,6 +472,10 @@ class CombatMainPageBehavior is Behavior, MainPage
 
     action SetBattle(Battle newBattle)
         battle = newBattle
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
     end
 
     action SetRemovalArray(Array<Item2D> newArray)

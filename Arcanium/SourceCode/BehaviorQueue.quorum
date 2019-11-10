@@ -48,8 +48,10 @@ class BehaviorQueue
     end
 
     action StopBehaviors
-        currentBehavior:Dispose()
-        currentBehavior = undefined
+        if currentBehavior not= undefined
+            currentBehavior:Dispose()
+            currentBehavior = undefined
+        end
         queue:Empty()
     end
 end

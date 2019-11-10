@@ -113,75 +113,48 @@ class Battle is Level
         dialogueBackground:LoadFilledRectangle(800, 180, color:LightGray())
         game:Add(dialogueBackground)
 
-        PlayerTurn()
-    end
-
-    action UpdateStatus
-        integer counter = 0
-
-        Player player = cast(Player, combatants:Get(0))
-        playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
-
-        repeat while counter < statusWindows:GetSize()
-            if (combatants:Get(counter) not= undefined) and (not combatants:Get(counter):CheckDefeated(0))
-                statusInfo:Get(counter):SetText("Health: " + combatants:Get(counter):GetCurrentHP() + "/" + combatants:Get(counter):GetMaxHP())
-
-            elseif (combatants:Get(counter) not= undefined)
-                if counter = 0
-                    removalArray:Add(playerMana)
-                end
-
-                combatants:Set(counter, undefined)
-
-                removalArray:Add(statusWindows:Get(counter))
-                statusWindows:Set(counter, undefined)
-
-                removalArray:Add(statusInfo:Get(counter))
-                statusInfo:Set(counter, undefined)
-
-                removalArray:Add(sprites:Get(counter))
-                sprites:Set(counter, undefined)
-            end
-
-            counter = counter + 1
-        end
-    end
-
-    action PlayerTurn
         DisplayLogBehavior logBehavior
         logBehavior:SetGame(game)
         logBehavior:SetLog(log)
         logBehavior:SetRemovalArray(removalArray)
         behaviorQueue:AddBehavior(logBehavior)
 
-        CombatMainPageBehavior combatBehavior
-        combatBehavior:SetGame(game)
-        combatBehavior:SetRemovalArray(removalArray)
-        combatBehavior:SetBattle(me)
-        combatBehavior:SetMaxTokens(2)
-        combatBehavior:SetCombatants(combatants)
-        combatBehavior:SetSprites(sprites)
-        behaviorQueue:AddBehavior(combatBehavior)
+        PlayerTurn()
+    end
+
+    action UpdateStatus(Array<text> updateMessages)
+        CombatUpdateStatusBehavior behavior
+        behavior:SetGame(game)
+        behavior:SetRemovalArray(removalArray)
+        behavior:SetCombatants(combatants)
+        behavior:SetPlayerMana(playerMana)
+        behavior:SetStatusInfo(statusInfo)
+        behavior:SetStatusWindows(statusWindows)
+        behavior:SetSprites(sprites)
+        behavior:SetUpdateMessages(updateMessages)
+        behaviorQueue:AddBehavior(behavior)
+    end
+
+    action PlayerTurn
+        CombatMainPageBehavior behavior
+        behavior:SetGame(game)
+        behavior:SetBehaviorQueue(behaviorQueue)
+        behavior:SetRemovalArray(removalArray)
+        behavior:SetBattle(me)
+        behavior:SetMaxTokens(2)
+        behavior:SetCombatants(combatants)
+        behavior:SetSprites(sprites)
+        behaviorQueue:AddBehavior(behavior)
     end
 
     action EnemyTurn
-        counter = 1
-        Player player = cast(Player, combatants:Get(0))
-
-        repeat while counter < combatants:GetSize()
-            if combatants:Get(counter) not= undefined
-                Enemy enemy = cast(Enemy, combatants:Get(counter))
-                enemy:AI()
-                //Ean changed this part, currently only picks the first valid attack in array
-                player:ReceiveAttack(enemy:GetUsableAttacksAtPosition(0), combatants:Get(counter))
-            end
-
-            counter = counter + 1
-        end
-
-        player:SetCurrentMP(player:GetCurrentMP() + 1)
-        UpdateStatus()
-        PlayerTurn()
+        CombatEnemyTurnBehavior behavior
+        behavior:SetGame(game)
+        behavior:SetRemovalArray(removalArray)
+        behavior:SetBattle(me)
+        behavior:SetCombatants(combatants)
+        behavior:SetBehaviorQueue(behaviorQueue)
+        behaviorQueue:AddBehavior(behavior)
     end
 
     action GetCombatants returns Array<Combatant>

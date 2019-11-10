@@ -7,7 +7,7 @@ use Libraries.Game.Graphics.Color
 use Libraries.Containers.Array
 
 class MenuButton is Button, FocusListener
-
+// make MenuButton change focus when moused over
     Game game
     Array<Item2D> removalArray
     Color color

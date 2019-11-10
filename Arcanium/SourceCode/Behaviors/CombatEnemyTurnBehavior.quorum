@@ -1,0 +1,85 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.Game
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
+
+class CombatEnemyTurnBehavior is Behavior
+    
+    Game game
+    Battle battle
+    BehaviorQueue behaviorQueue
+    Array<Item2D> removalArray
+    Array<Combatant> combatants
+    boolean finished = false
+
+    action Run(BehaviorEvent event)
+        Player player = cast(Player, combatants:Get(0))
+        Array<text> updateMessages
+
+        integer counter = 1
+
+        repeat while counter < combatants:GetSize()
+            if combatants:Get(counter) not= undefined
+                Enemy enemy = cast(Enemy, combatants:Get(counter))
+
+                /***************************************************************
+                Matt's note to Ean:
+
+                This is the section where you should be testing around with
+                enemy AI. Generally speaking, the AI class should be called
+                (using the AI action), though it will need to be edited to return
+                the Attack object choosen by the enemy's AI. Then this returned
+                Attack object should be used for the ReceiveAttack action on the
+                target (for now, the target can just be the player).
+
+                Naturally, feel free to message me via text or Discord if you
+                have any questions.
+
+                                                                - Matt
+                ***************************************************************/
+                enemy:AI()
+                //Ean changed this part, currently only picks the first valid attack in array
+                updateMessages = player:ReceiveAttack(enemy:GetUsableAttacksAtPosition(0), combatants:Get(counter))
+                battle:UpdateStatus(updateMessages)
+
+                DisplayLogBehavior updateMessage
+                updateMessage:SetGame(game)
+                updateMessage:SetLog(updateMessages)
+                updateMessage:SetRemovalArray(removalArray)
+                behaviorQueue:AddBehavior(updateMessage)
+            end
+
+            counter = counter + 1
+        end
+
+        player:SetCurrentMP(player:GetCurrentMP() + 1)
+
+        battle:PlayerTurn()
+        finished = true
+    end
+
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
+    end
+
+    action SetCombatants(Array<Combatant> newArray)
+        combatants = newArray
+    end
+end

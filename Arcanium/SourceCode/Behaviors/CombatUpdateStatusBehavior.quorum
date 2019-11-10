@@ -1,0 +1,107 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Game
+use Libraries.Interface.Item2D
+use Libraries.Game.Graphics.Label
+use Libraries.Game.Graphics.Drawable
+
+class CombatUpdateStatusBehavior is Behavior
+    
+    Game game
+    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue
+    Array<Combatant> combatants
+    Label playerMana
+    Array<Label> statusInfo
+    Array<Drawable> statusWindows
+    Array<Drawable> sprites
+    Array<text> updateMessages
+    boolean finished = false
+
+    action Run(BehaviorEvent event)
+        integer counter = 0
+
+        Player player = cast(Player, combatants:Get(0))
+        playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
+
+        repeat while counter < statusWindows:GetSize()
+            if (combatants:Get(counter) not= undefined) and (not combatants:Get(counter):CheckDefeated(0))
+                statusInfo:Get(counter):SetText("Health: " + combatants:Get(counter):GetCurrentHP() + "/" + combatants:Get(counter):GetMaxHP())
+            elseif (combatants:Get(counter) not= undefined)
+                if counter = 0
+                    removalArray:Add(playerMana)
+                else
+                    player:AddExperience(combatants:Get(counter):GetExperienceValue(), combatants:Get(counter):GetLevel())
+                    updateMessages:Add(player:GetName() + " defeated Level " + combatants:Get(counter):GetLevel() + " " + combatants:Get(counter):GetName() 
+                                            + " and earned " + combatants:Get(counter):GetExperienceValue() + " Experience!")
+                end
+
+                combatants:Set(counter, undefined)
+
+                removalArray:Add(statusWindows:Get(counter))
+                statusWindows:Set(counter, undefined)
+
+                removalArray:Add(statusInfo:Get(counter))
+                statusInfo:Set(counter, undefined)
+
+                removalArray:Add(sprites:Get(counter))
+                sprites:Set(counter, undefined)
+            end
+
+            counter = counter + 1
+        end
+
+        DisplayLogBehavior updateMessage
+        updateMessage:SetGame(game)
+        updateMessage:SetLog(updateMessages)
+        updateMessage:SetRemovalArray(removalArray)
+        behaviorQueue:AddBehavior(updateMessage)
+
+        if combatants:Get(0) = undefined
+            // player defeated, trigger game over
+        end
+
+        finished = true
+    end
+
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
+    end
+
+    action SetCombatants(Array<Combatant> newArray)
+        combatants = newArray
+    end
+
+    action SetPlayerMana(Label newLabel)
+        playerMana = newLabel
+    end
+
+    action SetStatusInfo(Array<Label> newArray)
+        statusInfo = newArray
+    end
+
+    action SetStatusWindows(Array<Drawable> newArray)
+        statusWindows = newArray
+    end
+
+    action SetSprites(Array<Drawable> newArray)
+        sprites = newArray
+    end
+
+    action SetUpdateMessages(Array<text> newArray)
+        updateMessages = newArray
+    end
+end

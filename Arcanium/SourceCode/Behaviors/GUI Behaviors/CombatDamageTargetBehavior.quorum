@@ -1,9 +1,14 @@
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
 use Libraries.Containers.Array
+use Libraries.Game.Game
+use Libraries.Interface.Item2D
 
 class CombatDamageTargetBehavior is Behavior
 
+    Game game
+    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue
     Battle battle
     CombatMainPageBehavior mainPage
     integer spellID = 0
@@ -28,15 +33,35 @@ output "Spell:       " + spell:GetName()
 output "Base Damage: " + spell:GetBaseDamage()
 output "MultiTarget: " + spell:GetMultiTarget()
 output ""
-                    targets:Get(counter):ReceiveAttack(spell, caster)
+
+                    Array<text> emptyArray
+                    battle:UpdateStatus(emptyArray)
+
+                    Array<text> updateMessages = targets:Get(counter):ReceiveAttack(spell, caster)
+                    DisplayLogBehavior updateMessage
+                    updateMessage:SetGame(game)
+                    updateMessage:SetLog(updateMessages)
+                    updateMessage:SetRemovalArray(removalArray)
+                    behaviorQueue:AddBehavior(updateMessage)
                 end
 
                 counter = counter + 1
             end
         end
 
-        battle:UpdateStatus()
         mainPage:SetFinished(true)
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
     end
 
     action SetBattle(Battle newBattle)
