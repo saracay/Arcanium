@@ -18,36 +18,20 @@ class CombatEnemyTurnBehavior is Behavior
         Array<text> updateMessages
 
         integer counter = 1
+        AI enemyAI
 
         repeat while counter < combatants:GetSize()
             if combatants:Get(counter) not= undefined
                 Enemy enemy = cast(Enemy, combatants:Get(counter))
 
-                /***************************************************************
-                Matt's note to Ean:
-
-                This is the section where you should be testing around with
-                enemy AI. Generally speaking, the AI class should be called
-                (using the AI action), though it will need to be edited to return
-                the Attack object choosen by the enemy's AI. Then this returned
-                Attack object should be used for the ReceiveAttack action on the
-                target (for now, the target can just be the player).
-
-                Naturally, feel free to message me via text or Discord if you
-                have any questions.
-
-                                                                - Matt
-                ***************************************************************/
-                enemy:AI()
-                //Ean changed this part, currently only picks the first valid attack in array
-                updateMessages = player:ReceiveAttack(enemy:GetUsableAttacksAtPosition(0), combatants:Get(counter))
+                enemyAI:AI(counter, combatants)
                 battle:UpdateStatus(updateMessages)
 
-                DisplayLogBehavior updateMessage
-                updateMessage:SetGame(game)
-                updateMessage:SetLog(updateMessages)
-                updateMessage:SetRemovalArray(removalArray)
-                behaviorQueue:AddBehavior(updateMessage)
+//                DisplayLogBehavior updateMessage
+//                updateMessage:SetGame(game)
+//                updateMessage:SetLog(updateMessages)
+//                updateMessage:SetRemovalArray(removalArray)
+//                behaviorQueue:AddBehavior(updateMessage)
             end
 
             counter = counter + 1
