@@ -39,4 +39,11 @@ class Animation
         end
         sprite1:Load(sheet:GetDrawable(frameImg + " frame " + frame)) 
     end
+
+    action FireSpell
+        if frame > 3
+            frame = 1
+        end
+        sprite1:Load(sheet:GetDrawable("Fireball frame " + frame))
+    end
 end
