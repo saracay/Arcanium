@@ -47,7 +47,7 @@
     {
       "spellID": 9000010,
       "name": "Heal",
-      "baseDamage": 100,
+      "baseDamage": 250,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": false,
@@ -146,8 +146,8 @@
     {
       "spellID": 9011000,
       "name": "Ice Sphere",
-      "baseDamage": 150,
-      "appliedStatusCodes": [],
+      "baseDamage": 175,
+      "appliedStatusCodes": [6],
       "curedStatusCodes": [],
       "multiTarget": false,
       "canHeal": false,
@@ -156,13 +156,13 @@
     },
     {
       "spellID": 9010100,
-      "name": "Protective Bubble",
-      "baseDamage": 0,
+      "name": "Chilling Wind",
+      "baseDamage": 125,
       "appliedStatusCodes": [6],
       "curedStatusCodes": [],
-      "multiTarget": false,
+      "multiTarget": true,
       "canHeal": false,
-      "canDamage": false,
+      "canDamage": true,
       "manaCost": 2
     },
     {
@@ -170,7 +170,7 @@
       "name": "Cleanse",
       "baseDamage": 0,
       "appliedStatusCodes": [],
-      "curedStatusCodes": [1, 2, 3, 4, 5, 8, 14],
+      "curedStatusCodes": [1, 2, 3, 4, 5, 8, 14, 15],
       "multiTarget": false,
       "canHeal": false,
       "canDamage": false,
@@ -2303,8 +2303,8 @@
   "physicals": [
     {
       "physicalID": 8000000,
-      "name": "TestPhysical",
-      "baseDamage": 1,
+      "name": "Bite",
+      "baseDamage": 100,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": false,
@@ -2325,9 +2325,9 @@
     },
     {
       "physicalID": 8000010,
-      "name": "Big Slash",
+      "name": "Cleave",
       "baseDamage": 300,
-      "appliedStatusCodes": [],
+      "appliedStatusCodes": [15],
       "curedStatusCodes": [],
       "multiTarget": false,
       "canHeal": false,
@@ -2347,7 +2347,7 @@
     },
     {
       "physicalID": 8000100,
-      "name": "Medkit",
+      "name": "Healing Potion",
       "baseDamage": 200,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
@@ -2369,8 +2369,52 @@
     },
     {
       "physicalID": 8000110,
-      "name": "Cower",
+      "name": "Intimidate",
+      "baseDamage": 20,
+      "appliedStatusCodes": [16],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    },
+    {
+      "physicalID": 8000111,
+      "name": "Maim",
+      "baseDamage": 150,
+      "appliedStatusCodes": [5, 15],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    },
+    {
+      "physicalID": 8001000,
+      "name": "Encourage",
       "baseDamage": 0,
+      "appliedStatusCodes": [17],
+      "curedStatusCodes": [9, 10, 16],
+      "multiTarget": true,
+      "canHeal": false,
+      "canDamage": false,
+      "elementalType": 0
+    },
+    {
+      "physicalID": 8001001,
+      "name": "Berserk Charge",
+      "baseDamage": 500,
+      "appliedStatusCodes": [16],
+      "curedStatusCodes": [],
+      "multiTarget": false,
+      "canHeal": false,
+      "canDamage": true,
+      "elementalType": 0
+    },
+    {
+      "physicalID": 8001010,
+      "name": "Lunge",
+      "baseDamage": 50,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": false,

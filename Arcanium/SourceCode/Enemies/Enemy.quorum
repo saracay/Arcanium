@@ -4,7 +4,8 @@ use Libraries.System.File
 
 class Enemy is Combatant
 
-    Array<Attack> usableAttacks    //array of attacks that the enemy can use
+    integer itemUseCount = 0        //total # of times items can be used, if the enemy has any
+    Array<integer> attackCooldowns  //array of # of turns needed before an attack can be used again
 
     /*Parse through the JSON to find an enemy with the given name and 
     use that information to fill out the enemy's fields*/    
@@ -36,6 +37,7 @@ class Enemy is Combatant
             SetExperienceValue(currentEnemy:GetValue("experienceValue"):ParseInteger())
             SetLevel(currentEnemy:GetValue("level"):ParseInteger())
             SetCurrentAttack(currentEnemy:GetValue("currentAttack"):ParseNumber())
+            SetItemUseCount(currentEnemy:GetValue("itemUseCount"):ParseInteger())
 
             enemyData = currentEnemy:GetObject("currentElementsEffectiveness")
             i = 0
@@ -45,41 +47,36 @@ class Enemy is Combatant
                 i = i + 1
             end
 
-            enemyData = currentEnemy:GetObject("usableAttacks")
+            enemyData = currentEnemy:GetObject("attackCooldowns")
             i = 0
-            integer attackID = 0
             repeat while (i < enemyData:GetSize())
-                attackID = enemyData:Get(i):GetValue():ParseInteger()
-                if (attackID / 1000000 = 9)
-                    Spell currentSpell
-                    currentSpell:FillSpell(attackID)
-                    usableAttacks:Add(currentSpell)
-                else
-                    Physical currentPhysical
-                    currentPhysical:FillPhysical(attackID)
-                    usableAttacks:Add(currentPhysical)
-                end
+                AddToAttackCooldowns(enemyData:Get(i):GetValue():ParseInteger())
                 i = i + 1
             end
         end
-    end
-
-    action AI
     end
 
 /*******************************************************************************
                     Getters and Setters Below This Point
 *******************************************************************************/
 
-    action AddToUsableAttacks(Attack newUsableAttack)
-        usableAttacks:Add(newUsableAttack)
+    action SetItemUseCount(integer newItemUseCount)
+        itemUseCount = newItemUseCount
     end
 
-    action SetUsableAttacksAtPosition(integer position, Attack newUsableAttack)
-        usableAttacks:Set(position, newUsableAttack)
+    action GetItemUseCount() returns integer
+        return itemUseCount
     end
 
-    action GetUsableAttacksAtPosition(integer position) returns Attack
-        return usableAttacks:Get(position)
+    action SetAttackCooldownsAtPosition(integer position, integer newAttackCooldown)
+        attackCooldowns:Set(position, newAttackCooldown)
+    end
+
+    action GetAttackCooldownsAtPosition(integer position) returns integer
+        return attackCooldowns:Get(position)
+    end
+
+    action AddToAttackCooldowns(integer newAttackCooldown)
+        attackCooldowns:Add(newAttackCooldown)
     end
 end

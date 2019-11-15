@@ -7,7 +7,7 @@
       "modifier": 0.25,
       "applicationChance": 0.2,
       "isHealing": false,
-      "effectivenessStatModifiers": [0.9, 1.2, 1, 1, 1, 1],
+      "effectivenessStatModifiers": [1.2, 0.9, 1, 1, 1, 1],
       "turnsAffected": 3
     },
     {
@@ -17,7 +17,7 @@
       "modifier": 0.5,
       "applicationChance": 0.6,
       "isHealing": false,
-      "effectivenessStatModifiers": [0.8, 1.2, 1, 1, 1, 1],
+      "effectivenessStatModifiers": [1.3, 0.8, 1, 1, 1, 1],
       "turnsAffected": 3
     },
     {
@@ -47,17 +47,17 @@
       "modifier": 1,
       "applicationChance": 0.3,
       "isHealing": false,
-      "effectivenessStatModifiers": [0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
+      "effectivenessStatModifiers": [1.2, 1.2, 1.2, 1.2, 1.2, 1.2],
       "turnsAffected": 3
     },
     {
       "statusID": 6,
       "elementID": 6000000,
-      "name": "Bubble",
+      "name": "Frozen",
       "modifier": 1,
       "applicationChance": 1.0,
       "isHealing": false,
-      "effectivenessStatModifiers": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 1
     },
     {
@@ -107,7 +107,7 @@
       "modifier": 1,
       "applicationChance": 1,
       "isHealing": false,
-      "effectivenessStatModifiers": [1.5, 1.5, 1.5, 1.5, 1.5, 1.5],
+      "effectivenessStatModifiers": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
       "turnsAffected": 5
     },
     {
@@ -137,8 +137,38 @@
       "modifier": 1,
       "applicationChance": 1,
       "isHealing": false,
-      "effectivenessStatModifiers": [0.7, 0.7, 0.7, 0.7, 0.7, 0.7],
+      "effectivenessStatModifiers": [1.3, 1.3, 1.3, 1.3, 1.3, 1.3],
       "turnsAffected": 2
+    },
+    {
+      "statusID": 15,
+      "elementID": 7000000,
+      "name": "Bleed",
+      "modifier": 0.25,
+      "applicationChance": 0.5,
+      "isHealing": false,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
+      "turnsAffected": 3
+    },
+    {
+      "statusID": 16,
+      "elementID": 6000000,
+      "name": "Fright",
+      "modifier": 0.75,
+      "applicationChance": 1,
+      "isHealing": false,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
+      "turnsAffected": 3
+    },
+    {
+      "statusID": 17,
+      "elementID": 6000000,
+      "name": "Encourage",
+      "modifier": 1.5,
+      "applicationChance": 1,
+      "isHealing": false,
+      "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
+      "turnsAffected": 3
     }
   ]
 }

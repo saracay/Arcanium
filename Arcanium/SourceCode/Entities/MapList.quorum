@@ -8,6 +8,7 @@ class MapList
     public text CASTLE_MAP = "Castle"
     public text LIBRARY_MAP = "Library"
     public text FOREST_CLEARING_MAP = "ForestClearing"
+    public text FOREST_PATH_1_MAP = "ForestPath1"
     public text PROLOGUE_TOWN_MAP = "PrologueTown"
     public text RUINED_TOWN_MAP = "RuinedTown"
 
@@ -21,6 +22,7 @@ class MapList
         ALL_MAPS:Add(CASTLE_MAP)
         ALL_MAPS:Add(LIBRARY_MAP)
         ALL_MAPS:Add(FOREST_CLEARING_MAP)
+        ALL_MAPS:Add(FOREST_PATH_1_MAP)
         ALL_MAPS:Add(PROLOGUE_TOWN_MAP)
         ALL_MAPS:Add(RUINED_TOWN_MAP)
         

@@ -136,6 +136,10 @@ class Main is Game, CollisionListener2D
 //                             CUSTOM ACTIONS
 //==============================================================================
 	  
+    action AddToRemove(Item2D item)
+        removalArray:Add(item)
+    end
+
     action InitializeMap(Map currMap, Text mapName)
     //Loads map image, collision, and adds it to layer.
         EnablePhysics2D(true)
