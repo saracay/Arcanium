@@ -8,6 +8,8 @@ use Libraries.Game.Graphics.Label
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
 use Libraries.Game.InputMonitor
+use Libraries.Game.InputSet
+use Libraries.Game.InputTable
 use Libraries.Game.Collision.Shapes.CollisionShape2D
 use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Interface.Events.CollisionListener2D
@@ -58,6 +60,16 @@ class Main is Game, CollisionListener2D
     KeyboardEvent keys
     InputMonitor monitor
 
+    //Input Sets
+    InputTable controlTable
+    InputSet upButton
+    InputSet downButton
+    InputSet leftButton
+    InputSet rightButton
+    InputSet selectButton
+    InputSet backButton
+    InputSet menuButton
+
     //Map Names
     //TO-DO: Export this in the future to a file that we can directly reference in this file
     MapList maps
@@ -88,6 +100,13 @@ class Main is Game, CollisionListener2D
 
     action CreateGame
 
+    upButton:SetKeyboardInput(keys:W)
+    downButton:SetKeyboardInput(keys:S)
+    leftButton:SetKeyboardInput(keys:A)
+    rightButton:SetKeyboardInput(keys:D)
+    selectButton:SetKeyboardInput(keys:SPACE)
+    backButton:SetKeyboardInput(keys:Q)
+    menuButton:SetKeyboardInput(keys:I)
         //SetResolution()
 //        CreateBackground()
 //        InitializeMap(map1, maps:FOREST_MAP)
@@ -286,6 +305,17 @@ class Main is Game, CollisionListener2D
         background:LoadFilledRectangle(1920*2,1080*2)
         background:SetPosition(-1920/2, -1080/2)
         Add(background)
+    end
+
+//==============================================================================
+//                          Input Rebinding
+//==============================================================================
+
+    action RebindKey(InputSet in)
+        KeyboardEvent key
+        repeat until key:keyCode not= 0
+        end
+        in:SetKeyboardInput(key:keyCode)
     end
 
 //==============================================================================
