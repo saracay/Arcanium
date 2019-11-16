@@ -18,11 +18,14 @@ class CombatUpdateStatusBehavior is Behavior
     Array<Drawable> sprites
     Array<text> updateMessages
     boolean finished = false
+    Player player
+
 
     action Run(BehaviorEvent event)
+
+        player = cast(Player, combatants:Get(0))
         integer counter = 0
 
-        Player player = cast(Player, combatants:Get(0))
         playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
 
         repeat while counter < statusWindows:GetSize()
@@ -58,11 +61,24 @@ class CombatUpdateStatusBehavior is Behavior
         updateMessage:SetRemovalArray(removalArray)
         behaviorQueue:AddBehavior(updateMessage)
 
-        if combatants:Get(0) = undefined
-            // player defeated, trigger game over
-        end
-
         finished = true
+    end
+
+    action Dispose
+        if combatants:Get(0) = undefined
+            behaviorQueue:StopBehaviors()
+
+            Array<text> gameOver
+            gameOver:Add(player:GetName() + " was defeated! Game over!")
+
+            DisplayLogBehavior gameOverMessage
+            gameOverMessage:SetGame(game)
+            gameOverMessage:SetLog(gameOver)
+            gameOverMessage:SetRemovalArray(removalArray)
+            behaviorQueue:AddBehavior(gameOverMessage)
+
+//            need behavior to end game after displaying Game Over text
+        end
     end
 
     action IsFinished returns boolean

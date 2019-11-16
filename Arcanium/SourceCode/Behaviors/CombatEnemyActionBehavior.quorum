@@ -1,0 +1,71 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Game
+use Libraries.Interface.Item2D
+
+class CombatEnemyActionBehavior is Behavior
+
+    Game game
+    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue
+    Array<Combatant> combatants
+    integer enemyIndex = 0
+    boolean finished = false
+    CombatEnemyTurnBehavior previousBehavior
+
+    action Run(BehaviorEvent event)
+        if combatants:Get(enemyIndex) not= undefined
+            Enemy enemy = cast(Enemy, combatants:Get(enemyIndex))
+
+            AI enemyAI
+            enemyAI:SetGame(game)
+            enemyAI:SetRemovalArray(removalArray)
+            enemyAI:SetBehaviorQueue(behaviorQueue)
+            enemyAI:SetPreviousBehavior(me)
+
+            enemyAI:AI(enemyIndex, combatants)
+        end
+
+        Dispose()
+        finished = true
+    end
+
+    action Dispose
+        if enemyIndex = combatants:GetSize() - 1
+            previousBehavior:SetFinished(true)
+        end
+    end
+
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action SetFinished(boolean newBoolean)
+        finished = newBoolean
+    end
+
+    action SetPreviousBehavior(CombatEnemyTurnBehavior newBehavior)
+        previousBehavior = newBehavior
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
+    end
+
+    action SetCombatants(Array<Combatant> newArray)
+        combatants = newArray
+    end
+
+    action SetEnemyIndex(integer newIndex)
+        enemyIndex = newIndex
+    end
+end

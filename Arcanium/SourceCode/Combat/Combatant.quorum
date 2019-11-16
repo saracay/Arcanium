@@ -80,10 +80,10 @@ class Combatant
         end
 
         //If target dies from the hit don't bother with status effects
-        if (CheckDefeated(damageReceived))
-            text defeated = GetName() + " was defeated!"
-            log:Add(defeated)
-        else
+        if (not CheckDefeated(damageReceived))
+//            text defeated = GetName() + " was defeated!"
+//            log:Add(defeated)
+//        else
             Array<text> statusResults = ApplyAttackStatuses(attack)
             Iterator<text> it = statusResults:GetIterator()
             repeat while (it:HasNext())
@@ -117,7 +117,7 @@ class Combatant
         end
         log:Add(incomingMove)
 
-        text incomingHeal = GetName() + " Received " + healReceived + " health!"
+        text incomingHeal = GetName() + " received " + healReceived + " health!"
         log:Add(incomingHeal)
 
         Array<text> statusResults = ApplyAttackStatuses(healMove)
@@ -163,20 +163,15 @@ class Combatant
     /*Apply/remove all status effects attached to a given attack*/
     action ApplyAttackStatuses(Attack attack) returns Array<text>
         Array<text> statusChange
-        text statusApplied = ""
 
         integer i = 0
         Status currentStatus
         repeat while (i < attack:GetAppliedStatuses():GetSize())
             currentStatus = attack:GetAppliedStatusesAtPosition(i)
             if (ApplyStatus(currentStatus))
-                statusApplied = GetName() + " was inflicted with the status "
-                 + currentStatus:GetName() + "."
-            else
-                statusApplied = GetName() + " resisted the status "
-                 + currentStatus:GetName() + "."
+                statusChange:Add(GetName() + " was inflicted with the status "
+                 + currentStatus:GetName() + "!")
             end
-            statusChange:Add(statusApplied)
             i = i + 1
         end
 
@@ -185,7 +180,7 @@ class Combatant
             currentStatus = attack:GetCuredStatusesAtPosition(i)
             if (RemoveStatus(currentStatus:GetStatusID()))
                 statusApplied = GetName() + " had the status "
-                 + currentStatus:GetName() + " removed."
+                 + currentStatus:GetName() + " removed!"
                 statusChange:Add(statusApplied)
             end
             i = i + 1

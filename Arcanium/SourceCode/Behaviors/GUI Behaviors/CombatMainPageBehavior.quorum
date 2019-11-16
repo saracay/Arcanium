@@ -7,6 +7,8 @@ use Libraries.Interface.Controls.Button
 use Libraries.Interface.Layouts.ManualLayout
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
+use Libraries.Containers.MultipleLineText
+use Libraries.Game.Graphics.Label
 
 class CombatMainPageBehavior is Behavior, MainPage
 
@@ -261,6 +263,18 @@ class CombatMainPageBehavior is Behavior, MainPage
             counter = counter + 1
         end
 
+//// create multiple labels (one for each line), but may be able to use "SetDescription" for screenreaders to be all in one focus
+//        Label currentSpell
+//        currentSpell:SetPosition(100, 100)
+//        MultipleLineText currentSpellText
+//        currentSpellText:Initialize("Current Spell:")
+//        currentSpellText = currentSpellText:Concatenate(currentSpellText:GetLineSeparator() + "Name: N/A")
+//        currentSpellText = currentSpellText:Concatenate(currentSpellText:GetLineSeparator() + "Base Damage: N/A")
+//        currentSpellText = currentSpellText:Concatenate(currentSpellText:GetLineSeparator() + "Mana Cost: N/A")
+//        currentSpellText = currentSpellText:Concatenate(currentSpellText:GetLineSeparator() + "Multi-target: N/A")
+//        currentSpell:SetText(currentSpellText:GetText())
+//        game:Add(currentSpell)
+
         fireButton:SetNextFocus(waterButton)
         fireButton:SetPreviousFocus(doneCombiningButton)
         waterButton:SetNextFocus(earthButton)
@@ -407,6 +421,9 @@ class CombatMainPageBehavior is Behavior, MainPage
         end
 
         CombatDamageTargetBehavior multiDamageBehavior
+        multiDamageBehavior:SetGame(game)
+        multiDamageBehavior:SetRemovalArray(removalArray)
+        multiDamageBehavior:SetBehaviorQueue(behaviorQueue)
         multiDamageBehavior:SetBattle(battle)
         multiDamageBehavior:SetMainPage(me)
         multiDamageBehavior:SetCaster(combatants:Get(0))
@@ -463,6 +480,8 @@ class CombatMainPageBehavior is Behavior, MainPage
             outerCounter = outerCounter + 1
         end
 
+        Array<text> emptyArray
+        battle:UpdateStatus(emptyArray)
         battle:EnemyTurn()
     end
 
