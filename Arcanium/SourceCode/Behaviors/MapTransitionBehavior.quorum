@@ -2,14 +2,13 @@
   Class for any Map Transitions
   Inherits from Behavior for modularity
 
-  Initialize with SetTransition(1, 2, 3)
+  Initialize with SetTransition(1, 2)
    1. MAP of the current map
    2. TEXT (name) of the map to transition to
-   3. ARRAY with the current INTERACTABLEs
 
   Set PLAYER's new position with SetCoordinates()
   Remove current MAP and load new MAP with Run()
-  * Also sets PLAYER in new position (default = (0,0))
+  * Also sets PLAYER in new position (defaults to center)
 **********************************************************/
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
@@ -22,82 +21,54 @@ class MapTransitionBehavior is Behavior
     GameStateManager manager            // Used to get MAIN
     Map currentMap                      // Current MAP
     text mapName = ""                   // New map name
-//    Array<Drawable> mapInteractables    // List of current INTERACTABLEs
-    Array<Interactable> npcList
-
-    // New player position
-    number playerX = 0
-    number playerY = 0
+    number playerX = 0                  // New Player X coordinate
+    number playerY = 0                  // New Player Y coordinate
 
     action Run(BehaviorEvent event)
         // Debugging output
-        output "Transition"
+        output "Transition to " + mapName
 
         // Get the MAIN for level loading
         Main main = cast(Main, manager:GetGame())
 
-        // Create a new MAP to load
+// ================ Ryan: Starting Changes ================
+        main:AddToRemove(main:GetMap():testMap)
+        main:AddToRemove(main:GetMap():aboveLayer)
+        i = 0
+        repeat main:GetMap():collisions:GetSize() times
+            main:AddToRemove(main:GetMap():collisions:Get(i))
+            i = i + 1
+        end
+        i = 0
+        repeat main:GetMap():interactables:GetSize() times
+            main:AddToRemove(main:GetMap():interactables:Get(i))
+            i = i + 1
+        end
+        i = 0
+        repeat main:GetMap():transitions:GetSize() times
+            main:AddToRemove(main:GetMap():transitions:Get(i))
+            i = i + 1
+        end
+        main:Remove(main:GetPlayer():playerSprite)
+        main:RemoveCollisionListener(main)
         Map nextMap
-        nextMap:loadMap(mapName)
-        nextMap:loadCollisionLayer(mapName)
-        // NOTE: these two SHOULD be loaded every single time, but they are currently commented out because not all maps have this data yet
-//        nextMap:loadInteractables(mapName)
-//        nextMap:loadMapTransitions(mapName)
-
-        // Add the drawables to the default layer
-        main:Add(nextMap:testMap) 
-
-        // Render all of the collision objects
-        i = 0
-        repeat nextMap:collisions:GetSize() times
-            main:Add(nextMap:collisions:Get(i))
-            i = i + 1
-        end
-
-        // if the map name exists in the array of maps, then also load in the above layer
-        if nextMap:inAboveMaps(mapName)
-            nextMap:loadAboveLayer(mapName)
-        end
-
-        // Remove the current MAP
-        main:AddToRemove(currentMap:testMap)
-
-        // Remove the current collsions
-        i = 0
-        repeat currentMap:collisions:GetSize() times
-            main:AddToRemove(currentMap:collisions:Get(i))
-            i = i + 1
-        end
-
-        // Remove the current interactables
-        i = 0
-        repeat currentMap:interactables:GetSize() times
-            main:AddToRemove(currentMap:interactables:Get(i))
-            i = i + 1
-        end
-
-        // Remove the current transitions
-        i = 0
-        repeat currentMap:transitions:GetSize() times
-            main:AddToRemove(currentMap:transitions:Get(i))
-            i = i + 1
-        end
-
-        // Add the new MAP + collisions + player
-        main:SetMap(nextMap)
-        main:GetPlayer():playerSprite:SetX(playerX * 32)
-        main:GetPlayer():playerSprite:SetY(playerY * 32)
-
-        // EDIT: Removed this because we no longer need the npcList for interactables
-        // ADD INTERACTABLES HERE
-//        i = 0
-//        repeat npcList:GetSize() times
-//            main:Add(npcList:Get(i))
-//            main:AddKeyboardListener(npcList:Get(i))
-//        end
-
-        //main:SetNpcList(npcList) Causes error, no method SetNpcList
+        main:InitializeMap(nextMap, mapName)
+        main:GetPlayer():playerSprite:EnablePhysics(true)
+        main:GetPlayer():playerSprite:CanRotate(false)
+        main:GetPlayer():playerSprite:SetResponsive()
+        main:GetPlayer():playerSprite:SetName("player")
         main:Add(main:GetPlayer():playerSprite)
+        if playerX = 0 and playerY = 0
+            main:GetPlayer():playerSprite:SetX(nextMap:testMap:GetWidth() / 2)
+            main:GetPlayer():playerSprite:SetY(nextMap:testMap:GetHeight() / 2)
+        else
+            main:GetPlayer():playerSprite:SetX(playerX * 32)
+            main:GetPlayer():playerSprite:SetY(playerY * 32)
+        end
+        main:LoadAboveLayer(nextMap, mapName)
+        main:SetMap(nextMap)
+// ================= Ryan: Ending Changes =================
+
     end
 
     // Initializer of MAPTRANSITIONBEHAVIOR 
@@ -106,19 +77,12 @@ class MapTransitionBehavior is Behavior
         currentMap = oldMap
         mapName = newName
 
-        output newName
-        output "in setTransition"
-//        mapInteractables = newList
+        output "<" + newName + "> set for MapTransition"
     end
 
     // Sets the PLAYER's new position
     action SetCoordinates(number newX, number newY)
         playerX = newX
         playerY = newY
-    end
-
-	// Add an INTERACTABLE to the LIST for the new MAP
-    action AddNPC(Interactable newNPC)
-        npcList:Add(newNPC)
     end
 end

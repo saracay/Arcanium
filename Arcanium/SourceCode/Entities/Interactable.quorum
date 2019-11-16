@@ -92,7 +92,7 @@ class Interactable is Drawable, KeyboardListener
 	
     // Switches the truth of currentlyInteracting
     // * If BEHAVIOR is DIALOGUE, reset to beginning
-    action ToggleInteraction(text interactableName)
+    action ToggleInteraction()
         if currentlyInteracting
             currentlyInteracting = false
             if currentBehavior is DialogueBehavior
@@ -102,7 +102,11 @@ class Interactable is Drawable, KeyboardListener
             end
         else
             currentlyInteracting = true
-            output "( Press [SPACE] to interact with " + interactableName + " )"
+            if typeOfBehavior = "transition"
+                output "( Press [SPACE] to travel to " + name + " )"
+            else
+                output "( Press [SPACE] to interact with " + name + " )"
+            end
         end
     end
 	
@@ -110,6 +114,9 @@ class Interactable is Drawable, KeyboardListener
     action PressedKey(KeyboardEvent event)
         if currentlyInteracting
             if event:keyCode = event:SPACE
+                if typeOfBehavior = "transition"
+                    currentlyInteracting = false
+                end
                 BehaviorEvent newEvent
                 currentBehavior:Run(newEvent)
             end
@@ -120,6 +127,11 @@ class Interactable is Drawable, KeyboardListener
     action SetInteractableBehavior(Behavior newBehavior, text behaviorType)
         currentBehavior = newBehavior
         typeOfBehavior = behaviorType
+        if typeOfBehavior = "combat"
+            InitiateCombatBehavior temp = cast(InitiateCombatBehavior, currentBehavior)
+            temp:SetInteractable(me)
+            currentBehavior = temp
+        end
     end
 
     // Creates a specific interactable behavior and then calls SetInteractableBehavior()
@@ -135,11 +147,10 @@ class Interactable is Drawable, KeyboardListener
         SetInteractableBehavior(temp, "dialogue")
     end
 
-    action CreateMapTransitionBehavior(Map oldMap, text newMapName)
+    action CreateMapTransitionBehavior(Map oldMap, text newMapName, number newX, number newY)
         MapTransitionBehavior temp
         temp:SetTransition(oldMap, newMapName)
-        temp:SetCoordinates(16, 12)
-
+        temp:SetCoordinates(newX, newY)
         SetInteractableBehavior(temp, "transition")
     end
 end

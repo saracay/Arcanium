@@ -21,7 +21,7 @@ use Libraries.Interface.Behaviors.Behavior
 use Libraries.Containers.Array
 use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.ImageSheet
-use Libraries.Game.Graphics.Camera      // Adds Camera
+use Libraries.Game.Graphics.Camera
 
 class Main is Game, CollisionListener2D
 //==============================================================================
@@ -89,6 +89,9 @@ class Main is Game, CollisionListener2D
     //For audio
     GameAudioManager audioManager
 
+    //For Transition to Combat
+    boolean inCombat = false
+
 //==============================================================================
 //                             PREBUILT ACTIONS
 //==============================================================================
@@ -107,6 +110,7 @@ class Main is Game, CollisionListener2D
     selectButton:SetKeyboardInput(keys:SPACE)
     backButton:SetKeyboardInput(keys:Q)
     menuButton:SetKeyboardInput(keys:I)
+
         //SetResolution()
 //        CreateBackground()
 //        InitializeMap(map1, maps:FOREST_MAP)
@@ -114,9 +118,10 @@ class Main is Game, CollisionListener2D
 //        LoadAboveLayer(map1, maps:FOREST_MAP)
 
         //==TEST CALLS==
-        CombatTest()
+        //CombatTest()
         //InitializeAnimTest()
-        //InitializeAudioTest()
+        InitializeAudioTest()
+        InitializeWhiteRoom()
     end
 
     action Update(number seconds)
@@ -124,22 +129,26 @@ class Main is Game, CollisionListener2D
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
 
-//        PlayerMovement(seconds)
+        if not inCombat
+            PlayerMovement(seconds)
+        end
 
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
             Remove(removalArray:RemoveFromFront())
         end
+
+        audioManager:UpdateAudioList()
     end
 
 //==============================================================================
 //                             CUSTOM ACTIONS
 //==============================================================================
-	  
-    action AddToRemove(Item2D item)
-        removalArray:Add(item)
-    end
 
+    action AddToRemove(Drawable object)
+        removalArray:Add(object)
+    end
+	  
     action InitializeMap(Map currMap, Text mapName)
     //Loads map image, collision, and adds it to layer.
         EnablePhysics2D(true)
@@ -151,7 +160,25 @@ class Main is Game, CollisionListener2D
             Add(currMap:collisions:Get(i))
             i = i + 1
         end
-	AddCollisionListener(me)	
+
+// ==== Ryan: Starting Changes ====
+        currMap:loadMapTransitions(mapName)
+        i = 0
+        repeat currMap:transitions:GetSize() times
+            Add(currMap:transitions:Get(i))
+            AddKeyboardListener(currMap:transitions:Get(i))
+            i = i + 1
+        end
+        currMap:loadInteractables(mapName)
+        i = 0
+        repeat currMap:interactables:GetSize() times
+            Add(currMap:interactables:Get(i))
+            AddKeyboardListener(currMap:interactables:Get(i))
+            i = i + 1
+        end
+// ===== Ryan: Ending Changes =====
+
+		AddCollisionListener(me)	
     end
 
     action LoadAboveLayer(Map currMap, Text mapName)
@@ -223,7 +250,14 @@ class Main is Game, CollisionListener2D
         player1:playerSprite:SetPosition(newX,newY)
         camera = GetCamera2D()
         camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
+    end
 
+    action BeginCollision(CollisionEvent2D event)
+        CheckForInteraction(event, true)
+    end
+
+    action FinishCollision(CollisionEvent2D event)
+        CheckForInteraction(event, false)
     end
 
     action CheckForInteraction(CollisionEvent2D event, boolean entering)
@@ -268,22 +302,33 @@ class Main is Game, CollisionListener2D
             Interactable newItemB = cast(Interactable, itemB)
 
             i = 0
-            repeat npcList:GetSize() times
-                if npcList:Get(i):IsInteracting()
+            repeat map1:interactables:GetSize() times
+                if map1:interactables:Get(i):IsInteracting()
+                    alreadyInteracting = true
+                end
+                i = i + 1
+            end
+
+            i = 0
+            repeat map1:transitions:GetSize() times
+                if map1:transitions:Get(i):IsInteracting()
                     alreadyInteracting = true
                 end
                 i = i + 1
             end
 
             if entering and not alreadyInteracting
-                newItemB:ToggleInteraction("newItemB")
+                newItemB:ToggleInteraction()
             elseif not entering
                 if newItemB:IsInteracting()
-                    output ""
-                    newItemB:ToggleInteraction("newItemB")
+                    newItemB:ToggleInteraction()
                 end
             end
         end
+    end
+
+    action GetMap() returns Map
+        return map1
     end
 
     action SetMap(Map newMap)
@@ -312,17 +357,6 @@ class Main is Game, CollisionListener2D
     end
 
 //==============================================================================
-//                          Input Rebinding
-//==============================================================================
-
-    action RebindKey(InputSet in)
-        KeyboardEvent key
-        repeat until key:keyCode not= 0
-        end
-        in:SetKeyboardInput(key:keyCode)
-    end
-
-//==============================================================================
 //                             FOR TESTING
 //==============================================================================
 
@@ -336,6 +370,9 @@ class Main is Game, CollisionListener2D
 
                                                             - Matt
         ***********************************************************************/
+
+        camera:SetPosition(400, map1:testMap:GetHeight() / 2, 0)
+
         Player player   //placeholder for now
         Array<number> currentElementsEffectiveness
         currentElementsEffectiveness:Add(1.0)
@@ -391,12 +428,51 @@ class Main is Game, CollisionListener2D
 //        audioManager:AddAudio("Effect_01", "wav", "effect")
 
         // * Example of adding music
-//        audioManager:AddAudio("Music_01", "ogg", "music")
+        audioManager:AddAudio("MidnightTale", "ogg", "music")
 
         // * Example of playing specific music
-        audioManager:PlayAudio("Music_01")
+        audioManager:PlayAudio("MidnightTale")
     end
 
+    action InitializeWhiteRoom
+        CreateBackground()
+        InitializeMap(map1, maps:FOREST_CLEARING_MAP)
+
+        Interactable testObj01
+        testObj01:CreateInteractable("Dialogue Test", "default", map1:testMap:GetWidth() / 64 - 2, map1:testMap:GetHeight() / 64, true)
+        AddKeyboardListener(testObj01)
+        InteractableData temp1
+        Array<text> dialogue
+        dialogue:Add("Hello, Test Player.")
+        dialogue:Add("I am Dialogue Test.")
+        dialogue:Add("This is a test to show dialogue from an Interactable.")
+        dialogue:Add("As you can see, you may interact with me until I run out of lines.")
+        dialogue:Add("Once that happens, I simply display '...'.")
+        dialogue:Add("To see my lines again, please move back and interact with me again.")
+        temp1:SetInteractableData("Dialogue Test", "dialogue", dialogue)
+        testObj01:CreateDialogueBehavior(temp1)
+        Add(testObj01)
+
+        Interactable testObj02
+        testObj02:CreateInteractable(maps:PROLOGUE_TOWN_MAP, "default", (map1:testMap:GetWidth() / 64), map1:testMap:GetHeight() / 64, false)
+        testObj02:LoadFilledRectangle(32, 32, color:Cyan())
+        AddKeyboardListener(testObj02)
+        testObj02:CreateMapTransitionBehavior(map1, maps:PROLOGUE_TOWN_MAP, 0, 0)
+        Add(testObj02)
+
+        Interactable testObj03
+        testObj03:CreateInteractable("Combat Test", "default", (map1:testMap:GetWidth() / 64) + 2, map1:testMap:GetHeight() / 64, true)
+        testObj03:LoadFilledRectangle(32, 32, color:Red())
+        AddKeyboardListener(testObj03)
+        InitiateCombatBehavior temp3
+        testObj03:SetInteractableBehavior(temp3, "combat")
+        Add(testObj03)
+
+        InitializePlayer(player1)
+        player1:playerSprite:SetY(map1:testMap:GetHeight() / 2)
+        player1:playerSprite:SetX(map1:testMap:GetWidth() / 4)
+        LoadAboveLayer(map1, maps:FOREST_CLEARING_MAP)
+    end
 end
 
 //==============================================================================

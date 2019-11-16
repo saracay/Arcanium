@@ -1,0 +1,30 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.GameStateManager
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+
+class InitiateCombatBehavior is Behavior
+    GameStateManager manager            // Used to get MAIN
+    Interactable object
+
+    action Run(BehaviorEvent event)
+        Main main = cast(Main, manager:GetGame())
+        main:AddToRemove(object)
+
+        // Create's a Gray background to cover the overworld
+        // Currently hard coded as a test, but will have to
+        // be removed once the battle is over (but can't atm)
+        Color color
+        Drawable background
+        background:LoadFilledRectangle(1920*2, 1080*2, color:Gray())
+        background:SetPosition(-1920/2, -1080/2)
+        main:Add(background)
+
+        main:CombatTest()
+    end
+
+    action SetInteractable(Interactable newObject)
+        object = newObject
+    end
+end
