@@ -9,7 +9,6 @@ class AI
     Game game
     Array<Item2D> removalArray
     BehaviorQueue behaviorQueue
-    Array<text> updateMessages
     CombatEnemyActionBehavior previousBehavior
 
     /*Determine what attack and enemy should use along with their target,
@@ -44,14 +43,12 @@ class AI
                 targetPosition = 1
                 repeat while (targetPosition < combatants:GetSize())
                     if combatants:Get(targetPosition) not= undefined
-                        updateMessages = combatants:Get(targetPosition):ReceiveAttack(enemySpell,
-                         actor)
+                        combatants:Get(targetPosition):ReceiveAttack(enemySpell, actor)
                     end
                     targetPosition = targetPosition + 1
                 end
             else
-                updateMessages = combatants:Get(targetPosition):ReceiveAttack(enemySpell,
-                 actor)
+                combatants:Get(targetPosition):ReceiveAttack(enemySpell, actor)
             end
         else
             Physical enemyPhysical
@@ -65,22 +62,14 @@ class AI
                 targetPosition = 1
                 repeat while (targetPosition < combatants:GetSize())
                     if combatants:Get(targetPosition) not= undefined
-                        updateMessages = combatants:Get(targetPosition):ReceiveAttack(enemyPhysical,
-                         actor)
+                        combatants:Get(targetPosition):ReceiveAttack(enemyPhysical, actor)
                     end
                     targetPosition = targetPosition + 1
                 end
             else
-                updateMessages = combatants:Get(targetPosition):ReceiveAttack(enemyPhysical,
-                 actor)
+                combatants:Get(targetPosition):ReceiveAttack(enemyPhysical,actor)
             end
         end
-
-        DisplayLogBehavior updateMessage
-        updateMessage:SetGame(game)
-        updateMessage:SetLog(updateMessages)
-        updateMessage:SetRemovalArray(removalArray)
-        behaviorQueue:AddBehavior(updateMessage)
     end
 
     /*Goblin can use Slash (8000001), Double Slash (8000011, 3 turn cooldown),

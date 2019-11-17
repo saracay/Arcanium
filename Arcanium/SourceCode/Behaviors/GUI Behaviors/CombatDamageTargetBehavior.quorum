@@ -33,16 +33,7 @@ output "Spell:       " + spell:GetName()
 output "Base Damage: " + spell:GetBaseDamage()
 output "MultiTarget: " + spell:GetMultiTarget()
 output ""
-
-                    Array<text> emptyArray
-                    battle:UpdateStatus(emptyArray)
-
-                    Array<text> updateMessages = targets:Get(counter):ReceiveAttack(spell, caster)
-                    DisplayLogBehavior updateMessage
-                    updateMessage:SetGame(game)
-                    updateMessage:SetLog(updateMessages)
-                    updateMessage:SetRemovalArray(removalArray)
-                    behaviorQueue:AddBehavior(updateMessage)
+                    targets:Get(counter):ReceiveAttack(spell, caster)
                 end
 
                 counter = counter + 1

@@ -1,6 +1,8 @@
 use Libraries.Containers.Array
 use Libraries.Containers.Iterator
 use Libraries.Compute.Random
+use Libraries.Game.Game
+use Libraries.Interface.Item2D
 
 class Combatant
 
@@ -13,6 +15,11 @@ class Combatant
     Array<number> currentElementsEffectiveness //current multiplier for incoming damage
     Array<Status> statuses  //statuses currently inflicted on this combatant
 
+    Game game
+    Battle battle
+    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue
+
     /*When initialized the currentElementsEffectiveness array is given 
     6 undefined values, it also cannot grow larger or smaller*/
     on create
@@ -24,15 +31,15 @@ class Combatant
     /*Take an attack from potentially an enemy, ally, or theirself, determines
     if it heals or damages, and if damaging calculates and applies it along
     with its status effects*/
-    action ReceiveAttack(Attack attack, Combatant user) returns Array<text>
+    action ReceiveAttack(Attack attack, Combatant user)
         Array<text> log
         number damageModifier = 0
         integer damageReceived = 0
         integer attackID = attack:GetID()
-        
+
         //The attack is solely used for healing
         if (attack:GetCanHeal() and not attack:GetCanDamage())
-            return ReceiveHeal(attack, user)
+            ReceiveHeal(attack, user)
         elseif (attack:GetCanDamage())
             if (attack is Physical)
                 Physical physicalAttack = cast(Physical, attack)
@@ -59,8 +66,31 @@ class Combatant
             end
             log:Add(incomingAttack)
 
-            text incomingDamage = GetName() + " took " + damageReceived + " damage!"
-            log:Add(incomingDamage)
+            // dialogue behavior
+            DisplayLogBehavior updateMessage
+            updateMessage:SetGame(game)
+            updateMessage:SetLog(log)
+            updateMessage:SetRemovalArray(removalArray)
+            behaviorQueue:AddBehavior(updateMessage)
+            
+            // deal damage behavior
+            CombatDamageBehavior damageBehavior
+            damageBehavior:SetTarget(me)
+            damageBehavior:SetAmount(damageReceived)
+            behaviorQueue:AddBehavior(damageBehavior)
+
+            // update battle GUI
+            battle:UpdateStatus()
+
+            Array<text> log2
+            log2:Add(GetName() + " took " + damageReceived + " damage!")
+
+            // dialogue behavior
+            DisplayLogBehavior updateMessage2
+            updateMessage2:SetGame(game)
+            updateMessage2:SetLog(log2)
+            updateMessage2:SetRemovalArray(removalArray)
+            behaviorQueue:AddBehavior(updateMessage2)
 
             //Leeching attack
             if (attack:GetCanHeal())
@@ -70,42 +100,49 @@ class Combatant
                     healReceived = user:GetMaxHP() - user:GetCurrentHP()
                 end
 
-                user:SetCurrentHP(user:GetCurrentHP() + healReceived)
+                // heal damage behavior
+                CombatHealBehavior healBehavior
+                healBehavior:SetTarget(user)
+                healBehavior:SetAmount(healReceived)
+                behaviorQueue:AddBehavior(healBehavior)
 
-                text incomingHeal = user:GetName() + " stole " + healReceived 
-                 + " from " + GetName() + "!"
+                // update battle GUI
+                battle:UpdateStatus()
 
-                log:Add(incomingHeal)
+                Array<text> log3
+                log3:Add(user:GetName() + " stole " + healReceived + " from " + GetName() + "!")
+
+                // dialogue behavior
+                DisplayLogBehavior updateMessage3
+                updateMessage3:SetGame(game)
+                updateMessage3:SetLog(log3)
+                updateMessage3:SetRemovalArray(removalArray)
+                behaviorQueue:AddBehavior(updateMessage3)
             end
         end
 
         //If target dies from the hit don't bother with status effects
-        if (not CheckDefeated(damageReceived))
-//            text defeated = GetName() + " was defeated!"
-//            log:Add(defeated)
-//        else
+        if (currentHP - damageReceived > 0)
             Array<text> statusResults = ApplyAttackStatuses(attack)
-            Iterator<text> it = statusResults:GetIterator()
-            repeat while (it:HasNext())
-                log:Add(it:Next())
-            end
-        end
 
-        return log
+            // dialogue behavior
+            DisplayLogBehavior updateMessage4
+            updateMessage4:SetGame(game)
+            updateMessage4:SetLog(statusResults)
+            updateMessage4:SetRemovalArray(removalArray)
+            behaviorQueue:AddBehavior(updateMessage4)
+        end
     end
 
     /*Takes a healing attack from an enemy, ally, or theirself, applies/removes
     status. Note: currently only goes off spell base damage*/
     action ReceiveHeal(Attack healMove, Combatant user) 
-     returns Array<text>
         Array<text> log
         integer healReceived = healMove:GetBaseDamage()
 
         if (currentHP + healReceived > maxHP)
             healReceived = maxHP - currentHP
         end
-
-        SetCurrentHP(currentHP + healReceived)
 
         text incomingMove = ""
         if (healMove is Spell)
@@ -117,16 +154,39 @@ class Combatant
         end
         log:Add(incomingMove)
 
-        text incomingHeal = GetName() + " received " + healReceived + " health!"
-        log:Add(incomingHeal)
+        // dialogue behavior
+        DisplayLogBehavior updateMessage
+        updateMessage:SetGame(game)
+        updateMessage:SetLog(log)
+        updateMessage:SetRemovalArray(removalArray)
+        behaviorQueue:AddBehavior(updateMessage)
+
+        // heal behavior
+        CombatHealBehavior healBehavior
+        healBehavior:SetTarget(me)
+        healBehavior:SetAmount(healReceived)
+        behaviorQueue:AddBehavior(healBehavior)
+
+        // update battle GUI
+        battle:UpdateStatus()
+
+        Array<text> log2
+        log2:Add(GetName() + " received " + healReceived + " health!")
+
+        // dialogue behavior
+        DisplayLogBehavior updateMessage2
+        updateMessage2:SetGame(game)
+        updateMessage2:SetLog(log2)
+        updateMessage2:SetRemovalArray(removalArray)
+        behaviorQueue:AddBehavior(updateMessage2)
 
         Array<text> statusResults = ApplyAttackStatuses(healMove)
-        Iterator<text> it = statusResults:GetIterator()
-        repeat while (it:HasNext())
-            log:Add(it:Next())
-        end
 
-        return log
+        DisplayLogBehavior updateMessage3
+        updateMessage3:SetGame(game)
+        updateMessage3:SetLog(statusResults)
+        updateMessage3:SetRemovalArray(removalArray)
+        behaviorQueue:AddBehavior(updateMessage3)
     end
 
     /*Calculate what percentage of its base damage an attack will deal,
@@ -185,7 +245,7 @@ class Combatant
             end
             i = i + 1
         end
-
+      
         return statusChange
     end
 
@@ -270,6 +330,8 @@ class Combatant
             currentStatus = statuses:Get(i)
             elementID = currentStatus:GetElementID()
 
+            Array<text> log
+
             if (elementID / 1000000 = 7)
                 if (currentStatus:GetIsHealing())
                     integer healReceived = 0
@@ -277,12 +339,46 @@ class Combatant
                     if (currentHP + healReceived > maxHP)
                         healReceived = maxHP - currentHP
                     end
-                    SetCurrentHP(currentHP + healReceived)
+
+                    // heal behavior
+                    CombatHealBehavior healingBehavior
+                    healingBehavior:SetTarget(me)
+                    healingBehavior:SetAmount(healReceived)
+                    behaviorQueue:AddBehavior(healingBehavior)
+
+                    // update battle GUI
+                    battle:UpdateStatus()
+
+                    log:Add(GetName() + " healed " + healReceived + " health from " + currentStatus:GetName() + "!")
+
+                    // dialogue behavior
+                    DisplayLogBehavior updateMessage
+                    updateMessage:SetGame(game)
+                    updateMessage:SetLog(log)
+                    updateMessage:SetRemovalArray(removalArray)
+                    behaviorQueue:AddBehavior(updateMessage)
                 else
                     integer damageReceived = 0
                     damageReceived = cast(integer, CalculateDamageModifier(elementID) 
                      * currentStatus:GetBaseDamage())
-                    CheckDefeated(damageReceived)
+
+                    // damage behavior
+                    CombatDamageBehavior damageBehavior
+                    damageBehavior:SetTarget(me)
+                    damageBehavior:SetAmount(damageReceived)
+                    behaviorQueue:AddBehavior(damageBehavior)
+
+                    // update battle GUI
+                    battle:UpdateStatus()
+
+                    log:Add(GetName() + " took " + damageReceived + " damage from " + currentStatus:GetName() + "!")
+
+                    // dialogue behavior
+                    DisplayLogBehavior updateMessage
+                    updateMessage:SetGame(game)
+                    updateMessage:SetLog(log)
+                    updateMessage:SetRemovalArray(removalArray)
+                    behaviorQueue:AddBehavior(updateMessage)
                 end
             end
             
@@ -362,14 +458,8 @@ class Combatant
     end
 
     /*Applies damage and checks if that defeats the target*/
-    action CheckDefeated(integer damage) returns boolean
-        if (GetCurrentHP() > damage)
-            SetCurrentHP(GetCurrentHP() - damage)
-            return false
-        end
-
-        SetCurrentHP(0)
-        return true
+    action CheckDefeated returns boolean
+        return currentHP <= 0
     end
 
 /*******************************************************************************
@@ -438,5 +528,21 @@ class Combatant
 
     action GetStatuses() returns Array<Status>
         return statuses
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
     end
 end

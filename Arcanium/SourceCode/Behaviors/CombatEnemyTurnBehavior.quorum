@@ -29,8 +29,6 @@ class CombatEnemyTurnBehavior is Behavior
 //            behaviorQueue:AddBehavior(behavior)
             behavior:Run(undefined)
 
-            battle:UpdateStatus(emptyArray)
-
             counter = counter + 1
         end
     end

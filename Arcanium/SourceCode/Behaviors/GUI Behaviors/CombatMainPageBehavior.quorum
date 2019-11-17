@@ -480,8 +480,6 @@ class CombatMainPageBehavior is Behavior, MainPage
             outerCounter = outerCounter + 1
         end
 
-        Array<text> emptyArray
-        battle:UpdateStatus(emptyArray)
         battle:EnemyTurn()
     end
 

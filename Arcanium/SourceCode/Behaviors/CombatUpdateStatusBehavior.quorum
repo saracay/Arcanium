@@ -16,20 +16,20 @@ class CombatUpdateStatusBehavior is Behavior
     Array<Label> statusInfo
     Array<Drawable> statusWindows
     Array<Drawable> sprites
-    Array<text> updateMessages
     boolean finished = false
     Player player
 
 
     action Run(BehaviorEvent event)
 
+        Array<text> updateMessages
         player = cast(Player, combatants:Get(0))
         integer counter = 0
 
         playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
 
         repeat while counter < statusWindows:GetSize()
-            if (combatants:Get(counter) not= undefined) and (not combatants:Get(counter):CheckDefeated(0))
+            if (combatants:Get(counter) not= undefined) and (not combatants:Get(counter):CheckDefeated())
                 statusInfo:Get(counter):SetText("Health: " + combatants:Get(counter):GetCurrentHP() + "/" + combatants:Get(counter):GetMaxHP())
             elseif (combatants:Get(counter) not= undefined)
                 if counter = 0
@@ -115,9 +115,5 @@ class CombatUpdateStatusBehavior is Behavior
 
     action SetSprites(Array<Drawable> newArray)
         sprites = newArray
-    end
-
-    action SetUpdateMessages(Array<text> newArray)
-        updateMessages = newArray
     end
 end
