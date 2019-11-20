@@ -14,37 +14,37 @@ class CombatEnemyTurnBehavior is Behavior
     boolean finished = false
 
     action Run(BehaviorEvent event)
-        Player player = cast(Player, combatants:Get(0))
-        Array<text> updateMessages
+        Array<text> emptyArray
 
         integer counter = 1
-        AI enemyAI
 
         repeat while counter < combatants:GetSize()
-            if combatants:Get(counter) not= undefined
-                Enemy enemy = cast(Enemy, combatants:Get(counter))
-
-                enemyAI:AI(counter, combatants)
-                battle:UpdateStatus(updateMessages)
-
-//                DisplayLogBehavior updateMessage
-//                updateMessage:SetGame(game)
-//                updateMessage:SetLog(updateMessages)
-//                updateMessage:SetRemovalArray(removalArray)
-//                behaviorQueue:AddBehavior(updateMessage)
-            end
+            CombatEnemyActionBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetBehaviorQueue(behaviorQueue)
+            behavior:SetCombatants(combatants)
+            behavior:SetEnemyIndex(counter)
+            behavior:SetPreviousBehavior(me)
+//            behaviorQueue:AddBehavior(behavior)
+            behavior:Run(undefined)
 
             counter = counter + 1
         end
-
+    end
+    
+    action Dispose
+        Player player = cast(Player, combatants:Get(0))
         player:SetCurrentMP(player:GetCurrentMP() + 1)
-
         battle:PlayerTurn()
-        finished = true
     end
 
     action IsFinished returns boolean
         return finished
+    end
+
+    action SetFinished(boolean newBoolean)
+        finished = newBoolean
     end
 
     action SetGame(Game newGame)

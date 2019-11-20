@@ -1,9 +1,15 @@
 use Libraries.Containers.Array
 use Libraries.Compute.Random
+use Libraries.Game.Game
+use Libraries.Interface.Item2D
 
 class AI 
 
     integer targetPosition = -1     //which combatant the attack will target
+    Game game
+    Array<Item2D> removalArray
+    BehaviorQueue behaviorQueue
+    CombatEnemyActionBehavior previousBehavior
 
     /*Determine what attack and enemy should use along with their target,
     then apply the attack*/
@@ -37,14 +43,12 @@ class AI
                 targetPosition = 1
                 repeat while (targetPosition < combatants:GetSize())
                     if combatants:Get(targetPosition) not= undefined
-                        combatants:Get(targetPosition):ReceiveAttack(enemySpell,
-                         actor)
+                        combatants:Get(targetPosition):ReceiveAttack(enemySpell, actor)
                     end
                     targetPosition = targetPosition + 1
                 end
             else
-                combatants:Get(targetPosition):ReceiveAttack(enemySpell,
-                 actor)
+                combatants:Get(targetPosition):ReceiveAttack(enemySpell, actor)
             end
         else
             Physical enemyPhysical
@@ -58,14 +62,12 @@ class AI
                 targetPosition = 1
                 repeat while (targetPosition < combatants:GetSize())
                     if combatants:Get(targetPosition) not= undefined
-                        combatants:Get(targetPosition):ReceiveAttack(enemyPhysical,
-                         actor)
+                        combatants:Get(targetPosition):ReceiveAttack(enemyPhysical, actor)
                     end
                     targetPosition = targetPosition + 1
                 end
             else
-                combatants:Get(targetPosition):ReceiveAttack(enemyPhysical,
-                 actor)
+                combatants:Get(targetPosition):ReceiveAttack(enemyPhysical,actor)
             end
         end
     end
@@ -374,5 +376,21 @@ class AI
         end
 
         return target
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetBehaviorQueue(BehaviorQueue newQueue)
+        behaviorQueue = newQueue
+    end
+    
+    action SetPreviousBehavior(CombatEnemyActionBehavior newBehavior)
+        previousBehavior = newBehavior
     end
 end

@@ -41,6 +41,8 @@ class Battle is Level
 
     action Initialize(Player player, Enemy overworldEnemy)   //sample for testing only
 
+        player:SetBattle(me)
+
         combatants:Add(player)
         //placeholder for player, just loads a square instead for now
 
@@ -75,8 +77,22 @@ class Battle is Level
         Enemy slime
 
         goblin:FillEnemy("Goblin")
+        goblin:SetGame(game)
+        goblin:SetBattle(me)
+        goblin:SetRemovalArray(removalArray)
+        goblin:SetBehaviorQueue(behaviorQueue)
+
         orc:FillEnemy("Orc")
+        orc:SetGame(game)
+        orc:SetBattle(me)
+        orc:SetRemovalArray(removalArray)
+        orc:SetBehaviorQueue(behaviorQueue)
+
         slime:FillEnemy("Slime")
+        slime:SetGame(game)
+        slime:SetBattle(me)
+        slime:SetRemovalArray(removalArray)
+        slime:SetBehaviorQueue(behaviorQueue)
 
         combatants:Add(goblin)
         combatants:Add(orc)
@@ -122,7 +138,7 @@ class Battle is Level
         PlayerTurn()
     end
 
-    action UpdateStatus(Array<text> updateMessages)
+    action UpdateStatus
         CombatUpdateStatusBehavior behavior
         behavior:SetGame(game)
         behavior:SetRemovalArray(removalArray)
@@ -131,7 +147,6 @@ class Battle is Level
         behavior:SetStatusInfo(statusInfo)
         behavior:SetStatusWindows(statusWindows)
         behavior:SetSprites(sprites)
-        behavior:SetUpdateMessages(updateMessages)
         behaviorQueue:AddBehavior(behavior)
     end
 

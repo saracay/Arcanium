@@ -437,9 +437,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
         Setup for loading a Battle (test version for now, will be adapted to
         the generalized loading a Level setup in the future.
 
-        NOTE: For now, if working within the main class, just comment out this
-        section of code to avoid my stuff screwing yours up.
-
                                                             - Matt
         ***********************************************************************/
         Player player   //placeholder for now
@@ -458,6 +455,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         currentElementTokens:Add(4)
         currentElementTokens:Add(4)
         player:SetStats("<Player>", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
+        player:SetGame(me)
+        player:SetRemovalArray(removalArray)
+        player:SetBehaviorQueue(behaviorQueue)
         Enemy enemy
 
         Battle battle
@@ -468,9 +468,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
         battle:Initialize(player, enemy)
         inCombat = true
 
-        /***********************************************************************
-        End of Matt's Testing Section
-        ***********************************************************************/
     end
     
     action InitializeAnimTest()

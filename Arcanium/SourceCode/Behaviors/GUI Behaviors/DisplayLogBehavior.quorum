@@ -21,6 +21,10 @@ class DisplayLogBehavior is Behavior
     
     action Run(BehaviorEvent event)
 
+        if log:GetSize() = 0
+            finished = true
+        end
+
         if displayBox = undefined
             Drawable newBox
             displayBox = newBox
