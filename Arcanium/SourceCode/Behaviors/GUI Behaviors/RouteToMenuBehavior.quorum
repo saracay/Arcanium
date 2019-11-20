@@ -1,0 +1,95 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
+use Libraries.Game.Game
+use Libraries.Interface.Layouts.ManualLayout
+
+
+class RouteToMenuBehavior is Behavior
+    
+    Game game
+    Array<Item2D> removalArray
+    Array<MenuButton> buttons
+    Array<text> pointsOfInterest
+    boolean finished = false
+
+    action Run(BehaviorEvent event)
+        ManualLayout layout
+        game:SetLayout(layout)
+
+        integer positionX = 10
+        integer positionY = 500
+
+        integer i = 0
+        repeat while (i < pointsOfInterest:GetSize())
+            MenuButton interestPointButton
+            FillButton(interestPointButton, positionX, positionY, 
+             pointsOfInterest:Get(i))
+            buttons:Add(interestPointButton)
+
+            positionY = positionY - 50
+            i = i + 1
+        end
+
+        MenuButton exitButton
+        FillButton(exitButton, positionX, positionY, "Exit")
+        buttons:Add(exitButton)
+
+        i = 0
+        repeat while (i < buttons:GetSize())
+            if (i = (buttons:GetSize() - 1))
+                buttons:Get(i):SetNextFocus(buttons:Get(0))
+            else
+                buttons:Get(i):SetNextFocus(buttons:Get(i + 1))
+            end
+
+            if (i = 0)
+                buttons:Get(i):SetPreviousFocus(buttons:Get(buttons:GetSize() - 1))
+            else
+                buttons:Get(i):SetPreviousFocus(buttons:Get(i - 1))
+            end
+            i = i + 1
+        end
+
+        game:SetFocus(buttons:Get(0))
+    end
+
+    action FillButton(MenuButton button, integer positionX, integer positionY, 
+     text name)
+        button:SetGame(game)
+        button:SetRemovalArray(removalArray)
+        button:SetTarget(button)
+        button:SetPosition(positionX, positionY)
+        button:SetName(name)
+        button:SetHorizontal(true)
+
+        game:Add(button)
+    end
+
+    action Dispose()
+        integer counter = 0
+
+        repeat while counter < buttons:GetSize()
+            removalArray:Add(buttons:Get(counter))
+
+            counter = counter + 1
+        end
+    end
+
+    action IsFinished() returns boolean
+        return finished
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+
+    action SetPointsOfInterest(Array<text> newPointsOfInterest)
+        pointsOfInterest = newPointsOfInterest
+    end
+end

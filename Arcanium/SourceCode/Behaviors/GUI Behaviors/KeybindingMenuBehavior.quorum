@@ -1,0 +1,110 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Interface.Item2D
+use Libraries.Game.Game
+use Libraries.Interface.Layouts.ManualLayout
+
+
+class KeybindingMenuBehavior is Behavior
+    
+    Game game
+    Array<Item2D> removalArray
+    Array<MenuButton> buttons
+    boolean finished = false
+    constant integer numberOfKeybindings = 10
+
+    action Run(BehaviorEvent event)
+        ManualLayout layout
+        game:SetLayout(layout)
+
+        integer positionX = 375
+        integer positionY = 550
+
+        integer i = numberOfKeybindings
+        repeat while (i > 0)
+            MenuButton keybindingButton
+            FillButton(keybindingButton, positionX, positionY)
+            buttons:Add(keybindingButton)
+
+            positionY = positionY - 50
+            i = i - 1
+        end
+
+        buttons:Get(1):SetX(366)
+        buttons:Get(2):SetX(372)
+        buttons:Get(3):SetX(367)
+        buttons:Get(4):SetX(336)
+        buttons:Get(5):SetX(323)
+        buttons:Get(6):SetX(356)
+        buttons:Get(7):SetX(359)
+        buttons:Get(8):SetX(336)
+        buttons:Get(9):SetX(334)
+
+        buttons:Get(0):SetName("Up")
+        buttons:Get(1):SetName("Down")
+        buttons:Get(2):SetName("Left")
+        buttons:Get(3):SetName("Right")
+        buttons:Get(4):SetName("Next Selection")
+        buttons:Get(5):SetName("Previous Selection")
+        buttons:Get(6):SetName("Confirm")
+        buttons:Get(7):SetName("Cancel")
+        buttons:Get(8):SetName("General Menu")
+        buttons:Get(9):SetName("Systems Menu")
+
+        MenuButton exitButton
+        FillButton(exitButton, positionX, positionY)
+        buttons:Add(exitButton)
+        buttons:Get(10):SetX(369)
+        buttons:Get(10):SetName("Exit")
+
+        i = 0
+        repeat while (i < buttons:GetSize())
+            if (i = (buttons:GetSize() - 1))
+                buttons:Get(i):SetNextFocus(buttons:Get(0))
+            else
+                buttons:Get(i):SetNextFocus(buttons:Get(i + 1))
+            end
+
+            if (i = 0)
+                buttons:Get(i):SetPreviousFocus(buttons:Get(buttons:GetSize() - 1))
+            else
+                buttons:Get(i):SetPreviousFocus(buttons:Get(i - 1))
+            end
+            i = i + 1
+        end
+
+        game:SetFocus(buttons:Get(0))
+    end
+
+    action FillButton(MenuButton button, integer positionX, integer positionY)
+        button:SetGame(game)
+        button:SetRemovalArray(removalArray)
+        button:SetTarget(button)
+        button:SetPosition(positionX, positionY)
+        button:SetHorizontal(true)
+
+        game:Add(button)
+    end
+
+    action Dispose()
+        integer counter = 0
+
+        repeat while (counter < buttons:GetSize())
+            removalArray:Add(buttons:Get(counter))
+            counter = counter + 1
+        end
+    end
+
+    action IsFinished() returns boolean
+        return finished
+    end
+
+    action SetGame(Game newGame)
+        game = newGame
+    end
+
+    action SetRemovalArray(Array<Item2D> newArray)
+        removalArray = newArray
+    end
+end
