@@ -12,6 +12,7 @@ use Libraries.Game.InputSet
 use Libraries.Game.InputTable
 use Libraries.Game.Collision.Shapes.CollisionShape2D
 use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Interface.Events.KeyboardListener
 use Libraries.Interface.Events.CollisionListener2D
 use Libraries.Interface.Events.CollisionEvent2D
 use Libraries.Interface.Controls.Button
@@ -23,7 +24,7 @@ use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.ImageSheet
 use Libraries.Game.Graphics.Camera      // Adds Camera
 
-class Main is Game, CollisionListener2D
+class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
 //                             VARIABLE DECLARATION
 //==============================================================================    
@@ -70,6 +71,15 @@ class Main is Game, CollisionListener2D
     InputSet backButton
     InputSet menuButton
 
+    //For Input Rebinding
+    boolean upRebinding = false
+    boolean downRebinding = false
+    boolean leftRebinding = false
+    boolean rightRebinding = false
+    boolean selectRebinding = false
+    boolean backRebinding = false
+    boolean menuRebinding = false
+
     //Map Names
     //TO-DO: Export this in the future to a file that we can directly reference in this file
     MapList maps
@@ -99,7 +109,7 @@ class Main is Game, CollisionListener2D
     end
 
     action CreateGame
-
+    AddKeyboardListener(me)
     upButton:SetKeyboardInput(keys:W)
     downButton:SetKeyboardInput(keys:S)
     leftButton:SetKeyboardInput(keys:A)
@@ -114,7 +124,8 @@ class Main is Game, CollisionListener2D
 //        LoadAboveLayer(map1, maps:FOREST_MAP)
 
         //==TEST CALLS==
-        CombatTest()
+        //CombatTest()
+        //InputTest()
         //InitializeAnimTest()
         //InitializeAudioTest()
     end
@@ -196,13 +207,13 @@ class Main is Game, CollisionListener2D
             elapsedTime = elapsedTime - 1/fps
             end*/
         end
-        if monitor:IsKeyPressed(keys:S)
+        if monitor:IsKeyPressed(downButton:GetInputType())
             newY = newY - plyrSpeed * seconds
         end
-        if monitor:IsKeyPressed(keys:D)
+        if monitor:IsKeyPressed(rightButton:GetInputType())
             newX = newX + plyrSpeed * seconds
         end
-        if monitor:IsKeyPressed(keys:A)
+        if monitor:IsKeyPressed(leftButton:GetInputType())
             newX = newX - plyrSpeed * seconds
         end
 
@@ -316,10 +327,105 @@ class Main is Game, CollisionListener2D
 //==============================================================================
 
     action RebindKey(InputSet in)
+        //RebindKeys rebind
         KeyboardEvent key
-        repeat until key:keyCode not= 0
+        output "Rebinding"
+        if (in = upButton)
+            upRebinding = true
+            output "rebinding upButton"
         end
-        in:SetKeyboardInput(key:keyCode)
+        if (in = downButton)
+            downRebinding = true
+            output "rebinding downButton"
+        end
+        if (in = leftButton)
+            leftRebinding = true
+            output "rebinding leftButton"
+        end
+        if (in = rightButton)
+            rightRebinding = true
+            output "rebinding rightButton"
+        end
+        if (in = selectButton)
+            selectRebinding = true
+            output "rebinding selectButton"
+        end
+        if (in = backButton)
+            backRebinding = true
+            output "rebinding backButton"
+        end
+        if (in = menuButton)
+            menuRebinding = true
+            output "rebinding menuButton"
+        end
+    end
+
+    action PressedKey(KeyboardEvent event)
+        if (not upRebinding or not downRebinding or not leftRebinding
+            or not rightRebinding or not selectRebinding or not backRebinding
+            or not menuRebinding)
+            if event:keyCode = upButton:GetInputValue()
+                output "up pressed"
+            end
+            if event:keyCode = downButton:GetInputValue()
+                output "down pressed"
+            end
+            if event:keyCode = leftButton:GetInputValue()
+                output "left pressed"
+            end
+            if event:keyCode = rightButton:GetInputValue()
+                output "right pressed"
+            end
+            if event:keyCode = selectButton:GetInputValue()
+                output "select pressed"
+            end
+            if event:keyCode = backButton:GetInputValue()
+                output "back pressed"
+            end
+            if event:keyCode = menuButton:GetInputValue()
+                output "menu pressed"
+            end
+        end
+        if (upRebinding)
+            upButton:SetKeyboardInput(event:keyCode)
+            upRebinding = false
+            output "up rebound to " + event:keyCode
+        end
+        if (downRebinding)
+            downButton:SetKeyboardInput(event:keyCode)
+            downRebinding = false
+            output "down rebound to " + event:keyCode
+        end
+        if (leftRebinding)
+            leftButton:SetKeyboardInput(event:keyCode)
+            leftRebinding = false
+            output "left rebound to " + event:keyCode
+        end
+        if (rightRebinding)
+            rightButton:SetKeyboardInput(event:keyCode)
+            rightRebinding = false
+            output "right rebound to " + event:keyCode
+        end
+        if (selectRebinding)
+            selectButton:SetKeyboardInput(event:keyCode)
+            selectRebinding = false
+            output "select rebound to " + event:keyCode
+        end
+        if (backRebinding)
+            backButton:SetKeyboardInput(event:keyCode)
+            backRebinding = false
+            output "back rebound to " + event:keyCode
+        end
+        if (menuRebinding)
+            menuButton:SetKeyboardInput(event:keyCode)
+            menuRebinding = false
+            output "menu rebound to " + event:keyCode
+        end
+    end
+
+    action InputTest()
+        output "rebinding"
+        RebindKey(upButton)
     end
 
 //==============================================================================
