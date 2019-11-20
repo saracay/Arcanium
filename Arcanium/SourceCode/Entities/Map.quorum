@@ -25,6 +25,10 @@ class Map
     action setAboveMaps() 
         aboveMaps:Add(maps:FOREST_MAP)
         aboveMaps:Add(maps:LIBRARY_MAP)
+        aboveMaps:Add(maps:FOREST_CLEARING_MAP)
+        aboveMaps:Add(maps:FOREST_PATH_1_MAP)
+        aboveMaps:Add(maps:PROLOGUE_TOWN_MAP)
+        aboveMaps:Add(maps:RUINED_TOWN_MAP)
     end
 
     action inAboveMaps(text map) returns boolean
@@ -47,8 +51,12 @@ class Map
         2. Export a map that is of the same name as its base map (so the above layer for the Forest Map would be ForestAbove)
     */
     action loadAboveLayer(text map)
-        aboveLayer:Load("Assets\Maps\" + map + "Above.png")
-    end
+        File filePath
+        filePath:SetPath("Assets\Maps\" + map + "Above.png")
+        if (filePath:Exists())
+            aboveLayer:Load("Assets\Maps\" + map + "Above.png")
+        end
+end
 
     /*
     This function is intended to gather all objects that will transition the player to a new map

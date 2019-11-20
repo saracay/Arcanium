@@ -166,8 +166,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 
     action LoadAboveLayer(Map currMap, Text mapName)
-        currMap:loadAboveLayer(mapName)
-        Add(currMap:aboveLayer)
+        if(currMap:inAboveMaps(mapName))
+            currMap:loadAboveLayer(mapName)
+            Add(currMap:aboveLayer)
+        end
     end
 
     action InitializePlayer(Player player)
