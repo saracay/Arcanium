@@ -126,6 +126,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //==TEST CALLS==
         //CombatTest()
         //InputTest()
+        //InteractableTest()
         //InitializeAnimTest()
         //InitializeAudioTest()
     end
@@ -271,7 +272,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // Check if PLAYER & INTERACTABLE
         if itemA:GetName() = "player"
-            if itemB:GetName() = "interactable"
+            if itemB:GetName():Contains("Interactable") or maps:Has(itemB:GetName()) // updated this because interactables will be named in tiled as "Something Interactable" 
                 interaction = true
             end
         end
@@ -281,19 +282,19 @@ class Main is Game, CollisionListener2D, KeyboardListener
             Interactable newItemB = cast(Interactable, itemB)
 
             i = 0
-            repeat npcList:GetSize() times
-                if npcList:Get(i):IsInteracting()
+            repeat map1:interactables:GetSize() times
+                if map1:interactables:Get(i):IsInteracting()
                     alreadyInteracting = true
                 end
                 i = i + 1
             end
 
             if entering and not alreadyInteracting
-                newItemB:ToggleInteraction("newItemB")
+                newItemB:ToggleInteraction(itemB:GetName())
             elseif not entering
                 if newItemB:IsInteracting()
                     output ""
-                    newItemB:ToggleInteraction("newItemB")
+                    newItemB:ToggleInteraction(itemB:GetName())
                 end
             end
         end
@@ -500,6 +501,72 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // * Example of playing specific music
         audioManager:PlayAudio("Music_01")
+    end
+
+    action InteractablesTest()
+    /***********************************************************************
+    Used for loading in a map to test Interactable dialogue as well as
+    the map transition behavior.
+
+                                                        - Lisel
+    ***********************************************************************/
+
+        // Initialize the MAP
+        EnablePhysics2D(true)
+        map1:loadMap(maps:LIBRARY_MAP)
+        map1:loadCollisionLayer(maps:LIBRARY_MAP) // collisions
+        map1:loadInteractables(maps:LIBRARY_MAP) // interactables (right now, these are dialogs)
+        map1:loadMapTransitions(maps:LIBRARY_MAP) // map transitions (will transfer player to a new map)
+
+        Add(map1:testMap)
+
+        // add all of the collisions to the map
+        i = 0
+        repeat map1:collisions:GetSize() times
+            Add(map1:collisions:Get(i))
+            i = i + 1
+        end
+
+        // add all of the interactables to the map
+        map1:getInteractablesData(map1:name)
+        i = 0
+        repeat map1:interactables:GetSize() times
+            Interactable curr = map1:interactables:Get(i)
+            Add(curr) // adds each interactable to the game
+            AddKeyboardListener(curr) // add keyboard listener for each interactable
+            InteractableData data = map1:interactableData:Get(i)
+            curr:CreateDialogueBehavior(data)
+            // add in the behavior for the interactable (call a method)
+            i = i + 1
+        end
+
+        // add all of the transitions to the map
+        i = 0
+        repeat map1:transitions:GetSize() times
+            Interactable curr = map1:transitions:Get(i)
+            Add(curr) // adds each map transition to the game
+            AddKeyboardListener(curr) // add keyboard listener for each transition
+            curr:CreateMapTransitionBehavior(map1, curr:GetName()) // will then call the SetTransition in MapTransitionBehavior
+            i = i + 1
+        end
+		
+        // Initialize the PLAYER
+        player1:DrawPlayer()
+        player1:playerSprite:EnablePhysics(true)
+        player1:playerSprite:CanRotate(false)
+        player1:playerSprite:SetResponsive()
+        player1:playerSprite:SetName("player")
+		
+        // Enable Collisions in the game
+        AddCollisionListener(me)
+        
+        // Add the PLAYER after everything to be in the foreground
+        Add(player1:playerSprite)
+
+        // Add the above layers
+        map1:loadAboveLayer(maps:LIBRARY_MAP)
+        Add(map1:aboveLayer)
+        
     end
 
 end
