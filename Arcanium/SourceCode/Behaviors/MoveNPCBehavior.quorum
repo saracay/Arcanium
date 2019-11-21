@@ -1,0 +1,16 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Interface.Item
+
+
+class MoveNPCBehavior is Behavior
+
+    action Run (BehaviorEvent event)
+        
+    end
+
+    action Update(number seconds)
+        
+        
+    end
+end
