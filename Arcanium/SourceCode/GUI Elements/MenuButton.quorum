@@ -16,10 +16,6 @@ class MenuButton is Button, FocusListener
     boolean horizontal = false
     boolean noIndicator = true
 
-    on create
-
-    end
-
     action Dispose
         integer counter = 0
 
