@@ -13,6 +13,7 @@ class MapList
     public text PROLOGUE_TOWN_MAP = "PrologueTown"
     public text RUINED_TOWN_MAP = "RuinedTown"
     public text INTERIOR_HOUSE_MAP = "InteriorHouse"
+    public text CAMP_MAP = "Camp"
 
     on create
         setMapList()
@@ -29,7 +30,8 @@ class MapList
         ALL_MAPS:Add(PROLOGUE_TOWN_MAP)
         ALL_MAPS:Add(RUINED_TOWN_MAP)
         ALL_MAPS:Add(INTERIOR_HOUSE_MAP)
-        
+        ALL_MAPS:Add(CAMP_MAP)
+
     end
 
     action Has(text map) returns boolean
