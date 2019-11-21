@@ -1,0 +1,20 @@
+use Libraries.Interface.Behaviors.Behavior
+
+
+class CinematicSequencer 
+
+    action CreateCineSequence()
+    
+    end
+
+    action AddCineEvent(Behavior CineBehavior)
+    //Acceptable behaviors:
+    //Player movement, Camera Movement, Dialogue, Play Music, Play Sound Effects, Wait for ... seconds, 
+        
+    end
+
+    action PlayCineSequence()
+        
+    end
+
+end
