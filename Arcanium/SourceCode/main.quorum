@@ -87,6 +87,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     //For animations
     Animation test1
     Animation test2
+    Animation test3
     number elapsedTime = 0
     number fps = 4
     number currentFrame = 1
@@ -95,6 +96,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
     text spriteImgSheet = "girl"
     text spriteFrame = "Girl"
     text spriteImage = "alien"
+    text fireImgSheet = "fire"
+    text fireFrame = "Fire"
 
     //For audio
     GameAudioManager audioManager
@@ -483,6 +486,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
         test2:sprite2:Scale(0.25)
     end
 
+    // Load images for spell animations
+    action InitializeSpellAnimTest()
+        test3:LoadImageSheet(fireImgSheet)
+        test3:LoadFrame(fireFrame)
+        Add(test3:sprite1)
+    end
+
     action InitializeAudioTest()
         /**************************************************************
                         Ryan's Audio Testing Section
@@ -752,6 +762,16 @@ end
             currentFrame = test:GetFrame()
             test:SetFrame(currentFrame + 1)
             test:ChangeFrame(spriteFrame)
+            elapsedTime = elapsedTime - 1/fps
+        end*/
+
+        // Spell animation
+        /*elapsedTime = elapsedTime + seconds
+        if elapsedTime >= 1/fps
+            currentFrame = test3:GetFrame()
+            test3:SetFrame(currentFrame + 1)
+            test3:ChangeFrame(fireFrame)
+            //test3:sprite1:Scale(0.9)  // shrinks in size
             elapsedTime = elapsedTime - 1/fps
         end*/
     
