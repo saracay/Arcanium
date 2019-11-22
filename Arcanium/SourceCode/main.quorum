@@ -765,7 +765,24 @@ end
             elapsedTime = elapsedTime - 1/fps
         end*/
 
-        // Spell animation
+        /************************************************
+        Spell Animations
+        HOW TO:
+        In variable declarations, declare: 
+        Animation <name> (i.e., Animation test3)
+        text <elementName>ImgSheet = "<elementName>
+        text <elementName>Frame = "<ElementName>"
+        (i.e., text fireImgSheet = "fire"
+               text fireFrame = "Fire")
+        In custom actions:
+        In the InitializeSpellAnimTest, call load LoadImgSheet and LoadFrame
+        from the Animation.quorum, pass the ImgSheet and Frame variables declared
+        (action InitializeSpellAnimTest()
+        test3:LoadImageSheet(fireImgSheet)
+        test3:LoadFrame(fireFrame)
+        Add(test3:sprite1)
+        end)
+        ************************************************/
         /*elapsedTime = elapsedTime + seconds
         if elapsedTime >= 1/fps
             currentFrame = test3:GetFrame()
