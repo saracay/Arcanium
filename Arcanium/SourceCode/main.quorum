@@ -393,39 +393,95 @@ class Main is Game, CollisionListener2D, KeyboardListener
             end
         end
         if (upRebinding)
-            upButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = downButton:GetInputValue() or 
+                event:keyCode = leftButton:GetInputValue() or
+                event:keyCode = rightButton:GetInputValue() or
+                event:keyCode = selectButton:GetInputValue() or
+                event:keyCode = backButton:GetInputValue() or
+                event:keyCode = menuButton:GetInputValue())
+
+                upButton:SetKeyboardInput(event:keyCode)
+                output "up rebound to " + event:keyCode
+            end
             upRebinding = false
-            output "up rebound to " + event:keyCode
         end
         if (downRebinding)
-            downButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = upButton:GetInputValue() or 
+                event:keyCode = leftButton:GetInputValue() or
+                event:keyCode = rightButton:GetInputValue() or
+                event:keyCode = selectButton:GetInputValue() or
+                event:keyCode = backButton:GetInputValue() or
+                event:keyCode = menuButton:GetInputValue())
+
+                downButton:SetKeyboardInput(event:keyCode)
+                output "down rebound to " + event:keyCode
+            end
             downRebinding = false
-            output "down rebound to " + event:keyCode
         end
         if (leftRebinding)
-            leftButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = upButton:GetInputValue() or 
+                event:keyCode = downButton:GetInputValue() or
+                event:keyCode = rightButton:GetInputValue() or
+                event:keyCode = selectButton:GetInputValue() or
+                event:keyCode = backButton:GetInputValue() or
+                event:keyCode = menuButton:GetInputValue())
+
+                leftButton:SetKeyboardInput(event:keyCode)
+                output "left rebound to " + event:keyCode
+            end
             leftRebinding = false
-            output "left rebound to " + event:keyCode
         end
         if (rightRebinding)
-            rightButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = upButton:GetInputValue() or 
+                event:keyCode = downButton:GetInputValue() or
+                event:keyCode = leftButton:GetInputValue() or
+                event:keyCode = selectButton:GetInputValue() or
+                event:keyCode = backButton:GetInputValue() or
+                event:keyCode = menuButton:GetInputValue())
+
+                rightButton:SetKeyboardInput(event:keyCode)
+                output "right rebound to " + event:keyCode
+            end
             rightRebinding = false
-            output "right rebound to " + event:keyCode
         end
         if (selectRebinding)
-            selectButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = upButton:GetInputValue() or 
+                event:keyCode = downButton:GetInputValue() or
+                event:keyCode = leftButton:GetInputValue() or
+                event:keyCode = rightButton:GetInputValue() or
+                event:keyCode = backButton:GetInputValue() or
+                event:keyCode = menuButton:GetInputValue())
+
+                selectButton:SetKeyboardInput(event:keyCode)
+                output "select rebound to " + event:keyCode
+            end
             selectRebinding = false
-            output "select rebound to " + event:keyCode
         end
         if (backRebinding)
-            backButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = upButton:GetInputValue() or 
+                event:keyCode = downButton:GetInputValue() or
+                event:keyCode = leftButton:GetInputValue() or
+                event:keyCode = rightButton:GetInputValue() or
+                event:keyCode = selectButton:GetInputValue() or
+                event:keyCode = menuButton:GetInputValue())
+
+                backButton:SetKeyboardInput(event:keyCode)
+                output "back rebound to " + event:keyCode
+            end
             backRebinding = false
-            output "back rebound to " + event:keyCode
         end
         if (menuRebinding)
-            menuButton:SetKeyboardInput(event:keyCode)
+            if not (event:keyCode = upButton:GetInputValue() or 
+                event:keyCode = downButton:GetInputValue() or
+                event:keyCode = leftButton:GetInputValue() or
+                event:keyCode = rightButton:GetInputValue() or
+                event:keyCode = selectButton:GetInputValue() or
+                event:keyCode = backButton:GetInputValue())
+
+                menuButton:SetKeyboardInput(event:keyCode)
+                output "menu rebound to " + event:keyCode
+            end
             menuRebinding = false
-            output "menu rebound to " + event:keyCode
         end
     end
 
