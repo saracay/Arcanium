@@ -198,7 +198,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         newX = player1:playerSprite:GetX()
 
         // Add/Sub to both X and Y based on keys
-        if monitor:IsKeyPressed(keys:W)
+        if monitor:IsKeyPressed(upButton:GetInputValue())
             newY = newY + plyrSpeed * seconds
             
             // for animation -- commented out for testing
@@ -213,13 +213,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
             elapsedTime = elapsedTime - 1/fps
             end*/
         end
-        if monitor:IsKeyPressed(downButton:GetInputType())
+        if monitor:IsKeyPressed(downButton:GetInputValue())
             newY = newY - plyrSpeed * seconds
         end
-        if monitor:IsKeyPressed(rightButton:GetInputType())
+        if monitor:IsKeyPressed(rightButton:GetInputValue())
             newX = newX + plyrSpeed * seconds
         end
-        if monitor:IsKeyPressed(leftButton:GetInputType())
+        if monitor:IsKeyPressed(leftButton:GetInputValue())
             newX = newX - plyrSpeed * seconds
         end
 
