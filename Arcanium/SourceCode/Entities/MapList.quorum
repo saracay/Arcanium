@@ -10,8 +10,12 @@ class MapList
     public text FOREST_CLEARING_MAP = "ForestClearing"
     public text FOREST_PATH_1_MAP = "ForestPath1"
     public text FOREST_PATH_2_MAP = "ForestPath2"
+    public text FOREST_PATH_3_MAP = "ForestPath3"
+    public text FOREST_PATH_4_MAP = "ForestPath4"
     public text PROLOGUE_TOWN_MAP = "PrologueTown"
     public text RUINED_TOWN_MAP = "RuinedTown"
+    public text INTERIOR_HOUSE_MAP = "InteriorHouse"
+    public text CAMP_MAP = "Camp"
 
     on create
         setMapList()
@@ -25,9 +29,13 @@ class MapList
         ALL_MAPS:Add(FOREST_CLEARING_MAP)
         ALL_MAPS:Add(FOREST_PATH_1_MAP)
         ALL_MAPS:Add(FOREST_PATH_2_MAP)
+        ALL_MAPS:Add(FOREST_PATH_3_MAP)
+        ALL_MAPS:Add(FOREST_PATH_4_MAP)
         ALL_MAPS:Add(PROLOGUE_TOWN_MAP)
         ALL_MAPS:Add(RUINED_TOWN_MAP)
-        
+        ALL_MAPS:Add(INTERIOR_HOUSE_MAP)
+        ALL_MAPS:Add(CAMP_MAP)
+
     end
 
     action Has(text map) returns boolean
