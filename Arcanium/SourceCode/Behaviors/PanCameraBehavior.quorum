@@ -1,14 +1,48 @@
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
 use Libraries.Interface.Item
-
+use Libraries.Game.Graphics.Camera    
+use Libraries.Game.Game
+use Libraries.Game.GameStateManager
 
 class PanCameraBehavior is Behavior
+    
+    GameStateManager manager 
+    Camera camera = undefined
+    number x = 0 
+    number y = 0
+    number maxTime = 0
+    number currTime = 0
+
+    boolean finished = false
 
     action Run (BehaviorEvent event)
-
+        currTime = 0
+        output "PanCameraBehavior"
     end
 
     action Update(number seconds)
+        
+        Main main = cast(Main, manager:GetGame())
+        camera = main:GetCamera2D()
+        
+        if(currTime <= maxTime)
+          camera:Move(x*seconds, y*seconds, 0)
+          currTime = currTime + seconds
+        else
+            finished = true
+        end
+         output "PanCameraBehavior should be updating"
     end
+
+    action PanCamera(number xPanSpeed, number yPanSpeed, number duration)
+        x = xPanSpeed
+        y = yPanSpeed
+        maxTime = duration
+    end
+    
+    action IsFinished returns boolean
+        return finished
+    end
+
 end

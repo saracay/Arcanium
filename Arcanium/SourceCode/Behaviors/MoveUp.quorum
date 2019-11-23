@@ -16,5 +16,6 @@ class MoveUp is Behavior
     end
 
     action Update(number seconds)
+        output "come on"
     end
 end

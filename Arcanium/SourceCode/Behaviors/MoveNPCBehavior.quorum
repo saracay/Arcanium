@@ -11,6 +11,10 @@ class MoveNPCBehavior is Behavior
 
     action Update(number seconds)
         
-        
     end
+
+    action SetMoveCoordinates(number x, number y)
+
+    end
+
 end

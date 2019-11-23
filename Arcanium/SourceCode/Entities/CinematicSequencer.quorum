@@ -1,16 +1,95 @@
+use Libraries.Containers.Array
 use Libraries.Interface.Behaviors.Behavior
-
+use Libraries.Interface.Events.BehaviorEvent
 
 class CinematicSequencer 
+
+    Array<Behavior> queue
+    Array<boolean> waitCheckQueue
+    
+    Array<Behavior> runningBehaviors
+    
+    Behavior currentBehavior
+    boolean currentWaitCheck = true
+
+    boolean shouldRun = true
+
+    action Update(number seconds)
+        if runningBehaviors:IsEmpty()
+            return now
+        end
+
+        if queue:IsEmpty()
+            shouldRun = true
+        end
+
+        integer i = 0
+        repeat until i < runningBehaviors:GetSize()
+            Behavior runningBehavior = runningBehaviors:Get(i)
+            
+            if runningBehavior:IsFinished()
+                runningBehaviors:RemoveAt(i)
+            else
+               runningBehavior:Update(seconds)
+            end
+
+            if currentWaitCheck = true
+                if currentBehavior:IsFinished()
+                    NextBehavior()
+                end
+            else
+                NextBehavior()
+            end
+            
+        end
+    end
+
+    action AddBehavior(Behavior behavior)
+        queue:Add(behavior)
+        if shouldRun
+            NextBehavior()
+        end
+    end
+
+    private action NextBehavior
+        shouldRun = false
+        if currentBehavior not= undefined
+            currentBehavior:Dispose()
+        end
+
+        if queue:IsEmpty()
+            currentBehavior = undefined
+        else
+            currentBehavior = queue:RemoveFromFront()
+            currentWaitCheck = waitCheckQueue:RemoveFromFront()
+
+            BehaviorEvent event
+            currentBehavior:Run(event)
+            
+            runningBehaviors:AddToFront(currentBehavior)
+
+        end
+    end
+
+    action StopBehaviors
+        if currentBehavior not= undefined
+            currentBehavior:Dispose()
+            currentBehavior = undefined
+        end
+        
+        runningBehaviors:Empty()
+        queue:Empty()
+    end
 
     action CreateCineSequence()
     
     end
 
-    action AddCineEvent(Behavior CineBehavior)
+    action AddCineEvent(Behavior cineBehavior, boolean waitUntilFinished)
     //Acceptable behaviors:
     //Player movement, Camera Movement, Dialogue, Play Music, Play Sound Effects, Wait for ... seconds, 
-        
+        queue:Add(cineBehavior)
+        waitCheckQueue:Add(waitUntilFinished)
     end
 
     action PlayCineSequence()
