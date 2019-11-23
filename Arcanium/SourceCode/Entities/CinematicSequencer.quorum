@@ -1,4 +1,5 @@
 use Libraries.Containers.Array
+use Libraries.Containers.Iterator
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
 
@@ -22,32 +23,28 @@ class CinematicSequencer
         if queue:IsEmpty()
             shouldRun = true
         end
+        
+        Iterator<Behavior> i = runningBehaviors:GetIterator()
+        repeat while i:HasNext()
+            Behavior runningBehavior = i:Next()
 
-        integer i = 0
-        repeat until i < runningBehaviors:GetSize()
-            Behavior runningBehavior = runningBehaviors:Get(i)
-            
             if runningBehavior:IsFinished()
-                runningBehaviors:RemoveAt(i)
+                runningBehavior:Dispose()
+                runningBehaviors:Remove(i:GetCurrent())
+                output "finished"
             else
                runningBehavior:Update(seconds)
             end
 
-            if currentWaitCheck = true
+            if currentWaitCheck = true and not queue:IsEmpty()
                 if currentBehavior:IsFinished()
                     NextBehavior()
                 end
             else
+                output "skip"
                 NextBehavior()
             end
             
-        end
-    end
-
-    action AddBehavior(Behavior behavior)
-        queue:Add(behavior)
-        if shouldRun
-            NextBehavior()
         end
     end
 
@@ -62,12 +59,11 @@ class CinematicSequencer
         else
             currentBehavior = queue:RemoveFromFront()
             currentWaitCheck = waitCheckQueue:RemoveFromFront()
-
+            
             BehaviorEvent event
             currentBehavior:Run(event)
             
-            runningBehaviors:AddToFront(currentBehavior)
-
+            runningBehaviors:Add(currentBehavior)
         end
     end
 
@@ -75,9 +71,11 @@ class CinematicSequencer
         if currentBehavior not= undefined
             currentBehavior:Dispose()
             currentBehavior = undefined
+            
         end
         
         runningBehaviors:Empty()
+        waitCheckQueue:Empty()
         queue:Empty()
     end
 
@@ -90,10 +88,11 @@ class CinematicSequencer
     //Player movement, Camera Movement, Dialogue, Play Music, Play Sound Effects, Wait for ... seconds, 
         queue:Add(cineBehavior)
         waitCheckQueue:Add(waitUntilFinished)
+
     end
 
     action PlayCineSequence()
-        
+        NextBehavior()
     end
 
 end

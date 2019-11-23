@@ -32,10 +32,10 @@ class PanCameraBehavior is Behavior
         else
             finished = true
         end
-         output "PanCameraBehavior should be updating"
+
     end
 
-    action PanCamera(number xPanSpeed, number yPanSpeed, number duration)
+    action SetCameraPan(number xPanSpeed, number yPanSpeed, number duration)
         x = xPanSpeed
         y = yPanSpeed
         maxTime = duration

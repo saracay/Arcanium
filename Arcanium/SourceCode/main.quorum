@@ -101,7 +101,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //For audio
     GameAudioManager audioManager
-
+    CinematicSequencer cineSequencer
 //==============================================================================
 //                             PREBUILT ACTIONS
 //==============================================================================
@@ -121,10 +121,11 @@ class Main is Game, CollisionListener2D, KeyboardListener
     backButton:SetKeyboardInput(keys:Q)
     menuButton:SetKeyboardInput(keys:I)
         //SetResolution()
-//        CreateBackground()
-//        InitializeMap(map1, maps:FOREST_MAP)
-//        InitializePlayer(player1)
-//        LoadAboveLayer(map1, maps:FOREST_MAP)
+        CreateBackground()
+        InitializeMap(map1, maps:FOREST_MAP)
+        InitializePlayer(player1)
+        LoadAboveLayer(map1, maps:FOREST_MAP)
+
 
         //==TEST CALLS==
         //CombatTest()
@@ -132,13 +133,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InteractableTest()
         //InitializeAnimTest()
         //InitializeAudioTest()
+        //CineSequencerTest()
     end
 
     action Update(number seconds)
 
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
-
+        cineSequencer:Update(seconds)
 //        PlayerMovement(seconds)
 
         // Necessary for removing unneeded objects
@@ -319,6 +321,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         Array<ScreenResolution> array = GetAvailableResolutions()
         ScreenResolution resolution = array:Get(21) //800x600 144hz
         SetScreenResolution(resolution)
+        SetFullScreen(false)
     end
 
     action CreateBackground()
@@ -532,6 +535,29 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     end
     
+    action CineSequencerTest()
+
+        //Cinematic Behaviors
+        PanCameraBehavior   cameraPan1
+        PanCameraBehavior   cameraPan2
+        WaitForBehavior     wait1
+        WaitForBehavior     wait2
+        
+        //Behavior Setup
+        wait1:              SetWaitDuration(0.3)
+        cameraPan1:         SetCameraPan(25,40, 5)
+        wait2:              SetWaitDuration(3)
+        cameraPan2:         SetCameraPan(40,0, 5)
+
+        //Adding Behaviors to Sequencer
+        cineSequencer:AddCineEvent(wait1, true)
+        cineSequencer:AddCineEvent(cameraPan1, true)
+        cineSequencer:AddCineEvent(wait2, false)
+        cineSequencer:AddCineEvent(cameraPan2, true)
+
+        cineSequencer:PlayCineSequence()
+    end
+
     action InitializeAnimTest()
         // Load images for sample animations
         test1:LoadImageSheet(spriteImgSheet)
