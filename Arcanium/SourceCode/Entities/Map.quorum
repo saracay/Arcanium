@@ -27,6 +27,8 @@ class Map
         aboveMaps:Add(maps:LIBRARY_MAP)
         aboveMaps:Add(maps:FOREST_CLEARING_MAP)
         aboveMaps:Add(maps:FOREST_PATH_1_MAP)
+        aboveMaps:Add(maps:FOREST_PATH_3_MAP)
+        aboveMaps:Add(maps:FOREST_PATH_4_MAP)
         aboveMaps:Add(maps:PROLOGUE_TOWN_MAP)
         aboveMaps:Add(maps:RUINED_TOWN_MAP)
     end
