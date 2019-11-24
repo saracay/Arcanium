@@ -39,13 +39,13 @@ class Battle is Level
         removalArray = newArray
     end
 
-    action Initialize(Player player, Enemy overworldEnemy)   //sample for testing only
+    action Initialize(Player player, Array<text> enemyTeam)
 
         player:SetBattle(me)
 
         combatants:Add(player)
-        //placeholder for player, just loads a square instead for now
 
+        //placeholder for player sprite, just loads a square instead for now
         Drawable playerSquare
         playerSquare:LoadFilledRectangle(150, 150, color:Blue())
         playerSquare:SetPosition(50, 200)
@@ -53,7 +53,6 @@ class Battle is Level
         sprites:Add(playerSquare)
 
         //displays player health and mana
-
         Drawable playerHealthBackground
         playerHealthBackground:LoadFilledRectangle(120, 40, color:LightGray())
         playerHealthBackground:SetPosition(225, 300)
@@ -70,34 +69,25 @@ class Battle is Level
         playerMana:SetPosition(230, 305)
         game:Add(playerMana)
 
-        //later on, will load different enemies based on the enemy encountered
+        integer counter = 0
 
-        Enemy goblin
-        Enemy orc
-        Enemy slime
+        repeat while counter < enemyTeam:GetSize()
+            if counter >= 3
+                counter = enemyTeam:GetSize()
+                output "Warning: only 3 enemies allowed per battle, extra enemies ignored."
+            else
+                Enemy enemy
+                enemy:FillEnemy(enemyTeam:Get(counter))
+                enemy:SetGame(game)
+                enemy:SetBattle(me)
+                enemy:SetRemovalArray(removalArray)
+                enemy:SetBehaviorQueue(behaviorQueue)
+                combatants:Add(enemy)
 
-        goblin:FillEnemy("Goblin")
-        goblin:SetGame(game)
-        goblin:SetBattle(me)
-        goblin:SetRemovalArray(removalArray)
-        goblin:SetBehaviorQueue(behaviorQueue)
-
-        orc:FillEnemy("Orc")
-        orc:SetGame(game)
-        orc:SetBattle(me)
-        orc:SetRemovalArray(removalArray)
-        orc:SetBehaviorQueue(behaviorQueue)
-
-        slime:FillEnemy("Slime")
-        slime:SetGame(game)
-        slime:SetBattle(me)
-        slime:SetRemovalArray(removalArray)
-        slime:SetBehaviorQueue(behaviorQueue)
-
-        combatants:Add(goblin)
-        combatants:Add(orc)
-        combatants:Add(slime)
-
+                counter = counter + 1
+            end
+        end
+        
         integer combatantIndex = 1
         Math math
 
@@ -123,7 +113,19 @@ class Battle is Level
             combatantIndex = combatantIndex + 1
         end
 
-        log:Add("An enemy Golbin, Orc, and Slime appeared!")
+        counter = 1
+
+        text enemiesLog = "An enemy "
+        repeat while counter < combatants:GetSize()
+            if counter = combatants:GetSize() - 1
+                enemiesLog = enemiesLog + " and " + combatants:Get(counter):GetName() + " attacked!"
+            else
+                enemiesLog = enemiesLog + combatants:Get(counter):GetName() + ","
+            end
+
+            counter = counter + 1
+        end
+        log:Add(enemiesLog)
 
         Drawable dialogueBackground
         dialogueBackground:LoadFilledRectangle(800, 180, color:LightGray())

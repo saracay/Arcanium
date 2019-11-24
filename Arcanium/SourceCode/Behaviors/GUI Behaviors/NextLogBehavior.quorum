@@ -9,6 +9,8 @@ use Libraries.Interface.Controls.Button
 
 class NextLogBehavior is Behavior
 
+// call notify from the accessibility manager from the gamestate manager
+
     Game game
     Drawable displayBox
     Array<Item2D> removalArray
@@ -28,7 +30,7 @@ class NextLogBehavior is Behavior
             logBehavior:SetFinished(true)
         end
     end
- 
+
     action SetLabels(Array<Label> array)
         labels = array
     end
