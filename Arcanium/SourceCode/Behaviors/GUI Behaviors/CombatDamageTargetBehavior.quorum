@@ -40,6 +40,9 @@ output ""
             end
         end
 
+        battle:UpdateStatus()
+        battle:EnemyTurn()
+
         mainPage:SetFinished(true)
     end
 

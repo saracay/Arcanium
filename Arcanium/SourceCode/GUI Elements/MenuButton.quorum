@@ -26,7 +26,9 @@ class MenuButton is Button, FocusListener
         end
     end
 
-    action GainedFocus(FocusEvent event)      
+    action GainedFocus(FocusEvent event)
+        parent:Button:GainedFocus(event)
+
         integer counter = 0
 
         repeat while counter < targets:GetSize()

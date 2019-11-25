@@ -22,11 +22,11 @@ class Animation
     end
 
     action LoadImageSheet(text imgSheet)
-        sheet:Load("resources/" + imgSheet +".atlas")
+        sheet:Load("Assets/ImageSheets/" + imgSheet +".atlas")
     end 
 
     action LoadImage(text img)
-        sprite2:Load("assets/" + img + ".png")
+        sprite2:Load("Assets/Sprites/" + img + ".png")
     end
 
     action LoadFrame(text frameImg)

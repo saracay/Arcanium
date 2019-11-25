@@ -90,7 +90,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     Animation test3
     number elapsedTime = 0
     number fps = 4
-    number currentFrame = 1
+    integer currentFrame = 1
     number spaceX = 0
     number spaceY = 0
     text spriteImgSheet = "girl"
@@ -129,6 +129,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         InputTest()
         //InteractableTest()
         //InitializeAnimTest()
+        //InitializeSpellAnimTest()
         //InitializeAudioTest()
         //CineSequencerTest()
     end
@@ -142,6 +143,12 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if(cineSequencer:IsFinished())
             PlayerMovement(seconds)
         end
+        
+		// ScriptedAnimTest(seconds)
+		// SpellAnim(seconds)
+		// PlayerMovementWithAnim(seconds)
+
+
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
             Remove(removalArray:RemoveFromFront())
@@ -564,8 +571,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         cineSequencer:PlayCineSequence()
     end
 
+    // Load images for sample animations, call in action CreateGame
     action InitializeAnimTest()
-        // Load images for sample animations
         test1:LoadImageSheet(spriteImgSheet)
         test1:LoadFrame(spriteFrame)
         Add(test1:sprite1)
@@ -574,7 +581,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         test2:sprite2:Scale(0.25)
     end
 
-    // Load images for spell animations
+    // Load images for spell animations, call in action CreateGame
     action InitializeSpellAnimTest()
         test3:LoadImageSheet(fireImgSheet)
         test3:LoadFrame(fireFrame)
@@ -666,6 +673,90 @@ class Main is Game, CollisionListener2D, KeyboardListener
         Add(map1:aboveLayer)
         
     end
+
+    // Animation without keys, call in action Updates
+    action ScriptedAnimTest(number seconds)
+        elapsedTime = elapsedTime + seconds
+        if elapsedTime >= 1/fps
+            currentFrame = test1:GetFrame()
+            test1:SetFrame(currentFrame + 1)
+            test1:ChangeFrame(spriteFrame)
+            elapsedTime = elapsedTime - 1/fps
+        end
+    end
+
+    /************************************************
+    Spell Animations -- call in action Updates
+    HOW TO:
+    In variable declarations, declare: 
+    Animation <name> (i.e., Animation test3)
+    text <elementName>ImgSheet = "<elementName>
+     text <elementName>Frame = "<ElementName>"
+     (i.e., text fireImgSheet = "fire"
+            text fireFrame = "Fire")
+     Call InitializeSpellAnimTest() in action CreateGame
+     ************************************************/
+     action SpellAnim(number seconds)
+     elapsedTime = elapsedTime + seconds
+     	if elapsedTime >= 1/fps
+        	currentFrame = test3:GetFrame()
+        	test3:SetFrame(currentFrame + 1)
+        	test3:ChangeFrame(fireFrame)
+        	//test3:sprite1:Scale(0.9)  // shrinks in size
+        	elapsedTime = elapsedTime - 1/fps
+     	end
+     end
+
+     // Animation with keys, call in action Updates
+     action PlayerMovementWithAnim(number seconds)
+     	newY = test1:sprite1:GetY()
+        	newX = test1:sprite1:GetX()
+           	
+           	if monitor:IsKeyPressed(keys:W)
+            newY = test1:sprite1:GetY() + plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+            if elapsedTime >= 1/fps
+                currentFrame = test1:GetFrame()
+                test1:SetFrame(currentFrame + 1)
+                test1:ChangeFrame(spriteFrame)
+                elapsedTime = elapsedTime - 1/fps
+            end
+
+        elseif monitor:IsKeyPressed(keys:S)
+            newY = test1:sprite1:GetY() - plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+            if elapsedTime >= 1/fps
+                currentFrame = test1:GetFrame()
+                test1:SetFrame(currentFrame + 1)
+                test1:ChangeFrame(spriteFrame)
+                elapsedTime = elapsedTime - 1/fps
+            end
+
+        elseif monitor:IsKeyPressed(keys:D)
+            newX = test1:sprite1:GetX() + plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+            if elapsedTime >= 1/fps
+                currentFrame = test1:GetFrame()
+                test1:SetFrame(currentFrame + 1)
+                test1:ChangeFrame(spriteFrame)
+                elapsedTime = elapsedTime - 1/fps
+            end
+
+        elseif monitor:IsKeyPressed(keys:A)
+            newX = test1:sprite1:GetX() - plyrSpeed * seconds
+            elapsedTime = elapsedTime + seconds
+        	if elapsedTime >= 1/fps
+            	currentFrame = test1:GetFrame()
+            	test1:SetFrame(currentFrame + 1)
+            	test1:ChangeFrame(spriteFrame)
+            	elapsedTime = elapsedTime - 1/fps
+        	end
+    	end
+        
+        test1:sprite1:SetPosition(newX,newY)
+     end
+
+
 
 end
 
@@ -844,41 +935,6 @@ end
         test2:sprite2:SetPosition(spaceX, spaceY)
         */
 
-        // Animation without using keys
-        /*elapsedTime = elapsedTime + seconds
-        if elapsedTime >= 1/fps
-            currentFrame = test:GetFrame()
-            test:SetFrame(currentFrame + 1)
-            test:ChangeFrame(spriteFrame)
-            elapsedTime = elapsedTime - 1/fps
-        end*/
-
-        /************************************************
-        Spell Animations
-        HOW TO:
-        In variable declarations, declare: 
-        Animation <name> (i.e., Animation test3)
-        text <elementName>ImgSheet = "<elementName>
-        text <elementName>Frame = "<ElementName>"
-        (i.e., text fireImgSheet = "fire"
-               text fireFrame = "Fire")
-        In custom actions:
-        In the InitializeSpellAnimTest, call load LoadImgSheet and LoadFrame
-        from the Animation.quorum, pass the ImgSheet and Frame variables declared
-        (action InitializeSpellAnimTest()
-        test3:LoadImageSheet(fireImgSheet)
-        test3:LoadFrame(fireFrame)
-        Add(test3:sprite1)
-        end)
-        ************************************************/
-        /*elapsedTime = elapsedTime + seconds
-        if elapsedTime >= 1/fps
-            currentFrame = test3:GetFrame()
-            test3:SetFrame(currentFrame + 1)
-            test3:ChangeFrame(fireFrame)
-            //test3:sprite1:Scale(0.9)  // shrinks in size
-            elapsedTime = elapsedTime - 1/fps
-        end*/
     
     /***********************************************************************
         Sprite Animation
@@ -887,7 +943,10 @@ end
 	
 	/*
 	// 	UPDATED - commented out for testing
-            if monitor:IsKeyPressed(keys:W)
+			newY = test1:sprite1:GetY()
+        	newX = test1:sprite1:GetX()
+           	
+           	if monitor:IsKeyPressed(keys:W)
             newY = test1:sprite1:GetY() + plyrSpeed * seconds
             elapsedTime = elapsedTime + seconds
             if elapsedTime >= 1/fps

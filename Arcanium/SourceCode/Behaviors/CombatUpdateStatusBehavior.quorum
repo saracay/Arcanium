@@ -22,7 +22,6 @@ class CombatUpdateStatusBehavior is Behavior
 
     action Run(BehaviorEvent event)
 
-        Array<text> updateMessages
         player = cast(Player, combatants:Get(0))
         integer counter = 0
 
@@ -36,8 +35,6 @@ class CombatUpdateStatusBehavior is Behavior
                     removalArray:Add(playerMana)
                 else
                     player:AddExperience(combatants:Get(counter):GetExperienceValue(), combatants:Get(counter):GetLevel())
-                    updateMessages:Add(player:GetName() + " defeated Level " + combatants:Get(counter):GetLevel() + " " + combatants:Get(counter):GetName() 
-                                            + " and earned " + combatants:Get(counter):GetExperienceValue() + " Experience!")
                 end
 
                 combatants:Set(counter, undefined)
@@ -54,12 +51,6 @@ class CombatUpdateStatusBehavior is Behavior
 
             counter = counter + 1
         end
-
-        DisplayLogBehavior updateMessage
-        updateMessage:SetGame(game)
-        updateMessage:SetLog(updateMessages)
-        updateMessage:SetRemovalArray(removalArray)
-        behaviorQueue:AddBehavior(updateMessage)
 
         finished = true
     end

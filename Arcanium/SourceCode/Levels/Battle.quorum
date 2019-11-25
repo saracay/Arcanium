@@ -120,7 +120,7 @@ class Battle is Level
             if counter = combatants:GetSize() - 1
                 enemiesLog = enemiesLog + " and " + combatants:Get(counter):GetName() + " attacked!"
             else
-                enemiesLog = enemiesLog + combatants:Get(counter):GetName() + ","
+                enemiesLog = enemiesLog + combatants:Get(counter):GetName() + ", "
             end
 
             counter = counter + 1
