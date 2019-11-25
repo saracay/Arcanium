@@ -14,6 +14,7 @@ class CinematicSequencer
     boolean currentWaitCheck = true
 
     boolean shouldRun = true
+    boolean isFinished = true
 
     action Update(number seconds)
         if runningBehaviors:IsEmpty()
@@ -28,8 +29,8 @@ class CinematicSequencer
         repeat while i:HasNext()
             Behavior runningBehavior = i:Next()
 
-            if runningBehavior:IsFinished()
-                runningBehavior:Dispose()
+            if runningBehavior:IsFinished() 
+                //runningBehavior:Dispose()
                 runningBehaviors:Remove(i:GetCurrent())
                 output "finished"
             else
@@ -38,32 +39,39 @@ class CinematicSequencer
 
             if currentWaitCheck = true and not queue:IsEmpty()
                 if currentBehavior:IsFinished()
+                    output "Next Behavior"
                     NextBehavior()
                 end
             else
-                output "skip"
                 NextBehavior()
             end
-            
+
         end
     end
 
     private action NextBehavior
-        shouldRun = false
-        if currentBehavior not= undefined
-            currentBehavior:Dispose()
-        end
+        if isFinished = false 
+            shouldRun = false
+            if currentBehavior not= undefined
+                currentBehavior:Dispose()
+            end
 
-        if queue:IsEmpty()
-            currentBehavior = undefined
-        else
-            currentBehavior = queue:RemoveFromFront()
-            currentWaitCheck = waitCheckQueue:RemoveFromFront()
-            
-            BehaviorEvent event
-            currentBehavior:Run(event)
-            
-            runningBehaviors:Add(currentBehavior)
+            if queue:IsEmpty()
+                currentBehavior = undefined
+                if runningBehaviors:IsEmpty()
+                    output "CineSequencer is Finished"
+                    isFinished = true
+                end
+                
+            else
+                currentBehavior = queue:RemoveFromFront()
+                currentWaitCheck = waitCheckQueue:RemoveFromFront()
+
+                BehaviorEvent event
+                currentBehavior:Run(event)
+
+                runningBehaviors:Add(currentBehavior)
+            end
         end
     end
 
@@ -92,7 +100,11 @@ class CinematicSequencer
     end
 
     action PlayCineSequence()
+        isFinished = false
         NextBehavior()
     end
 
+    action IsFinished returns boolean
+        return isFinished
+    end
 end

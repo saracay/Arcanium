@@ -112,15 +112,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 
     action CreateGame
-    AddKeyboardListener(me)
-    upButton:SetKeyboardInput(keys:W)
-    downButton:SetKeyboardInput(keys:S)
-    leftButton:SetKeyboardInput(keys:A)
-    rightButton:SetKeyboardInput(keys:D)
-    selectButton:SetKeyboardInput(keys:SPACE)
-    backButton:SetKeyboardInput(keys:Q)
-    menuButton:SetKeyboardInput(keys:I)
+
         //SetResolution()
+        SetKeyboardInput()
         CreateBackground()
         InitializeMap(map1, maps:FOREST_MAP)
         InitializePlayer(player1)
@@ -132,7 +126,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        enemies:Add("Goblin Shaman")
 //        enemies:Add("Goblin")
 //        CombatTest(enemies)
-        //InputTest()
+        InputTest()
         //InteractableTest()
         //InitializeAnimTest()
         //InitializeAudioTest()
@@ -144,8 +138,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
-//        PlayerMovement(seconds)
 
+        if(cineSequencer:IsFinished())
+            PlayerMovement(seconds)
+        end
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
             Remove(removalArray:RemoveFromFront())
@@ -218,16 +214,16 @@ class Main is Game, CollisionListener2D, KeyboardListener
             elapsedTime = elapsedTime - 1/fps
             end*/
         end
-        if monitor:IsKeyPressed(downButton:GetInputValue())
+        if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
         end
         if monitor:IsKeyPressed(rightButton:GetInputValue())
             newX = newX + plyrSpeed * seconds
         end
-        if monitor:IsKeyPressed(leftButton:GetInputValue())
+        if monitor:IsKeyPressed(keys:A)
             newX = newX - plyrSpeed * seconds
         end
-
+        
         // Checks if PLAYER is out of bounds
         if newY < 0
             newY = 0
@@ -245,7 +241,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         player1:playerSprite:SetPosition(newX,newY)
         camera = GetCamera2D()
         camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
-
+        
     end
 
     action CheckForInteraction(CollisionEvent2D event, boolean entering)
@@ -337,6 +333,17 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
 //                          Input Rebinding
 //==============================================================================
+
+    action SetKeyboardInput()
+        AddKeyboardListener(me)
+        upButton:SetKeyboardInput(keys:W)
+        downButton:SetKeyboardInput(keys:S)
+        leftButton:SetKeyboardInput(keys:A)
+        rightButton:SetKeyboardInput(keys:D)
+        selectButton:SetKeyboardInput(keys:SPACE)
+        backButton:SetKeyboardInput(keys:Q)
+        menuButton:SetKeyboardInput(keys:I)
+    end
 
     action RebindKey(InputSet in)
         //RebindKeys rebind
@@ -537,12 +544,16 @@ class Main is Game, CollisionListener2D, KeyboardListener
         PanCameraBehavior   cameraPan2
         WaitForBehavior     wait1
         WaitForBehavior     wait2
-        
+        DialogueBehavior    dialogue1
+
+
         //Behavior Setup
         wait1:              SetWaitDuration(0.3)
         cameraPan1:         SetCameraPan(25,40, 5)
         wait2:              SetWaitDuration(3)
         cameraPan2:         SetCameraPan(40,0, 5)
+        dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 1")
+        dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 2")
 
         //Adding Behaviors to Sequencer
         cineSequencer:AddCineEvent(wait1, true)
