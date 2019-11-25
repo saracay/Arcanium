@@ -480,7 +480,7 @@ class CombatMainPageBehavior is Behavior, MainPage
             outerCounter = outerCounter + 1
         end
 
-        battle:EnemyTurn()
+//        battle:EnemyTurn()
     end
 
     action SetGame(Game newGame)

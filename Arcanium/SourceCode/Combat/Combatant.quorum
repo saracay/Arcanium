@@ -85,6 +85,11 @@ class Combatant
             Array<text> log2
             log2:Add(GetName() + " took " + damageReceived + " damage!")
 
+            if (currentHP - damageReceived <= 0) and (not (me is Player))
+                log2:Add(GetName() + " was defeated!")
+                log2:Add(user:GetName() + " gained " + GetExperienceValue() + " experience!")
+            end
+
             // dialogue behavior
             DisplayLogBehavior updateMessage2
             updateMessage2:SetGame(game)

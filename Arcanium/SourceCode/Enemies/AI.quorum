@@ -40,6 +40,15 @@ class AI
             end
 
             if (enemySpell:GetMultiTarget() and targetPosition not= 0)
+                Array<text> log
+                log:Add(actor:GetName() + " cast " + enemySpell:GetName() + "!")
+
+                DisplayLogBehavior updateMessage
+                updateMessage:SetGame(game)
+                updateMessage:SetLog(log)
+                updateMessage:SetRemovalArray(removalArray)
+                behaviorQueue:AddBehavior(updateMessage)
+
                 targetPosition = 1
                 repeat while (targetPosition < combatants:GetSize())
                     if combatants:Get(targetPosition) not= undefined
@@ -59,6 +68,15 @@ class AI
             end
 
             if (enemyPhysical:GetMultiTarget())
+                Array<text> log
+                log:Add(actor:GetName() + " used " + enemyPhysical:GetName() + "!")
+
+                DisplayLogBehavior updateMessage
+                updateMessage:SetGame(game)
+                updateMessage:SetLog(log)
+                updateMessage:SetRemovalArray(removalArray)
+                behaviorQueue:AddBehavior(updateMessage)
+
                 targetPosition = 1
                 repeat while (targetPosition < combatants:GetSize())
                     if combatants:Get(targetPosition) not= undefined
