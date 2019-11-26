@@ -93,8 +93,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
     integer currentFrame = 1
     number spaceX = 0
     number spaceY = 0
-    text spriteImgSheet = "girl"
-    text spriteFrame = "Girl"
+    text spriteImgSheet = "Hero"
+    text spriteFrame = "Hero"
     text spriteImage = "alien"
     text fireImgSheet = "fire"
     text fireFrame = "Fire"
@@ -144,7 +144,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
             PlayerMovement(seconds)
         end
         
-		// ScriptedAnimTest(seconds)
+		//ScriptedAnimTest(seconds)
 		// SpellAnim(seconds)
 		// PlayerMovementWithAnim(seconds)
 
@@ -546,13 +546,19 @@ class Main is Game, CollisionListener2D, KeyboardListener
     
     action CineSequencerTest()
 
+        //Setup
+        Animation cineAnimation
+        cineAnimation:LoadImageSheet(spriteImgSheet)
+        cineAnimation:LoadFrame(spriteFrame)
+        Add(cineAnimation:sprite1)
+
         //Cinematic Behaviors
         PanCameraBehavior   cameraPan1
         PanCameraBehavior   cameraPan2
         WaitForBehavior     wait1
         WaitForBehavior     wait2
         DialogueBehavior    dialogue1
-
+        MoveNPCBehavior     moveTest1
 
         //Behavior Setup
         wait1:              SetWaitDuration(0.3)
@@ -561,11 +567,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
         cameraPan2:         SetCameraPan(40,0, 5)
         dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 1")
         dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 2")
+        moveTest1:SetAnimation(cineAnimation, spriteImgSheet)
+        moveTest1:SetMoveDirection(15,0,5)
 
         //Adding Behaviors to Sequencer
+        cineSequencer:AddCineEvent(moveTest1, true)
         cineSequencer:AddCineEvent(wait1, true)
         cineSequencer:AddCineEvent(cameraPan1, true)
-        cineSequencer:AddCineEvent(wait2, false)
+        cineSequencer:AddCineEvent(wait2, true)
         cineSequencer:AddCineEvent(cameraPan2, true)
 
         cineSequencer:PlayCineSequence()
@@ -712,7 +721,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
      	newY = test1:sprite1:GetY()
         	newX = test1:sprite1:GetX()
            	
-           	if monitor:IsKeyPressed(keys:W)
+        if monitor:IsKeyPressed(keys:W)
             newY = test1:sprite1:GetY() + plyrSpeed * seconds
             elapsedTime = elapsedTime + seconds
             if elapsedTime >= 1/fps

@@ -1,0 +1,27 @@
+
+Hero.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Hero frame 1
+  rotate: false
+  xy: 2, 2
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+Hero frame 2
+  rotate: false
+  xy: 74, 2
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+Hero frame 3
+  rotate: false
+  xy: 144, 2
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
