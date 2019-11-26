@@ -785,103 +785,103 @@ class Main is Game, CollisionListener2D, KeyboardListener
     ***********************************************************************/
     /*
     action DebugCreateButton(Button button, text buttonText, number buttonPosX, number buttonPosY)
-    button:SetName(buttonText)
-    button:SetPosition(buttonPosX, buttonPosY)
-    SetFocus(button)
-    Add(button)
-    end
+        button:SetName(buttonText)
+        button:SetPosition(buttonPosX, buttonPosY)
+        SetFocus(button)
+        Add(button)
+        end
     */
 
     // Initializes/creates buttons
     action DebugCreateButton(Button button, text buttonText, DebugMenuBehavior behavior, text mapName, text transitionMap)
-    button:SetName(buttonText)
-    behavior:SetMap(map1, mapName, transitionMap, player1)
-    //SetFocus(button)
-    Add(button)
-    button:SetBehavior(behavior)
+        button:SetName(buttonText)
+        behavior:SetMap(map1, mapName, transitionMap, player1)
+        //SetFocus(button)
+        Add(button)
+        button:SetBehavior(behavior)
     end
 
     // Initializes debug menu for all maps
     action DebugMenuTest()
-    ManualLayout layout
-    me:SetLayout(layout)
+        ManualLayout layout
+        me:SetLayout(layout)
 
-    // Current maps. Add maps here.
-    Button bTestMap
-    Button bForest
-    Button bCastle
-    Button bLibrary
-    Button bForestClearing
-    Button bForestPath1
-    Button bForestPath2
-    Button bForestPath3
-    Button bForestPath4
-    Button bPrologueTown
-    Button bRuinedTown
-    Button bInteriorHouse
-    Button bCamp
+        // Current maps. Add maps here.
+        Button bTestMap
+        Button bForest
+        Button bCastle
+        Button bLibrary
+        Button bForestClearing
+        Button bForestPath1
+        Button bForestPath2
+        Button bForestPath3
+        Button bForestPath4
+        Button bPrologueTown
+        Button bRuinedTown
+        Button bInteriorHouse
+        Button bCamp
 
     // Behaviors for respective buttons above...
-    DebugMenuBehavior testing1
-    DebugMenuBehavior testing2
-    DebugMenuBehavior testing3
-    DebugMenuBehavior testing4
-    DebugMenuBehavior testing5
-    DebugMenuBehavior testing6
-    DebugMenuBehavior testing7
-    DebugMenuBehavior testing8
-    DebugMenuBehavior testing9 
-    DebugMenuBehavior testing10
-    DebugMenuBehavior testing11
-    DebugMenuBehavior testing12
-    DebugMenuBehavior testing13
+        DebugMenuBehavior testing1
+        DebugMenuBehavior testing2
+        DebugMenuBehavior testing3
+        DebugMenuBehavior testing4
+        DebugMenuBehavior testing5
+        DebugMenuBehavior testing6
+        DebugMenuBehavior testing7
+        DebugMenuBehavior testing8
+        DebugMenuBehavior testing9 
+        DebugMenuBehavior testing10
+        DebugMenuBehavior testing11
+        DebugMenuBehavior testing12
+        DebugMenuBehavior testing13
 
-    // Current buttons. Initialize new buttons for new maps here.
-    // Currently used for testing (general testing)
-    // When setting a new button position, leave X at 0 for now, increment Y by 50 from previous button using SetPosition()
-    // FOR NEW COLUMN: Increment X by 200
-    // Button position defaulted at (0,0)
-    // NOTE: I just assigned random transition maps for each button. Feel free to change these to the correct maps
-    DebugCreateButton(bTestMap, "TestMap", testing1, maps:TEST_MAP, maps:FOREST_MAP)
+        // Current buttons. Initialize new buttons for new maps here.
+        // Currently used for testing (general testing)
+        // When setting a new button position, leave X at 0 for now, increment Y by 50 from previous button using SetPosition()
+        // FOR NEW COLUMN: Increment X by 200
+        // Button position defaulted at (0,0)
+        // NOTE: I just assigned random transition maps for each button. Feel free to change these to the correct maps
+        DebugCreateButton(bTestMap, "TestMap", testing1, maps:TEST_MAP, maps:FOREST_MAP)
 
-    DebugCreateButton(bForest, "Forest", testing2, maps:FOREST_MAP, maps:FOREST_PATH_1_MAP)
-    bForest:SetPosition(0, 50)
+        DebugCreateButton(bForest, "Forest", testing2, maps:FOREST_MAP, maps:FOREST_PATH_1_MAP)
+        bForest:SetPosition(0, 50)
 
-    DebugCreateButton(bCastle, "Castle", testing3, maps:CASTLE_MAP, maps:TEST_MAP)
-    bCastle:SetPosition(0, 100)
+        DebugCreateButton(bCastle, "Castle", testing3, maps:CASTLE_MAP, maps:TEST_MAP)
+        bCastle:SetPosition(0, 100)
 
-    DebugCreateButton(bLibrary, "Library", testing4, maps:LIBRARY_MAP, maps:CASTLE_MAP)
-    bLibrary:SetPosition(0, 150)
+        DebugCreateButton(bLibrary, "Library", testing4, maps:LIBRARY_MAP, maps:CASTLE_MAP)
+        bLibrary:SetPosition(0, 150)
 
-    DebugCreateButton(bForestClearing, "ForestClearing", testing5, maps:FOREST_CLEARING_MAP, maps:FOREST_MAP)
-    bForestClearing:SetPosition(200, 0)
+        DebugCreateButton(bForestClearing, "ForestClearing", testing5, maps:FOREST_CLEARING_MAP, maps:FOREST_MAP)
+        bForestClearing:SetPosition(200, 0)
 
-    DebugCreateButton(bForestPath1, "ForestPath1", testing6, maps:FOREST_PATH_1_MAP, maps:FOREST_PATH_2_MAP)
-    bForestPath1:SetPosition(200, 50)
+        DebugCreateButton(bForestPath1, "ForestPath1", testing6, maps:FOREST_PATH_1_MAP, maps:FOREST_PATH_2_MAP)
+        bForestPath1:SetPosition(200, 50)
 
-    DebugCreateButton(bForestPath2, "ForestPath2", testing7, maps:FOREST_PATH_2_MAP, maps:FOREST_PATH_3_MAP)
-    bForestPath2:SetPosition(200, 100)
+        DebugCreateButton(bForestPath2, "ForestPath2", testing7, maps:FOREST_PATH_2_MAP, maps:FOREST_PATH_3_MAP)
+        bForestPath2:SetPosition(200, 100)
 
-    DebugCreateButton(bForestPath3, "ForestPath3", testing8, maps:FOREST_PATH_3_MAP, maps:FOREST_PATH_4_MAP)
-    bForestPath3:SetPosition(200, 150)
+        DebugCreateButton(bForestPath3, "ForestPath3", testing8, maps:FOREST_PATH_3_MAP, maps:FOREST_PATH_4_MAP)
+        bForestPath3:SetPosition(200, 150)
 
-    DebugCreateButton(bForestPath4, "ForestPath4", testing9, maps:FOREST_PATH_4_MAP, maps:FOREST_MAP)
-    bForestPath4:SetPosition(200, 200)
+        DebugCreateButton(bForestPath4, "ForestPath4", testing9, maps:FOREST_PATH_4_MAP, maps:FOREST_MAP)
+        bForestPath4:SetPosition(200, 200)
 
-    DebugCreateButton(bPrologueTown, "PrologueTown", testing10, maps:PROLOGUE_TOWN_MAP, maps:RUINED_TOWN_MAP)
-    bPrologueTown:SetPosition(400, 0)
+        DebugCreateButton(bPrologueTown, "PrologueTown", testing10, maps:PROLOGUE_TOWN_MAP, maps:RUINED_TOWN_MAP)
+        bPrologueTown:SetPosition(400, 0)
 
-    // THESE 3 BUTTONS ARE CURRENTLY CRASHING
-    /*
-    DebugCreateButton(bRuinedTown, "RuinedTown", testing11, maps:RUINED_TOWN_MAP, maps:TEST_MAP)
-    bRuinedTown:SetPosition(-200, 50)
+        // THESE 3 BUTTONS ARE CURRENTLY CRASHING
+        /*
+        DebugCreateButton(bRuinedTown, "RuinedTown", testing11, maps:RUINED_TOWN_MAP, maps:TEST_MAP)
+        bRuinedTown:SetPosition(400, 50)
  
-    DebugCreateButton(bInteriorHouse, "InteriorHouse", testing12, maps:INTERIOR_HOUSE_MAP, maps:TEST_MAP)
-    bInteriorHouse:SetPosition(-200, 100)
+        DebugCreateButton(bInteriorHouse, "InteriorHouse", testing12, maps:INTERIOR_HOUSE_MAP, maps:TEST_MAP)
+        bInteriorHouse:SetPosition(400, 100)
 
-    DebugCreateButton(bCamp, "Camp", testing13, maps:CAMP_MAP, maps:TEST_MAP)
-    bCamp:SetPosition(-200, 150)
-    */
+        DebugCreateButton(bCamp, "Camp", testing13, maps:CAMP_MAP, maps:TEST_MAP)
+        bCamp:SetPosition(400, 150)
+        */
     end
 /***********************************************************************
                      End of Maria's debug menu section.
