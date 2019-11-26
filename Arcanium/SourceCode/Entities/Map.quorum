@@ -29,6 +29,10 @@ class Map
         aboveMaps:Add(maps:FOREST_PATH_1_MAP)
         aboveMaps:Add(maps:FOREST_PATH_3_MAP)
         aboveMaps:Add(maps:FOREST_PATH_4_MAP)
+        aboveMaps:Add(maps:FOREST_PATH_1_MAP_COMPLETE)
+        aboveMaps:Add(maps:FOREST_PATH_3_MAP_COMPLETE)
+        aboveMaps:Add(maps:FOREST_PATH_4_MAP_HALF_COMPLETE)
+        aboveMaps:Add(maps:FOREST_PATH_4_MAP_COMPLETE)
         aboveMaps:Add(maps:PROLOGUE_TOWN_MAP)
         aboveMaps:Add(maps:RUINED_TOWN_MAP)
     end
