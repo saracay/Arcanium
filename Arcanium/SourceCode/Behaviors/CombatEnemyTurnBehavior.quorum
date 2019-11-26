@@ -36,7 +36,11 @@ class CombatEnemyTurnBehavior is Behavior
     action Dispose
         Player player = cast(Player, combatants:Get(0))
         player:SetCurrentMP(player:GetCurrentMP() + 1)
-        battle:PlayerTurn()
+        
+        CombatUpdateEffectsBehavior behavior
+        behavior:SetCombatants(combatants)
+        behavior:SetBattle(battle)
+        behaviorQueue:AddBehavior(behavior)
     end
 
     action IsFinished returns boolean

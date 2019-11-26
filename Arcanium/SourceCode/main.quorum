@@ -99,6 +99,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
     text fireImgSheet = "fire"
     text fireFrame = "Fire"
 
+    boolean doneCreating = false
+
     //For audio
     GameAudioManager audioManager
     CinematicSequencer cineSequencer
@@ -112,21 +114,22 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 
     action CreateGame
+        doneCreating = true
 
         //SetResolution()
-        SetKeyboardInput()
-        CreateBackground()
-        InitializeMap(map1, maps:FOREST_MAP)
-        InitializePlayer(player1)
-        LoadAboveLayer(map1, maps:FOREST_MAP)
+//        SetKeyboardInput()
+//        CreateBackground()
+//        InitializeMap(map1, maps:FOREST_MAP)
+//        InitializePlayer(player1)
+//        LoadAboveLayer(map1, maps:FOREST_MAP)
 
         //==TEST CALLS==
-//        Array<text> enemies
-//        enemies:Add("Goblin")
-//        enemies:Add("Goblin Shaman")
-//        enemies:Add("Goblin")
-//        CombatTest(enemies)
-        InputTest()
+        Array<text> enemies
+        enemies:Add("Goblin")
+        enemies:Add("Goblin Shaman")
+        enemies:Add("Goblin")
+        CombatTest(enemies)
+        //InputTest()
         //InteractableTest()
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
@@ -136,13 +139,17 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     action Update(number seconds)
 
+        if not doneCreating
+            return now
+        end
+
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
 
-        if(cineSequencer:IsFinished())
-            PlayerMovement(seconds)
-        end
+//        if(cineSequencer:IsFinished())
+//            PlayerMovement(seconds)
+//        end
         
 		//ScriptedAnimTest(seconds)
 		// SpellAnim(seconds)
