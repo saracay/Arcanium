@@ -57,7 +57,7 @@
                 {
                  "height":65,
                  "id":1,
-                 "name":"Interactable Log Pile",
+                 "name":"Interactable Log Pile 2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -68,7 +68,7 @@
                 {
                  "height":62,
                  "id":2,
-                 "name":"Interactable Log Pile",
+                 "name":"Interactable Log Pile 1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -79,7 +79,7 @@
                 {
                  "height":42,
                  "id":24,
-                 "name":"Dead Goblin Interactable",
+                 "name":"Dead Goblin 2 Interactable",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -90,7 +90,7 @@
                 {
                  "height":44,
                  "id":25,
-                 "name":"Dead Goblin Interactable",
+                 "name":"Dead Goblin 1 Interactable",
                  "rotation":0,
                  "type":"",
                  "visible":true,
