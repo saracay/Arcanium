@@ -378,6 +378,11 @@ class Combatant
 
                     log:Add(GetName() + " took " + damageReceived + " damage from " + currentStatus:GetName() + "!")
 
+                    if (currentHP - damageReceived <= 0) and (not (me is Player))
+                        log:Add(GetName() + " was defeated!")
+                        log:Add(battle:GetPlayer():GetName() + " gained " + GetExperienceValue() + " experience!")
+                    end
+
                     // dialogue behavior
                     DisplayLogBehavior updateMessage
                     updateMessage:SetGame(game)

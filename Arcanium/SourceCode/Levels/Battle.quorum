@@ -118,7 +118,7 @@ class Battle is Level
         text enemiesLog = "An enemy "
         repeat while counter < combatants:GetSize()
             if counter = combatants:GetSize() - 1
-                enemiesLog = enemiesLog + " and " + combatants:Get(counter):GetName() + " attacked!"
+                enemiesLog = enemiesLog + "and " + combatants:Get(counter):GetName() + " attacked!"
             else
                 enemiesLog = enemiesLog + combatants:Get(counter):GetName() + ", "
             end
@@ -180,6 +180,10 @@ class Battle is Level
 
     action GetSprites returns Array<Drawable>
         return sprites
+    end
+
+    action GetPlayer returns Combatant
+        return combatants:Get(0)
     end
 
     action SetBehaviorQueue(BehaviorQueue queue)

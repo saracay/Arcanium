@@ -16,15 +16,30 @@ class CombatEnemyActionBehavior is Behavior
 
     action Run(BehaviorEvent event)
         if combatants:Get(enemyIndex) not= undefined
-            Enemy enemy = cast(Enemy, combatants:Get(enemyIndex))
+            
+            boolean canMove = true
+            Array<Status> statuses = combatants:Get(enemyIndex):GetStatuses()
+            integer counter = 0           
 
-            AI enemyAI
-            enemyAI:SetGame(game)
-            enemyAI:SetRemovalArray(removalArray)
-            enemyAI:SetBehaviorQueue(behaviorQueue)
-            enemyAI:SetPreviousBehavior(me)
+            repeat while counter < statuses:GetSize()
+                if statuses:Get(counter):GetName() = "Frozen" or statuses:Get(counter):GetName() = "Stun"
+                    canMove = false
+                end
 
-            enemyAI:AI(enemyIndex, combatants)
+                counter = counter + 1
+            end
+
+            if canMove
+                Enemy enemy = cast(Enemy, combatants:Get(enemyIndex))
+
+                AI enemyAI
+                enemyAI:SetGame(game)
+                enemyAI:SetRemovalArray(removalArray)
+                enemyAI:SetBehaviorQueue(behaviorQueue)
+                enemyAI:SetPreviousBehavior(me)
+
+                enemyAI:AI(enemyIndex, combatants)
+            end
         end
 
         Dispose()
