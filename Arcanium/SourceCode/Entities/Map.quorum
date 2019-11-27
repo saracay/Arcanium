@@ -4,6 +4,7 @@ use Libraries.Data.Formats.JavaScriptObjectNotation
 use Libraries.System.File
 use Libraries.Containers.Array
 use Libraries.Game.Graphics.Color
+use Libraries.Game.GameStateManager
 
 
 class Map 
@@ -17,6 +18,8 @@ class Map
     public text name = ""
 
     MapList maps
+
+    GameStateManager manager            // Used to get MAIN
 
     on create
         setAboveMaps()
@@ -75,6 +78,7 @@ end
         JavaScriptObjectNotation mapData
         File data
         data:SetPath("Assets\Maps\Data\" + mapText  + ".json")
+        if (data:Exists())
         mapData:Read(data)
 
         JavaScriptObjectNotation layersData = mapData:GetObject("layers")
@@ -96,6 +100,8 @@ end
 
         JavaScriptObjectNotation transitionsObjects = transitionsLayer:GetObject("objects")
 
+        Main main = cast(Main, manager:GetGame())
+
         i = 0
         repeat transitionsObjects:GetSize() times
             JavaScriptObjectNotation curr = transitionsObjects:Get(i)
@@ -116,17 +122,24 @@ end
             Color color
             
             // save the value of each collision object's x, y, height, and width
-            transition:SetPosition(x, mapY - y - height)
-            transition:LoadRectangle(width, height)
-          
-            transition:SetColor(color:Clear())
-            
-            transition:SetRotation(rotation)
-            transition:SetName(name)
-            transition:EnablePhysics(true)
+//            transition:SetPosition(x, mapY - y - height)
+//            transition:LoadRectangle(width, height)
+//          
+//            transition:SetColor(color:Clear())
+//            
+//            transition:SetRotation(rotation)
+//            transition:SetName(name)
+//            transition:EnablePhysics(true)
+
+// ==== Ryan: Starting Changes ====
+            transition:CreateInteractable(name, "clear", width, height, x, (mapY - y - height), false)
+            transition:CreateMapTransitionBehavior(main:GetMap(), name, 0, 0)
+// ===== Ryan: Ending Changes =====
 
             transitions:Add(transition)
             i = i + 1
+        end
+            
         end
     end
 
@@ -142,6 +155,7 @@ end
         JavaScriptObjectNotation mapData
         File data
         data:SetPath("Assets\Maps\Data\" + mapText  + ".json")
+        if (data:Exists())
         mapData:Read(data)
 
         JavaScriptObjectNotation layersData = mapData:GetObject("layers")
@@ -183,17 +197,23 @@ end
             Color color
             
             // save the value of each collision object's x, y, height, and width
-            interactable:SetPosition(x, mapY - y - height)
-            interactable:LoadRectangle(width, height)
-          
-            interactable:SetColor(color:Clear())
-            
-            interactable:SetRotation(rotation)
-            interactable:SetName(name)
-            interactable:EnablePhysics(true)
+//            interactable:SetPosition(x, mapY - y - height)
+//            interactable:LoadRectangle(width, height)
+//          
+//            interactable:SetColor(color:Clear())
+//            
+//            interactable:SetRotation(rotation)
+//            interactable:SetName(name)
+//            interactable:EnablePhysics(true)
+
+// ==== Ryan: Starting Changes ====
+            interactable:CreateInteractable(name, "clear", width, height, x, (mapY - y - height), true)
+// ===== Ryan: Ending Changes =====
 
             interactables:Add(interactable)
             i = i + 1
+        end
+            
         end
     end
 
@@ -207,6 +227,7 @@ end
         JavaScriptObjectNotation mapData
         File data
         data:SetPath("Assets\Maps\Data\" + mapText  + "Interactables.json")
+        if (data:Exists())
 
         mapData:Read(data)
 
@@ -234,7 +255,25 @@ end
             InteractableData temp // creates a temp interactableData to add to our public array of interactableData
             temp:SetInteractableData(curr:GetValue("name"), curr:GetValue("type"), d) // sets values
             interactableData:Add(temp)
+
+// ==== Ryan: Starting Changes ====
+            boolean interactableDialogueSet = false
+            j = 0
+            repeat interactables:GetSize() times
+                if interactables:Get(j):GetInteractableName() = temp:name
+                    interactableDialogueSet = true
+                    interactables:Get(j):CreateDialogueBehavior(temp)
+                end
+                j = j + 1
+            end
+            if not interactableDialogueSet
+                output "Error: Interactable of name '" + temp:name + "' does not exist"
+            end
+// ===== Ryan: Ending Changes =====
+
             i = i + 1
+        end
+            
         end
     end
 

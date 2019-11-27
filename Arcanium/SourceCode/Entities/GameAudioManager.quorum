@@ -61,7 +61,7 @@ class GameAudioManager
                     ***********************************************************/
                     music:SetWillFade(true)
                     music:SetFadeRate(0.000005)
-                    music:SetMinVolume(0.0)
+                    music:SetMinVolume(0.1)
                     music:SetMaxVolume(0.5)
                     audio = music
                     /***********************************************************

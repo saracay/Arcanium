@@ -22,7 +22,7 @@ use Libraries.Interface.Behaviors.Behavior
 use Libraries.Containers.Array
 use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.ImageSheet
-use Libraries.Game.Graphics.Camera      // Adds Camera
+use Libraries.Game.Graphics.Camera
 use Libraries.Interface.Layouts.ManualLayout
 
 class Main is Game, CollisionListener2D, KeyboardListener
@@ -35,7 +35,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     DesktopDisplay deskDisplay
     
     //Queue for storing subsequent Behaviors
-    BehaviorQueue behaviorQueue
+    public BehaviorQueue behaviorQueue
 
     //Queue for removing objects
     Array<Item2D> removalArray
@@ -45,8 +45,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     Player player1
 	
     // For Interaction testing      -Ryan
-    Array<Interactable> npcList
-    Camera camera = undefined  // Camera
+    Camera camera = undefined
 
     //For drawing images
     Drawable testmap
@@ -107,6 +106,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //For Cutscenes
     CinematicSequencer cineSequencer
+
+    //For Transition to Combat
+    boolean inCombat = false
+
 //==============================================================================
 //                             PREBUILT ACTIONS
 //==============================================================================
@@ -118,12 +121,12 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     action CreateGame
         doneCreating = true
-
+	
         //SetResolution()
         SetKeyboardInput()
-        CreateBackground()  
-        
-        // ***These 3 must be commented out for DebugMenuTest() -Maria***
+        CreateBackground()
+		
+		// ***These 3 must be commented out for DebugMenuTest() -Maria***
 //        InitializeMap(currentMap, maps:FOREST_MAP)
 //        InitializePlayer(player1)
 //        LoadAboveLayer(currentMap, maps:FOREST_MAP)
@@ -136,11 +139,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //CombatTest(enemies)
         //InputTest()
         //InteractablesTest()
+        //InteractablesTest2()
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
-        CineSequencerTest()
+        //CineSequencerTest()
         //DebugMenuTest()
+        InitializeWhiteRoom()
     end
 
     action Update(number seconds)
@@ -152,30 +157,30 @@ class Main is Game, CollisionListener2D, KeyboardListener
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
 
-        if(cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded())
+        if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded()
             PlayerMovement(seconds)
         end
         
-		//ScriptedAnimTest(seconds)
-		// SpellAnim(seconds)
-		// PlayerMovementWithAnim(seconds)
-
+        // ScriptedAnimTest(seconds)
+        // SpellAnim(seconds)
+        // PlayerMovementWithAnim(seconds)
 
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
-            output "Emptying Removal Array!"
             Remove(removalArray:RemoveFromFront())
         end
+
+        audioManager:UpdateAudioList()
     end
 
 //==============================================================================
 //                             CUSTOM ACTIONS
 //==============================================================================
-	  
-    action AddToRemove(Item2D item)
-        removalArray:Add(item)
-    end
 
+    action AddToRemove(Drawable object)
+        removalArray:Add(object)
+    end
+	  
     action InitializeMap(Map currMap, Text mapName)
     //Loads map image, collision, and adds it to layer.
         EnablePhysics2D(true)
@@ -187,7 +192,27 @@ class Main is Game, CollisionListener2D, KeyboardListener
             Add(currMap:collisions:Get(i))
             i = i + 1
         end
-	AddCollisionListener(me)	
+        AddCollisionListener(me)	
+    end
+
+    action InitializeInteractables(Map currMap, Text mapName)
+// ==== Ryan: Starting Changes ====
+        currMap:loadMapTransitions(mapName)
+        i = 0
+        repeat currMap:transitions:GetSize() times
+            Add(currMap:transitions:Get(i))
+            AddKeyboardListener(currMap:transitions:Get(i))
+            i = i + 1
+        end
+        currMap:loadInteractables(mapName)
+        currMap:getInteractablesData(mapName)
+        i = 0
+        repeat currMap:interactables:GetSize() times
+            Add(currMap:interactables:Get(i))
+            AddKeyboardListener(currMap:interactables:Get(i))
+            i = i + 1
+        end
+// ===== Ryan: Ending Changes =====
     end
 
     action LoadAboveLayer(Map currMap, Text mapName)
@@ -214,37 +239,22 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 
     action PlayerMovement(number seconds)
-         // Movement using WASD
+        // Movement using WASD
         // Get current location
         text direction = ""
         newY = player1:playerSprite:sprite1:GetY()
         newX = player1:playerSprite:sprite1:GetX()
 
-        elapsedTime = elapsedTime + seconds
-
         // Add/Sub to both X and Y based on keys
-        if monitor:IsKeyPressed(upButton:GetInputValue())
+        if monitor:IsKeyPressed(keys:W)
             newY = newY + plyrSpeed * seconds
-            
-            // for animation -- commented out for testing
-            /*newY = testAnimation:girl:GetY() + plyrSpeed * seconds
-            //for animation
-            if elapsedTime >= 1/fps
-                frame = frame + 1
-            if frame > 3
-                frame = 1 
-            end
-            testAnimation:ChangeFrame()
-            elapsedTime = elapsedTime - 1/fps
-            end*/
-
             direction = "up"
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
             direction = "down"
         end
-        if monitor:IsKeyPressed(rightButton:GetInputValue())
+        if monitor:IsKeyPressed(keys:D)
             newX = newX + plyrSpeed * seconds
             direction = "right"
         end
@@ -252,7 +262,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
             newX = newX - plyrSpeed * seconds
             direction = "left"
         end
-        
+
         // Checks if PLAYER is out of bounds
         if newY < 0
             newY = 0
@@ -295,9 +305,16 @@ class Main is Game, CollisionListener2D, KeyboardListener
         elseif(camera:GetPosition():GetY() >= (currentMap:map:GetHeight() - camera:GetHeight()/2 + 50))
             camera:SetPosition( camera:GetPosition():GetX(), (currentMap:map:GetHeight() - camera:GetHeight()/2 + 50), camera:GetPosition():GetZ())
         end
-
+		
     end
-    
+
+    action BeginCollision(CollisionEvent2D event)
+        CheckForInteraction(event, true)
+    end
+
+    action FinishCollision(CollisionEvent2D event)
+        CheckForInteraction(event, false)
+    end
 
     action CheckForInteraction(CollisionEvent2D event, boolean entering)
 
@@ -331,7 +348,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // Check if PLAYER & INTERACTABLE
         if itemA:GetName() = "player"
-            if itemB:GetName():Contains("Interactable") or maps:Has(itemB:GetName()) // updated this because interactables will be named in tiled as "Something Interactable" 
+            if itemB:GetName() = "interactable"
                 interaction = true
             end
         end
@@ -348,15 +365,26 @@ class Main is Game, CollisionListener2D, KeyboardListener
                 i = i + 1
             end
 
+            i = 0
+            repeat currentMap:transitions:GetSize() times
+                if currentMap:transitions:Get(i):IsInteracting()
+                    alreadyInteracting = true
+                end
+                i = i + 1
+            end
+
             if entering and not alreadyInteracting
-                newItemB:ToggleInteraction(itemB:GetName())
+                newItemB:ToggleInteraction()
             elseif not entering
                 if newItemB:IsInteracting()
-                    output ""
-                    newItemB:ToggleInteraction(itemB:GetName())
+                    newItemB:ToggleInteraction()
                 end
             end
         end
+    end
+
+    action GetMap() returns Map
+        return currentMap
     end
 
     action SetMap(Map newMap)
@@ -365,10 +393,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     action GetPlayer() returns Player
         return player1
-    end
-
-    action SetNpcList(Array<Interactable> newList)
-        npcList = newList
     end
 
     action SetResolution()
@@ -563,6 +587,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
 
     action CombatTest(Array<text> enemies)
+        camera:SetPosition(400, 300, 0)
+		
         Array<number> currentElementsEffectiveness
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(0.7)
@@ -590,7 +616,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         battle:Initialize(player1, enemies)
         inCombat = true
 
-    end
+	end
     
     action CineSequencerTest()
 
@@ -653,9 +679,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         cineSequencer:PlayCineSequence()
     end
-
-    // Load images for sample animations, call in action CreateGame
+    
     action InitializeAnimTest()
+        // Load images for sample animations
         test1:LoadImageSheet(spriteImgSheet)
         test1:LoadFrame(spriteFrame)
         Add(test1:sprite1)
@@ -685,10 +711,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        audioManager:AddAudio("Effect_01", "wav", "effect")
 
         // * Example of adding music
-//        audioManager:AddAudio("Music_01", "ogg", "music")
+//        audioManager:AddAudio("MidnightTale", "ogg", "music")
 
         // * Example of playing specific music
-        audioManager:PlayAudio("Music_01")
+        audioManager:PlayAudio("MidnightTale")
     end
 
     action InteractablesTest()
@@ -698,7 +724,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
                                                         - Lisel
     ***********************************************************************/
-
+/*
         // Initialize the MAP
         EnablePhysics2D(true)
         currentMap:loadMap(maps:LIBRARY_MAP)
@@ -706,7 +732,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         currentMap:loadInteractables(maps:LIBRARY_MAP) // interactables (right now, these are dialogs)
         currentMap:loadMapTransitions(maps:LIBRARY_MAP) // map transitions (will transfer player to a new map)
 
-        Add(currentMap:map)
+        Add(currentMap:testMap)
 
         // add all of the collisions to the map
         i = 0
@@ -754,7 +780,150 @@ class Main is Game, CollisionListener2D, KeyboardListener
         // Add the above layers
         currentMap:loadAboveLayer(maps:LIBRARY_MAP)
         Add(currentMap:aboveLayer)
+       */ 
+    end
+
+    action InteractablesTest2()
+        CreateBackground()
+        InitializeMap(currentMap, maps:LIBRARY_MAP)
+        InitializeInteractables(currentMap, maps:LIBRARY_MAP)
+        InitializePlayer(player1)
+        player1:playerSprite:sprite1:SetY(currentMap:map:GetHeight() / 8)
+        player1:playerSprite:sprite1:SetX(currentMap:map:GetWidth() / 8)
+        LoadAboveLayer(currentMap, maps:LIBRARY_MAP)
+    end
+
+    action InitializeWhiteRoom()
+        /***********************************************************************
+                  Here are variables you can edit to test Interactables
+        ***********************************************************************/
+        // Here is the map you start in ("dafault" loads a gray room)
+        text testingMap = "default"
+
+        // Here are the number of each type of Interactable
+        //  * numOfDialogues - Interactables with Dialogue
+        //  * numOfTransitions - Interactables with Map Transitions
+        //  * numOfCombats - Interactables with Combats
+        integer numOfDialogues = 3
+        integer numOfTransitions = 3
+        integer numOfCombats = 3
+
+        // Here are the necessary variables for each Interactable
+        Array<Array<text>> dialogues
+        Array<text> travelMaps
+        Array<Array<text>> enemies
+
+        // Create Array<text> with LINES for a Dialogue Interactable 
+        Array<text> DialogueList1
+        DialogueList1:Add("Insert Lines Here 01")
+        DialogueList1:Add("Insert Lines Here 02")
+        DialogueList1:Add("Insert Lines Here 03")
+        dialogues:Add(DialogueList1)
+
+        Array<text> DialogueList2
+        DialogueList2:Add("This is test dialogue.")
+        DialogueList2:Add("I only have 2 lines.")
+        dialogues:Add(DialogueList2)
+
+        Array<text> DialogueList3
+        DialogueList3:Add("Here you can see my dialogue.")
+        DialogueList3:Add("You may leave and come back to reset my lines.")
+        DialogueList3:Add("Beware Map Transitions.")
+        DialogueList3:Add("They currently do not remove these testing Interactables.")
+        dialogues:Add(DialogueList3)
+
+        // Create text with the MAP_NAMES for Map Transition Interactable 
+        text travelcurrentMap = "Not Ready Yet"
+        travelMaps:Add(travelcurrentMap)
+
+        text travelMap2 = maps:PROLOGUE_TOWN_MAP
+        travelMaps:Add(travelMap2)
+
+        text travelMap3 = maps:RUINED_TOWN_MAP
+        travelMaps:Add(travelMap3)
+
+        // Create Array<text> with ENEMY_NAMES for Initiate Combat Interactable
+        Array<text> enemyList1
+        enemyList1:Add("Goblin")
+        enemyList1:Add("Orc")
+        enemyList1:Add("Slime")
+        enemies:Add(enemyList1)
+
+        Array<text> enemyList2
+        enemyList2:Add("Goblin Shaman")
+        enemies:Add(enemyList2)
+
+        Array<text> enemyList3
+        enemyList3:Add("Slime")
+        enemyList3:Add("Slime")
+        enemyList3:Add("Slime")
+        enemies:Add(enemyList3)
+
         
+        /***********************************************************************
+                    Don't change anything below for WhiteBoxRoom
+        ***********************************************************************/
+        number width = 800
+        number height = 600
+
+        CreateBackground()
+
+        if testingMap not= "default"
+            InitializeMap(currentMap, testingMap)
+            width = currentMap:map:GetWidth()
+            height = currentMap:map:GetHeight()
+        else
+            integer x = cast(integer, width)
+            integer y = cast(integer, height)
+            currentMap:map:LoadFilledRectangle(x,y,color:Gray())
+            Add(currentMap:map)
+            EnablePhysics2D(true)
+            AddCollisionListener(me)
+        end
+
+        integer i = 1
+        repeat numOfDialogues times
+            Interactable testObj01
+            testObj01:CreateInteractable("Dialogue Test " + cast(text, i), "default", 0, 0, width / 2 - 128, height / 4 + (96 * (i - 1)), true)
+            AddKeyboardListener(testObj01)
+            InteractableData temp1
+            temp1:SetInteractableData("Dialogue Test " + cast(text, i), "dialogue", dialogues:Get(i - 1))
+            testObj01:CreateDialogueBehavior(temp1)
+            Add(testObj01)
+            i = i + 1
+        end
+
+        i = 1
+        repeat numOfTransitions times
+            Interactable testObj02
+            testObj02:CreateInteractable(travelMaps:Get(i - 1), "default", 0, 0, (width / 2), height / 4 + (96 * (i - 1)), false)
+            testObj02:LoadFilledRectangle(32, 32, color:Cyan())
+            AddKeyboardListener(testObj02)
+            testObj02:CreateMapTransitionBehavior(currentMap, travelMaps:Get(i - 1), 0, 0)
+            Add(testObj02)
+            i = i + 1
+        end
+
+        i = 1
+        repeat numOfCombats times
+            Interactable testObj03
+            testObj03:CreateInteractable("Combat Test " + cast(text, i), "default", 0, 0, (width / 2) + 128, height / 4 + (96 * (i - 1)), true)
+            testObj03:LoadFilledRectangle(32, 32, color:Red())
+            AddKeyboardListener(testObj03)
+            InitiateCombatBehavior temp3
+            temp3:SetEnemyList(enemies:Get(i - 1))
+            testObj03:SetInteractableBehavior(temp3, "combat")
+            Add(testObj03)
+            i = i + 1
+        end
+
+        InitializePlayer(player1)
+        player1:playerSprite:sprite1:SetY(height / 8)
+        player1:playerSprite:sprite1:SetX(width / 2)
+
+        if testingMap not= "default"
+            LoadAboveLayer(currentMap, testingMap)
+        end
     end
 
     // Animation without keys, call in action Updates
@@ -793,7 +962,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
      // Animation with keys, call in action Updates
      action PlayerMovementWithAnim(number seconds)
      	newY = test1:sprite1:GetY()
-        	newX = test1:sprite1:GetX()
+        newX = test1:sprite1:GetX()
            	
         if monitor:IsKeyPressed(keys:W)
             newY = test1:sprite1:GetY() + plyrSpeed * seconds
@@ -1100,11 +1269,11 @@ end
 //        if newX < 0
 //            newX = 0
 //        end
-//        if newY > currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
-//            newY = currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
+//        if newY > currentMap:testMap:GetHeight() - player1:playerSprite:sprite1:GetHeight()
+//            newY = currentMap:testMap:GetHeight() - player1:playerSprite:sprite1:GetHeight()
 //        end
-//        if newX > currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
-//            newX = currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
+//        if newX > currentMap:testMap:GetWidth() - player1:playerSprite:sprite1:GetWidth()
+//            newX = currentMap:testMap:GetWidth() - player1:playerSprite:sprite1:GetWidth()
 //        end
 //
 //        player1:playerSprite:sprite1:SetPosition(newX,newY)
@@ -1126,6 +1295,14 @@ end
         test2:sprite2:SetPosition(spaceX, spaceY)
         */
 
+        // Animation without using keys
+        /*elapsedTime = elapsedTime + seconds
+        if elapsedTime >= 1/fps
+            currentFrame = test:GetFrame()
+            test:SetFrame(currentFrame + 1)
+            test:ChangeFrame(spriteFrame)
+            elapsedTime = elapsedTime - 1/fps
+        end*/
     
     /***********************************************************************
         Sprite Animation
@@ -1134,10 +1311,7 @@ end
 	
 	/*
 	// 	UPDATED - commented out for testing
-			newY = test1:sprite1:GetY()
-        	newX = test1:sprite1:GetX()
-           	
-           	if monitor:IsKeyPressed(keys:W)
+            if monitor:IsKeyPressed(keys:W)
             newY = test1:sprite1:GetY() + plyrSpeed * seconds
             elapsedTime = elapsedTime + seconds
             if elapsedTime >= 1/fps
