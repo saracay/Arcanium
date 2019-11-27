@@ -124,9 +124,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()  
         
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(currentMap, maps:FOREST_MAP)
-        InitializePlayer(player1)
-        LoadAboveLayer(currentMap, maps:FOREST_MAP)
+//        InitializeMap(currentMap, maps:FOREST_MAP)
+//        InitializePlayer(player1)
+//        LoadAboveLayer(currentMap, maps:FOREST_MAP)
 
         //==TEST CALLS==
         //Array<text> enemies
@@ -139,8 +139,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
-        CineSequencerTest()
-        //DebugMenuTest()
+        //CineSequencerTest()
+        DebugMenuTest()
     end
 
     action Update(number seconds)
@@ -153,7 +153,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
 
-        if(cineSequencer:IsFinished())
+        if(cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded())
             PlayerMovement(seconds)
         end
         
