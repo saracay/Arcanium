@@ -104,6 +104,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //For audio
     GameAudioManager audioManager
+
+    //For Cutscenes
     CinematicSequencer cineSequencer
 //==============================================================================
 //                             PREBUILT ACTIONS
@@ -122,9 +124,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()  
         
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        //InitializeMap(map1, maps:FOREST_MAP)
-        //InitializePlayer(player1)
-        //LoadAboveLayer(map1, maps:FOREST_MAP)
+        InitializeMap(map1, maps:FOREST_MAP)
+        InitializePlayer(player1)
+        LoadAboveLayer(map1, maps:FOREST_MAP)
 
         //==TEST CALLS==
         //Array<text> enemies
@@ -138,7 +140,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
         //CineSequencerTest()
-        DebugMenuTest()
+        //DebugMenuTest()
     end
 
     action Update(number seconds)
@@ -151,9 +153,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
 
-//        if(cineSequencer:IsFinished())
-//            PlayerMovement(seconds)
-//        end
+        if(cineSequencer:IsFinished())
+            PlayerMovement(seconds)
+        end
         
 		//ScriptedAnimTest(seconds)
 		// SpellAnim(seconds)
@@ -257,10 +259,26 @@ class Main is Game, CollisionListener2D, KeyboardListener
         end
 
         player1:playerSprite:SetPosition(newX,newY)
+        
+        //Player Camera
         camera = GetCamera2D()
         camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
         
+        //Setting Camera Bounds
+        if(camera:GetPosition():GetX() <= camera:GetWidth()/2 - 100)
+            camera:SetPosition(camera:GetWidth()/2 - 100, camera:GetPosition():GetY(), camera:GetPosition():GetZ())
+        elseif(camera:GetPosition():GetX() >= (map1:testMap:GetWidth() - camera:GetWidth()/2 + 100))
+            camera:SetPosition((map1:testMap:GetWidth() - camera:GetWidth()/2 + 100), camera:GetPosition():GetY(), camera:GetPosition():GetZ())
+        end
+        
+        if(camera:GetPosition():GetY() <= camera:GetHeight()/2 - 50)
+            camera:SetPosition(camera:GetPosition():GetX(), camera:GetHeight()/2 - 50, camera:GetPosition():GetZ())
+        elseif(camera:GetPosition():GetY() >= (map1:testMap:GetHeight() - camera:GetHeight()/2 + 50))
+            camera:SetPosition( camera:GetPosition():GetX(), (map1:testMap:GetHeight() - camera:GetHeight()/2 + 50), camera:GetPosition():GetZ())
+        end
+
     end
+    
 
     action CheckForInteraction(CollisionEvent2D event, boolean entering)
 
@@ -562,31 +580,46 @@ class Main is Game, CollisionListener2D, KeyboardListener
         cineAnimation:LoadImageSheet(spriteImgSheet)
         cineAnimation:LoadFrame(spriteFrame)
         Add(cineAnimation:sprite1)
+        cineAnimation:sprite1:SetCollidable(true)
+        cineAnimation:sprite1:SetPosition(10,115)
 
         //Cinematic Behaviors
+        WaitForBehavior     wait1
+        WaitForBehavior     wait2      
         PanCameraBehavior   cameraPan1
         PanCameraBehavior   cameraPan2
-        WaitForBehavior     wait1
-        WaitForBehavior     wait2
+        PanCameraBehavior   cameraPan3
         DialogueBehavior    dialogue1
         MoveNPCBehavior     moveTest1
+        MoveNPCBehavior     moveTest2
+        MoveNPCBehavior     moveTest3
 
         //Behavior Setup
         wait1:              SetWaitDuration(0.3)
-        cameraPan1:         SetCameraPan(25,40, 5)
         wait2:              SetWaitDuration(3)
-        cameraPan2:         SetCameraPan(40,0, 5)
+        cameraPan1:         SetCameraPan(5,40, 5)
+        cameraPan2:         SetCameraPan(25,0, 3.5)
+        cameraPan3:         SetCameraPan(0,30,6)
         dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 1")
         dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 2")
-        moveTest1:SetAnimation(cineAnimation, spriteImgSheet)
-        moveTest1:SetMoveDirection(15,0,5)
+        moveTest1:          SetAnimation(cineAnimation, spriteImgSheet)
+        moveTest1:          SetMoveDirection(25,0,3.5)
+        moveTest2:          SetAnimation(cineAnimation, spriteImgSheet)
+        moveTest2:          SetMoveDirection(0,45,6)
+        moveTest3:          SetAnimation(cineAnimation, spriteImgSheet)
+        moveTest3:          SetMoveDirection(0,-45,6)
+
 
         //Adding Behaviors to Sequencer
-        cineSequencer:AddCineEvent(moveTest1, true)
         cineSequencer:AddCineEvent(wait1, true)
         cineSequencer:AddCineEvent(cameraPan1, true)
+        cineSequencer:AddCineEvent(cameraPan2, false)
+        cineSequencer:AddCineEvent(moveTest1, true)
+        cineSequencer:AddCineEvent(cameraPan3, false)
+        cineSequencer:AddCineEvent(moveTest2, true)
         cineSequencer:AddCineEvent(wait2, true)
-        cineSequencer:AddCineEvent(cameraPan2, true)
+        cineSequencer:AddCineEvent(moveTest3, true)
+        
 
         cineSequencer:PlayCineSequence()
     end
