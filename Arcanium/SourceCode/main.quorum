@@ -139,12 +139,11 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
-        //CineSequencerTest()
-        DebugMenuTest()
+        CineSequencerTest()
+        //DebugMenuTest()
     end
 
     action Update(number seconds)
-
         if not doneCreating
             return now
         end
@@ -164,6 +163,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
+            output "Emptying Removal Array!"
             Remove(removalArray:RemoveFromFront())
         end
     end
@@ -204,6 +204,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         player:playerSprite:sprite1:CanRotate(false)
         player:playerSprite:sprite1:SetResponsive()
         player:playerSprite:sprite1:SetName("player")
+        player:playerSprite:sprite1:SetScale(0.85)
         Add(player:playerSprite:sprite1)
 
         //Sets camera onto player.
@@ -602,17 +603,23 @@ class Main is Game, CollisionListener2D, KeyboardListener
         cineAnimation:sprite1:SetPosition(10,115)
         cineAnimation:sprite1:EnablePhysics(true)
         cineAnimation:sprite1:CanRotate(false)
-        //cineAnimation:sprite1:SetResponsive()
+        
+        Array<text> dialogue1Text
+        dialogue1Text:Add("Hello Traveller!")
+        dialogue1Text:Add("What brings you to these parts?")
+        dialogue1Text:Add("It's dangerous to go alone, take this!")
+
         //Cinematic Behaviors
         WaitForBehavior     wait1
         WaitForBehavior     wait2      
         PanCameraBehavior   cameraPan1
         PanCameraBehavior   cameraPan2
         PanCameraBehavior   cameraPan3
-        DialogueBehavior    dialogue1
+        DisplayLogBehavior  dialogue1
         MoveNPCBehavior     moveTest1
         MoveNPCBehavior     moveTest2
         MoveNPCBehavior     moveTest3
+
 
         //Behavior Setup
         wait1:              SetWaitDuration(0.3)
@@ -620,8 +627,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         cameraPan1:         SetCameraPan(5,40, 5)
         cameraPan2:         SetCameraPan(25,0, 3.5)
         cameraPan3:         SetCameraPan(0,30,6)
-        dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 1")
-        dialogue1:          AddDialogue("Cinematic Sequencer Dialogue Test 2")
+        dialogue1:          SetGame(me)
+        dialogue1:          SetLog(dialogue1Text)
+        dialogue1:          SetRemovalArray(removalArray)
+        dialogue1:          SetCamera(camera)
         moveTest1:          SetAnimation(cineAnimation, spriteImgSheet)
         moveTest1:          SetMoveDirection(25,0,3.5)
         moveTest2:          SetAnimation(cineAnimation, spriteImgSheet)
@@ -635,6 +644,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         cineSequencer:AddCineEvent(cameraPan1, true)
         cineSequencer:AddCineEvent(cameraPan2, false)
         cineSequencer:AddCineEvent(moveTest1, true)
+        cineSequencer:AddCineEvent(dialogue1, true)
         cineSequencer:AddCineEvent(cameraPan3, false)
         cineSequencer:AddCineEvent(moveTest2, true)
         cineSequencer:AddCineEvent(wait2, true)

@@ -85,8 +85,8 @@ class MapTransitionBehavior is Behavior
 
         // Add the new MAP + collisions + player
         main:SetMap(nextMap)
-        main:GetPlayer():playerSprite:SetX(playerX * 32)
-        main:GetPlayer():playerSprite:SetY(playerY * 32)
+        main:GetPlayer():playerSprite:sprite1:SetX(playerX * 32)
+        main:GetPlayer():playerSprite:sprite1:SetY(playerY * 32)
 
         // EDIT: Removed this because we no longer need the npcList for interactables
         // ADD INTERACTABLES HERE
@@ -97,7 +97,7 @@ class MapTransitionBehavior is Behavior
 //        end
 
         //main:SetNpcList(npcList) Causes error, no method SetNpcList
-        main:Add(main:GetPlayer():playerSprite)
+        main:Add(main:GetPlayer():playerSprite:sprite1)
     end
 
     // Initializer of MAPTRANSITIONBEHAVIOR 

@@ -32,6 +32,7 @@ class CinematicSequencer
             if runningBehavior:IsFinished() 
                 //runningBehavior:Dispose()
                 runningBehaviors:Remove(i:GetCurrent())
+                runningBehavior:Dispose()
                 output "finished"
             else
                runningBehavior:Update(seconds)
