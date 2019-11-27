@@ -9,7 +9,9 @@ class Player is Combatant
     integer maxMP = 5               //maximum amount of mana allowed
     integer expToNextLevel = 100    //experience to get to next level
     Array<integer> currentElementTokens //current limits to how many of a particular element can be used in a spell
-    public Drawable playerSprite
+    
+    public Animation playerSprite
+    public text spriteSheetName = "Hero"
 
     /*When initialized the currentElementTokens array is given 
     6 undefined values, it also cannot grow larger or smaller*/
@@ -42,7 +44,8 @@ class Player is Combatant
     end
 
     action DrawPlayer()
-        playerSprite:Load("Assets\Sprites\SkeletonWalk.png")
+        playerSprite:LoadImageSheet(spriteSheetName)
+        playerSprite:LoadFrame(spriteSheetName)
     end
 
     /*Update player's experience, leveling them up if they have reached the

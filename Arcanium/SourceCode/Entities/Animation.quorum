@@ -62,6 +62,8 @@ class Animation
             if frame > 9 or frame < 7
                 frame = 7
             end
+        elseif direction = ""
+            frame = frame - 1
         end
 
         sprite1:Load(sheet:GetDrawable(frameImg + " frame " + frame)) 

@@ -94,8 +94,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
     integer currentFrame = 1
     number spaceX = 0
     number spaceY = 0
-    text spriteImgSheet = "Hero"
-    text spriteFrame = "Hero"
+    text spriteImgSheet = "Boy"
+    text spriteFrame = "Boy"
     text spriteImage = "alien"
     text fireImgSheet = "fire"
     text fireFrame = "Fire"
@@ -139,7 +139,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
-        //CineSequencerTest()
+        CineSequencerTest()
         //DebugMenuTest()
     end
 
@@ -200,23 +200,26 @@ class Main is Game, CollisionListener2D, KeyboardListener
     action InitializePlayer(Player player)
         //Loads player image, enables collision/movement, does NOT add to layer.
         player:DrawPlayer()
-        player:playerSprite:EnablePhysics(true)
-        player:playerSprite:CanRotate(false)
-        player:playerSprite:SetResponsive()
-        player:playerSprite:SetName("player")
-        Add(player:playerSprite)
+        player:playerSprite:sprite1:EnablePhysics(true)
+        player:playerSprite:sprite1:CanRotate(false)
+        player:playerSprite:sprite1:SetResponsive()
+        player:playerSprite:sprite1:SetName("player")
+        Add(player:playerSprite:sprite1)
 
         //Sets camera onto player.
         camera = GetCamera2D()
-        camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
+        camera:SetPosition(player1:playerSprite:sprite1:GetX(), player1:playerSprite:sprite1:GetY(), 0)
         //camera:SetZoom(2)
     end
 
     action PlayerMovement(number seconds)
          // Movement using WASD
         // Get current location
-        newY = player1:playerSprite:GetY()
-        newX = player1:playerSprite:GetX()
+        text direction = ""
+        newY = player1:playerSprite:sprite1:GetY()
+        newX = player1:playerSprite:sprite1:GetX()
+
+        elapsedTime = elapsedTime + seconds
 
         // Add/Sub to both X and Y based on keys
         if monitor:IsKeyPressed(upButton:GetInputValue())
@@ -233,15 +236,20 @@ class Main is Game, CollisionListener2D, KeyboardListener
             testAnimation:ChangeFrame()
             elapsedTime = elapsedTime - 1/fps
             end*/
+
+            direction = "up"
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
+            direction = "down"
         end
         if monitor:IsKeyPressed(rightButton:GetInputValue())
             newX = newX + plyrSpeed * seconds
+            direction = "right"
         end
         if monitor:IsKeyPressed(keys:A)
             newX = newX - plyrSpeed * seconds
+            direction = "left"
         end
         
         // Checks if PLAYER is out of bounds
@@ -251,18 +259,28 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if newX < 0
             newX = 0
         end
-        if newY > currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
-            newY = currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
+        if newY > currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
+            newY = currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
         end
-        if newX > currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
-            newX = currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
+        if newX > currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
+            newX = currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
         end
 
-        player1:playerSprite:SetPosition(newX,newY)
+        player1:playerSprite:sprite1:SetPosition(newX,newY)
         
+        //Sprite Animation
+        if direction = ""
+                elapsedTime = 0
+        elseif elapsedTime >= 1/player1:playerSprite:GetFPS()
+                player1:playerSprite:SetFrame(player1:playerSprite:GetFrame()+1)
+                player1:playerSprite:ChangeFrames(player1:spriteSheetName, direction)
+                elapsedTime = elapsedTime - 1/player1:playerSprite:GetFPS()
+        end
+
+
         //Player Camera
         camera = GetCamera2D()
-        camera:SetPosition(player1:playerSprite:GetX(), player1:playerSprite:GetY(), 0)
+        camera:SetPosition(player1:playerSprite:sprite1:GetX(), player1:playerSprite:sprite1:GetY(), 0)
         
         //Setting Camera Bounds
         if(camera:GetPosition():GetX() <= camera:GetWidth()/2 - 100)
@@ -582,7 +600,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         Add(cineAnimation:sprite1)
         cineAnimation:sprite1:SetCollidable(true)
         cineAnimation:sprite1:SetPosition(10,115)
-
+        cineAnimation:sprite1:EnablePhysics(true)
+        cineAnimation:sprite1:CanRotate(false)
+        //cineAnimation:sprite1:SetResponsive()
         //Cinematic Behaviors
         WaitForBehavior     wait1
         WaitForBehavior     wait2      
@@ -710,16 +730,16 @@ class Main is Game, CollisionListener2D, KeyboardListener
 		
         // Initialize the PLAYER
         player1:DrawPlayer()
-        player1:playerSprite:EnablePhysics(true)
-        player1:playerSprite:CanRotate(false)
-        player1:playerSprite:SetResponsive()
-        player1:playerSprite:SetName("player")
+        player1:playerSprite:sprite1:EnablePhysics(true)
+        player1:playerSprite:sprite1:CanRotate(false)
+        player1:playerSprite:sprite1:SetResponsive()
+        player1:playerSprite:sprite1:SetName("player")
 		
         // Enable Collisions in the game
         AddCollisionListener(me)
         
         // Add the PLAYER after everything to be in the foreground
-        Add(player1:playerSprite)
+        Add(player1:playerSprite:sprite1)
 
         // Add the above layers
         currentMap:loadAboveLayer(maps:LIBRARY_MAP)
@@ -1011,7 +1031,7 @@ end
 //        end
 //		
 //        // Add the PLAYER after everything to be in the foreground
-//        Add(player1:playerSprite)
+//        Add(player1:playerSprite:sprite1)
 //
 //        // Add the above layers
 //        currentMap:loadAboveLayer(maps:FOREST_MAP)
@@ -1019,7 +1039,7 @@ end
 //		
 //        // Set the camera
 //        camera = GetCamera2D()
-//        camera:SetPosition(player1:playerSprite:GetX() + 200, player1:playerSprite:GetY() + 200, 0)
+//        camera:SetPosition(player1:playerSprite:sprite1:GetX() + 200, player1:playerSprite:sprite1:GetY() + 200, 0)
 //        /***********************************************************************
 //        End test Section
 //        ***********************************************************************/
@@ -1034,8 +1054,8 @@ end
 
 //        // Movement using WASD
 //        // Get current location
-//        newY = player1:playerSprite:GetY()
-//        newX = player1:playerSprite:GetX()
+//        newY = player1:playerSprite:sprite1:GetY()
+//        newX = player1:playerSprite:sprite1:GetX()
 //
 //        // Add/Sub to both X and Y based on keys
 //        if monitor:IsKeyPressed(keys:W)
@@ -1070,14 +1090,14 @@ end
 //        if newX < 0
 //            newX = 0
 //        end
-//        if newY > currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
-//            newY = currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
+//        if newY > currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
+//            newY = currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
 //        end
-//        if newX > currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
-//            newX = currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
+//        if newX > currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
+//            newX = currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
 //        end
 //
-//        player1:playerSprite:SetPosition(newX,newY)
+//        player1:playerSprite:sprite1:SetPosition(newX,newY)
         
     /**********************************************************************
         END OF PLAYER INPUT LOGIC
