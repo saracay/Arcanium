@@ -45,7 +45,7 @@ class MapTransitionBehavior is Behavior
 //        nextMap:loadMapTransitions(mapName)
 
         // Add the drawables to the default layer
-        main:Add(nextMap:testMap) 
+        main:Add(nextMap:map) 
 
         // Render all of the collision objects
         i = 0
@@ -60,7 +60,7 @@ class MapTransitionBehavior is Behavior
         end
 
         // Remove the current MAP
-        main:AddToRemove(currentMap:testMap)
+        main:AddToRemove(currentMap:map)
 
         // Remove the current collsions
         i = 0

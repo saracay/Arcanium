@@ -7,7 +7,7 @@ use Libraries.Game.Graphics.Color
 
 
 class Map 
-    public Drawable testMap
+    public Drawable map
     public Drawable aboveLayer
     public Array<Drawable> collisions
     public Array<Interactable> interactables
@@ -45,9 +45,9 @@ class Map
         return false
     end
 
-    action loadMap(text map)
-        testMap:Load("Assets\Maps\" + map + ".png")     
-        name = map
+    action loadMap(text mapText)
+        map:Load("Assets\Maps\" + mapText + ".png")     
+        name = mapText
     end
 
     /*
@@ -71,10 +71,10 @@ end
         1. When exporting your map in Tiled as PNG, export it at its actual size, NOT at the zoomed level.
         2. You MUST have a separate layer named "Transitions" that contains all of your collision objects.
     */
-    action loadMapTransitions(text map) 
+    action loadMapTransitions(text mapText) 
         JavaScriptObjectNotation mapData
         File data
-        data:SetPath("Assets\Maps\Data\" + map  + ".json")
+        data:SetPath("Assets\Maps\Data\" + mapText  + ".json")
         mapData:Read(data)
 
         JavaScriptObjectNotation layersData = mapData:GetObject("layers")
@@ -138,10 +138,10 @@ end
         1. When exporting your map in Tiled as PNG, export it at its actual size, NOT at the zoomed level.
         2. You MUST have a separate layer named "Interactables" that contains all of your collision objects.
     */
-    action loadInteractables(text map) 
+    action loadInteractables(text mapText) 
         JavaScriptObjectNotation mapData
         File data
-        data:SetPath("Assets\Maps\Data\" + map  + ".json")
+        data:SetPath("Assets\Maps\Data\" + mapText  + ".json")
         mapData:Read(data)
 
         JavaScriptObjectNotation layersData = mapData:GetObject("layers")
@@ -203,10 +203,10 @@ end
         JSON layout: an object will represent one interactable
             each interactable will have the following properties -> type: dialogue (text) and dialogue: (array of dialog strings)
     */
-    action getInteractablesData(text map) 
+    action getInteractablesData(text mapText) 
         JavaScriptObjectNotation mapData
         File data
-        data:SetPath("Assets\Maps\Data\" + map  + "Interactables.json")
+        data:SetPath("Assets\Maps\Data\" + mapText  + "Interactables.json")
 
         mapData:Read(data)
 
@@ -243,10 +243,10 @@ end
         1. When exporting your map in Tiled as PNG, export it at its actual size, NOT at the zoomed level.
         2. You MUST have a separate layer named "Collision" that contains all of your collision objects.
     */
-    action loadCollisionLayer(text map) 
+    action loadCollisionLayer(text mapText) 
         JavaScriptObjectNotation mapData
         File data
-        data:SetPath("Assets\Maps\Data\" + map  + ".json")
+        data:SetPath("Assets\Maps\Data\" + mapText  + ".json")
         mapData:Read(data)
 
         JavaScriptObjectNotation layersData = mapData:GetObject("layers")

@@ -41,7 +41,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     Array<Item2D> removalArray
 
     //Entities
-    Map map1
+    Map currentMap
     Player player1
 	
     // For Interaction testing      -Ryan
@@ -124,9 +124,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()  
         
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(map1, maps:FOREST_MAP)
+        InitializeMap(currentMap, maps:FOREST_MAP)
         InitializePlayer(player1)
-        LoadAboveLayer(map1, maps:FOREST_MAP)
+        LoadAboveLayer(currentMap, maps:FOREST_MAP)
 
         //==TEST CALLS==
         //Array<text> enemies
@@ -181,7 +181,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         EnablePhysics2D(true)
         currMap:loadMap(mapName)
         currMap:loadCollisionLayer(mapName)
-        Add(currMap:testMap)
+        Add(currMap:map)
         i = 0
         repeat currMap:collisions:GetSize() times
             Add(currMap:collisions:Get(i))
@@ -251,11 +251,11 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if newX < 0
             newX = 0
         end
-        if newY > map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
-            newY = map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
+        if newY > currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
+            newY = currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
         end
-        if newX > map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
-            newX = map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
+        if newX > currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
+            newX = currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
         end
 
         player1:playerSprite:SetPosition(newX,newY)
@@ -267,14 +267,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //Setting Camera Bounds
         if(camera:GetPosition():GetX() <= camera:GetWidth()/2 - 100)
             camera:SetPosition(camera:GetWidth()/2 - 100, camera:GetPosition():GetY(), camera:GetPosition():GetZ())
-        elseif(camera:GetPosition():GetX() >= (map1:testMap:GetWidth() - camera:GetWidth()/2 + 100))
-            camera:SetPosition((map1:testMap:GetWidth() - camera:GetWidth()/2 + 100), camera:GetPosition():GetY(), camera:GetPosition():GetZ())
+        elseif(camera:GetPosition():GetX() >= (currentMap:map:GetWidth() - camera:GetWidth()/2 + 100))
+            camera:SetPosition((currentMap:map:GetWidth() - camera:GetWidth()/2 + 100), camera:GetPosition():GetY(), camera:GetPosition():GetZ())
         end
         
         if(camera:GetPosition():GetY() <= camera:GetHeight()/2 - 50)
             camera:SetPosition(camera:GetPosition():GetX(), camera:GetHeight()/2 - 50, camera:GetPosition():GetZ())
-        elseif(camera:GetPosition():GetY() >= (map1:testMap:GetHeight() - camera:GetHeight()/2 + 50))
-            camera:SetPosition( camera:GetPosition():GetX(), (map1:testMap:GetHeight() - camera:GetHeight()/2 + 50), camera:GetPosition():GetZ())
+        elseif(camera:GetPosition():GetY() >= (currentMap:map:GetHeight() - camera:GetHeight()/2 + 50))
+            camera:SetPosition( camera:GetPosition():GetX(), (currentMap:map:GetHeight() - camera:GetHeight()/2 + 50), camera:GetPosition():GetZ())
         end
 
     end
@@ -322,8 +322,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
             Interactable newItemB = cast(Interactable, itemB)
 
             i = 0
-            repeat map1:interactables:GetSize() times
-                if map1:interactables:Get(i):IsInteracting()
+            repeat currentMap:interactables:GetSize() times
+                if currentMap:interactables:Get(i):IsInteracting()
                     alreadyInteracting = true
                 end
                 i = i + 1
@@ -341,7 +341,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 
     action SetMap(Map newMap)
-        map1 = newMap
+        currentMap = newMap
     end
 
     action GetPlayer() returns Player
@@ -671,28 +671,28 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // Initialize the MAP
         EnablePhysics2D(true)
-        map1:loadMap(maps:LIBRARY_MAP)
-        map1:loadCollisionLayer(maps:LIBRARY_MAP) // collisions
-        map1:loadInteractables(maps:LIBRARY_MAP) // interactables (right now, these are dialogs)
-        map1:loadMapTransitions(maps:LIBRARY_MAP) // map transitions (will transfer player to a new map)
+        currentMap:loadMap(maps:LIBRARY_MAP)
+        currentMap:loadCollisionLayer(maps:LIBRARY_MAP) // collisions
+        currentMap:loadInteractables(maps:LIBRARY_MAP) // interactables (right now, these are dialogs)
+        currentMap:loadMapTransitions(maps:LIBRARY_MAP) // map transitions (will transfer player to a new map)
 
-        Add(map1:testMap)
+        Add(currentMap:map)
 
         // add all of the collisions to the map
         i = 0
-        repeat map1:collisions:GetSize() times
-            Add(map1:collisions:Get(i))
+        repeat currentMap:collisions:GetSize() times
+            Add(currentMap:collisions:Get(i))
             i = i + 1
         end
 
         // add all of the interactables to the map
-        map1:getInteractablesData(map1:name)
+        currentMap:getInteractablesData(currentMap:name)
         i = 0
-        repeat map1:interactables:GetSize() times
-            Interactable curr = map1:interactables:Get(i)
+        repeat currentMap:interactables:GetSize() times
+            Interactable curr = currentMap:interactables:Get(i)
             Add(curr) // adds each interactable to the game
             AddKeyboardListener(curr) // add keyboard listener for each interactable
-            InteractableData data = map1:interactableData:Get(i)
+            InteractableData data = currentMap:interactableData:Get(i)
             curr:CreateDialogueBehavior(data)
             // add in the behavior for the interactable (call a method)
             i = i + 1
@@ -700,11 +700,11 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // add all of the transitions to the map
         i = 0
-        repeat map1:transitions:GetSize() times
-            Interactable curr = map1:transitions:Get(i)
+        repeat currentMap:transitions:GetSize() times
+            Interactable curr = currentMap:transitions:Get(i)
             Add(curr) // adds each map transition to the game
             AddKeyboardListener(curr) // add keyboard listener for each transition
-            curr:CreateMapTransitionBehavior(map1, curr:GetName()) // will then call the SetTransition in MapTransitionBehavior
+            curr:CreateMapTransitionBehavior(currentMap, curr:GetName()) // will then call the SetTransition in MapTransitionBehavior
             i = i + 1
         end
 		
@@ -722,8 +722,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         Add(player1:playerSprite)
 
         // Add the above layers
-        map1:loadAboveLayer(maps:LIBRARY_MAP)
-        Add(map1:aboveLayer)
+        currentMap:loadAboveLayer(maps:LIBRARY_MAP)
+        Add(currentMap:aboveLayer)
         
     end
 
@@ -828,7 +828,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     // Initializes/creates buttons
     action DebugCreateButton(Button button, text buttonText, DebugMenuBehavior behavior, text mapName, text transitionMap)
         button:SetName(buttonText)
-        behavior:SetMap(map1, mapName, transitionMap, player1)
+        behavior:SetMap(currentMap, mapName, transitionMap, player1)
         //SetFocus(button)
         Add(button)
         button:SetBehavior(behavior)
@@ -980,7 +980,7 @@ end
 //                npcList:Get(index):CreateInteractable("Back to Castle", "clear", 0, 4, false)
 //                npcList:Get(index):LoadFilledRectangle(32,32,color:Cyan())
 //                MapTransitionBehavior newTransition1
-//                newTransition1:SetTransition(map1, maps:CASTLE_MAP, npcList)
+//                newTransition1:SetTransition(currentMap, maps:CASTLE_MAP, npcList)
 //                newTransition1:SetCoordinates(16, 12)
 
 //                // Test Section of adding INTERACTABLEs to the new MAP
@@ -988,7 +988,7 @@ end
 //                newInteractable:CreateInteractable("Back to Forest", "clear", 17, 12, false)
 //                newInteractable:LoadFilledRectangle(32,32,color:Cyan())
 //                MapTransitionBehavior newTransition2
-//                newTransition2:SetTransition(map1, maps:FOREST_MAP, npcList)
+//                newTransition2:SetTransition(currentMap, maps:FOREST_MAP, npcList)
 //                newTransition2:SetCoordinates(1, 4)
 //
 ////    // THIS PART DOES NOT WORK
@@ -1014,8 +1014,8 @@ end
 //        Add(player1:playerSprite)
 //
 //        // Add the above layers
-//        map1:loadAboveLayer(maps:FOREST_MAP)
-//        Add(map1:aboveLayer)
+//        currentMap:loadAboveLayer(maps:FOREST_MAP)
+//        Add(currentMap:aboveLayer)
 //		
 //        // Set the camera
 //        camera = GetCamera2D()
@@ -1070,11 +1070,11 @@ end
 //        if newX < 0
 //            newX = 0
 //        end
-//        if newY > map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
-//            newY = map1:testMap:GetHeight() - player1:playerSprite:GetHeight()
+//        if newY > currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
+//            newY = currentMap:map:GetHeight() - player1:playerSprite:GetHeight()
 //        end
-//        if newX > map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
-//            newX = map1:testMap:GetWidth() - player1:playerSprite:GetWidth()
+//        if newX > currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
+//            newX = currentMap:map:GetWidth() - player1:playerSprite:GetWidth()
 //        end
 //
 //        player1:playerSprite:SetPosition(newX,newY)
