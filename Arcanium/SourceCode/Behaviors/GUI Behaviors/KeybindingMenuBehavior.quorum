@@ -4,59 +4,61 @@ use Libraries.Containers.Array
 use Libraries.Interface.Item2D
 use Libraries.Game.Game
 use Libraries.Interface.Layouts.ManualLayout
-
+use Libraries.Game.InputSet
+use Libraries.Game.InputTable
+use Libraries.Interface.Events.KeyboardEvent
 
 class KeybindingMenuBehavior is Behavior
     
     Game game
     Array<Item2D> removalArray
     Array<MenuButton> buttons
+    InputTable controlTable
+    Array<InputSet> inputSets
+    Array<text> buttonNames
+    KeyboardEvent keys
     boolean finished = false
-    constant integer numberOfKeybindings = 10
+
+    /*Current buttons needed are: up, down, left, right, select, cancel,
+    open keybindings, open route-to*/
 
     action Run(BehaviorEvent event)
         ManualLayout layout
         game:SetLayout(layout)
 
-        integer positionX = 375
-        integer positionY = 550
+        /*
+        InputSet test
+        test:SetKeyboardInput(keys:W)
+        output(test:GetDisplayName()) //this prints W, so it tells the key currently bound
+        */
 
-        integer i = numberOfKeybindings
-        repeat while (i > 0)
+        integer positionX = 30
+        integer positionY = 550
+        text keybindingText = ""
+
+        integer i = 0
+        repeat while (i < buttonNames:GetSize() and i < inputSets:GetSize())
             MenuButton keybindingButton
-            FillButton(keybindingButton, positionX, positionY)
+            keybindingText = buttonNames:Get(i) + ": currently bound to " + inputSets:Get(i):GetDisplayName()
+            FillButton(keybindingButton, positionX, positionY, keybindingText)
             buttons:Add(keybindingButton)
 
             positionY = positionY - 50
-            i = i - 1
+            i = i + 1
         end
 
-        buttons:Get(1):SetX(366)
-        buttons:Get(2):SetX(372)
-        buttons:Get(3):SetX(367)
-        buttons:Get(4):SetX(336)
-        buttons:Get(5):SetX(323)
-        buttons:Get(6):SetX(356)
-        buttons:Get(7):SetX(359)
-        buttons:Get(8):SetX(336)
-        buttons:Get(9):SetX(334)
-
-        buttons:Get(0):SetName("Up")
-        buttons:Get(1):SetName("Down")
-        buttons:Get(2):SetName("Left")
-        buttons:Get(3):SetName("Right")
-        buttons:Get(4):SetName("Next Selection")
-        buttons:Get(5):SetName("Previous Selection")
-        buttons:Get(6):SetName("Confirm")
-        buttons:Get(7):SetName("Cancel")
-        buttons:Get(8):SetName("General Menu")
-        buttons:Get(9):SetName("Systems Menu")
+//        buttons:Get(0):SetX(366)
+//        buttons:Get(1):SetX(372)
+//        buttons:Get(2):SetX(367)
+//        buttons:Get(3):SetX(356)
+//        buttons:Get(4):SetX(359)
+//        buttons:Get(5):SetX(336)
+//        buttons:Get(6):SetX(334)
 
         MenuButton exitButton
-        FillButton(exitButton, positionX, positionY)
+        FillButton(exitButton, positionX, positionY, "Exit")
         buttons:Add(exitButton)
-        buttons:Get(10):SetX(369)
-        buttons:Get(10):SetName("Exit")
+//        buttons:Get(7):SetX(369)
 
         i = 0
         repeat while (i < buttons:GetSize())
@@ -73,15 +75,16 @@ class KeybindingMenuBehavior is Behavior
             end
             i = i + 1
         end
-
         game:SetFocus(buttons:Get(0))
     end
 
-    action FillButton(MenuButton button, integer positionX, integer positionY)
+    action FillButton(MenuButton button, integer positionX, integer positionY,
+     text name)
         button:SetGame(game)
         button:SetRemovalArray(removalArray)
         button:SetTarget(button)
         button:SetPosition(positionX, positionY)
+        button:SetName(name)
         button:SetHorizontal(true)
 
         game:Add(button)
@@ -106,5 +109,17 @@ class KeybindingMenuBehavior is Behavior
 
     action SetRemovalArray(Array<Item2D> newArray)
         removalArray = newArray
+    end
+
+    action SetControlTable(InputTable newControlTable)
+        controlTable = newControlTable
+    end
+
+    action SetInputSets(Array<InputSet> newInputSets)
+        inputSets = newInputSets
+    end
+
+    action SetButtonNames(Array<text> newButtonNames)
+        buttonNames = newButtonNames
     end
 end
