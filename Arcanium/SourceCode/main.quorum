@@ -13,6 +13,7 @@ use Libraries.Game.InputTable
 use Libraries.Game.Collision.Shapes.CollisionShape2D
 use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Interface.Events.KeyboardListener
+use Libraries.Interface.Events.BehaviorEvent
 use Libraries.Interface.Events.CollisionListener2D
 use Libraries.Interface.Events.CollisionEvent2D
 use Libraries.Interface.Controls.Button
@@ -130,12 +131,67 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
 		// ***These 3 must be commented out for DebugMenuTest() -Maria***
-//        InitializeMap(currentMap, maps:FOREST_MAP)
-//        InitializePlayer(player1)
-//        LoadAboveLayer(currentMap, maps:FOREST_MAP)
+        InitializeMap(currentMap, maps:FOREST_MAP)
+        InitializePlayer(player1)
+        LoadAboveLayer(currentMap, maps:FOREST_MAP)
 
         //==TEST CALLS==
-        /*
+        //Array<text> enemies
+        //enemies:Add("Goblin")
+        //enemies:Add("Goblin Shaman")
+        //enemies:Add("Goblin")
+        //CombatTest(enemies)
+        //InputTest()
+        //InteractablesTest()
+        //InteractablesTest2()
+        //InitializeAnimTest()
+        //InitializeSpellAnimTest()
+        //InitializeAudioTest()
+        //TitleScreenTest()
+        //CineSequencerTest()
+        //DebugMenuTest()
+        //InitializeWhiteRoom()
+        //KeyBindTest()
+        //Introduction intro
+        //intro:Run()
+
+    end
+
+    action Update(number seconds)
+        if not doneCreating
+            return now
+        end
+
+        // Check if Behaviors are queued
+        behaviorQueue:Update(seconds)
+        cineSequencer:Update(seconds)
+
+        if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded()
+            PlayerMovement(seconds)
+        end
+        
+        // ScriptedAnimTest(seconds)
+        // SpellAnim(seconds)
+        // PlayerMovementWithAnim(seconds)
+
+        // Necessary for removing unneeded objects
+        repeat until removalArray:IsEmpty()
+            Remove(removalArray:RemoveFromFront())
+        end
+
+        audioManager:UpdateAudioList()
+    end
+
+//==============================================================================
+//                             CUSTOM ACTIONS
+//==============================================================================
+
+    action AddToRemove(Drawable object)
+        removalArray:Add(object)
+    end
+
+    action KeyBindTest()
+        
         Array<text> names
         names:Add("Up")
         names:Add("Down")
@@ -177,57 +233,17 @@ class Main is Game, CollisionListener2D, KeyboardListener
         keybindTest:SetInputSets(inputSets)
         keybindTest:SetButtonNames(names)
         keybindTest:Run(undefined)
-        */
-        //Array<text> enemies
-        //enemies:Add("Goblin")
-        //enemies:Add("Goblin Shaman")
-        //enemies:Add("Goblin")
-        //CombatTest(enemies)
-        //InputTest()
-        //InteractablesTest()
-        //InteractablesTest2()
-        //InitializeAnimTest()
-        //InitializeSpellAnimTest()
-        //InitializeAudioTest()
-        TitleScreenTest()
-        //CineSequencerTest()
-        //DebugMenuTest()
-        //InitializeWhiteRoom()
-    end
-
-    action Update(number seconds)
-        if not doneCreating
-            return now
-        end
-
-        // Check if Behaviors are queued
-        behaviorQueue:Update(seconds)
-        cineSequencer:Update(seconds)
-
-        if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded()
-            PlayerMovement(seconds)
-        end
         
-        // ScriptedAnimTest(seconds)
-        // SpellAnim(seconds)
-        // PlayerMovementWithAnim(seconds)
-
-        // Necessary for removing unneeded objects
-        repeat until removalArray:IsEmpty()
-            Remove(removalArray:RemoveFromFront())
-        end
-
-        audioManager:UpdateAudioList()
-    end
-
-//==============================================================================
-//                             CUSTOM ACTIONS
-//==============================================================================
-
-    action AddToRemove(Drawable object)
-        removalArray:Add(object)
     end
 	  
+    action GetRemovalArray returns Libraries.Containers.Array
+        return removalArray
+    end
+
+    action GetCineSequencer returns CinematicSequencer
+        return cineSequencer
+    end
+
     action InitializeMap(Map currMap, Text mapName)
     //Loads map image, collision, and adds it to layer.
         EnablePhysics2D(true)

@@ -1,0 +1,90 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.Game.GameStateManager
+
+class Introduction 
+    
+    GameStateManager manager 
+    Main main
+    CinematicSequencer cineSequencer
+    
+    //NPCs
+    Animation boy
+    text boyImgSheet = "Boy"
+
+    //Dialogue
+    Array<text> dialogue1Text
+
+    //Cinematic Behaviors
+    WaitForBehavior     wait1
+    WaitForBehavior     wait2      
+    PanCameraBehavior   cameraPan1
+    PanCameraBehavior   cameraPan2
+    PanCameraBehavior   cameraPan3
+    DisplayLogBehavior  dialogue1
+    MoveNPCBehavior     moveTest1
+    MoveNPCBehavior     moveTest2
+    MoveNPCBehavior     moveTest3
+
+    public action Run ()
+
+        ActorSetup()
+        BehaviorSetup()
+        EnqueueBehaviors()
+        
+        cineSequencer:PlayCineSequence()
+    end
+ 
+    private action ActorSetup()
+        main = cast(Main, manager:GetGame())
+        cineSequencer = main:GetCineSequencer()
+
+        //Boy NPC
+        boy:LoadImageSheet(boyImgSheet)
+        boy:LoadFrame(boyImgSheet)
+        main:Add(boy:sprite1)
+        boy:sprite1:SetCollidable(true)
+        boy:sprite1:SetPosition(10,115)
+        boy:sprite1:EnablePhysics(true)
+        boy:sprite1:CanRotate(false)
+        
+        //Dialogue1
+        dialogue1Text:Add("Hello Traveller!")
+        dialogue1Text:Add("What brings you to these parts?")
+        dialogue1Text:Add("It's dangerous to go alone, take this!")
+    end
+
+    private action BehaviorSetup()
+        wait1:              SetWaitDuration(0.3)
+        wait2:              SetWaitDuration(3)
+        cameraPan1:         SetCameraPan(5,40, 5)
+        cameraPan2:         SetCameraPan(25,0, 3.5)
+        cameraPan3:         SetCameraPan(0,30,6)
+        dialogue1:          SetGame(main)
+        dialogue1:          SetLog(dialogue1Text)
+        dialogue1:          SetRemovalArray(main:GetRemovalArray())
+        dialogue1:          SetCamera(main:GetCamera2D())
+        moveTest1:          SetAnimation(boy, boyImgSheet)
+        moveTest1:          SetMoveDirection(25,0,3.5)
+        moveTest2:          SetAnimation(boy, boyImgSheet)
+        moveTest2:          SetMoveDirection(0,45,6)
+        moveTest3:          SetAnimation(boy, boyImgSheet)
+        moveTest3:          SetMoveDirection(0,-45,6)
+    end
+
+    private action EnqueueBehaviors()
+        //Adding Behaviors to Sequencer in Correct Order
+        cineSequencer:AddCineEvent(wait1, true)
+        cineSequencer:AddCineEvent(cameraPan1, true)
+        cineSequencer:AddCineEvent(cameraPan2, false)
+        cineSequencer:AddCineEvent(moveTest1, true)
+        cineSequencer:AddCineEvent(dialogue1, true)
+        cineSequencer:AddCineEvent(cameraPan3, false)
+        cineSequencer:AddCineEvent(moveTest2, true)
+        cineSequencer:AddCineEvent(wait2, true)
+        cineSequencer:AddCineEvent(moveTest3, true)
+    end
+end
