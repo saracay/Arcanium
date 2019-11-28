@@ -1,0 +1,27 @@
+
+light.png
+size: 512,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Light frame 1
+  rotate: false
+  xy: 2, 2
+  size: 103, 103
+  orig: 103, 103
+  offset: 0, 0
+  index: -1
+Light frame 2
+  rotate: false
+  xy: 107, 15
+  size: 109, 90
+  orig: 109, 90
+  offset: 0, 0
+  index: -1
+Light frame 3
+  rotate: false
+  xy: 218, 10
+  size: 95, 95
+  orig: 95, 95
+  offset: 0, 0
+  index: -1

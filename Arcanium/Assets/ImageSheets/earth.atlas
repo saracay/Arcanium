@@ -1,0 +1,27 @@
+
+earth.png
+size: 512,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Earth frame 1
+  rotate: false
+  xy: 208, 2
+  size: 82, 92
+  orig: 82, 92
+  offset: 0, 0
+  index: -1
+Earth frame 2
+  rotate: false
+  xy: 2, 3
+  size: 106, 91
+  orig: 106, 91
+  offset: 0, 0
+  index: -1
+Earth frame 3
+  rotate: false
+  xy: 110, 9
+  size: 96, 85
+  orig: 96, 85
+  offset: 0, 0
+  index: -1
