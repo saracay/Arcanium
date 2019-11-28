@@ -15,6 +15,13 @@
       ]
     },
     {
+      "name": "Interactable Book",
+      "type": "dialogue",
+      "dialogue": [
+        "This book is exactly like the one from your dreams. The pages are full of runes."
+      ]
+    },
+    {
       "name": "Interactable Cabinet 2",
       "type": "dialogue",
       "dialogue": [
