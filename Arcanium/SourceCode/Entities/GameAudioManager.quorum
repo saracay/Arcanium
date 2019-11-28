@@ -111,7 +111,15 @@ class GameAudioManager
     action StopAudioList
         integer i = 0
         repeat audioList:GetSize() times
-            if audioList:Get(i):GetType() = "music"
+            audioList:Get(i):StopAudio()
+            i = i + 1
+        end
+    end
+
+    action StopAudio(text audioName)
+        integer i = 0
+        repeat audioList:GetSize() times
+            if audioList:Get(i):GetName() = audioName
                 audioList:Get(i):StopAudio()
             end
             i = i + 1

@@ -411,6 +411,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
         Add(background)
     end
 
+    action PlayAudio(text audioName)
+        audioManager:PlayAudio(audioName)
+    end
+
+    action StopAudio(text audioName)
+        audioManager:StopAudio(audioName)
+    end
+
 //==============================================================================
 //                          Input Rebinding
 //==============================================================================
@@ -713,7 +721,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        audioManager:AddAudio("Effect_01", "wav", "effect")
 
         // * Example of adding music
-//        audioManager:AddAudio("MidnightTale", "ogg", "music")
+        audioManager:AddAudio("MidnightTale", "ogg", "music")
 
         // * Example of playing specific music
         audioManager:PlayAudio("MidnightTale")
