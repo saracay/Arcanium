@@ -443,8 +443,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
             end
 
             if entering and not alreadyInteracting
-                newItemB:ToggleInteraction(itemB:GetName())
-                if (newItemB:requiredCompleted = false and map1:name = maps:INTRODUCTION_MAP)
+                newItemB:ToggleInteraction()
+                if (newItemB:requiredCompleted = false and currentMap:name = maps:INTRODUCTION_MAP)
                     newItemB:SetRequiredCompleted(true)
                     introductionJewelsTouched = introductionJewelsTouched + 1
                 end
@@ -1331,7 +1331,7 @@ action BeginGameSequence
     // fade in the music
 
     // load in player and level
-    InitializeMap(map1, maps:INTRODUCTION_MAP)
+    InitializeMap(currentMap, maps:INTRODUCTION_MAP)
     InitializePlayer(player1)
 
     
