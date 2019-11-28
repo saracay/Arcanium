@@ -11,7 +11,7 @@ GameStateManager manager
         Main main = cast(Main, manager:GetGame())
         main:DebugMenuTest()
         main:AddToRemove(main:Arcanium)
-        main:AddToRemove(main:debugTest)
+        main:Remove(main:debugTest)
         
     end
 end

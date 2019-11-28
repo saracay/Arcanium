@@ -189,13 +189,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
-<<<<<<< HEAD
-=======
         TitleScreenTest()
->>>>>>> d3d34beb9b4f02fd4bdda8f1aaffd8d356e9027e
         //CineSequencerTest()
         //DebugMenuTest()
-        InitializeWhiteRoom()
+        //InitializeWhiteRoom()
     end
 
     action Update(number seconds)
@@ -217,10 +214,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
-<<<<<<< HEAD
-=======
-            // output "Emptying Removal Array!"
->>>>>>> d3d34beb9b4f02fd4bdda8f1aaffd8d356e9027e
             Remove(removalArray:RemoveFromFront())
         end
 
