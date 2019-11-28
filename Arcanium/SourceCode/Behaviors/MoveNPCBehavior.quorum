@@ -5,16 +5,19 @@ use Libraries.Game.Graphics.Camera
 use Libraries.Game.Game
 use Libraries.Game.GameStateManager
 use Libraries.Game.Graphics.Drawable
+use Libraries.Compute.Math
 
 class MoveNPCBehavior is Behavior
     
     Animation npc
     text npcName = ""
+    text direction = "down"
     number x = 0 
     number y = 0
     number maxTime = 0
     number currTime = 0
-
+    number elapsedTime = 0
+    Math math
     boolean finished = false
 
     action Run (BehaviorEvent event)
@@ -25,13 +28,38 @@ class MoveNPCBehavior is Behavior
     action Update(number seconds)
         if(currTime <= maxTime)
           currTime = currTime + seconds
+          elapsedTime = elapsedTime + seconds
           npc:sprite1:Move(x*seconds,y*seconds)
+
+          //Calculating sprite direction
+          if(math:AbsoluteValue(x) > math:AbsoluteValue(y))
+            if(x > 0)
+               direction = "right" 
+            else
+               direction = "left"
+            end
+          else
+            if(y > 0)
+                direction = "up"
+            else
+                direction = "down"
+            end
+          end
+
+
           if npcName = ""
             output "Missing animation frame name!"
           else 
-            npc:ChangeFrame(npcName)
+            if elapsedTime >= 1/npc:GetFPS()
+                npc:SetFrame(npc:GetFrame()+1)
+                npc:ChangeFrames(npcName, direction)
+                elapsedTime = elapsedTime - 1/npc:GetFPS()
+            end
           end
         else
+            //Set to standing frame
+            npc:SetFrame(99)
+            npc:ChangeFrames(npcName, direction)
             finished = true
         end
 

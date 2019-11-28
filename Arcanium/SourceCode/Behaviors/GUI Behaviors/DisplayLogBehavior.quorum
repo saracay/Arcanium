@@ -7,6 +7,7 @@ use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
 use Libraries.Game.Graphics.Label
 use Libraries.Interface.Controls.Button
+use Libraries.Game.Graphics.Camera
 
 class DisplayLogBehavior is Behavior
     
@@ -18,9 +19,9 @@ class DisplayLogBehavior is Behavior
     Drawable displayBox = undefined
     Color color
     boolean finished = false
+    Camera camera = undefined
     
     action Run(BehaviorEvent event)
-
         if log:GetSize() = 0
             finished = true
         end
@@ -29,6 +30,7 @@ class DisplayLogBehavior is Behavior
             Drawable newBox
             displayBox = newBox
             displayBox:LoadFilledRectangle(800, 180, color:LightGray())
+            displayBox:SetPosition(camera:GetPosition():GetX()-camera:GetWidth()/2, camera:GetPosition():GetY()-camera:GetHeight()/2)
             game:Add(displayBox)
         end
         
@@ -73,9 +75,8 @@ class DisplayLogBehavior is Behavior
 
         repeat while counter < buttons:GetSize()
             removalArray:Add(buttons:Get(counter))
-            removalArray:Add(displayBox)
             removalArray:Add(labels:Get(counter))
-            
+            removalArray:Add(displayBox)            
             counter = counter + 1
         end
     end
@@ -98,6 +99,10 @@ class DisplayLogBehavior is Behavior
 
     action SetDisplayBox(Drawable item)
         displayBox = item
+    end
+
+    action SetCamera(Camera gameCamera)
+        camera = gameCamera
     end
 
     action SetLog(Array<text> newLog)
