@@ -17,6 +17,7 @@ use Libraries.Interface.Events.CollisionListener2D
 use Libraries.Interface.Events.CollisionEvent2D
 use Libraries.Interface.Controls.Button
 use Libraries.Interface.Layouts.Layout
+use Libraries.System.File
 use Libraries.System.Console
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Containers.Array
@@ -39,6 +40,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //Queue for removing objects
     Array<Item2D> removalArray
+    public Button debugTest // for Title Screen
+    public Drawable Arcanium // for Title Screen
 
     //Entities
     Map currentMap
@@ -132,6 +135,49 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        LoadAboveLayer(currentMap, maps:FOREST_MAP)
 
         //==TEST CALLS==
+        /*
+        Array<text> names
+        names:Add("Up")
+        names:Add("Down")
+        names:Add("Left")
+        names:Add("Right")
+        names:Add("Select")
+        names:Add("Cancel")
+        names:Add("Open Keybindings")
+        names:Add("Open Route-To")
+        InputSet up
+        up:SetKeyboardInput(keys:W)
+        InputSet down
+        down:SetKeyboardInput(keys:S)
+        InputSet left
+        left:SetKeyboardInput(keys:L)
+        InputSet right
+        right:SetKeyboardInput(keys:D)
+        InputSet select
+        select:SetKeyboardInput(keys:SPACE)
+        InputSet cancel
+        cancel:SetKeyboardInput(keys:B)
+        InputSet keybindings
+        keybindings:SetKeyboardInput(keys:Y)
+        InputSet routeTo
+        routeTo:SetKeyboardInput(keys:U)
+        Array<InputSet> inputSets
+        inputSets:Add(up)
+        inputSets:Add(down)
+        inputSets:Add(left)
+        inputSets:Add(right)
+        inputSets:Add(select)
+        inputSets:Add(cancel)
+        inputSets:Add(keybindings)
+        inputSets:Add(routeTo)
+
+        KeybindingMenuBehavior keybindTest
+        keybindTest:SetGame(me)
+        keybindTest:SetRemovalArray(removalArray)
+        keybindTest:SetInputSets(inputSets)
+        keybindTest:SetButtonNames(names)
+        keybindTest:Run(undefined)
+        */
         //Array<text> enemies
         //enemies:Add("Goblin")
         //enemies:Add("Goblin Shaman")
@@ -143,6 +189,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
+<<<<<<< HEAD
+=======
+        TitleScreenTest()
+>>>>>>> d3d34beb9b4f02fd4bdda8f1aaffd8d356e9027e
         //CineSequencerTest()
         //DebugMenuTest()
         InitializeWhiteRoom()
@@ -167,6 +217,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         // Necessary for removing unneeded objects
         repeat until removalArray:IsEmpty()
+<<<<<<< HEAD
+=======
+            // output "Emptying Removal Array!"
+>>>>>>> d3d34beb9b4f02fd4bdda8f1aaffd8d356e9027e
             Remove(removalArray:RemoveFromFront())
         end
 
@@ -1040,6 +1094,26 @@ class Main is Game, CollisionListener2D, KeyboardListener
         test1:sprite1:SetPosition(newX,newY)
      end
 
+// =============================================================================
+//                     Christian's Title Screen
+// =============================================================================
+
+action TitleScreenTest
+    ManualLayout layout
+    me:SetLayout(layout)
+    File file
+    file:SetPath("/Assets/ImageSheets/Arcanium3.png")
+    Arcanium:Load(file)
+    Arcanium:SetPosition(100,250)
+    Add(Arcanium)
+
+    TitleScreenBehavior testing1
+    debugTest:SetPosition(300,200)
+    debugTest:SetName("Debug Menu")
+    Add(debugTest)
+    debugTest:SetBehavior(testing1)
+
+end
     /***********************************************************************
                        Maria's DEBUG MENU testing section.
                        
