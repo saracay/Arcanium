@@ -57,8 +57,13 @@ class GameSound is Audio
         return audioType
     end
 
-    action SetFilePath (text newPath)
+    action SetFilePath (text newPath) returns boolean
         file:SetPath(newPath)
+        if (file:Exists())
+            return true
+        else
+            return false
+        end
     end
 
     action GetFile returns File

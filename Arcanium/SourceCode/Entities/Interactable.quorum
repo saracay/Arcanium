@@ -154,10 +154,11 @@ class Interactable is Drawable, KeyboardListener
         SetInteractableBehavior(temp, "dialogue")
     end
 
-    action CreateMapTransitionBehavior(Map oldMap, text newMapName, number newX, number newY)
+    action CreateMapTransitionBehavior(Map oldMap, text newMapName, number newX, number newY, text musicName)
         MapTransitionBehavior temp
         temp:SetTransition(oldMap, newMapName)
         temp:SetCoordinates(newX, newY)
+        temp:SetMusic(musicName)
         SetInteractableBehavior(temp, "transition")
     end
 end

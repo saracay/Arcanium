@@ -419,6 +419,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         audioManager:StopAudio(audioName)
     end
 
+    action StopAllAudio()
+        audioManager:StopAudioList()
+    end
+
 //==============================================================================
 //                          Input Rebinding
 //==============================================================================
@@ -721,7 +725,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        audioManager:AddAudio("Effect_01", "wav", "effect")
 
         // * Example of adding music
+        audioManager:AddAudio("CelticImpulse", "ogg", "music")
+        audioManager:AddAudio("FolkRound", "ogg", "music")
+        audioManager:AddAudio("LordOfTheLand", "ogg", "music")
         audioManager:AddAudio("MidnightTale", "ogg", "music")
+        audioManager:AddAudio("PippinTheHunchback", "ogg", "music")
+        audioManager:AddAudio("SkyeCullin", "ogg", "music")
+        audioManager:AddAudio("TellerOfTheTales", "ogg", "music")
+        audioManager:AddAudio("Wholesome", "ogg", "music")
 
         // * Example of playing specific music
         audioManager:PlayAudio("MidnightTale")
@@ -798,8 +809,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         InitializeMap(currentMap, maps:LIBRARY_MAP)
         InitializeInteractables(currentMap, maps:LIBRARY_MAP)
         InitializePlayer(player1)
-        player1:playerSprite:sprite1:SetY(currentMap:map:GetHeight() / 8)
-        player1:playerSprite:sprite1:SetX(currentMap:map:GetWidth() / 8)
+        player1:playerSprite:sprite1:SetY(currentMap:map:GetHeight() / 10)
+        player1:playerSprite:sprite1:SetX(currentMap:map:GetWidth() / 10)
         LoadAboveLayer(currentMap, maps:LIBRARY_MAP)
     end
 
@@ -864,9 +875,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         enemies:Add(enemyList2)
 
         Array<text> enemyList3
-        enemyList3:Add("Slime")
-        enemyList3:Add("Slime")
-        enemyList3:Add("Slime")
+        enemyList3:Add("Wolf")
+        enemyList3:Add("Wolf")
+        enemyList3:Add("Wolf")
         enemies:Add(enemyList3)
 
         
@@ -909,7 +920,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
             testObj02:CreateInteractable(travelMaps:Get(i - 1), "default", 0, 0, (width / 2), height / 4 + (96 * (i - 1)), false)
             testObj02:LoadFilledRectangle(32, 32, color:Cyan())
             AddKeyboardListener(testObj02)
-            testObj02:CreateMapTransitionBehavior(currentMap, travelMaps:Get(i - 1), 0, 0)
+            testObj02:CreateMapTransitionBehavior(currentMap, travelMaps:Get(i - 1), 0, 0, "Wholesome")
             Add(testObj02)
             i = i + 1
         end
@@ -917,7 +928,18 @@ class Main is Game, CollisionListener2D, KeyboardListener
         i = 1
         repeat numOfCombats times
             Interactable testObj03
-            testObj03:CreateInteractable("Combat Test " + cast(text, i), "default", 0, 0, (width / 2) + 128, height / 4 + (96 * (i - 1)), true)
+            text testName = "Combat Test " + cast(text, i) 
+            j = 0
+            repeat enemies:Get(i - 1):GetSize() times
+                if j = 0
+                    testName = testName + ": "
+                else
+                    testName = testName + ", "
+                end
+                testName = testName + enemies:Get(i - 1):Get(j)
+                j = j + 1
+            end
+            testObj03:CreateInteractable(testName, "default", 0, 0, (width / 2) + 128, height / 4 + (96 * (i - 1)), true)
             testObj03:LoadFilledRectangle(32, 32, color:Red())
             AddKeyboardListener(testObj03)
             InitiateCombatBehavior temp3

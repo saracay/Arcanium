@@ -23,6 +23,7 @@ class MapTransitionBehavior is Behavior
     text mapName = ""                   // New map name
     number playerX = 0                  // New Player X coordinate
     number playerY = 0                  // New Player Y coordinate
+    text musicName = ""
 
     action Run(BehaviorEvent event)
         if mapName not= "Not Ready Yet"
@@ -64,11 +65,16 @@ class MapTransitionBehavior is Behavior
                 main:GetPlayer():playerSprite:sprite1:SetX(nextMap:map:GetWidth() / 2)
                 main:GetPlayer():playerSprite:sprite1:SetY(nextMap:map:GetHeight() / 2)
             else
-                main:GetPlayer():playerSprite:sprite1:SetX(playerX * 32)
-                main:GetPlayer():playerSprite:sprite1:SetY(playerY * 32)
+                main:GetPlayer():playerSprite:sprite1:SetX(playerX)
+                main:GetPlayer():playerSprite:sprite1:SetY(playerY)
             end
             main:LoadAboveLayer(nextMap, mapName)
             main:SetMap(nextMap)
+
+            main:StopAllAudio()
+            if not (musicName = "")
+                main:PlayAudio(musicName)
+            end
         else
             output "This transition is unavailable."
         end
@@ -89,5 +95,9 @@ class MapTransitionBehavior is Behavior
     action SetCoordinates(number newX, number newY)
         playerX = newX
         playerY = newY
+    end
+
+    action SetMusic(text newMusicName)
+        musicName = newMusicName
     end
 end

@@ -15,7 +15,7 @@ class InitiateCombatBehavior is Behavior
         Main main = cast(Main, manager:GetGame())
         main:AddToRemove(object)
         Drawable background
-        background:LoadFilledRectangle(1920*2,1080*2,color:Gray())
+        background:LoadFilledRectangle(1920*2,1080*2,color:White())
         background:SetPosition(-1920/2, -1080/2)
         main:Add(background)
         main:CombatTest(enemyList)

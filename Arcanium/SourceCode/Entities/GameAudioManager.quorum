@@ -26,55 +26,67 @@ class GameAudioManager
             output "Error: Duplicate Audio"
         else
             GameSound audio
+            boolean legalFilePath = true
             if sound = "effect"
                 if type = "wav"
-                    audio:SetFilePath("Assets\Audio\Effects\" + name + ".wav")
+                    legalFilePath = audio:SetFilePath("Assets\Audio\Effects\" + name + ".wav")
                 elseif type = "ogg"
-                    audio:SetFilePath("Assets\Audio\Effects\" + name + ".ogg")
+                    legalFilePath = audio:SetFilePath("Assets\Audio\Effects\" + name + ".ogg")
                 end
 
-                if type not= "wav" and type not= "ogg"
-                    output "Error: Incorrect Audio Type (~.wav / ~.ogg only)"
+                if legalFilePath
+                    if type not= "wav" and type not= "ogg"
+                        output "Error: Incorrect Audio Type (~.wav / ~.ogg only)"
+                    else
+                        audio:LoadAudio()
+                        audio:SetMinVolume(0.5)
+                        audio:SetType("effect")
+                        audio:SetName(name)
+                    end
                 else
-                    audio:LoadAudio()
-                    audio:SetMinVolume(0.5)
-                    audio:SetType("effect")
-                    audio:SetName(name)
+                    output "Error: Illegal File Path"
                 end
+
             elseif sound = "music"
                 Music music
                 if type = "wav"
-                    music:SetFilePath("Assets\Audio\Music\" + name + ".wav")
+                    legalFilePath = music:SetFilePath("Assets\Audio\Music\" + name + ".wav")
                 elseif type = "ogg"
-                    music:SetFilePath("Assets\Audio\Music\" + name + ".ogg")
+                    legalFilePath = music:SetFilePath("Assets\Audio\Music\" + name + ".ogg")
                 end
 
-                if type not= "wav" and type not= "ogg"
-                    output "Error: Incorrect Audio Type ('wav' / 'ogg' only)"
+                if legalFilePath
+                    if type not= "wav" and type not= "ogg"
+                        output "Error: Incorrect Audio Type ('wav' / 'ogg' only)"
+                    else
+                        music:LoadAudio()
+                        /***********************************************************
+                                        START HARD CODED TEST PART
+                            This part is currently HARD-CODED but should be able
+                            to enter values to edit these, probably through some
+                            JSON file
+                        ***********************************************************/
+                        music:SetWillFade(true)
+                        music:SetFadeRate(0.000005)
+                        music:SetMinVolume(0.1)
+                        music:SetMaxVolume(0.5)
+                        audio = music
+                        /***********************************************************
+                                        END HARD CODED TEST PART
+                        ***********************************************************/
+                        audio:SetType("music")
+                        audio:SetName(name)
+                    end
                 else
-                    music:LoadAudio()
-                    /***********************************************************
-                                    START HARD CODED TEST PART
-                        This part is currently HARD-CODED but should be able
-                        to enter values to edit these, probably through some
-                        JSON file
-                    ***********************************************************/
-                    music:SetWillFade(true)
-                    music:SetFadeRate(0.000005)
-                    music:SetMinVolume(0.1)
-                    music:SetMaxVolume(0.5)
-                    audio = music
-                    /***********************************************************
-                                    END HARD CODED TEST PART
-                    ***********************************************************/
-                    audio:SetType("music")
-                    audio:SetName(name)
+                    output "Error: Illegal File Path"
                 end
             end
-            if sound not= "effect" and sound not= "music"
-                output "Error: Incorrect GameSound Type ('effect' / 'music' only)"
-            else
-                audioList:Add(audio)
+            if legalFilePath
+                if sound not= "effect" and sound not= "music"
+                    output "Error: Incorrect GameSound Type ('effect' / 'music' only)"
+                else
+                    audioList:Add(audio)
+                end
             end
         end
     end
