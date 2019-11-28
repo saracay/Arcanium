@@ -12,6 +12,7 @@ class Map
     public Array<Drawable> collisions
     public Array<Interactable> interactables
     public Array<InteractableData> interactableData
+    public Array<Boolean> completedInteractables
     public Array<Interactable> transitions
     public Array<Text> aboveMaps
     public text name = ""
@@ -211,11 +212,18 @@ end
         mapData:Read(data)
 
         JavaScriptObjectNotation interDataJSON = mapData:GetObject("interactables")
-        
 
         i = 0
         repeat interDataJSON:GetSize() times
             JavaScriptObjectNotation curr = interDataJSON:Get(i)
+            text required = curr:GetValue("required")
+            
+            if required = "true" // if an interactable is required to be complete, then set its completed to false
+                completedInteractables:Add(false)
+            else 
+                completedInteractables:Add(true)
+            end
+            
             text dial = curr:GetValue("dialogue") // gets the dialogue object and turns it into a string
             dial = dial:GetSubtext(1, dial:GetSize() - 1) // trims off the double quotes
             text dq = ""

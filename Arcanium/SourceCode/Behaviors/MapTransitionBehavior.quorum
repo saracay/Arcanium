@@ -20,9 +20,9 @@ use Libraries.Containers.Array
 class MapTransitionBehavior is Behavior
     // List of variables for MAPTRANSITIONBEHAVIOR
     GameStateManager manager            // Used to get MAIN
+    MapList maps                        // all of the map names
     Map currentMap                      // Current MAP
     text mapName = ""                   // New map name
-//    Array<Drawable> mapInteractables    // List of current INTERACTABLEs
     Array<Interactable> npcList
 
     // New player position
@@ -36,79 +36,76 @@ class MapTransitionBehavior is Behavior
         // Get the MAIN for level loading
         Main main = cast(Main, manager:GetGame())
 
-        // Create a new MAP to load
-        Map nextMap
-        nextMap:loadMap(mapName)
-        nextMap:loadCollisionLayer(mapName)
-        // NOTE: these two SHOULD be loaded every single time, but they are currently commented out because not all maps have this data yet
-//        nextMap:loadInteractables(mapName)
-//        nextMap:loadMapTransitions(mapName)
+        // here will be the logic that will control for every map if it can be loaded
+        // this mainly matters for maps where there are no physical collision obstacles from the map transition collider
+        // example: in the introduction, you cannot go to the interior house until touching all of the jewels
 
-        // Add the drawables to the default layer
-        main:Add(nextMap:testMap) 
+        if currentMap:name = maps:INTRODUCTION_MAP and main:introductionJewelsTouched < 6
+            // do nothing
+        else // allow the map to be loaded
+            // Create a new MAP to load
+            Map nextMap
+            nextMap:loadMap(mapName)
+            nextMap:loadCollisionLayer(mapName)
+            // NOTE: these two SHOULD be loaded every single time, but they are currently commented out because not all maps have this data yet
+            nextMap:loadInteractables(mapName)
+            nextMap:loadMapTransitions(mapName)
 
-        // Render all of the collision objects
-        i = 0
-        repeat nextMap:collisions:GetSize() times
-            main:Add(nextMap:collisions:Get(i))
-            i = i + 1
+            // Add the drawables to the default layer
+            main:Add(nextMap:testMap) 
+
+            // Render all of the collision objects
+            i = 0
+            repeat nextMap:collisions:GetSize() times
+                main:Add(nextMap:collisions:Get(i))
+                i = i + 1
+            end
+
+            // if the map name exists in the array of maps, then also load in the above layer
+            if nextMap:inAboveMaps(mapName)
+                nextMap:loadAboveLayer(mapName)
+            end
+
+            // Remove the current MAP
+            main:AddToRemove(currentMap:testMap)
+
+            // Remove the current collsions
+            i = 0
+            repeat currentMap:collisions:GetSize() times
+                main:AddToRemove(currentMap:collisions:Get(i))
+                i = i + 1
+            end
+
+            // Remove the current interactables
+            i = 0
+            repeat currentMap:interactables:GetSize() times
+                main:AddToRemove(currentMap:interactables:Get(i))
+                i = i + 1
+            end
+
+            // Remove the current transitions
+            i = 0
+            repeat currentMap:transitions:GetSize() times
+                main:AddToRemove(currentMap:transitions:Get(i))
+                i = i + 1
+            end
+
+            // Add the new MAP + collisions + player
+            main:SetMap(nextMap)
+            main:GetPlayer():playerSprite:SetX(playerX * 32)
+            main:GetPlayer():playerSprite:SetY(playerY * 32)
+
+            main:Add(main:GetPlayer():playerSprite)
         end
-
-        // if the map name exists in the array of maps, then also load in the above layer
-        if nextMap:inAboveMaps(mapName)
-            nextMap:loadAboveLayer(mapName)
-        end
-
-        // Remove the current MAP
-        main:AddToRemove(currentMap:testMap)
-
-        // Remove the current collsions
-        i = 0
-        repeat currentMap:collisions:GetSize() times
-            main:AddToRemove(currentMap:collisions:Get(i))
-            i = i + 1
-        end
-
-        // Remove the current interactables
-        i = 0
-        repeat currentMap:interactables:GetSize() times
-            main:AddToRemove(currentMap:interactables:Get(i))
-            i = i + 1
-        end
-
-        // Remove the current transitions
-        i = 0
-        repeat currentMap:transitions:GetSize() times
-            main:AddToRemove(currentMap:transitions:Get(i))
-            i = i + 1
-        end
-
-        // Add the new MAP + collisions + player
-        main:SetMap(nextMap)
-        main:GetPlayer():playerSprite:SetX(playerX * 32)
-        main:GetPlayer():playerSprite:SetY(playerY * 32)
-
-        // EDIT: Removed this because we no longer need the npcList for interactables
-        // ADD INTERACTABLES HERE
-//        i = 0
-//        repeat npcList:GetSize() times
-//            main:Add(npcList:Get(i))
-//            main:AddKeyboardListener(npcList:Get(i))
-//        end
-
-        //main:SetNpcList(npcList) Causes error, no method SetNpcList
-        main:Add(main:GetPlayer():playerSprite)
     end
 
     // Initializer of MAPTRANSITIONBEHAVIOR 
-    // EDITED: will no longer need this newList parameter because the map carries all of the information about all of the layers already
     action SetTransition(Map oldMap, text newName)
         currentMap = oldMap
         mapName = newName
 
         output newName
         output "in setTransition"
-//        mapInteractables = newList
     end
 
     // Sets the PLAYER's new position

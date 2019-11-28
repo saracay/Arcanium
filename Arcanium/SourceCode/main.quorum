@@ -105,6 +105,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
     //For audio
     GameAudioManager audioManager
     CinematicSequencer cineSequencer
+
+    //For game Sequencer
+    // introduction level
+    public number introductionJewelsTouched = 0
+
+    // bedroom level
+
 //==============================================================================
 //                             PREBUILT ACTIONS
 //==============================================================================
@@ -138,7 +145,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeSpellAnimTest()
         //InitializeAudioTest()
         //CineSequencerTest()
-        DebugMenuTest()
+        //DebugMenuTest()
+        BeginGameSequence()
     end
 
     action Update(number seconds)
@@ -185,6 +193,30 @@ class Main is Game, CollisionListener2D, KeyboardListener
             Add(currMap:collisions:Get(i))
             i = i + 1
         end
+
+        // ==== Ryan: Starting Changes ====
+        currMap:loadMapTransitions(mapName)
+        i = 0
+        repeat currMap:transitions:GetSize() times
+            Add(currMap:transitions:Get(i))
+            AddKeyboardListener(currMap:transitions:Get(i))
+            currMap:transitions:Get(i):CreateMapTransitionBehavior(map1, currMap:name)
+            i = i + 1
+        end
+
+        currMap:getInteractablesData(currMap:name)
+        currMap:loadInteractables(mapName)
+        i = 0
+        repeat currMap:interactables:GetSize() times
+            Add(currMap:interactables:Get(i))
+            AddKeyboardListener(currMap:interactables:Get(i))
+            currMap:interactables:Get(i):SetRequiredCompleted(currMap:completedInteractables:Get(i))
+            InteractableData data = currMap:interactableData:Get(i)
+            currMap:interactables:Get(i):CreateDialogueBehavior(data)
+            i = i + 1
+        end
+        // ===== Ryan: Ending Changes =====
+
 	AddCollisionListener(me)	
     end
 
@@ -313,6 +345,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
             if entering and not alreadyInteracting
                 newItemB:ToggleInteraction(itemB:GetName())
+                if (newItemB:requiredCompleted = false and map1:name = maps:INTRODUCTION_MAP)
+                    newItemB:SetRequiredCompleted(true)
+                    introductionJewelsTouched = introductionJewelsTouched + 1
+                end
             elseif not entering
                 if newItemB:IsInteracting()
                     output ""
@@ -885,6 +921,110 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 /***********************************************************************
                      End of Maria's debug menu section.
+***********************************************************************/
+
+/***********************************************************************
+                     GAME SEQUENCE TEST - LISEL
+  This section serves as a way to test how our game will actually run:
+    - Loads in the maps in the correct order
+    - Saves the states of maps when necessary
+    - Initializes and sets bools used for Interactables / achievement
+        tracking
+    - Loads in appropriate cutscenes
+***********************************************************************/
+
+// pseudocode to plan out functionalities
+
+// load in the introduction scene where player learns all elements
+    // if player touches all elements, load in the interior house
+        // fade out the level for a few seconds, then black, then fade in interior house
+// loads in the village scene (does not happen in our code, only happens when player exits the house)
+    // does the intetrnasitionsrior house state have to be saved?
+// map transition with the player getting knocked out 
+// load the forest clearing map
+// load the forest path 1 map
+    // save the state of whether or not the obstacle has been completed
+    // river interactable will have a bool that determines if it has been completed
+    // if player interacts with river interactales
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the obstacle's completed to true (so that the map will never load again with the uncompleted obstacle)
+        // load the player
+// load the forest path 2 map
+    // if player interacts with the burnable tree interactable
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the interactable's completed to true
+        // load the player
+// load the forest path 3 map
+    // initial state of obstacle completed is false
+    // if player interacts with fire interactables
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the interactable's complete to true
+        // load the player
+// load the forest path 4 map
+    // initial state of obstacle completed is false
+    // if player interacts with log 1 interactables
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the half completed obstacle
+        // set the interactable's half complete to true
+        // load the player
+    // if player interacts with the log 2 interactables
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the interactable's complete to true
+        // load the player    
+// load the village ruins
+    // after reaching a certain spot, load the transition to refugee camp cutscene
+// load the refugee camp
+    // load cutscene where son finds his father
+
+action BeginGameSequence
+    // -------------------------------------
+    // INTRODUCTION LEVEL
+    // -------------------------------------
+
+    // fade in from black over a few seconds
+    // fade in the music
+
+    // load in player and level
+    InitializeMap(map1, maps:INTRODUCTION_MAP)
+    InitializePlayer(player1)
+
+    
+
+    
+
+    // check if the player has touched all of the elements yet
+        // this will require a change in check for interaction, where we must then check if it has a completed attribute in its data
+        // so, if requiredCompleted is set to false, now set it to true
+        // if it has completed in its data, set the array of jewels to true
+    
+    // if player has touched all of the elements, load in the bedroom
+        // this can be handled by going into the map transition behavior and checking the jewels amount
+
+    // -------------------------------------
+    // BEDROOM LEVEL
+    // -------------------------------------
+
+    // fade in from black over a few seconds
+    // fade in the music
+
+end 
+
+/***********************************************************************
+                     END OF GAME SEQUENCE TEST
 ***********************************************************************/
 end
 
