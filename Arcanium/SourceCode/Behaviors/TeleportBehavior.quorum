@@ -1,0 +1,39 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.Graphics.Drawable
+
+
+class TeleportBehavior is Behavior
+    
+    Player player
+    number newX = 0
+    number newY = 0
+    
+    boolean finished = false
+
+    action Run (BehaviorEvent event)
+        player:playerSprite:sprite1:SetPosition(newX,newY)
+        finished = true
+    end
+
+    action Update(number seconds)
+
+    end
+    
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action SetPlayer(Player p)
+        player = p
+    end
+
+    action SetX(number x)
+        newX = x
+    end
+
+    action SetY(number y)
+        newY = y
+    end
+
+end
