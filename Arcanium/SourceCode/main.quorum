@@ -100,8 +100,18 @@ class Main is Game, CollisionListener2D, KeyboardListener
     text spriteImgSheet = "Boy"
     text spriteFrame = "Boy"
     text spriteImage = "alien"
-    text fireImgSheet = "fire"
-    text fireFrame = "Fire"
+    text airImgSheet = "air"
+    text airFrame = "Air"
+    text darkImgSheet = "dark"
+    text darkFrame = "Dark"
+    text earthImgSheet = "earth"
+    text earthFrame = "Earth"
+    text fireImgSheet = "fireball"
+    text fireFrame = "Fireball"
+    text lightImgSheet = "light"
+    text lightFrame = "Light"
+    text waterImgSheet = "water"
+    text waterFrame = "Water"
 
     boolean doneCreating = false
 
@@ -147,7 +157,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InteractablesTest()
         //InteractablesTest2()
         //InitializeAnimTest()
-        //InitializeSpellAnimTest()
+        //InitializeSpellAnimTest(fireball, Fireball)
         //InitializeAudioTest()
         //TitleScreenTest()
         //CineSequencerTest()
@@ -173,7 +183,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         end
         
         // ScriptedAnimTest(seconds)
-        // SpellAnim(seconds)
+        // SpellAnim(seconds, Fireball)
         // PlayerMovementWithAnim(seconds)
 
         // Necessary for removing unneeded objects
@@ -774,9 +784,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
     end
 
     // Load images for spell animations, call in action CreateGame
-    action InitializeSpellAnimTest()
-        test3:LoadImageSheet(fireImgSheet)
-        test3:LoadFrame(fireFrame)
+    action InitializeSpellAnimTest(text spellSheet, text spellFrame)
+        test3:LoadImageSheet(spellSheet)
+        test3:LoadFrame(spellFrame)
         Add(test3:sprite1)
     end
 
@@ -1058,7 +1068,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
             text fireFrame = "Fire")
      Call InitializeSpellAnimTest() in action CreateGame
      ************************************************/
-     action SpellAnim(number seconds)
+     action SpellAnim(number seconds, text spellFrame)
      elapsedTime = elapsedTime + seconds
      	if elapsedTime >= 1/fps
         	currentFrame = test3:GetFrame()
@@ -1070,7 +1080,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
      end
 
      // Animation with keys, call in action Updates
-     action PlayerMovementWithAnim(number seconds)
+     /*action PlayerMovementWithAnim(number seconds)
      	newY = test1:sprite1:GetY()
         newX = test1:sprite1:GetX()
            	
@@ -1116,7 +1126,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     	end
         
         test1:sprite1:SetPosition(newX,newY)
-     end
+     end*/
 
 // =============================================================================
 //                     Christian's Title Screen
