@@ -58,20 +58,27 @@ class Interactable is Drawable, KeyboardListener
     text typeOfBehavior = ""                // Behavior type ID
 
     // Initializer of an INTERACTABLE Object
-    action CreateInteractable(text setName, text spritePath, number setX, number setY, boolean physicsOn)
+    action CreateInteractable(text setName, text spritePath, integer width, integer height, number setX, number setY, boolean physicsOn)
         name = setName                      // Sets the name of the Interactable
         SetName("interactable")             // Sets the name for Drawable
 
+        if width = 0
+            width = 32
+        end
+        if height = 0
+            height = 32
+        end
+
         if spritePath = "default"
-            LoadFilledRectangle(32, 32, color:Black())
+            LoadFilledRectangle(width, height, color:Black())
         elseif spritePath = "clear"
-            LoadFilledRectangle(32, 32, color:Clear())
+            LoadFilledRectangle(width, height, color:Clear())
         elseif spritePath not= "default" and spritePath not= "clear"
             Load(spritePath)
         end
 
-        SetX(setX * 32)                     // x32 for Tiled positioning
-        SetY(setY * 32)                     // x32 for Tiled positioning
+        SetX(setX)                     // x32 for Tiled positioning
+        SetY(setY)                     // x32 for Tiled positioning
 
         if physicsOn
             EnablePhysics(true)             // Tangible
@@ -92,7 +99,7 @@ class Interactable is Drawable, KeyboardListener
 	
     // Switches the truth of currentlyInteracting
     // * If BEHAVIOR is DIALOGUE, reset to beginning
-    action ToggleInteraction(text interactableName)
+    action ToggleInteraction()
         if currentlyInteracting
             currentlyInteracting = false
             if currentBehavior is DialogueBehavior
@@ -102,7 +109,11 @@ class Interactable is Drawable, KeyboardListener
             end
         else
             currentlyInteracting = true
-            output "( Press [SPACE] to interact with " + interactableName + " )"
+            if typeOfBehavior = "transition"
+                output "( Press [SPACE] to travel to " + name + " )"
+            else
+                output "( Press [SPACE] to interact with " + name + " )"
+            end
         end
     end
 	
@@ -110,6 +121,9 @@ class Interactable is Drawable, KeyboardListener
     action PressedKey(KeyboardEvent event)
         if currentlyInteracting
             if event:keyCode = event:SPACE
+                if typeOfBehavior = "transition"
+                    currentlyInteracting = false
+                end
                 BehaviorEvent newEvent
                 currentBehavior:Run(newEvent)
             end
@@ -120,6 +134,11 @@ class Interactable is Drawable, KeyboardListener
     action SetInteractableBehavior(Behavior newBehavior, text behaviorType)
         currentBehavior = newBehavior
         typeOfBehavior = behaviorType
+        if typeOfBehavior = "combat"
+            InitiateCombatBehavior temp = cast(InitiateCombatBehavior, currentBehavior)
+            temp:SetInteractable(me)
+            currentBehavior = temp
+        end
     end
 
     // Creates a specific interactable behavior and then calls SetInteractableBehavior()
@@ -135,11 +154,11 @@ class Interactable is Drawable, KeyboardListener
         SetInteractableBehavior(temp, "dialogue")
     end
 
-    action CreateMapTransitionBehavior(Map oldMap, text newMapName)
+    action CreateMapTransitionBehavior(Map oldMap, text newMapName, number newX, number newY, text musicName)
         MapTransitionBehavior temp
         temp:SetTransition(oldMap, newMapName)
-        temp:SetCoordinates(16, 12)
-
+        temp:SetCoordinates(newX, newY)
+        temp:SetMusic(musicName)
         SetInteractableBehavior(temp, "transition")
     end
 end

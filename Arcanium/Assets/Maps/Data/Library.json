@@ -657,6 +657,17 @@
  "nextlayerid":8,
  "nextobjectid":64,
  "orientation":"orthogonal",
+ "pointsofinterest":[
+	{
+	 "name":"TestPOI0",
+	 "x":0,
+	 "y":0
+	},
+	{
+	 "name":"TestPOI1",
+	 "x":200,
+	 "y":200
+	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
  "tileheight":32,

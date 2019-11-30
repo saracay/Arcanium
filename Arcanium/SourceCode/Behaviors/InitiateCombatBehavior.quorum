@@ -1,0 +1,31 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.GameStateManager
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Containers.Array
+
+class InitiateCombatBehavior is Behavior
+    GameStateManager manager            // Used to get MAIN
+    Color color
+    Interactable object
+    Array<text> enemyList
+
+    action Run(BehaviorEvent event)
+        Main main = cast(Main, manager:GetGame())
+        main:AddToRemove(object)
+        Drawable background
+        background:LoadFilledRectangle(1920*2,1080*2,color:White())
+        background:SetPosition(-1920/2, -1080/2)
+        main:Add(background)
+        main:CombatTest(enemyList)
+    end
+
+    action SetInteractable(Interactable newObject)
+        object = newObject
+    end
+
+    action SetEnemyList(Array<text> newEnemyList)
+        enemyList = newEnemyList
+    end
+end

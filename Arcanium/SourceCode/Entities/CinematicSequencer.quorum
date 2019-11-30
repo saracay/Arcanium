@@ -30,8 +30,9 @@ class CinematicSequencer
             Behavior runningBehavior = i:Next()
 
             if runningBehavior:IsFinished() 
-                //runningBehavior:Dispose()
+                
                 runningBehaviors:Remove(i:GetCurrent())
+                runningBehavior:Dispose()
                 output "finished"
             else
                runningBehavior:Update(seconds)
@@ -53,7 +54,7 @@ class CinematicSequencer
         if isFinished = false 
             shouldRun = false
             if currentBehavior not= undefined
-                currentBehavior:Dispose()
+                //currentBehavior:Dispose()
             end
 
             if queue:IsEmpty()
@@ -85,10 +86,6 @@ class CinematicSequencer
         runningBehaviors:Empty()
         waitCheckQueue:Empty()
         queue:Empty()
-    end
-
-    action CreateCineSequence()
-    
     end
 
     action AddCineEvent(Behavior cineBehavior, boolean waitUntilFinished)

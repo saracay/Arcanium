@@ -1,0 +1,17 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.GameStateManager
+use Libraries.Game.Graphics.Drawable
+use Libraries.Containers.Array
+use Libraries.Interface.Controls.Button
+
+class TitleScreenBehavior is Behavior
+GameStateManager manager
+    action Run (BehaviorEvent event)
+        Main main = cast(Main, manager:GetGame())
+        main:DebugMenuTest()
+        main:AddToRemove(main:Arcanium)
+        main:Remove(main:debugTest)
+        
+    end
+end
