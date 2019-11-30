@@ -184,14 +184,6 @@ class Combatant
         updateMessage2:SetLog(log2)
         updateMessage2:SetRemovalArray(removalArray)
         behaviorQueue:AddBehavior(updateMessage2)
-
-        Array<text> statusResults = ApplyAttackStatuses(healMove)
-
-        DisplayLogBehavior updateMessage3
-        updateMessage3:SetGame(game)
-        updateMessage3:SetLog(statusResults)
-        updateMessage3:SetRemovalArray(removalArray)
-        behaviorQueue:AddBehavior(updateMessage3)
     end
 
     /*Calculate what percentage of its base damage an attack will deal,

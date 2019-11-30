@@ -28,16 +28,20 @@ class CombatDamageTargetBehavior is Behavior
 
             repeat while counter < targets:GetSize()
                 if targets:Get(counter) not= undefined
-output "Target:      " + targets:Get(counter):GetName()
-output "Spell:       " + spell:GetName()
-output "Base Damage: " + spell:GetBaseDamage()
-output "MultiTarget: " + spell:GetMultiTarget()
-output ""
                     targets:Get(counter):ReceiveAttack(spell, caster)
                 end
 
                 counter = counter + 1
             end
+        else
+            Array<text> log
+            log:Add(player:GetName() + " does not have enough mana to cast " + spell:GetName() + "!")
+
+            DisplayLogBehavior updateMessage
+            updateMessage:SetGame(game)
+            updateMessage:SetLog(log)
+            updateMessage:SetRemovalArray(removalArray)
+            behaviorQueue:AddBehavior(updateMessage)
         end
 
         battle:UpdateStatus()

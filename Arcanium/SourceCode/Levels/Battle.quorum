@@ -19,6 +19,7 @@ class Battle is Level
     Array<Item2D> currentPage
     Array<Combatant> combatants
     Array<Label> statusInfo
+    Array<Label> statusNames
     Array<Drawable> statusWindows
     Array<Drawable> sprites
     Array<text> log
@@ -54,19 +55,28 @@ class Battle is Level
 
         //displays player health and mana
         Drawable playerHealthBackground
-        playerHealthBackground:LoadFilledRectangle(120, 40, color:LightGray())
-        playerHealthBackground:SetPosition(225, 300)
+        playerHealthBackground:LoadFilledRectangle(140, 70, color:LightGray())
+        playerHealthBackground:SetPosition(225, 275)
         game:Add(playerHealthBackground)
         statusWindows:Add(playerHealthBackground)
 
+        Label playerName
+        playerName:SetText(player:GetName())
+        playerName:SetPosition(230, 325)
+        playerName:SetFontSize(16)
+        game:Add(playerName)
+        statusNames:Add(playerName)
+
         Label playerHealth
         playerHealth:SetText("Health: " + player:GetCurrentHP() + "/" + player:GetMaxHP())
-        playerHealth:SetPosition(230, 325)
+        playerHealth:SetPosition(230, 305)
+        playerHealth:SetFontSize(16)
         game:Add(playerHealth)
         statusInfo:Add(playerHealth)
 
         playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
-        playerMana:SetPosition(230, 305)
+        playerMana:SetPosition(230, 285)
+        playerMana:SetFontSize(16)
         game:Add(playerMana)
 
         integer counter = 0
@@ -99,14 +109,22 @@ class Battle is Level
             sprites:Add(enemySprite)
 
             Drawable enemyHealthBackground
-            enemyHealthBackground:LoadFilledRectangle(120, 30, color:LightGray())
-            enemyHealthBackground:SetPosition(225, 500 - 40 * (combatantIndex - 1))
+            enemyHealthBackground:LoadFilledRectangle(140, 40, color:LightGray())
+            enemyHealthBackground:SetPosition(225, 495 - 50 * (combatantIndex - 1))
             game:Add(enemyHealthBackground)
             statusWindows:Add(enemyHealthBackground)
 
+            Label enemyName
+            enemyName:SetText(combatants:Get(combatantIndex):GetName())
+            enemyName:SetPosition(230, 520 - 50 * (combatantIndex - 1))
+            enemyName:SetFontSize(16)
+            game:Add(enemyName)
+            statusNames:Add(enemyName)
+
             Label enemyHealth
             enemyHealth:SetText("Health: " + combatants:Get(combatantIndex):GetCurrentHP() + "/" + combatants:Get(combatantIndex):GetMaxHP())
-            enemyHealth:SetPosition(230, 500 + 15 - 40 * (combatantIndex - 1))
+            enemyHealth:SetPosition(230, 500 - 50 * (combatantIndex - 1))
+            enemyHealth:SetFontSize(16)
             game:Add(enemyHealth)
             statusInfo:Add(enemyHealth)
 
@@ -153,6 +171,12 @@ class Battle is Level
     end
 
     action PlayerTurn
+        Player player = cast(Player, combatants:Get(0))
+        if player:GetCurrentMP() not= player:GetMaxMP()
+            player:SetCurrentMP(player:GetCurrentMP() + 1)
+        end
+        UpdateStatus()
+
         CombatMainPageBehavior behavior
         behavior:SetGame(game)
         behavior:SetBehaviorQueue(behaviorQueue)

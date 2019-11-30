@@ -55,7 +55,7 @@
       "elementID": 6000000,
       "name": "Frozen",
       "modifier": 1,
-      "applicationChance": 1.0,
+      "applicationChance": 0.4,
       "isHealing": false,
       "effectivenessStatModifiers": [1, 1, 1, 1, 1, 1],
       "turnsAffected": 1

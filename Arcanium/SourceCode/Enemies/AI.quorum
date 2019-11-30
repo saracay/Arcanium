@@ -3,7 +3,7 @@ use Libraries.Compute.Random
 use Libraries.Game.Game
 use Libraries.Interface.Item2D
 
-class AI 
+class AI
 
     integer targetPosition = -1     //which combatant the attack will target
     Game game
@@ -243,6 +243,7 @@ class AI
         if (targetPosition not= -1 and lickWoundsCooldown >= 3)
             if (r <= 60)
                 attackID = 8000101
+                actor:SetAttackCooldownsAtPosition(0, 0)
             elseif (maimCooldown >= 4)
                 if (r <= 80)
                     actor:SetAttackCooldownsAtPosition(1, 0)
@@ -360,8 +361,9 @@ class AI
         integer i = 1
         repeat while (i < combatants:GetSize() and allyPosition = -1)
             if (combatants:Get(i) not= undefined)
-                number percent = (combatants:Get(i):GetCurrentHP()
-                 / combatants:Get(i):GetMaxHP()) * 100
+                number percent = (cast(number, combatants:Get(i):GetCurrentHP())
+                 / (cast(number, combatants:Get(i):GetMaxHP()))) * 100
+
                 if (percent <= 50)
                     found = true
                     allyPosition = i

@@ -33,10 +33,7 @@ class CombatEnemyTurnBehavior is Behavior
         end
     end
     
-    action Dispose
-        Player player = cast(Player, combatants:Get(0))
-        player:SetCurrentMP(player:GetCurrentMP() + 1)
-        
+    action Dispose      
         CombatUpdateEffectsBehavior behavior
         behavior:SetCombatants(combatants)
         behavior:SetBattle(battle)

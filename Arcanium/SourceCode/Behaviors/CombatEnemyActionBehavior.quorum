@@ -17,12 +17,14 @@ class CombatEnemyActionBehavior is Behavior
     action Run(BehaviorEvent event)
         if combatants:Get(enemyIndex) not= undefined
             
+            text status = ""
             boolean canMove = true
             Array<Status> statuses = combatants:Get(enemyIndex):GetStatuses()
             integer counter = 0           
 
             repeat while counter < statuses:GetSize()
                 if statuses:Get(counter):GetName() = "Frozen" or statuses:Get(counter):GetName() = "Stun"
+                    status = statuses:Get(counter):GetName()
                     canMove = false
                 end
 
@@ -39,6 +41,15 @@ class CombatEnemyActionBehavior is Behavior
                 enemyAI:SetPreviousBehavior(me)
 
                 enemyAI:AI(enemyIndex, combatants)
+            else
+                Array<text> log
+                log:Add(combatants:Get(enemyIndex):GetName() + " is " + " cannot move!")
+
+                DisplayLogBehavior updateMessage
+                updateMessage:SetGame(game)
+                updateMessage:SetLog(log)
+                updateMessage:SetRemovalArray(removalArray)
+                behaviorQueue:AddBehavior(updateMessage)
             end
         end
 
