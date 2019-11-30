@@ -41,6 +41,9 @@ class DisplayLogBehavior is Behavior
             label:SetText(log:Get(counter))
             label:SetFontSize(20)
             label:SetPosition(-1000, -1000)
+            label:SetHorizontalMargins(5)
+            label:SetFontSize(22)
+            label:SetMaximumWidth(camera:GetWidth())
             labels:Add(label)
             displayBox:Add(label)
 

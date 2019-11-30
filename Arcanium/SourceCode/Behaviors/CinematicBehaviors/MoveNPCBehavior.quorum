@@ -19,9 +19,14 @@ class MoveNPCBehavior is Behavior
     number elapsedTime = 0
     Math math
     boolean finished = false
+    boolean isCollidable = false
+    boolean setCollidable = false
 
     action Run (BehaviorEvent event)
-        currTime = 0
+        currTime = 0   
+        if(setCollidable = true)
+            npc:sprite1:SetCollidable(isCollidable)
+        end
         output "MoveCameraBehavior"
     end
 
@@ -45,7 +50,6 @@ class MoveNPCBehavior is Behavior
                 direction = "down"
             end
           end
-
 
           if npcName = ""
             output "Missing animation frame name!"
@@ -79,6 +83,11 @@ class MoveNPCBehavior is Behavior
     
     action IsFinished returns boolean
         return finished
+    end
+    
+    action SetNPCCollidable(boolean collision)
+        isCollidable = collision
+        setCollidable = true
     end
 
 end

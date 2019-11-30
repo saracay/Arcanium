@@ -12,7 +12,7 @@ class Animation
     number xPos = 0
     number yPos = 0
     number secs = 0
-    number fps = 4
+    number fps = 6
 
     action GetFrame returns integer
         return frame

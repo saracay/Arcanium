@@ -130,8 +130,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         SetKeyboardInput()
         CreateBackground()
 		
-		// ***These 3 must be commented out for DebugMenuTest() -Maria***
+        // ***These 3 must be commented out for DebugMenuTest() -Maria***
         InitializeMap(currentMap, maps:INTRODUCTION_MAP)
+        InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
         InitializePlayer(player1)
         LoadAboveLayer(currentMap, maps:INTRODUCTION_MAP)
         
