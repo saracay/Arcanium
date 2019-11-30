@@ -9,11 +9,13 @@ use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
 use Libraries.Containers.MultipleLineText
 use Libraries.Game.Graphics.Label
+use Libraries.Game.Graphics.Camera
 
 class CombatMainPageBehavior is Behavior, MainPage
 
     Game game = undefined
     Battle battle = undefined
+    Camera camera = undefined
     BehaviorQueue behaviorQueue
     Array<Item2D> removalArray
     Array<Item2D> currentPage
@@ -368,6 +370,7 @@ class CombatMainPageBehavior is Behavior, MainPage
                 damageBehavior:SetRemovalArray(removalArray)
                 damageBehavior:SetBehaviorQueue(behaviorQueue)
                 damageBehavior:SetBattle(battle)
+                damageBehavior:SetCamera(camera)
                 damageBehavior:SetMainPage(me)
                 damageBehavior:SetCaster(combatants:Get(0))
                 Array<Combatant> target
@@ -460,6 +463,7 @@ class CombatMainPageBehavior is Behavior, MainPage
             damageBehavior:SetGame(game)
             damageBehavior:SetRemovalArray(removalArray)
             damageBehavior:SetBehaviorQueue(behaviorQueue)
+            damageBehavior:SetCamera(camera)
             damageBehavior:SetBattle(battle)
             damageBehavior:SetMainPage(me)
             damageBehavior:SetCaster(combatants:Get(0))
@@ -497,6 +501,7 @@ class CombatMainPageBehavior is Behavior, MainPage
         multiDamageBehavior:SetGame(game)
         multiDamageBehavior:SetRemovalArray(removalArray)
         multiDamageBehavior:SetBehaviorQueue(behaviorQueue)
+        multiDamageBehavior:SetCamera(camera)
         multiDamageBehavior:SetBattle(battle)
         multiDamageBehavior:SetMainPage(me)
         multiDamageBehavior:SetCaster(combatants:Get(0))
@@ -579,6 +584,10 @@ class CombatMainPageBehavior is Behavior, MainPage
 
     action SetBattle(Battle newBattle)
         battle = newBattle
+    end
+
+    action SetCamera(Camera newCamera)
+        camera = newCamera
     end
 
     action SetBehaviorQueue(BehaviorQueue newQueue)

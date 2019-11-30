@@ -10,9 +10,11 @@ use Libraries.Interface.Events.KeyboardListener
 use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Game.InputMonitor
 use Libraries.Interface.Behaviors.Behavior
+use Libraries.Game.Graphics.Camera
 
 class Battle is Level
     
+    Camera camera = undefined
     BehaviorQueue behaviorQueue = undefined
     Array<Item2D> removalArray = undefined
     Behavior previousBehavior
@@ -38,6 +40,10 @@ class Battle is Level
 
     action SetRemovalArray(Array<Item2D> newArray)
         removalArray = newArray
+    end
+
+    action SetCamera(Camera newCamera)
+        camera = newCamera
     end
 
     action Initialize(Player player, Array<text> enemyTeam)
@@ -89,6 +95,7 @@ class Battle is Level
                 Enemy enemy
                 enemy:FillEnemy(enemyTeam:Get(counter))
                 enemy:SetGame(game)
+                enemy:SetCamera(camera)
                 enemy:SetBattle(me)
                 enemy:SetRemovalArray(removalArray)
                 enemy:SetBehaviorQueue(behaviorQueue)
@@ -153,6 +160,7 @@ class Battle is Level
         logBehavior:SetGame(game)
         logBehavior:SetLog(log)
         logBehavior:SetRemovalArray(removalArray)
+        logBehavior:SetCamera(camera)
         behaviorQueue:AddBehavior(logBehavior)
 
         PlayerTurn()
@@ -162,6 +170,7 @@ class Battle is Level
         CombatUpdateStatusBehavior behavior
         behavior:SetGame(game)
         behavior:SetRemovalArray(removalArray)
+        behavior:SetCamera(camera)
         behavior:SetCombatants(combatants)
         behavior:SetPlayerMana(playerMana)
         behavior:SetStatusInfo(statusInfo)
@@ -181,6 +190,7 @@ class Battle is Level
         behavior:SetGame(game)
         behavior:SetBehaviorQueue(behaviorQueue)
         behavior:SetRemovalArray(removalArray)
+        behavior:SetCamera(camera)
         behavior:SetBattle(me)
         behavior:SetMaxTokens(2)
         behavior:SetCombatants(combatants)
@@ -192,6 +202,7 @@ class Battle is Level
         CombatEnemyTurnBehavior behavior
         behavior:SetGame(game)
         behavior:SetRemovalArray(removalArray)
+        behavior:SetCamera(camera)
         behavior:SetBattle(me)
         behavior:SetCombatants(combatants)
         behavior:SetBehaviorQueue(behaviorQueue)
