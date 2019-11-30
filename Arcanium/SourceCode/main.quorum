@@ -1066,7 +1066,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
      text <elementName>Frame = "<ElementName>"
      (i.e., text fireImgSheet = "fire"
             text fireFrame = "Fire")
-     Call InitializeSpellAnimTest() in action CreateGame
+     Call InitializeSpellAnimTest(...) in action CreateGame with spellImgSheet and spellFrame parameters
+     Call SpellAnim(seconds, <spellFrame>)
      ************************************************/
      action SpellAnim(number seconds, text spellFrame)
      elapsedTime = elapsedTime + seconds
