@@ -33,6 +33,7 @@ class InteriorHouse is Cinematic
     DisplayLogBehavior  dialogue3
     MoveNPCBehavior     moveNPC1
     MoveNPCBehavior     moveNPC2
+    MoveNPCBehavior     moveNPC3
     PlaySoundBehavior   sound1
 
     action Run()
@@ -102,6 +103,9 @@ class InteriorHouse is Cinematic
         moveNPC2:       SetMoveDirection(0,-80, 0.4)
         moveNPC2:       SetNPCCollidable(false)
 
+        moveNPC3:       SetAnimation(player, playerImgSheet)
+        moveNPC3:       SetMoveDirection(0,0, 0)
+        moveNPC3:       SetNPCCollidable(true)
         sound1:SetSound("Assets\Audio\Effects\AAAGH1.wav")
         
     end
@@ -113,6 +117,7 @@ class InteriorHouse is Cinematic
         cineSequencer:AddCineEvent(sound1, false)        
         cineSequencer:AddCineEvent(moveNPC1, true)
         cineSequencer:AddCineEvent(moveNPC2, true)
+        cineSequencer:AddCineEvent(moveNPC3, true)
         cineSequencer:AddCineEvent(dialogue2, true)
 
     end
