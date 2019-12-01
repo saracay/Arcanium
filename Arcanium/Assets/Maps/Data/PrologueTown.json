@@ -292,13 +292,13 @@
                  "y":1183
                 }, 
                 {
-                 "height":33,
+                 "height":16,
                  "id":28,
                  "name":"Stump",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":29,
+                 "width":16,
                  "x":1249,
                  "y":1406
                 }, 
@@ -342,12 +342,12 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":28,
+                 "width":16,
                  "x":801,
                  "y":801
                 }, 
                 {
-                 "height":35,
+                 "height":16,
                  "id":34,
                  "name":"Hedges",
                  "rotation":0,
@@ -358,7 +358,7 @@
                  "y":319
                 }, 
                 {
-                 "height":34,
+                 "height":16,
                  "id":35,
                  "name":"Hedges",
                  "rotation":0,
@@ -655,7 +655,7 @@
                  "y":1521
                 }, 
                 {
-                 "height":32,
+                 "height":2,
                  "id":67,
                  "name":"Lamp",
                  "rotation":0,
@@ -666,15 +666,15 @@
                  "y":1438
                 }, 
                 {
-                 "height":30,
+                 "height":2,
                  "id":68,
                  "name":"Lamp",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
+                 "width":20,
                  "x":800,
-                 "y":1472
+                 "y":1482
                 }, 
                 {
                  "height":32,
@@ -864,35 +864,35 @@
                  "y":1219
                 }, 
                 {
-                 "height":32,
+                 "height":15,
                  "id":87,
                  "name":"Bush",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":191,
+                 "width":185,
                  "x":897,
                  "y":1376
                 }, 
                 {
-                 "height":30,
+                 "height":15,
                  "id":88,
                  "name":"Bush",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":255,
+                 "width":250,
                  "x":898,
                  "y":1473
                 }, 
                 {
-                 "height":127,
+                 "height":120,
                  "id":89,
                  "name":"Bush",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
+                 "width":5,
                  "x":1121,
                  "y":1375
                 }, 
@@ -908,7 +908,7 @@
                  "y":989
                 }, 
                 {
-                 "height":36,
+                 "height":2,
                  "id":91,
                  "name":"Lamp",
                  "rotation":0,

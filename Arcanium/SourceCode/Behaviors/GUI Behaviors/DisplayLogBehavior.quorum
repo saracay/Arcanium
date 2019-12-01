@@ -22,6 +22,9 @@ class DisplayLogBehavior is Behavior
     Camera camera = undefined
     
     action Run(BehaviorEvent event)
+        Main main = cast(Main, game)
+        main:lockMovement = true
+
         if log:GetSize() = 0
             finished = true
         end
@@ -74,6 +77,9 @@ class DisplayLogBehavior is Behavior
     end
     
     action Dispose
+        Main main = cast(Main, game)
+        main:lockMovement = false
+
         integer counter = 0
 
         repeat while counter < buttons:GetSize()
