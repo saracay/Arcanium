@@ -31,6 +31,10 @@ class MapTransitionBehavior is Behavior
 
     action Run(BehaviorEvent event)
         output "YO"
+        if mapName = maps:PROLOGUE_TOWN_MAP
+            // here is where you play the cutscene
+        end
+
         if mapName not= "Not Ready Yet"
             // Debugging output
             output "Transition to " + mapName
@@ -94,7 +98,7 @@ class MapTransitionBehavior is Behavior
             output "This transition is unavailable."
         end
     end
-
+    
     // Initializer of MAPTRANSITIONBEHAVIOR 
     action SetTransition(Map oldMap, text newName)
         currentMap = oldMap

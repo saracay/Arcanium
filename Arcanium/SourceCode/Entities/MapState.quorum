@@ -2,16 +2,25 @@ use Libraries.Containers.Array
 use Libraries.Containers.Iterator
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.Graphics.Color
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.GameStateManager
 
 // this class serves as a way to keep track of the map state
 // used to keep track of actions that need to be done before a map is completed 
 
 class MapState
     MapList maps
+//    GameStateManager manager 
+//    Main main
 
     // cinematic effects
+    CinematicSequencer cineSequencer
     ColorFadeBehavior fadeFromBlack
     ColorFadeBehavior fadeToBlack
+    Drawable rectangle1
+    Color color
+
 
     // introduction map
     number jewelsTouched = 0
@@ -26,8 +35,8 @@ class MapState
             output "condition met for introduction!" 
             jewelsTouched = jewelsTouched + 1
 
-            Introduction intro
-            intro:Run()
+            InteriorHouse interiorHouse
+            interiorHouse:Run()
         end
     end
 

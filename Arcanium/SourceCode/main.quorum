@@ -1359,42 +1359,15 @@ end
     // load cutscene where son finds his father
 
 action BeginGameSequence
-    // -------------------------------------
-    // INTRODUCTION LEVEL
-    // -------------------------------------
-
-    // fade in from black over a few seconds
-    // fade in the music
-
-    // load in player and level
-    Introduction intro
-    intro:Run()
-
     InitializeMap(currentMap, maps:INTRODUCTION_MAP)
     InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
     InitializePlayer(player1)
-    player1:playerSprite:sprite1:SetY(350)
+    player1:playerSprite:sprite1:SetY(400)
     player1:playerSprite:sprite1:SetX(400)
-    
 
-    
+    Introduction intro
+    intro:Run()
 
-    
-
-    // check if the player has touched all of the elements yet
-        // this will require a change in check for interaction, where we must then check if it has a completed attribute in its data
-        // so, if requiredCompleted is set to false, now set it to true
-        // if it has completed in its data, set the array of jewels to true
-    
-    // if player has touched all of the elements, load in the bedroom
-        // this can be handled by going into the map transition behavior and checking the jewels amount
-
-    // -------------------------------------
-    // BEDROOM LEVEL
-    // -------------------------------------
-
-    // fade in from black over a few seconds
-    // fade in the music
 
 end 
 
