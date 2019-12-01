@@ -45,6 +45,7 @@ use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Game.Graphics.Color
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Game.GameStateManager
 
 class Interactable is Drawable, KeyboardListener
 
@@ -102,11 +103,13 @@ class Interactable is Drawable, KeyboardListener
     action ToggleInteraction()
         if currentlyInteracting
             currentlyInteracting = false
+/*
             if currentBehavior is DialogueBehavior
                 integer currentDialogue = 0
                 DialogueBehavior newBehavior = cast(DialogueBehavior, currentBehavior)
                 newBehavior:ResetDialogue()
             end
+*/
         else
             currentlyInteracting = true
             if typeOfBehavior = "transition"
@@ -121,11 +124,20 @@ class Interactable is Drawable, KeyboardListener
     action PressedKey(KeyboardEvent event)
         if currentlyInteracting
             if event:keyCode = event:SPACE
-                if typeOfBehavior = "transition"
+                if currentBehavior is MapTransitionBehavior
                     currentlyInteracting = false
+                    BehaviorEvent newEvent
+                    currentBehavior:Run(newEvent)
+                elseif currentBehavior is DisplayLogBehavior
+                    GameStateManager manager            // Used to get MAIN
+                    Main main = cast(Main, manager:GetGame())
+                    DisplayLogBehavior temp = cast(DisplayLogBehavior, currentBehavior)
+                    main:behaviorQueue:AddBehavior(temp)
+                    currentlyInteracting = false
+                elseif currentBehavior is InitiateCombatBehavior
+                    BehaviorEvent newEvent
+                    currentBehavior:Run(newEvent)
                 end
-                BehaviorEvent newEvent
-                currentBehavior:Run(newEvent)
             end
         end
     end
@@ -143,15 +155,23 @@ class Interactable is Drawable, KeyboardListener
 
     // Creates a specific interactable behavior and then calls SetInteractableBehavior()
     action CreateDialogueBehavior(InteractableData data)
-        DialogueBehavior temp
-
+        GameStateManager manager            // Used to get MAIN
+        Main main = cast(Main, manager:GetGame())
+/*
         i = 0
         repeat data:dialogue:GetSize() times // adds the array of dialog from the data
             temp:AddDialogue(data:dialogue:Get(i))
             i = i + 1
         end
+*/
+        DisplayLogBehavior dialogue1
 
-        SetInteractableBehavior(temp, "dialogue")
+        dialogue1:          SetGame(main)
+        dialogue1:          SetLog(data:dialogue)
+        dialogue1:          SetRemovalArray(main:GetRemovalArray())
+        dialogue1:          SetCamera(main:GetCamera2D())
+
+        SetInteractableBehavior(dialogue1, "dialogue")
     end
 
     action CreateMapTransitionBehavior(Map oldMap, text newMapName, number newX, number newY, text musicName)

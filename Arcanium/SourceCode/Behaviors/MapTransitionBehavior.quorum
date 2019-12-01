@@ -29,7 +29,6 @@ class MapTransitionBehavior is Behavior
     boolean isFinished = false
 
     action Run(BehaviorEvent event)
-        output "YO"
         if mapName not= "Not Ready Yet"
             // Debugging output
             output "Transition to " + mapName
