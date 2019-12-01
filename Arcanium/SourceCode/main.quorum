@@ -149,10 +149,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
-        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
-        InitializePlayer(player1)
-        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializePlayer(player1)
+//        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
         
 
         //==TEST CALLS==
@@ -173,8 +173,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         BeginGameSequence()
         //InitializeWhiteRoom()
         //KeyBindTest()
-        PrologueTown town
-        town:Run()
+//        PrologueTown town
+//        town:Run()
 
     end
 
@@ -1364,13 +1364,9 @@ action BeginGameSequence
     InitializeMap(currentMap, maps:INTRODUCTION_MAP)
     InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
     InitializePlayer(player1)
-    player1:playerSprite:sprite1:SetY(400)
-    player1:playerSprite:sprite1:SetX(400)
 
     Introduction intro
     intro:Run()
-
-
 end 
 
 /***********************************************************************

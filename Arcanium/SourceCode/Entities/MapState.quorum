@@ -31,12 +31,12 @@ class MapState
 
     action Update(number seconds, text mapName)
         // Check if map conditions have been met for things like cutscenes, map completion conditions, etc.
-        if  mapName = maps:INTRODUCTION_MAP and jewelsTouched / 2 = 6
+        if  mapName = maps:INTRODUCTION_MAP and jewelsTouched = 6
             output "condition met for introduction!" 
             jewelsTouched = jewelsTouched + 1
 
-            InteriorHouse interiorHouse
-            interiorHouse:Run()
+            Introduction2 introduction2
+            introduction2:Run()
         end
     end
 
