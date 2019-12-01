@@ -1,0 +1,149 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.Game.GameStateManager
+use Libraries.Game.Graphics.Color
+
+class PrologueTown is Cinematic
+    
+    GameStateManager manager 
+    Main main
+    CinematicSequencer cineSequencer
+
+    //Actors
+    Animation player
+    Animation goblin1
+    Animation goblin2
+    Animation goblin3
+    Animation goblin4
+    Animation boy
+    text playerImgSheet = "Hero"
+    text goblinImgSheet = "Goblin"
+    text boyImgSheet = "Boy"
+
+    //Goblin 1
+    MoveNPCBehavior     move1Goblin1
+    MoveNPCBehavior     move2Goblin1
+
+    //Goblin 2
+    MoveNPCBehavior     move1Goblin2
+    MoveNPCBehavior     move2Goblin2
+
+    //Goblin 3
+    MoveNPCBehavior     move1Goblin3
+
+    //Goblin 4
+    MoveNPCBehavior     move1Goblin4
+
+    PanCameraBehavior   cameraPan1
+    PanCameraBehavior   cameraPan2
+
+    WaitForBehavior     wait1
+    WaitForBehavior     wait2
+    WaitForBehavior     wait3
+    WaitForBehavior     wait4
+    WaitForBehavior     wait5
+    WaitForBehavior     wait6
+
+    action Run()
+        ActorSetup()
+        BehaviorSetup()
+        EnqueueBehaviors()
+        
+        cineSequencer:PlayCineSequence()
+    end
+    
+    action ActorSetup()
+        main = cast(Main, manager:GetGame())
+        cineSequencer = main:GetCineSequencer()
+
+        //Player
+        player = main:GetPlayer():playerSprite
+        player:sprite1:SetPosition(1075,175)
+        player:sprite1:SetCollidable(true)
+
+        //NPCs
+        goblin1:LoadImageSheet(goblinImgSheet)
+        goblin1:LoadFrame(goblinImgSheet)
+        goblin1:sprite1:SetPosition(730,1550)
+        main:Add(goblin1:sprite1)
+
+        goblin2:LoadImageSheet(goblinImgSheet)
+        goblin2:LoadFrame(goblinImgSheet)
+        goblin2:sprite1:SetPosition(620,1550)
+        main:Add(goblin2:sprite1)
+
+        goblin3:LoadImageSheet(goblinImgSheet)
+        goblin3:LoadFrame(goblinImgSheet)
+        goblin3:sprite1:SetPosition(1100,826)
+        main:Add(goblin3:sprite1)
+
+        goblin4:LoadImageSheet(goblinImgSheet)
+        goblin4:LoadFrame(goblinImgSheet)
+        goblin4:sprite1:SetPosition(400,525)
+        main:Add(goblin4:sprite1)
+
+        boy:LoadImageSheet(boyImgSheet)
+        boy:LoadFrame(boyImgSheet)
+        boy:sprite1:SetPosition(620,175)
+        main:Add(boy:sprite1)
+
+        //Camera
+        main:GetCamera2D():SetPosition(700,1320,0)
+    end
+
+    action BehaviorSetup()
+        move1Goblin1:    SetNPCCollidable(false)
+        move1Goblin1:    SetAnimation(goblin1, goblinImgSheet)
+        move1Goblin1:    SetMoveDirection(0, -80, 4.4)
+
+        move2Goblin1:    SetNPCCollidable(false)
+        move2Goblin1:    SetAnimation(goblin1, goblinImgSheet)
+        move2Goblin1:    SetMoveDirection(80, 0, 4)
+
+        move1Goblin2:    SetAnimation(goblin2, goblinImgSheet)
+        move1Goblin2:    SetMoveDirection(0, -80, 5.3)
+
+        move2Goblin2:    SetAnimation(goblin2, goblinImgSheet)
+        move2Goblin2:    SetMoveDirection(-80, 0, 6)
+
+        move1Goblin3:    SetNPCCollidable(false)
+        move1Goblin3:    SetAnimation(goblin3, goblinImgSheet)
+        move1Goblin3:    SetMoveDirection(-80, 0, 4.4)
+
+        move1Goblin4:    SetNPCCollidable(false)
+        move1Goblin4:    SetAnimation(goblin4, goblinImgSheet)
+        move1Goblin4:    SetMoveDirection(80, 0, 16)
+
+        cameraPan1:     SetCameraPan(0, -60, 17.5)
+        cameraPan2:     SetCameraPan(70, 0, 5)
+        wait1:          SetWaitDuration(2)
+        wait2:          SetWaitDuration(2.4)
+        wait3:          SetWaitDuration(0.9)
+        wait4:          SetWaitDuration(1)
+        wait5:          SetWaitDuration(4)
+        wait6:          SetWaitDuration(9.5)
+
+    end
+
+    action EnqueueBehaviors()
+        cineSequencer:AddCineEvent(move1Goblin1, false)
+        cineSequencer:AddCineEvent(move1Goblin2, false)
+        cineSequencer:AddCineEvent(wait1, true)
+        cineSequencer:AddCineEvent(cameraPan1, false)
+        cineSequencer:AddCineEvent(wait2, true)
+        cineSequencer:AddCineEvent(move2Goblin1, false)
+        cineSequencer:AddCineEvent(wait3, true)
+        cineSequencer:AddCineEvent(move2Goblin2, false)
+        cineSequencer:AddCineEvent(wait4, true)
+        cineSequencer:AddCineEvent(move1Goblin3, false)
+        cineSequencer:AddCineEvent(wait5, true)
+        cineSequencer:AddCineEvent(move1Goblin4, false)
+        cineSequencer:AddCineEvent(wait6, true)
+        cineSequencer:AddCineEvent(cameraPan2, true)
+        
+    end
+
+end

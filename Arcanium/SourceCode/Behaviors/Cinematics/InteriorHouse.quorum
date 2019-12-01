@@ -39,7 +39,6 @@ class InteriorHouse is Cinematic
         ActorSetup()
         BehaviorSetup()
         EnqueueBehaviors()
-        Drawable test
         
         cineSequencer:PlayCineSequence()
     end
