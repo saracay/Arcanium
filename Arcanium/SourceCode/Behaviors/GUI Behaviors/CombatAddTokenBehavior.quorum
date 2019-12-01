@@ -6,6 +6,7 @@ use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
 use Libraries.Interface.Controls.Button
+use Libraries.Game.Graphics.Label
 
 class CombatAddTokenBehavior is Behavior
     
@@ -13,6 +14,7 @@ class CombatAddTokenBehavior is Behavior
     Battle battle
     Array<CombatAddTokenBehavior> otherBehaviors
     Array<Drawable> tokenDrawables
+    Array<Label> labels
     MenuButton doneButton
     integer maxTokens = 0
     integer currentTokens = 0
@@ -64,6 +66,23 @@ class CombatAddTokenBehavior is Behavior
             counter = counter + 1
         end
 
+        Spell tempSpell
+        tempSpell:FillSpell(spellID)
+
+        text multiTarget = ""
+        if tempSpell:GetMultiTarget()
+            multiTarget = "Yes"
+        else
+            multiTarget = "No"
+        end
+
+        labels:Get(0):SetText("Current Spell:, Name: " + tempSpell:GetName() + ", Base Damage: " + tempSpell:GetBaseDamage() 
+                                + ", Mana Cost: " + tempSpell:GetManaCost() + ", Multi-target: " + multiTarget)
+        labels:Get(1):SetText("Name: " + tempSpell:GetName())
+        labels:Get(2):SetText("Base Damage: " + tempSpell:GetBaseDamage())
+        labels:Get(3):SetText("Mana Cost: " + tempSpell:GetManaCost())
+        labels:Get(4):SetText("Multi-target: " + multiTarget)
+
         if currentTokens = maxTokens
             Dispose()
         end
@@ -103,5 +122,9 @@ class CombatAddTokenBehavior is Behavior
 
     action SetOtherBehaviors(Array<CombatAddTokenBehavior> newArray)
         otherBehaviors = newArray
+    end
+
+    action SetLabels(Array<Label> newArray)
+        labels = newArray
     end
 end

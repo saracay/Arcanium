@@ -3,12 +3,14 @@ use Libraries.Interface.Events.BehaviorEvent
 use Libraries.Containers.Array
 use Libraries.Game.Game
 use Libraries.Interface.Item2D
+use Libraries.Game.Graphics.Camera
 
 class CombatEnemyActionBehavior is Behavior
 
     Game game
     Array<Item2D> removalArray
     BehaviorQueue behaviorQueue
+    Camera camera = undefined
     Array<Combatant> combatants
     integer enemyIndex = 0
     boolean finished = false
@@ -17,19 +19,21 @@ class CombatEnemyActionBehavior is Behavior
     action Run(BehaviorEvent event)
         if combatants:Get(enemyIndex) not= undefined
             
-            boolean canMove = true
+            text cannotMoveEffect = ""
             Array<Status> statuses = combatants:Get(enemyIndex):GetStatuses()
             integer counter = 0           
 
             repeat while counter < statuses:GetSize()
-                if statuses:Get(counter):GetName() = "Frozen" or statuses:Get(counter):GetName() = "Stun"
-                    canMove = false
+                if statuses:Get(counter):GetName() = "Frozen"
+                    cannotMoveEffect = "Frozen"
+                elseif statuses:Get(counter):GetName() = "Stun"
+                    cannotMoveEffect = "Stunned"
                 end
 
                 counter = counter + 1
             end
 
-            if canMove
+            if cannotMoveEffect = ""
                 Enemy enemy = cast(Enemy, combatants:Get(enemyIndex))
 
                 AI enemyAI
@@ -39,6 +43,17 @@ class CombatEnemyActionBehavior is Behavior
                 enemyAI:SetPreviousBehavior(me)
 
                 enemyAI:AI(enemyIndex, combatants)
+            else
+                Array<text> log
+                log:Add(combatants:Get(enemyIndex):GetName() + " is " 
+                 + cannotMoveEffect + " and cannot move!")
+
+                DisplayLogBehavior updateMessage
+                updateMessage:SetGame(game)
+                updateMessage:SetLog(log)
+                updateMessage:SetRemovalArray(removalArray)
+                updateMessage:SetCamera(camera)
+                behaviorQueue:AddBehavior(updateMessage)
             end
         end
 
@@ -74,6 +89,10 @@ class CombatEnemyActionBehavior is Behavior
 
     action SetBehaviorQueue(BehaviorQueue newQueue)
         behaviorQueue = newQueue
+    end
+
+    action SetCamera(Camera newCamera)
+        camera = newCamera
     end
 
     action SetCombatants(Array<Combatant> newArray)

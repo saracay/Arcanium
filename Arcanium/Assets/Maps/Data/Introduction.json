@@ -581,8 +581,8 @@
                  "type":"",
                  "visible":true,
                  "width":31.25,
-                 "x":417.763157894737,
-                 "y":381.578947368421
+                 "x":0,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -593,6 +593,17 @@
  "nextlayerid":13,
  "nextobjectid":64,
  "orientation":"orthogonal",
+ "pointsofinterest":[
+	{
+	 "name":"TestPOI0",
+	 "x":0,
+	 "y":0
+	},
+	{
+	 "name":"TestPOI1",
+	 "x":200,
+	 "y":200
+	}],
  "renderorder":"right-down",
  "tiledversion":"1.3.0",
  "tileheight":32,

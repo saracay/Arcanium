@@ -119,7 +119,7 @@
       "multiTarget": false,
       "canHeal": false,
       "canDamage": true,
-      "manaCost": 3
+      "manaCost": 2
     },
     {
       "spellID": 9100001,
@@ -157,13 +157,13 @@
     {
       "spellID": 9010100,
       "name": "Chilling Wind",
-      "baseDamage": 125,
+      "baseDamage": 100,
       "appliedStatusCodes": [6],
       "curedStatusCodes": [],
       "multiTarget": true,
       "canHeal": false,
       "canDamage": true,
-      "manaCost": 2
+      "manaCost": 3
     },
     {
       "spellID": 9010010,
@@ -174,7 +174,7 @@
       "multiTarget": false,
       "canHeal": false,
       "canDamage": false,
-      "manaCost": 2
+      "manaCost": 1
     },
     {
       "spellID": 9010001,
@@ -185,12 +185,12 @@
       "multiTarget": false,
       "canHeal": false,
       "canDamage": true,
-      "manaCost": 3
+      "manaCost": 2
     },
     {
       "spellID": 9002000,
       "name": "Boulder",
-      "baseDamage": 175,
+      "baseDamage": 200,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": false,
@@ -201,7 +201,7 @@
     {
       "spellID": 9001100,
       "name": "Sandstorm",
-      "baseDamage": 25,
+      "baseDamage": 30,
       "appliedStatusCodes": [7],
       "curedStatusCodes": [],
       "multiTarget": true,
@@ -234,10 +234,10 @@
     {
       "spellID": 9000200,
       "name": "Windblast",
-      "baseDamage": 150,
-      "appliedStatusCodes": [],
+      "baseDamage": 175,
+      "appliedStatusCodes": [9],
       "curedStatusCodes": [],
-      "multiTarget": false,
+      "multiTarget": true,
       "canHeal": false,
       "canDamage": true,
       "manaCost": 4
@@ -245,7 +245,7 @@
     {
       "spellID": 9000110,
       "name": "Healing Aura",
-      "baseDamage": 40,
+      "baseDamage": 100,
       "appliedStatusCodes": [12],
       "curedStatusCodes": [],
       "multiTarget": false,
@@ -262,17 +262,17 @@
       "multiTarget": true,
       "canHeal": false,
       "canDamage": true,
-      "manaCost": 3
+      "manaCost": 2
     },
     {
       "spellID": 9000020,
-      "name": "Shield",
-      "baseDamage": 0,
+      "name": "Smite",
+      "baseDamage": 200,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": false,
       "canHeal": false,
-      "canDamage": false,
+      "canDamage": true,
       "manaCost": 3
     },
     {
@@ -284,7 +284,7 @@
       "multiTarget": false,
       "canHeal": false,
       "canDamage": false,
-      "manaCost": 3
+      "manaCost": 2
     },
     {
       "spellID": 9000002,
@@ -2246,7 +2246,7 @@
     },
     {
       "spellID": 9000040,
-      "name": "Smite",
+      "name": "TEMP",
       "baseDamage": 350,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
@@ -2348,7 +2348,7 @@
     {
       "physicalID": 8000100,
       "name": "Healing Potion",
-      "baseDamage": 200,
+      "baseDamage": 100,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": false,

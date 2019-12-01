@@ -5,11 +5,13 @@ use Libraries.Game.Game
 use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.Label
 use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Camera
 
 class CombatUpdateStatusBehavior is Behavior
     
     Game game
     Array<Item2D> removalArray
+    Camera camera = undefined
     BehaviorQueue behaviorQueue
     Array<Combatant> combatants
     Label playerMana
@@ -18,7 +20,6 @@ class CombatUpdateStatusBehavior is Behavior
     Array<Drawable> sprites
     boolean finished = false
     Player player
-
 
     action Run(BehaviorEvent event)
 
@@ -66,6 +67,7 @@ class CombatUpdateStatusBehavior is Behavior
             gameOverMessage:SetGame(game)
             gameOverMessage:SetLog(gameOver)
             gameOverMessage:SetRemovalArray(removalArray)
+            gameOverMessage:SetCamera(camera)
             behaviorQueue:AddBehavior(gameOverMessage)
 
 //            need behavior to end game after displaying Game Over text
@@ -86,6 +88,10 @@ class CombatUpdateStatusBehavior is Behavior
 
     action SetBehaviorQueue(BehaviorQueue newQueue)
         behaviorQueue = newQueue
+    end
+
+    action SetCamera(Camera newCamera)
+        camera = newCamera
     end
 
     action SetCombatants(Array<Combatant> newArray)

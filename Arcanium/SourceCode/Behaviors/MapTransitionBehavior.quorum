@@ -25,10 +25,13 @@ class MapTransitionBehavior is Behavior
     number playerX = 0                  // New Player X coordinate
     number playerY = 0                  // New Player Y coordinate
     text musicName = ""
+    Cinematic cinematic = undefined
+
+    boolean isFinished = false
 
     action Run(BehaviorEvent event)
-        if mapName not= "Not Ready Yet" 
-
+        output "YO"
+        if mapName not= "Not Ready Yet"
             // Debugging output
             output "Transition to " + mapName
 
@@ -85,7 +88,12 @@ class MapTransitionBehavior is Behavior
                     main:PlayAudio(musicName)
                 end
             end
-// ================= Ryan: Ending Changes =================
+
+            if(cinematic not= undefined)
+                cinematic:Run()
+            end
+
+            isFinished = true
         else
             output "This transition is unavailable."
         end
@@ -107,5 +115,13 @@ class MapTransitionBehavior is Behavior
 
     action SetMusic(text newMusicName)
         musicName = newMusicName
+    end
+
+    action IsFinished() returns boolean
+        return isFinished
+    end
+
+    action SetCinematic(Cinematic scene)
+        cinematic = scene
     end
 end

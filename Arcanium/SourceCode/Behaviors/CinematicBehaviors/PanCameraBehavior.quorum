@@ -13,22 +13,25 @@ class PanCameraBehavior is Behavior
     number y = 0
     number maxTime = 0
     number currTime = 0
+    number initZoom = 1
+    number zoom = 1
 
     boolean finished = false
 
     action Run (BehaviorEvent event)
         currTime = 0
+        Main main = cast(Main, manager:GetGame())
+        camera = main:GetCamera2D()
+        initZoom = camera:GetZoom()
         output "PanCameraBehavior"
     end
 
     action Update(number seconds)
         
-        Main main = cast(Main, manager:GetGame())
-        camera = main:GetCamera2D()
-        
         if(currTime <= maxTime)
           camera:Move(x*seconds, y*seconds, 0)
           currTime = currTime + seconds
+          camera:SetZoom(Lerp(initZoom, zoom, currTime/maxTime))
         else
             finished = true
         end
@@ -40,7 +43,16 @@ class PanCameraBehavior is Behavior
         y = yPanSpeed
         maxTime = duration
     end
+
+    action SetCameraZoom(number zoomAmount, number duration)
+        zoom = zoomAmount
+        maxTime = duration
+    end
     
+    action Lerp(number a, number b, number t) returns number
+        return a * (1-t) + b * t
+    end
+
     action IsFinished returns boolean
         return finished
     end

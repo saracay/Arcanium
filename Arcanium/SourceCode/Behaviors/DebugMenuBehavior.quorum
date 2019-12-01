@@ -23,9 +23,10 @@ class DebugMenuBehavior is Behavior
         Main main = cast(Main, manager:GetGame())
 
         main:InitializeMap(currentMap, currentMapName)
+        main:InitializeInteractables(currentMap, currentMapName)
         main:LoadAboveLayer(currentMap, currentMapName)
         main:InitializePlayer(sprite)  
-
+        
         output "------------------------------------"
         output "DEBUG MENU: " + currentMapName + " map loaded"
 

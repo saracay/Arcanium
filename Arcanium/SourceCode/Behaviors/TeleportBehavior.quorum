@@ -1,0 +1,64 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Data.Formats.JavaScriptObjectNotation
+use Libraries.System.File
+
+class TeleportBehavior is Behavior
+/*
+    Pass me the name of the current map and the index of the POI you want
+*/
+    Player player
+    text mapName = ""
+    integer poiIndex = 0
+
+    number newX = 0
+    number newY = 0
+    
+    boolean finished = false
+
+    action Run (BehaviorEvent event)
+        JavaScriptObjectNotation mapData
+        File data
+
+        data:SetPath("Assets\Maps\Data\" + mapName  + ".json")
+        if (data:Exists())
+            mapData:Read(data)
+            JavaScriptObjectNotation poiData = mapData:GetObject("pointsofinterest")
+
+            if poiIndex < poiData:GetSize()
+                number newX = cast(number, poiData:Get(poiIndex):GetValue("x"))
+                number newY = cast(number, poiData:Get(poiIndex):GetValue("y"))
+                player:playerSprite:sprite1:SetPosition(newX,newY)
+            else
+                output "Point of interest doesn't exist"
+            end
+        end
+
+        finished = true
+    end
+    
+    action IsFinished returns boolean
+        return finished
+    end
+
+    action SetPlayer(Player p)
+        player = p
+    end
+
+    action SetX(number x)
+        newX = x
+    end
+
+    action SetY(number y)
+        newY = y
+    end
+
+    action SetPOIIndex(integer poi)
+        poiIndex = poi
+    end
+
+    action SetMapName(text map)
+        mapName = map
+    end
+
+end
