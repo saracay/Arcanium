@@ -42,51 +42,47 @@ class MapTransitionBehavior is Behavior
             // this mainly matters for maps where there are no physical collision obstacles from the map transition collider
             // example: in the introduction, you cannot go to the interior house until touching all of the jewels
 
-            if mapName = maps:INTRODUCTION_MAP and main:introductionJewelsTouched < 6
-                // do nothing
-            else
     // ================ Ryan: Starting Changes ================
-                main:AddToRemove(main:GetMap():map)
-                main:AddToRemove(main:GetMap():aboveLayer)
-                i = 0
-                repeat main:GetMap():collisions:GetSize() times
-                    main:AddToRemove(main:GetMap():collisions:Get(i))
-                    i = i + 1
-                end
-                i = 0
-                repeat main:GetMap():interactables:GetSize() times
-                    main:AddToRemove(main:GetMap():interactables:Get(i))
-                    i = i + 1
-                end
-                i = 0
-                repeat main:GetMap():transitions:GetSize() times
-                    main:AddToRemove(main:GetMap():transitions:Get(i))
-                    i = i + 1
-                end
-                main:Remove(main:GetPlayer():playerSprite:sprite1)
-                main:RemoveCollisionListener(main)
-                Map nextMap
-                main:InitializeMap(nextMap, mapName)
-                main:InitializeInteractables(nextMap, mapName)
-                main:GetPlayer():playerSprite:sprite1:EnablePhysics(true)
-                main:GetPlayer():playerSprite:sprite1:CanRotate(false)
-                main:GetPlayer():playerSprite:sprite1:SetResponsive()
-                main:GetPlayer():playerSprite:sprite1:SetName("player")
-                main:Add(main:GetPlayer():playerSprite:sprite1)
-                if playerX = 0 and playerY = 0
-                    main:GetPlayer():playerSprite:sprite1:SetX(nextMap:map:GetWidth() / 2)
-                    main:GetPlayer():playerSprite:sprite1:SetY(nextMap:map:GetHeight() / 2)
-                else
-                    main:GetPlayer():playerSprite:sprite1:SetX(playerX)
-                    main:GetPlayer():playerSprite:sprite1:SetY(playerY)
-                end
-                main:LoadAboveLayer(nextMap, mapName)
-                main:SetMap(nextMap)
+            main:AddToRemove(main:GetMap():map)
+            main:AddToRemove(main:GetMap():aboveLayer)
+            i = 0
+            repeat main:GetMap():collisions:GetSize() times
+                main:AddToRemove(main:GetMap():collisions:Get(i))
+                i = i + 1
+            end
+            i = 0
+            repeat main:GetMap():interactables:GetSize() times
+                main:AddToRemove(main:GetMap():interactables:Get(i))
+                i = i + 1
+            end
+            i = 0
+            repeat main:GetMap():transitions:GetSize() times
+                main:AddToRemove(main:GetMap():transitions:Get(i))
+                i = i + 1
+            end
+            main:Remove(main:GetPlayer():playerSprite:sprite1)
+            main:RemoveCollisionListener(main)
+            Map nextMap
+            main:InitializeMap(nextMap, mapName)
+            main:InitializeInteractables(nextMap, mapName)
+            main:GetPlayer():playerSprite:sprite1:EnablePhysics(true)
+            main:GetPlayer():playerSprite:sprite1:CanRotate(false)
+            main:GetPlayer():playerSprite:sprite1:SetResponsive()
+            main:GetPlayer():playerSprite:sprite1:SetName("player")
+            main:Add(main:GetPlayer():playerSprite:sprite1)
+            if playerX = 0 and playerY = 0
+                main:GetPlayer():playerSprite:sprite1:SetX(nextMap:map:GetWidth() / 2)
+                main:GetPlayer():playerSprite:sprite1:SetY(nextMap:map:GetHeight() / 2)
+            else
+                main:GetPlayer():playerSprite:sprite1:SetX(playerX)
+                main:GetPlayer():playerSprite:sprite1:SetY(playerY)
+            end
+            main:LoadAboveLayer(nextMap, mapName)
+            main:SetMap(nextMap)
 
-                main:StopAllAudio()
-                if not (musicName = "")
-                    main:PlayAudio(musicName)
-                end
+            main:StopAllAudio()
+            if not (musicName = "")
+                main:PlayAudio(musicName)
             end
 
             if(cinematic not= undefined)

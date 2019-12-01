@@ -122,6 +122,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     CinematicSequencer cineSequencer
 
     //For game Sequencer
+    MapState mapState
     // introduction level
     public number introductionJewelsTouched = 0
 
@@ -183,6 +184,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
+        mapState:Update(seconds, currentMap:name)
 
         if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded()
             PlayerMovement(seconds)
@@ -455,13 +457,24 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
             if entering and not alreadyInteracting
                 newItemB:ToggleInteraction()
-                if (newItemB:requiredCompleted = false and currentMap:name = maps:INTRODUCTION_MAP)
-                    newItemB:SetRequiredCompleted(true)
-                    introductionJewelsTouched = introductionJewelsTouched + 1
-                end
             elseif not entering
                 if newItemB:IsInteracting()
                     newItemB:ToggleInteraction()
+                end
+
+                // checks any incompleted interactables that are required
+                if newItemB:requiredCompleted = false
+                    newItemB:SetRequiredCompleted(true)
+
+                    // introduction map
+                    if currentMap:name = maps:INTRODUCTION_MAP
+                        mapState:UpdateJewelsTouched()
+                    end
+
+                    // interior house map
+                    if currentMap:name = maps:INTERIOR_HOUSE_MAP
+                        mapState:UpdateTomeTouched()
+                    end
                 end
             end
         end
@@ -1354,8 +1367,15 @@ action BeginGameSequence
     // fade in the music
 
     // load in player and level
+    Introduction intro
+    intro:Run()
+
     InitializeMap(currentMap, maps:INTRODUCTION_MAP)
+    InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
     InitializePlayer(player1)
+    player1:playerSprite:sprite1:SetY(350)
+    player1:playerSprite:sprite1:SetX(400)
+    
 
     
 
