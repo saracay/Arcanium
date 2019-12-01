@@ -1,8 +1,8 @@
 /* 
-    Based on Lisel's MapTransitionBehavior 
+    Based on MapTransitionBehavior 
     Call using SetMap(current map, current map name, transition map name, player)
 
-    Uses InitializeNap, LoadAboveLayer, InitializePlayer from MAIN
+    Uses InitializeMap, LoadAboveLayer, InitializeInteracctables, InitializePlayer from MAIN
 */
 
 use Libraries.Interface.Behaviors.Behavior
@@ -25,14 +25,16 @@ class DebugMenuBehavior is Behavior
         main:InitializeMap(currentMap, currentMapName)
         main:InitializeInteractables(currentMap, currentMapName)
         main:LoadAboveLayer(currentMap, currentMapName)
+        
         main:InitializePlayer(sprite)  
         
         output "------------------------------------"
-        output "DEBUG MENU: " + currentMapName + " map loaded"
-
+        
+        output "DEBUG MENU: <" + currentMapName + "> map loaded"
+        
         MapTransitionBehavior transition
         transition:SetTransition(currentMap, newMapName)
-
+        
         output "------------------------------------"
     end
 
