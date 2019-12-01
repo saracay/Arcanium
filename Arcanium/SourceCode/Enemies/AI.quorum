@@ -354,19 +354,22 @@ class AI
         return 8001010
     end
 
-    /*Check if one of the enemies left is below 50% HP, if so return their 
-    position, otherwise return  -1*/
+    /*Check if one of the enemies left is below 50% HP and not targetted for 
+    healing already, if so return their position, otherwise return  -1*/
     action FindHurtAllyPosition(Array<Combatant> combatants) returns integer
         integer allyPosition = -1
         integer i = 1
         repeat while (i < combatants:GetSize() and allyPosition = -1)
             if (combatants:Get(i) not= undefined)
-                number percent = (cast(number, combatants:Get(i):GetCurrentHP())
-                 / (cast(number, combatants:Get(i):GetMaxHP()))) * 100
-
-                if (percent <= 50)
-                    found = true
-                    allyPosition = i
+                Enemy ally = cast(Enemy, combatants:Get(i))
+                if (not ally:GetTargetForHeal())
+                    number percent = (cast(number, ally:GetCurrentHP())
+                     / (cast(number, ally:GetMaxHP()))) * 100
+                    if (percent <= 50)
+                        found = true
+                        allyPosition = i
+                        ally:SetTargetForHeal(true)
+                    end
                 end
             end
             i = i + 1

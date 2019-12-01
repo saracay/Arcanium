@@ -19,22 +19,21 @@ class CombatEnemyActionBehavior is Behavior
     action Run(BehaviorEvent event)
         if combatants:Get(enemyIndex) not= undefined
             
-            boolean isFrozen = false
-            boolean isStunned = false
+            text cannotMoveEffect = ""
             Array<Status> statuses = combatants:Get(enemyIndex):GetStatuses()
             integer counter = 0           
 
             repeat while counter < statuses:GetSize()
                 if statuses:Get(counter):GetName() = "Frozen"
-                    isFrozen = true
+                    cannotMoveEffect = "Frozen"
                 elseif statuses:Get(counter):GetName() = "Stun"
-                    isStunned = true
+                    cannotMoveEffect = "Stunned"
                 end
 
                 counter = counter + 1
             end
 
-            if not isFrozen and not isStunned
+            if cannotMoveEffect = ""
                 Enemy enemy = cast(Enemy, combatants:Get(enemyIndex))
 
                 AI enemyAI
@@ -44,19 +43,10 @@ class CombatEnemyActionBehavior is Behavior
                 enemyAI:SetPreviousBehavior(me)
 
                 enemyAI:AI(enemyIndex, combatants)
-            elseif isFrozen
+            else
                 Array<text> log
-                log:Add(combatants:Get(enemyIndex):GetName() + " is Frozen and cannot move!")
-
-                DisplayLogBehavior updateMessage
-                updateMessage:SetGame(game)
-                updateMessage:SetLog(log)
-                updateMessage:SetRemovalArray(removalArray)
-                updateMessage:SetCamera(camera)
-                behaviorQueue:AddBehavior(updateMessage)
-            else //isStunned
-                Array<text> log
-                log:Add(combatants:Get(enemyIndex):GetName() + " is Stunned and cannot move!")
+                log:Add(combatants:Get(enemyIndex):GetName() + " is " 
+                 + cannotMoveEffect + " and cannot move!")
 
                 DisplayLogBehavior updateMessage
                 updateMessage:SetGame(game)

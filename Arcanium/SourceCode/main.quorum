@@ -124,6 +124,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
     //For Transition to Combat
     boolean inCombat = false
 
+    public boolean lockMovement = false
+
 //==============================================================================
 //                             PREBUILT ACTIONS
 //==============================================================================
@@ -141,10 +143,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(currentMap, maps:INTRODUCTION_MAP)
-        InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
+        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
+        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
         InitializePlayer(player1)
-        LoadAboveLayer(currentMap, maps:INTRODUCTION_MAP)
+        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
         
 
         //==TEST CALLS==
@@ -164,8 +166,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
-        Introduction intro
-        intro:Run()
+        PrologueTown town
+        town:Run()
 
     end
 
@@ -178,7 +180,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
 
-        if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded()
+        if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded() and (not lockMovement)
             PlayerMovement(seconds)
         end
         

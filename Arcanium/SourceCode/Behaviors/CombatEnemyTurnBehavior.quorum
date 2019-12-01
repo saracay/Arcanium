@@ -19,7 +19,15 @@ class CombatEnemyTurnBehavior is Behavior
         Array<text> emptyArray
 
         integer counter = 1
+        repeat while counter < combatants:GetSize()
+            if (combatants:Get(counter) not= undefined)
+                Enemy enemy = cast(Enemy, combatants:Get(counter))
+                enemy:SetTargetForHeal(false)
+            end
+            counter = counter + 1
+        end
 
+        counter = 1
         repeat while counter < combatants:GetSize()
             CombatEnemyActionBehavior behavior
             behavior:SetGame(game)
