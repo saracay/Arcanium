@@ -141,10 +141,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(currentMap, maps:INTRODUCTION_MAP)
-        InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
+        InitializeMap(currentMap, maps:INTERIOR_HOUSE_MAP)
+        InitializeInteractables(currentMap, maps:INTERIOR_HOUSE_MAP)
         InitializePlayer(player1)
-        LoadAboveLayer(currentMap, maps:INTRODUCTION_MAP)
+        LoadAboveLayer(currentMap, maps:INTERIOR_HOUSE_MAP)
         
 
         //==TEST CALLS==
@@ -164,8 +164,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
-        Introduction intro
-        intro:Run()
+        InteriorHouse interiorHouse
+        interiorHouse:Run()
 
     end
 
