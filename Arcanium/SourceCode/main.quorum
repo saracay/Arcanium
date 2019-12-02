@@ -169,7 +169,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAudioTest()
         //TitleScreenTest()
         //CineSequencerTest()
-        DebugMenuTest()
+        //DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
         //PrologueTown town
