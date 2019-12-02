@@ -20,7 +20,7 @@ class PrologueTown is Cinematic
     Animation goblin4
     Animation boy
     text playerImgSheet = "Hero"
-    text goblinImgSheet = "Goblin"
+    text goblinImgSheet = "Man2"
     text boyImgSheet = "Boy"
 
     //Goblin 1
