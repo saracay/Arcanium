@@ -49,7 +49,7 @@ class Player is Combatant
         playerSprite:LoadFrame(spriteSheetName)
 
         Color color
-        playerSprite:sprite3:LoadRectangle(32, 48, color:White())
+        playerSprite:sprite3:LoadRectangle(32, 48, color:Clear())
     end
 
     /*Update player's experience, leveling them up if they have reached the
