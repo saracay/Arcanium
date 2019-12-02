@@ -1178,12 +1178,12 @@
 	{
 	 "name":"My House",
 	 "x":257,
-	 "y":1206
+	 "y":1211
 	},
 	{
 	 "name":"Inn",
 	 "x":1057,
-	 "y":1241
+	 "y":1246
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

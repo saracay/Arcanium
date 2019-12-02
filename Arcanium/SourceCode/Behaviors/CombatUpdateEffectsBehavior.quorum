@@ -23,6 +23,7 @@ class CombatUpdateEffectsBehavior is Behavior
     end
 
     action Dispose
+        battle:UpdateStatus(true)
         battle:PlayerTurn()
     end
 

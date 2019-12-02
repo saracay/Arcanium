@@ -61,21 +61,23 @@ class MapTransitionBehavior is Behavior
                 i = i + 1
             end
             main:Remove(main:GetPlayer():playerSprite:sprite1)
+            main:Remove(main:GetPlayer():playerSprite:sprite3)
             main:RemoveCollisionListener(main)
             Map nextMap
             main:InitializeMap(nextMap, mapName)
             main:InitializeInteractables(nextMap, mapName)
-            main:GetPlayer():playerSprite:sprite1:EnablePhysics(true)
-            main:GetPlayer():playerSprite:sprite1:CanRotate(false)
-            main:GetPlayer():playerSprite:sprite1:SetResponsive()
-            main:GetPlayer():playerSprite:sprite1:SetName("player")
+            main:GetPlayer():playerSprite:sprite3:EnablePhysics(true)
+            main:GetPlayer():playerSprite:sprite3:CanRotate(false)
+            main:GetPlayer():playerSprite:sprite3:SetResponsive()
+            main:GetPlayer():playerSprite:sprite3:SetName("player")
             main:Add(main:GetPlayer():playerSprite:sprite1)
+            main:Add(main:GetPlayer():playerSprite:sprite3)
             if playerX = 0 and playerY = 0
-                main:GetPlayer():playerSprite:sprite1:SetX(nextMap:map:GetWidth() / 2)
-                main:GetPlayer():playerSprite:sprite1:SetY(nextMap:map:GetHeight() / 2)
+                main:GetPlayer():playerSprite:sprite3:SetX(nextMap:map:GetWidth() / 2)
+                main:GetPlayer():playerSprite:sprite3:SetY(nextMap:map:GetHeight() / 2)
             else
-                main:GetPlayer():playerSprite:sprite1:SetX(playerX)
-                main:GetPlayer():playerSprite:sprite1:SetY(playerY)
+                main:GetPlayer():playerSprite:sprite3:SetX(playerX)
+                main:GetPlayer():playerSprite:sprite3:SetY(playerY)
             end
             main:LoadAboveLayer(nextMap, mapName)
             main:SetMap(nextMap)
@@ -97,7 +99,7 @@ class MapTransitionBehavior is Behavior
         else
             output "This transition is unavailable."
         end
-
+/*
         if mapName = maps:INTERIOR_HOUSE_MAP
             main:audioManager:AddAudio("4371-skye-cuillin-by-kevin-macleod", "wav", "music")
             main:audioManager:PlayAudio("4371-skye-cuillin-by-kevin-macleod")
@@ -108,6 +110,7 @@ class MapTransitionBehavior is Behavior
             PrologueTown prologueTown
             prologueTown:Run()
         end
+*/
     end
     
     // Initializer of MAPTRANSITIONBEHAVIOR 

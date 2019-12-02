@@ -26,11 +26,11 @@ class TeleportBehavior is Behavior
             JavaScriptObjectNotation poiData = mapData:GetObject("pointsofinterest")
 
             if poiIndex < poiData:GetSize()
-output "test output"
 
                 number newX = cast(number, poiData:Get(poiIndex):GetValue("x"))
                 number newY = cast(number, poiData:Get(poiIndex):GetValue("y"))
-                player:playerSprite:sprite1:SetPosition(newX, newY)
+output "Teleporting player to coordinates (" + newX + ", " + newY + ")"
+                player:playerSprite:sprite3:SetPosition(newX, newY)
             else
                 output "Point of interest doesn't exist"
             end

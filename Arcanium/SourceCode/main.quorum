@@ -26,6 +26,7 @@ use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.ImageSheet
 use Libraries.Game.Graphics.Camera
 use Libraries.Interface.Layouts.ManualLayout
+use Libraries.Compute.Random
 
 class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
@@ -132,6 +133,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     public boolean lockMovement = false
 
+    integer TPindex = 0
+
 //==============================================================================
 //                             PREBUILT ACTIONS
 //==============================================================================
@@ -149,10 +152,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
-        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
-        InitializePlayer(player1)
-        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializePlayer(player1)
+//        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
         
 
         //==TEST CALLS==
@@ -169,11 +172,11 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAudioTest()
         //TitleScreenTest()
         //CineSequencerTest()
-        //DebugMenuTest()
+        DebugMenuTest() 
         //InitializeWhiteRoom()
         //KeyBindTest()
-        PrologueTown town
-        town:Run()
+//        PrologueTown town
+//        town:Run()
 //        BeginGameSequence()
 
     end
@@ -305,12 +308,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
     action InitializePlayer(Player player)
         //Loads player image, enables collision/movement, does NOT add to layer.
         player:DrawPlayer()
-        player:playerSprite:sprite1:EnablePhysics(true)
-        player:playerSprite:sprite1:CanRotate(false)
-        player:playerSprite:sprite1:SetResponsive()
-        player:playerSprite:sprite1:SetName("player")
+        player:playerSprite:sprite3:EnablePhysics(true)
+        player:playerSprite:sprite3:CanRotate(false)
+        player:playerSprite:sprite3:SetResponsive()
+        player:playerSprite:sprite3:SetName("player")
         player:playerSprite:sprite1:SetScale(0.85)
+        player:playerSprite:sprite3:SetScale(0.85)
         Add(player:playerSprite:sprite1)
+        Add(player:playerSprite:sprite3)
 
         //Sets camera onto player.
         camera = GetCamera2D()
@@ -322,8 +327,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         // Movement using WASD
         // Get current location
         text direction = ""
-        newY = player1:playerSprite:sprite1:GetY()
-        newX = player1:playerSprite:sprite1:GetX()
+        newY = player1:playerSprite:sprite3:GetY()
+        newX = player1:playerSprite:sprite3:GetX()
 
         elapsedTime = elapsedTime + seconds
 
@@ -331,21 +336,138 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if monitor:IsKeyPressed(keys:W)
             newY = newY + plyrSpeed * seconds
             direction = "up"
-            Array<text> enemies
-            enemies:Add("Goblin")
-//            CombatTest(enemies)
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
             direction = "down"
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
         if monitor:IsKeyPressed(keys:D)
             newX = newX + plyrSpeed * seconds
             direction = "right"
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
         if monitor:IsKeyPressed(keys:A)
             newX = newX - plyrSpeed * seconds
             direction = "left"
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
 
         // Checks if PLAYER is out of bounds
@@ -355,14 +477,15 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if newX < 0
             newX = 0
         end
-        if newY > currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
-            newY = currentMap:map:GetHeight() - player1:playerSprite:sprite1:GetHeight()
+        if newY > currentMap:map:GetHeight() - player1:playerSprite:sprite3:GetHeight()
+            newY = currentMap:map:GetHeight() - player1:playerSprite:sprite3:GetHeight()
         end
-        if newX > currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
-            newX = currentMap:map:GetWidth() - player1:playerSprite:sprite1:GetWidth()
+        if newX > currentMap:map:GetWidth() - player1:playerSprite:sprite3:GetWidth()
+            newX = currentMap:map:GetWidth() - player1:playerSprite:sprite3:GetWidth()
         end
 
-        player1:playerSprite:sprite1:SetPosition(newX,newY)
+        player1:playerSprite:sprite3:SetPosition(newX,newY)
+        player1:playerSprite:sprite1:SetPosition(newX-20,newY-10)
         
         //Sprite Animation
         if direction = ""
@@ -391,6 +514,16 @@ class Main is Game, CollisionListener2D, KeyboardListener
             camera:SetPosition( camera:GetPosition():GetX(), (currentMap:map:GetHeight() - camera:GetHeight()/2 + 50), camera:GetPosition():GetZ())
         end
 		
+//        if monitor:IsKeyPressed(keys:Q)
+//            TeleportTest(TPindex)
+//        end
+//        if monitor:IsKeyPressed(keys:E)
+//            TPindex = TPindex + 1
+//            if TPindex > 5
+//                TPindex = 0
+//            end
+//            output "Teleport Index: " + TPindex
+//        end
     end
 
     action BeginCollision(CollisionEvent2D event)
@@ -725,36 +858,38 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
 
     action CombatTest(Array<text> enemies)
-	
-        Array<number> currentElementsEffectiveness
-        currentElementsEffectiveness:Add(1.0)
-        currentElementsEffectiveness:Add(0.7)
-        currentElementsEffectiveness:Add(1.0)
-        currentElementsEffectiveness:Add(1.0)
-        currentElementsEffectiveness:Add(0.5)
-        currentElementsEffectiveness:Add(1.0)
-        Array<integer> currentElementTokens
-        currentElementTokens:Add(4)
-        currentElementTokens:Add(4)
-        currentElementTokens:Add(4)
-        currentElementTokens:Add(4)
-        currentElementTokens:Add(4)
-        currentElementTokens:Add(4)
-        player1:SetStats("Hero", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
-        player1:SetGame(me)
-        player1:SetRemovalArray(removalArray)
-        player1:SetBehaviorQueue(behaviorQueue)
-        player1:SetCamera(camera)
+	if not inCombat
+            inCombat = true
 
-        Battle battle
-        battle:SetGame(me)
-        battle:SetRemovalArray(removalArray)
-        battle:SetBehaviorQueue(behaviorQueue)  
-        battle:SetCamera(camera)
-        battle:Initialize(player1, enemies)
-        inCombat = true
+            Array<number> currentElementsEffectiveness
+            currentElementsEffectiveness:Add(1.0)
+            currentElementsEffectiveness:Add(0.7)
+            currentElementsEffectiveness:Add(1.0)
+            currentElementsEffectiveness:Add(1.0)
+            currentElementsEffectiveness:Add(0.5)
+            currentElementsEffectiveness:Add(1.0)
+            Array<integer> currentElementTokens
+            currentElementTokens:Add(4)
+            currentElementTokens:Add(4)
+            currentElementTokens:Add(4)
+            currentElementTokens:Add(4)
+            currentElementTokens:Add(4)
+            currentElementTokens:Add(4)
+            player1:SetStats("Hero", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
+            player1:SetGame(me)
+            player1:SetRemovalArray(removalArray)
+            player1:SetBehaviorQueue(behaviorQueue)
+            player1:SetCamera(camera)
 
-	end
+            Battle battle
+            battle:SetGame(me)
+            battle:SetRemovalArray(removalArray)
+            battle:SetBehaviorQueue(behaviorQueue)  
+            battle:SetCamera(camera)
+            battle:Initialize(player1, enemies)
+            battle:Run(undefined)
+        end
+    end
     
     action CineSequencerTest()
 
@@ -862,12 +997,12 @@ class Main is Game, CollisionListener2D, KeyboardListener
         audioManager:PlayAudio("MidnightTale")
     end
 
-    action TeleportTest()
+    action TeleportTest(integer index)
         BehaviorEvent bevent
         TeleportBehavior tpBehavior
         tpBehavior:SetPlayer(player1)
         tpBehavior:SetMapName(currentMap:name)
-        tpBehavior:SetPOIIndex(1)
+        tpBehavior:SetPOIIndex(index)
         tpBehavior:Run(bevent)
     end
 
@@ -987,13 +1122,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
         dialogues:Add(DialogueList3)
 
         // Create text with the MAP_NAMES for Map Transition Interactable 
-        text travelcurrentMap = "Not Ready Yet"
+        text travelcurrentMap = maps:INTERIOR_HOUSE_MAP
         travelMaps:Add(travelcurrentMap)
 
         text travelMap2 = maps:PROLOGUE_TOWN_MAP
         travelMaps:Add(travelMap2)
 
-        text travelMap3 = maps:RUINED_TOWN_MAP
+        text travelMap3 = maps:INTRODUCTION_MAP
         travelMaps:Add(travelMap3)
 
         // Create Array<text> with ENEMY_NAMES for Initiate Combat Interactable
@@ -1083,8 +1218,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
         end
 
         InitializePlayer(player1)
-        player1:playerSprite:sprite1:SetY(height / 8)
-        player1:playerSprite:sprite1:SetX(width / 2)
+        player1:playerSprite:sprite3:SetY(height / 8)
+        player1:playerSprite:sprite3:SetX(width / 2)
 
         if testingMap not= "default"
             LoadAboveLayer(currentMap, testingMap)
