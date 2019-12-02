@@ -333,7 +333,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
             direction = "up"
             Array<text> enemies
             enemies:Add("Goblin")
-            CombatTest(enemies)
+//            CombatTest(enemies)
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
@@ -472,6 +472,27 @@ class Main is Game, CollisionListener2D, KeyboardListener
                     // introduction map
                     if currentMap:name = maps:INTRODUCTION_MAP
                         mapState:UpdateJewelsTouched()
+                    end
+
+                    // forest path 1 map
+                    if currentMap:name = maps:FOREST_PATH_1_MAP
+                        mapState:SetRiverCrossed(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_2_MAP
+                        mapState:SetTreeBurned(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_3_MAP
+                        mapState:SetFirePutOut(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_4_MAP
+                        mapState:SetLogPile1Moved(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_4_MAP_HALF_COMPLETE
+                        mapState:SetLogPile2Moved(true)
                     end
                 end
             end
