@@ -72,6 +72,8 @@ class Introduction2 is Cinematic
         blue:SetColor(0,0,0,0.25)
         rectangle1:LoadFilledRectangle(800,800,blue)
         main:Add(rectangle1)
+
+        //Test
     end
 
     private action BehaviorSetup()
