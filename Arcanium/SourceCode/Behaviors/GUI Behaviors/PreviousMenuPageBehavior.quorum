@@ -11,9 +11,10 @@ class PreviousMenuPageBehavior is Behavior
     Array<Array <integer>> xPosition
     Array<Array <integer>> yPosition
     integer currentIndex = 0
+    MenuButton removeTokenButton = undefined
 
     action Run(BehaviorEvent event)
-        if currentIndex not= 0
+        if currentIndex > 0
             integer counter = 0
             
             repeat while counter < pages:Get(currentIndex):GetSize()
@@ -23,6 +24,14 @@ class PreviousMenuPageBehavior is Behavior
             end
 
             integer tempIndex = currentIndex - 1
+            if currentIndex = 3
+                tempIndex = tempIndex - 1
+            end
+
+            if currentIndex = 2 or currentIndex = 3
+                removeTokenButton:Activate()
+            end
+
             counter = 0
 
             repeat while counter < pages:Get(tempIndex):GetSize()
@@ -30,13 +39,16 @@ class PreviousMenuPageBehavior is Behavior
 
                 counter = counter + 1
             end
-
             game:SetFocus(pages:Get(tempIndex):Get(0))
         end
     end
 
     action SetGame(Game newGame)
         game = newGame
+    end
+
+    action SetRemoveTokenButton(MenuButton newButton)
+        removeTokenButton = newButton
     end
 
     action SetPages(Array<Array <Item2D>> array)
