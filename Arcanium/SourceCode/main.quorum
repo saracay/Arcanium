@@ -288,8 +288,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
             Add(currMap:interactables:Get(i))
             AddKeyboardListener(currMap:interactables:Get(i))
             currMap:interactables:Get(i):SetRequiredCompleted(currMap:completedInteractables:Get(i))
-            InteractableData data = currMap:interactableData:Get(i)
-            currMap:interactables:Get(i):CreateDialogueBehavior(data)
             i = i + 1
         end
         // ===== Ryan: Ending Changes =====
