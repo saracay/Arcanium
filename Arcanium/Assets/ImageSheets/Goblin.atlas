@@ -69,21 +69,21 @@ Goblin frame 9
   index: -1
 Goblin frame 10
   rotate: false
-  xy: 0, 128
+  xy: 0, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 Goblin frame 11
   rotate: false
-  xy: 128, 128
+  xy: 128, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 Goblin frame 12
   rotate: false
-  xy: 256, 128
+  xy: 256, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

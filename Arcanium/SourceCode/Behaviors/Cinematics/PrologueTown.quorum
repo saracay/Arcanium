@@ -21,10 +21,19 @@ class PrologueTown is Cinematic
     Animation goblin2
     Animation goblin3
     Animation goblin4
+    Animation goblin5
+    Animation goblin6
+    Animation man1
+    Animation man2
+    Animation woman1
     Animation boy
+
     text playerImgSheet = "Hero"
-    text goblinImgSheet = "Man2"
+    text goblinImgSheet = "Goblin"
     text boyImgSheet = "Boy"
+    text man1ImgSheet = "Man1"
+    text man2ImgSheet = "Man2"
+    text woman1ImgSheet = "Woman1"
 
     //Goblin 1
     MoveNPCBehavior     move1Goblin1
@@ -40,8 +49,35 @@ class PrologueTown is Cinematic
     //Goblin 4
     MoveNPCBehavior     move1Goblin4
 
+    //Goblin 5
+    MoveNPCBehavior     move1Goblin5
+
+    //Goblin 6
+    MoveNPCBehavior     move1Goblin6
+
+    //Man1
+    MoveNPCBehavior     move1Man1
+
+    //Man2
+    MoveNPCBehavior     move1Man2
+
+    //Woman1
+    MoveNPCBehavior     move1Woman1
+    MoveNPCBehavior     move2Woman1
+
+    //Boy
+    MoveNPCBehavior     move1Boy
+    MoveNPCBehavior     move2Boy
+    MoveNPCBehavior     move3Boy
+    MoveNPCBehavior     move4Boy
+
+    MoveNPCBehavior     move1Player
+    MoveNPCBehavior     move2Player
+    MoveNPCBehavior     move3Player
+
     PanCameraBehavior   cameraPan1
     PanCameraBehavior   cameraPan2
+    PanCameraBehavior   cameraPan3
 
     WaitForBehavior     wait1
     WaitForBehavior     wait2
@@ -49,6 +85,23 @@ class PrologueTown is Cinematic
     WaitForBehavior     wait4
     WaitForBehavior     wait5
     WaitForBehavior     wait6
+    WaitForBehavior     wait7
+    WaitForBehavior     wait8
+    WaitForBehavior     wait9
+    WaitForBehavior     wait10
+    WaitForBehavior     wait11
+    WaitForBehavior     wait12
+
+    DisplayLogBehavior  dialogue1
+    DisplayLogBehavior  dialogue2
+    DisplayLogBehavior  dialogue3
+    DisplayLogBehavior  dialogue4
+
+
+    Array<text> dialogue1Text
+    Array<text> dialogue2Text
+    Array<text> dialogue3Text
+    Array<text> dialogue4Text
 
     MapTransitionBehavior transition1
 
@@ -67,7 +120,7 @@ class PrologueTown is Cinematic
         //Player
         player = main:GetPlayer():playerSprite
         player:sprite1:SetPosition(1075,175)
-        player:sprite1:SetCollidable(true)
+        player:sprite1:SetCollidable(false)
 
         //NPCs
         goblin1:LoadImageSheet(goblinImgSheet)
@@ -90,13 +143,56 @@ class PrologueTown is Cinematic
         goblin4:sprite1:SetPosition(400,525)
         main:Add(goblin4:sprite1)
 
+        goblin5:LoadImageSheet(goblinImgSheet)
+        goblin5:LoadFrame(goblinImgSheet)
+        goblin5:sprite1:SetPosition(200,175)
+        main:Add(goblin5:sprite1)
+
+        goblin6:LoadImageSheet(goblinImgSheet)
+        goblin6:LoadFrame(goblinImgSheet)
+        goblin6:sprite1:SetPosition(650,-200)
+        main:Add(goblin6:sprite1)
+
         boy:LoadImageSheet(boyImgSheet)
         boy:LoadFrame(boyImgSheet)
-        boy:sprite1:SetPosition(620,175)
+        boy:sprite1:SetPosition(320,175)
+        boy:sprite1:SetScale(0.7)
         main:Add(boy:sprite1)
+
+
+        man1:LoadImageSheet(man1ImgSheet)
+        man1:LoadFrame(man1ImgSheet)
+        man1:sprite1:SetPosition(820,1200)
+        man1:SetFrame(4)
+        man1:ChangeFrame(man1ImgSheet)
+        main:Add(man1:sprite1)
+
+        man2:LoadImageSheet(man2ImgSheet)
+        man2:LoadFrame(man2ImgSheet)
+        man2:sprite1:SetPosition(540,1140)
+        man2:SetFrame(7)
+        man2:ChangeFrame(man2ImgSheet)
+        main:Add(man2:sprite1)
+
+        woman1:LoadImageSheet(woman1ImgSheet)
+        woman1:LoadFrame(woman1ImgSheet)
+        woman1:sprite1:SetPosition(1150,800)
+        woman1:SetFrame(7)
+        woman1:ChangeFrame(woman1ImgSheet)
+        main:Add(woman1:sprite1)
 
         //Camera
         main:GetCamera2D():SetPosition(700,1320,0)
+
+        //Dialogue
+        dialogue1Text:Add("Boy: HELP!")
+        dialogue2Text:Add("You step out to a scene of total chaos. Goblins have invaded in the town. From nearby, you hear the cries of a young boy.")
+        dialogue3Text:Add("GOBLIN: Look what we got here. Fresh meat!")
+        dialogue3Text:Add("HERO: Get behind me, kid.")
+        dialogue4Text:Add("GOBLIN: You'll be fresh meat too by the time we're done with you!")
+
+
+        main:LoadAboveLayer(main:GetMap(), maps:PROLOGUE_TOWN_MAP)
     end
 
     action BehaviorSetup()
@@ -106,13 +202,13 @@ class PrologueTown is Cinematic
 
         move2Goblin1:    SetNPCCollidable(false)
         move2Goblin1:    SetAnimation(goblin1, goblinImgSheet)
-        move2Goblin1:    SetMoveDirection(80, 0, 4)
+        move2Goblin1:    SetMoveDirection(80, 0, 6)
 
         move1Goblin2:    SetAnimation(goblin2, goblinImgSheet)
         move1Goblin2:    SetMoveDirection(0, -80, 5.3)
 
         move2Goblin2:    SetAnimation(goblin2, goblinImgSheet)
-        move2Goblin2:    SetMoveDirection(-80, 0, 6)
+        move2Goblin2:    SetMoveDirection(-80, 0, 7)
 
         move1Goblin3:    SetNPCCollidable(false)
         move1Goblin3:    SetAnimation(goblin3, goblinImgSheet)
@@ -122,16 +218,84 @@ class PrologueTown is Cinematic
         move1Goblin4:    SetAnimation(goblin4, goblinImgSheet)
         move1Goblin4:    SetMoveDirection(80, 0, 16)
 
-        cameraPan1:     SetCameraPan(0, -60, 17.5)
-        cameraPan2:     SetCameraPan(70, 0, 5)
-        wait1:          SetWaitDuration(2)
-        wait2:          SetWaitDuration(2.4)
-        wait3:          SetWaitDuration(0.9)
-        wait4:          SetWaitDuration(1)
-        wait5:          SetWaitDuration(4)
-        wait6:          SetWaitDuration(9.5)
+        move1Goblin5:    SetNPCCollidable(false)
+        move1Goblin5:    SetAnimation(goblin5, goblinImgSheet)
+        move1Goblin5:    SetMoveDirection(70, 0, 5.7)
 
-        transition1:        SetTransition(tempMap, maps:INTERIOR_HOUSE_MAP)
+        move1Goblin6:    SetNPCCollidable(false)
+        move1Goblin6:    SetAnimation(goblin6, goblinImgSheet)
+        move1Goblin6:    SetMoveDirection(0, 55, 4.7)
+
+        move1Man1:       SetNPCCollidable(false)
+        move1Man1:       SetAnimation(man1, man1ImgSheet)
+        move1Man1:       SetMoveDirection(90, 0, 8)
+
+        move1Man2:       SetNPCCollidable(false)
+        move1Man2:       SetAnimation(man2, man2ImgSheet)
+        move1Man2:       SetMoveDirection(-90, 0, 8)
+
+        move1Woman1:     SetNPCCollidable(false)
+        move1Woman1:     SetAnimation(woman1, woman1ImgSheet)
+        move1Woman1:     SetMoveDirection(-150, 0, 3)
+
+        move2Woman1:     SetAnimation(woman1, woman1ImgSheet)
+        move2Woman1:     SetMoveDirection(0, -140, 30)
+
+        move1Boy:        SetNPCCollidable(false)
+        move1Boy:        SetAnimation(boy, boyImgSheet)
+        move1Boy:        SetMoveDirection(90, 0, 4)
+        move2Boy:        SetAnimation(boy, boyImgSheet)
+        move2Boy:        SetMoveDirection(0, -60, 0.5)
+        move3Boy:        SetAnimation(boy, boyImgSheet)
+        move3Boy:        SetMoveDirection(90, 0, 2.5)
+        move4Boy:        SetAnimation(boy, boyImgSheet)
+        move4Boy:        SetMoveDirection(-30, 0, 0.5)
+        
+
+        move1Player:     SetNPCCollidable(false)
+        move1Player:     SetAnimation(player, playerImgSheet)
+        move1Player:     SetMoveDirection(0, -90, 0.4)
+        move2Player:     SetAnimation(player, playerImgSheet)
+        move2Player:     SetMoveDirection(-90, 0, 3.3)
+        move3Player:     SetAnimation(player, playerImgSheet)
+        move3Player:     SetMoveDirection(-30, 0, 2)
+
+        cameraPan1:     SetCameraPan(0, -60, 17.5)
+        cameraPan2:     SetCameraPan(90, 0, 4.4)
+        cameraPan3:     SetCameraPan(-90, 0, 3)
+
+        wait1:          SetWaitDuration(1)
+        wait2:          SetWaitDuration(1)
+        wait3:          SetWaitDuration(2.4)
+        wait4:          SetWaitDuration(0.7)
+        wait5:          SetWaitDuration(3)
+        wait6:          SetWaitDuration(1)
+        wait7:          SetWaitDuration(2)
+        wait8:          SetWaitDuration(1)
+        wait9:          SetWaitDuration(3)
+        wait10:         SetWaitDuration(1)
+
+        dialogue1:      SetRemovalArray(main:GetRemovalArray())
+        dialogue1:      SetGame(main)
+        dialogue1:      SetCamera(main:GetCamera2D())
+        dialogue1:      SetLog(dialogue1Text)
+
+        dialogue2:      SetRemovalArray(main:GetRemovalArray())
+        dialogue2:      SetGame(main)
+        dialogue2:      SetCamera(main:GetCamera2D())
+        dialogue2:      SetLog(dialogue2Text)
+
+        dialogue3:      SetRemovalArray(main:GetRemovalArray())
+        dialogue3:      SetGame(main)
+        dialogue3:      SetCamera(main:GetCamera2D())
+        dialogue3:      SetLog(dialogue3Text)
+
+        dialogue4:      SetRemovalArray(main:GetRemovalArray())
+        dialogue4:      SetGame(main)
+        dialogue4:      SetCamera(main:GetCamera2D())
+        dialogue4:      SetLog(dialogue4Text)
+
+        transition1:        SetTransition(tempMap, maps:FOREST_CLEARING_MAP)
         transition1:        SetCinematic(forestClearing)
 
     end
@@ -140,17 +304,39 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(move1Goblin1, false)
         cineSequencer:AddCineEvent(move1Goblin2, false)
         cineSequencer:AddCineEvent(wait1, true)
-        cineSequencer:AddCineEvent(cameraPan1, false)
+        cineSequencer:AddCineEvent(move1Man1, false)
         cineSequencer:AddCineEvent(wait2, true)
-        cineSequencer:AddCineEvent(move2Goblin1, false)
+        cineSequencer:AddCineEvent(move1Man2, false)
+        cineSequencer:AddCineEvent(cameraPan1, false)
         cineSequencer:AddCineEvent(wait3, true)
-        cineSequencer:AddCineEvent(move2Goblin2, false)
+        cineSequencer:AddCineEvent(move2Goblin1, false)
         cineSequencer:AddCineEvent(wait4, true)
-        cineSequencer:AddCineEvent(move1Goblin3, false)
+        cineSequencer:AddCineEvent(move2Goblin2, false)
         cineSequencer:AddCineEvent(wait5, true)
-        cineSequencer:AddCineEvent(move1Goblin4, false)
+        cineSequencer:AddCineEvent(move1Woman1, false)
         cineSequencer:AddCineEvent(wait6, true)
+        cineSequencer:AddCineEvent(move1Goblin3, false)
+        cineSequencer:AddCineEvent(wait7, true)
+        cineSequencer:AddCineEvent(move2Woman1, false)
+        cineSequencer:AddCineEvent(wait8, true)
+        cineSequencer:AddCineEvent(move1Goblin4, false)
+        cineSequencer:AddCineEvent(wait9, true)
+        cineSequencer:AddCineEvent(move1Goblin5, false)
+        cineSequencer:AddCineEvent(move1Goblin6, false)
+        cineSequencer:AddCineEvent(move1Boy, true)
+        cineSequencer:AddCineEvent(move2Boy, true)
+        cineSequencer:AddCineEvent(wait10, true)
+        cineSequencer:AddCineEvent(dialogue1, true)
         cineSequencer:AddCineEvent(cameraPan2, true)
+        cineSequencer:AddCineEvent(dialogue2, true)
+        cineSequencer:AddCineEvent(move1Player, true)
+        cineSequencer:AddCineEvent(move2Player, false)
+        cineSequencer:AddCineEvent(cameraPan3, true)
+        cineSequencer:AddCineEvent(dialogue3, true)
+        cineSequencer:AddCineEvent(move3Player, false)
+        cineSequencer:AddCineEvent(move3Boy, true)
+        cineSequencer:AddCineEvent(move4Boy, true)
+        cineSequencer:AddCineEvent(dialogue4, true)
         cineSequencer:AddCineEvent(transition1, true)
     end
 
