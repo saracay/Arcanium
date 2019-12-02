@@ -99,7 +99,7 @@ class MapTransitionBehavior is Behavior
         else
             output "This transition is unavailable."
         end
-/*
+
         if mapName = maps:INTERIOR_HOUSE_MAP
             main:audioManager:AddAudio("4371-skye-cuillin-by-kevin-macleod", "wav", "music")
             main:audioManager:PlayAudio("4371-skye-cuillin-by-kevin-macleod")
@@ -110,7 +110,6 @@ class MapTransitionBehavior is Behavior
             PrologueTown prologueTown
             prologueTown:Run()
         end
-*/
     end
     
     // Initializer of MAPTRANSITIONBEHAVIOR 
