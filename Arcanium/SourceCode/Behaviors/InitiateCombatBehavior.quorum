@@ -8,16 +8,14 @@ use Libraries.Containers.Array
 class InitiateCombatBehavior is Behavior
     GameStateManager manager            // Used to get MAIN
     Color color
-    Interactable object
+    Interactable object = undefined
     Array<text> enemyList
 
     action Run(BehaviorEvent event)
         Main main = cast(Main, manager:GetGame())
-        main:AddToRemove(object)
-        Drawable background
-        background:LoadFilledRectangle(1920*2,1080*2,color:White())
-        background:SetPosition(-1920/2, -1080/2)
-        main:Add(background)
+        if object not= undefined
+            main:AddToRemove(object)
+        end
         main:CombatTest(enemyList)
     end
 

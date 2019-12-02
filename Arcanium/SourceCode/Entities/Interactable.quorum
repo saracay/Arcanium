@@ -107,13 +107,6 @@ class Interactable is Drawable, KeyboardListener
     action ToggleInteraction()
         if currentlyInteracting
             currentlyInteracting = false
-/*
-            if currentBehavior is DialogueBehavior
-                integer currentDialogue = 0
-                DialogueBehavior newBehavior = cast(DialogueBehavior, currentBehavior)
-                newBehavior:ResetDialogue()
-            end
-*/
         else
             currentlyInteracting = true
             if typeOfBehavior = "transition"
@@ -135,8 +128,13 @@ class Interactable is Drawable, KeyboardListener
                 elseif currentBehavior is DisplayLogBehavior
                     GameStateManager manager            // Used to get MAIN
                     Main main = cast(Main, manager:GetGame())
-                    DisplayLogBehavior temp = cast(DisplayLogBehavior, currentBehavior)
-                    main:behaviorQueue:AddBehavior(temp)
+                    
+                    DisplayLogBehavior temp1
+                    DisplayLogBehavior temp2 = cast(DisplayLogBehavior, currentBehavior)
+
+                    temp1:DuplicateDisplayLog(temp2)
+
+                    main:behaviorQueue:AddBehavior(temp1)
                     currentlyInteracting = false
                 elseif currentBehavior is InitiateCombatBehavior
                     BehaviorEvent newEvent
@@ -161,13 +159,7 @@ class Interactable is Drawable, KeyboardListener
     action CreateDialogueBehavior(InteractableData data)
         GameStateManager manager            // Used to get MAIN
         Main main = cast(Main, manager:GetGame())
-/*
-        i = 0
-        repeat data:dialogue:GetSize() times // adds the array of dialog from the data
-            temp:AddDialogue(data:dialogue:Get(i))
-            i = i + 1
-        end
-*/
+
         DisplayLogBehavior dialogue1
 
         dialogue1:          SetGame(main)
@@ -191,5 +183,9 @@ class Interactable is Drawable, KeyboardListener
 
     action SetRequiredCompleted(boolean completed)
         requiredCompleted = completed
+    end
+
+    action ResetInteraction()
+        currentlyInteracting = false
     end
 end

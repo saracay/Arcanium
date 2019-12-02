@@ -39,6 +39,7 @@ class BehaviorQueue
 
         if queue:IsEmpty()
             currentBehavior = undefined
+            shouldRun = true
         else
             currentBehavior = queue:RemoveFromFront()
 

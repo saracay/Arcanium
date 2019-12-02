@@ -121,4 +121,27 @@ class DisplayLogBehavior is Behavior
             counter = counter + 1
         end
     end
+
+    action GetGame() returns Game
+        return game
+    end
+
+    action GetRemovalArray() returns Array<Item2D>
+        return removalArray
+    end
+
+    action GetCamera() returns Camera
+        return camera
+    end
+
+    action GetLog() returns Array<text>
+        return log
+    end
+
+    action DuplicateDisplayLog(DisplayLogBehavior target)
+        SetGame(target:GetGame())
+        SetLog(target:GetLog())
+        SetRemovalArray(target:GetRemovalArray())
+        SetCamera(target:GetCamera())
+    end
 end

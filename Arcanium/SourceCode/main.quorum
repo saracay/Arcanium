@@ -192,8 +192,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
         if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded() and (not lockMovement)
             PlayerMovement(seconds)
+        else
+            DisableInteraction()
         end
         
+        // Center player collision box on player sprite
+        UpdatePlayerCollision()
+
         // ScriptedAnimTest(seconds)
         // SpellAnim(seconds, Fireball)
         // PlayerMovementWithAnim(seconds)
@@ -408,6 +413,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        end
     end
 
+    // Center player collision box
+    action UpdatePlayerCollision()
+        number x = player1:playerSprite:sprite1:GetX()
+        number y = player1:playerSprite:sprite1:GetY()
+        player1:playerSprite:sprite3:SetPosition(x + 20, y + 10)
+    end
+
     action BeginCollision(CollisionEvent2D event)
         CheckForInteraction(event, true)
     end
@@ -511,6 +523,21 @@ class Main is Game, CollisionListener2D, KeyboardListener
                     end
                 end
             end
+        end
+    end
+
+    // Set all interactable:alreadyInteracting to false
+    action DisableInteraction()
+        i = 0
+        repeat currentMap:interactables:GetSize() times
+            currentMap:interactables:Get(i):ResetInteraction()
+            i = i + 1
+        end
+
+        i = 0
+        repeat currentMap:transitions:GetSize() times
+            currentMap:transitions:Get(i):ResetInteraction()
+            i = i + 1
         end
     end
 
@@ -1002,13 +1029,13 @@ class Main is Game, CollisionListener2D, KeyboardListener
         dialogues:Add(DialogueList3)
 
         // Create text with the MAP_NAMES for Map Transition Interactable 
-        text travelcurrentMap = maps:INTERIOR_HOUSE_MAP
-        travelMaps:Add(travelcurrentMap)
+        text travelMap1 = maps:INTERIOR_HOUSE_MAP
+        travelMaps:Add(travelMap1)
 
         text travelMap2 = maps:PROLOGUE_TOWN_MAP
         travelMaps:Add(travelMap2)
 
-        text travelMap3 = maps:INTRODUCTION_MAP
+        text travelMap3 = maps:FOREST_CLEARING_MAP
         travelMaps:Add(travelMap3)
 
         // Create Array<text> with ENEMY_NAMES for Initiate Combat Interactable
