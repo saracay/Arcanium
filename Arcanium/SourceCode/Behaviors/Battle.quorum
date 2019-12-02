@@ -12,9 +12,10 @@ use Libraries.Game.InputMonitor
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Game.Graphics.Camera
 use Libraries.Game.GameStateManager
+use Libraries.Interface.Events.BehaviorEvent
 
-class Battle
-    
+class Battle is Behavior
+
     Game game
     Camera camera = undefined
     BehaviorQueue behaviorQueue
@@ -25,13 +26,35 @@ class Battle
     Array<Label> statusNames
     Array<Drawable> statusWindows
     Array<Drawable> sprites
+    Array<Drawable> backgrounds
     Array<text> log
-    Drawable background
-    Drawable dialogueBackground
     Color color
     Label playerMana
     boolean created = false
-    
+    Array<boolean> flags
+    Array<CombatMainPageBehavior> playerTurns
+
+    action Run(BehaviorEvent event)
+        boolean isFinished = false
+        flags:Add(isFinished)
+
+        PlayerTurn()
+    end
+
+    action Dispose
+        integer counter = 0
+
+        repeat while counter < playerTurns:GetSize()
+            playerTurns:Get(counter):Dispose()
+
+            counter = counter + 1
+        end
+    end
+
+    action IsFinished returns boolean
+        return flags:Get(0)
+    end
+
     action SetGame(Game newGame)
         game = newGame
     end
@@ -46,13 +69,25 @@ class Battle
 
     action Initialize(Player player, Array<text> enemyTeam)
 
-        number cameraX = camera:GetPosition():GetX()-camera:GetWidth()/2
-        number cameraY = camera:GetPosition():GetY()-camera:GetHeight()/2
+        playerTurns:Empty()
+        combatants:Empty()
+        statusInfo:Empty()
+        statusNames:Empty()
+        statusWindows:Empty()
+        sprites:Empty()
+        backgrounds:Empty()
+        flags:Empty()
+        log:Empty()
 
+        integer cameraX = cast(integer, camera:GetPosition():GetX()-camera:GetWidth()/2)
+        integer cameraY = cast(integer, camera:GetPosition():GetY()-camera:GetHeight()/2)
+
+        Drawable background
         background:Load("Assets/Sprites/combat-background.png")
         background:Scale(0.65)
         background:SetPosition(cameraX-110, cameraY-30)
         game:Add(background)
+        backgrounds:Add(background)
 
 //        Main main = cast(Main, game)
 //        main:SetCurrentAnim("air", "Air")
@@ -170,7 +205,7 @@ class Battle
         text enemiesLog = "An enemy "
         repeat while counter < combatants:GetSize()
             if counter = combatants:GetSize() - 1
-                if counter not= 0
+                if counter not= 1
                     enemiesLog = enemiesLog + "and " + combatants:Get(counter):GetName() + " attacked!"
                 else
                     enemiesLog = enemiesLog + combatants:Get(counter):GetName() + " attacked!"
@@ -183,10 +218,12 @@ class Battle
         end
         log:Add(enemiesLog)
 
+        Drawable dialogueBackground
         dialogueBackground:Load("Assets/Sprites/dialogue-box.png")
         dialogueBackground:SetPosition(cameraX-110, cameraY-30)
         dialogueBackground:Scale(3.53)
         game:Add(dialogueBackground)
+        backgrounds:Add(dialogueBackground)
 
         DisplayLogBehavior logBehavior
         logBehavior:SetGame(game)
@@ -194,105 +231,68 @@ class Battle
         logBehavior:SetRemovalArray(removalArray)
         logBehavior:SetCamera(camera)
         behaviorQueue:AddBehavior(logBehavior)
-
-        PlayerTurn()
     end
 
     action UpdateStatus
-        CombatUpdateStatusBehavior behavior
-        behavior:SetGame(game)
-        behavior:SetRemovalArray(removalArray)
-        behavior:SetCamera(camera)
-        behavior:SetCombatants(combatants)
-        behavior:SetPlayerMana(playerMana)
-        behavior:SetStatusInfo(statusInfo)
-        behavior:SetStatusNames(statusNames)
-        behavior:SetStatusWindows(statusWindows)
-        behavior:SetSprites(sprites)
-        behaviorQueue:AddBehavior(behavior)
+        UpdateStatus(false)
+    end
+
+    action UpdateStatus(boolean checkForVictory)
+        if not flags:Get(0)
+            CombatUpdateStatusBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetCamera(camera)
+            behavior:SetCombatants(combatants)
+            behavior:SetPlayerMana(playerMana)
+            behavior:SetStatusInfo(statusInfo)
+            behavior:SetStatusNames(statusNames)
+            behavior:SetStatusWindows(statusWindows)
+            behavior:SetSprites(sprites)
+            behavior:SetBackgrounds(backgrounds)
+            behavior:SetCheckForVictory(checkForVictory)
+            behavior:SetPlayerTurns(playerTurns)
+            behavior:SetFlags(flags)
+            behaviorQueue:AddBehavior(behavior)
+        end
     end
 
     action PlayerTurn
-        Player player = cast(Player, combatants:Get(0))
-        if player:GetCurrentMP() not= player:GetMaxMP()
-            player:SetCurrentMP(player:GetCurrentMP() + 1)
-        end
-        UpdateStatus()
+        if not flags:Get(0)
+            Player player = cast(Player, combatants:Get(0))
+            if player:GetCurrentMP() not= player:GetMaxMP()
+                player:SetCurrentMP(player:GetCurrentMP() + 1)
+            end
+            UpdateStatus()
 
-        CombatMainPageBehavior behavior
-        behavior:SetGame(game)
-        behavior:SetBehaviorQueue(behaviorQueue)
-        behavior:SetRemovalArray(removalArray)
-        behavior:SetCamera(camera)
-        behavior:SetBattle(me)
-        behavior:SetMaxTokens(2)
-        behavior:SetCombatants(combatants)
-        behavior:SetSprites(sprites)
-        behaviorQueue:AddBehavior(behavior)
+            CombatMainPageBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetBehaviorQueue(behaviorQueue)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetCamera(camera)
+            behavior:SetBattle(me)
+            behavior:SetMaxTokens(2)
+            behavior:SetCombatants(combatants)
+            behavior:SetSprites(sprites)
+            behavior:SetFlags(flags)
+            behaviorQueue:AddBehavior(behavior)
+
+            playerTurns:AddToFront(behavior)
+        end
     end
 
     action EnemyTurn
-        CombatEnemyTurnBehavior behavior
-        behavior:SetGame(game)
-        behavior:SetRemovalArray(removalArray)
-        behavior:SetCamera(camera)
-        behavior:SetBattle(me)
-        behavior:SetCombatants(combatants)
-        behavior:SetBehaviorQueue(behaviorQueue)
-        behaviorQueue:AddBehavior(behavior)
-    end
-
-    action EndCombat
-        GameStateManager manager
-        Main main = cast(Main, manager:GetGame())
-        main:behaviorQueue:StopBehaviors()
-
-        Array<text> endLog
-        endLog:Add("You defeated all enemies! The battle is won!")
-
-        DisplayLogBehavior logBehavior
-        logBehavior:SetGame(game)
-        logBehavior:SetLog(endLog)
-        logBehavior:SetRemovalArray(removalArray)
-        logBehavior:SetCamera(camera)
-        main:behaviorQueue:AddBehavior(logBehavior)
-
-        integer counter = 0
-        repeat while counter < statusInfo:GetSize()
-            if statusInfo:Get(counter) not= undefined
-                main:Remove(statusInfo:Get(counter))
-            end
-
-            counter = counter + 1
+        if not flags:Get(0)
+            CombatEnemyTurnBehavior behavior
+            behavior:SetGame(game)
+            behavior:SetRemovalArray(removalArray)
+            behavior:SetCamera(camera)
+            behavior:SetBattle(me)
+            behavior:SetCombatants(combatants)
+            behavior:SetBehaviorQueue(behaviorQueue)
+            behavior:SetFlags(flags)
+            behaviorQueue:AddBehavior(behavior)
         end
-        counter = 0
-        repeat while counter < statusNames:GetSize()
-            if statusNames:Get(counter) not= undefined
-                main:Remove(statusNames:Get(counter))
-            end
-
-            counter = counter + 1
-        end
-        counter = 0
-        repeat while counter < statusWindows:GetSize()
-            if statusWindows:Get(counter) not= undefined
-                main:Remove(statusWindows:Get(counter))
-            end
-
-            counter = counter + 1
-        end
-        counter = 0
-        repeat while counter < sprites:GetSize()
-            if sprites:Get(counter) not= undefined
-                main:Remove(sprites:Get(counter))
-            end
-
-            counter = counter + 1
-        end
-        main:Remove(background)
-        main:Remove(dialogueBackground)
-
-        main:inCombat = false
     end
 
     action GetCombatants returns Array<Combatant>
@@ -317,6 +317,10 @@ class Battle
 
     action GetPreviousBehavior returns Behavior
         return previousBehavior
+    end
+
+    action SetFinishedCombat(boolean bool)
+        finishedCombat = bool
     end
 
 end

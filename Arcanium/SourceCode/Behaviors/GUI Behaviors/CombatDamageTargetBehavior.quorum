@@ -47,7 +47,7 @@ class CombatDamageTargetBehavior is Behavior
             behaviorQueue:AddBehavior(updateMessage)
         end
 
-        battle:UpdateStatus()
+        battle:UpdateStatus(true)
         battle:EnemyTurn()
 
         mainPage:SetFinished(true)

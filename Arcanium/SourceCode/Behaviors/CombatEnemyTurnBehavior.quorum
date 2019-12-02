@@ -14,8 +14,14 @@ class CombatEnemyTurnBehavior is Behavior
     Array<Item2D> removalArray
     Array<Combatant> combatants
     boolean finished = false
+    Array<boolean> flags
+
+    action SetFlags(Array<boolean> newArray)
+        flags = newArray
+    end
 
     action Run(BehaviorEvent event)
+        if not flags:Get(0)
         Array<text> emptyArray
 
         integer counter = 1
@@ -40,6 +46,7 @@ class CombatEnemyTurnBehavior is Behavior
             behavior:Run(undefined)
 
             counter = counter + 1
+        end
         end
     end
     
