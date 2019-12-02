@@ -2,6 +2,7 @@ use Libraries.Game.Graphics.Drawable
 use Libraries.Containers.Array
 use Libraries.Data.Formats.JavaScriptObjectNotation
 use Libraries.System.File
+use Libraries.Game.Graphics.Color
 
 class Player is Combatant
 
@@ -46,6 +47,9 @@ class Player is Combatant
     action DrawPlayer()
         playerSprite:LoadImageSheet(spriteSheetName)
         playerSprite:LoadFrame(spriteSheetName)
+
+        Color color
+        playerSprite:sprite3:LoadRectangle(32, 48, color:White())
     end
 
     /*Update player's experience, leveling them up if they have reached the
