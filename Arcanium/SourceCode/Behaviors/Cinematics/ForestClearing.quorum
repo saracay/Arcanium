@@ -84,6 +84,7 @@ class ForestClearing is Cinematic
         player = main:GetPlayer():playerSprite
         player:sprite1:SetCollidable(false)
         player:sprite1:SetPosition(414, 398)
+        player:sprite3:SetPosition(414, 398)
 
         //Boy
         boy:LoadImageSheet(boyImgSheet)

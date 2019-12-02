@@ -52,6 +52,8 @@ class InteriorHouse is Cinematic
 
         //Player NPC
         player:sprite1:SetPosition(430,335)
+        player:sprite3:SetPosition(430,335)
+
 
         //Camera
         main:GetCamera2D():SetZoom(3)

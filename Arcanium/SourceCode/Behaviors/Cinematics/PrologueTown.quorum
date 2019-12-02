@@ -125,6 +125,7 @@ class PrologueTown is Cinematic
         //Player
         player = main:GetPlayer():playerSprite
         player:sprite1:SetPosition(1075,175)
+        player:sprite3:SetPosition(1075,175)
         player:sprite1:SetCollidable(false)
 
         //NPCs

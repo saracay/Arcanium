@@ -64,7 +64,8 @@ class Introduction is Cinematic
 
         //Player NPC
         player:sprite1:SetPosition(400,400)
-        
+        player:sprite3:SetPosition(400,400)
+
         //Dialogue1
         dialogue1Text:Add("?: Awaken...")
         dialogue2Text:Add("Moments later, like waking up from a daydream, you step forth.")

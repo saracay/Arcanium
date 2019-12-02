@@ -27,6 +27,7 @@ class MoveNPCBehavior is Behavior
         currTime = 0   
         if(setCollidable = true)
             npc:sprite1:SetCollidable(isCollidable)
+            npc:sprite3:SetCollidable(isCollidable)
         end
         if(frame not= 0)
             npc:SetFrame(frame)
@@ -39,6 +40,7 @@ class MoveNPCBehavior is Behavior
           currTime = currTime + seconds
           elapsedTime = elapsedTime + seconds
           npc:sprite1:Move(x*seconds,y*seconds)
+          npc:sprite3:Move(x*seconds,y*seconds)
 
           //Calculating sprite direction
           if(math:AbsoluteValue(x) > math:AbsoluteValue(y))
