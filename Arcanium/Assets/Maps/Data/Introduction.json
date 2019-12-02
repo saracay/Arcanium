@@ -595,14 +595,34 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
-	 "y":0
+	 "name":"Red Jewel",
+	 "x":288,
+	 "y":545
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"Blue Jewel",
+	 "x":513,
+	 "y":545
+	},
+	{
+	 "name":"Green Jewel",
+	 "x":226,
+	 "y":417
+	},
+	{
+	 "name":"Brown Jewel",
+	 "x":577,
+	 "y":417
+	},
+	{
+	 "name":"White Jewel",
+	 "x":287,
+	 "y":257
+	},
+	{
+	 "name":"Black Jewel",
+	 "x":512,
+	 "y":258
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.3.0",

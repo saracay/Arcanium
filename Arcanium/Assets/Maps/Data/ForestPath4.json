@@ -417,14 +417,34 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
-	 "y":0
+	 "name":"Forest Path 3",
+	 "x":447,
+	 "y":629
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"Town",
+	 "x":789,
+	 "y":33
+	},
+	{
+	 "name":"Log Pile 1",
+	 "x":352,
+	 "y":383
+	},
+	{
+	 "name":"Fallen Goblin 1",
+	 "x":275,
+	 "y":419
+	},
+	{
+	 "name":"Log Pile 2",
+	 "x":290,
+	 "y":96
+	},
+	{
+	 "name":"Fallen Goblin 1",
+	 "x":702,
+	 "y":134
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

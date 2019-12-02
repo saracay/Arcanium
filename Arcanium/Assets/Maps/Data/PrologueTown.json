@@ -1171,14 +1171,19 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
+	 "name":"Forest",
+	 "x":379,
 	 "y":0
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"My House",
+	 "x":257,
+	 "y":1246
+	},
+	{
+	 "name":"Inn",
+	 "x":1057,
+	 "y":1281
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
