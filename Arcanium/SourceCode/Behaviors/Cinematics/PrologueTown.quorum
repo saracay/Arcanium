@@ -102,8 +102,13 @@ class PrologueTown is Cinematic
     Array<text> dialogue2Text
     Array<text> dialogue3Text
     Array<text> dialogue4Text
+    
 
     MapTransitionBehavior transition1
+    InitiateCombatBehavior combat
+    Array<text> enemies
+
+    
 
     action Run()
         ActorSetup()
@@ -186,12 +191,15 @@ class PrologueTown is Cinematic
 
         //Dialogue
         dialogue1Text:Add("Boy: HELP!")
-        dialogue2Text:Add("You step out to a scene of total chaos. Goblins have invaded in the town. From nearby, you hear the cries of a young boy.")
+        dialogue2Text:Add("You step out to a scene of total chaos. Goblins have invaded the town. Nearby, you hear the cries of a young boy.")
         dialogue3Text:Add("GOBLIN: Look what we got here. Fresh meat!")
         dialogue3Text:Add("HERO: Get behind me, kid.")
-        dialogue4Text:Add("GOBLIN: You'll be fresh meat too by the time we're done with you!")
+        dialogue4Text:Add("GOBLIN: You won't be looking so good by the time we're done with you!")
 
+        enemies:Add("Goblin")
+        enemies:Add("Goblin")
 
+        main:Remove(main:GetMap():aboveLayer)
         main:LoadAboveLayer(main:GetMap(), maps:PROLOGUE_TOWN_MAP)
     end
 
@@ -295,9 +303,11 @@ class PrologueTown is Cinematic
         dialogue4:      SetCamera(main:GetCamera2D())
         dialogue4:      SetLog(dialogue4Text)
 
-        transition1:        SetTransition(tempMap, maps:FOREST_CLEARING_MAP)
-        transition1:        SetCinematic(forestClearing)
+        transition1:    SetTransition(tempMap, maps:FOREST_CLEARING_MAP)
+        transition1:    SetCinematic(forestClearing)
 
+        combat:SetEnemyList(enemies)
+             
     end
 
     action EnqueueBehaviors()

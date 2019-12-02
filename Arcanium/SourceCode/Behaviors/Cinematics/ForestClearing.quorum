@@ -40,6 +40,7 @@ class ForestClearing is Cinematic
     MoveNPCBehavior     moveNPC2
     MoveNPCBehavior     moveNPC3
     MoveNPCBehavior     moveNPC4
+    MoveNPCBehavior     moveNPC5
     MoveNPCBehavior     moveBoy1
     MoveNPCBehavior     moveBoy2
     MoveNPCBehavior     moveBoy3
@@ -76,14 +77,13 @@ class ForestClearing is Cinematic
         boy:sprite1:SetPosition(-40, 355)
         main:Add(boy:sprite1)
 
-
-
         //Camera
         main:GetCamera2D():SetPosition(400,360,0)
 
         //Dialogue
-        dialogueText1:Add("You wake up in a daze to the sound of cicadas, beneath a thick canopy of leaves. As you sit up, a searing headache overcomes you.")
-        dialogueText2:Add("Wait! It’s alright I won’t hurt you.") 
+        dialogueText1:Add("You wake up in a daze to the sound of cicadas, beneath a thick canopy of leaves. A piercing headache overcomes you.")
+        dialogueText1:Add("Suddenly, you hear rustling... Someone is approaching.")
+        dialogueText2:Add("Wait! Its alright I wont hurt you.") 
         dialogueText3:Add("You were the kid from earlier right?")
         dialogueText3:Add("The kid shyly nods")
 
@@ -107,6 +107,11 @@ class ForestClearing is Cinematic
         dialogue1:      SetCamera(main:GetCamera2D())
         dialogue1:      SetLog(dialogueText1)
 
+        dialogue2:      SetRemovalArray(main:GetRemovalArray())
+        dialogue2:      SetGame(main)
+        dialogue2:      SetCamera(main:GetCamera2D())
+        dialogue2:      SetLog(dialogueText2)
+
         moveNPC1:       SetAnimation(player, playerImgSheet)
         moveNPC1:       SetMoveDirection(0,-60, 1)
 
@@ -118,6 +123,9 @@ class ForestClearing is Cinematic
 
         moveNPC4:       SetAnimation(player, playerImgSheet)
         moveNPC4:       SetMoveDirection(0, 20, 0.3)
+
+        moveNPC5:       SetAnimation(player, playerImgSheet)
+        moveNPC5:       SetNPCCollidable(true)
 
         moveBoy1:       SetAnimation(boy, boyImgSheet)
         moveBoy1:       SetMoveDirection(70, 0, 2)
@@ -136,10 +144,10 @@ class ForestClearing is Cinematic
     
     action EnqueueBehaviors()
         cineSequencer:AddCineEvent(colorFade1, true)
-        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(dialogue1, true)
         cineSequencer:AddCineEvent(moveNPC1, true)
         cineSequencer:AddCineEvent(moveNPC2, true)
+        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(wait1, true)
         cineSequencer:AddCineEvent(moveNPC3, true)
         cineSequencer:AddCineEvent(wait2, true)
@@ -148,7 +156,7 @@ class ForestClearing is Cinematic
         cineSequencer:AddCineEvent(moveBoy2, true)
         cineSequencer:AddCineEvent(moveBoy3, false)
         cineSequencer:AddCineEvent(dialogue2, true)
-
+        cineSequencer:AddCineEvent(moveNPC5, true)
 
     end
         

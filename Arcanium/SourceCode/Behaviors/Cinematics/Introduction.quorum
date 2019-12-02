@@ -93,10 +93,10 @@ class Introduction is Cinematic
         dialogue2:          SetCamera(main:GetCamera2D())
         moveTest1:          SetAnimation(player, playerImgSheet)
         moveTest1:          SetMoveDirection(0,-15,3.5)
+        moveTest1:          SetNPCCollidable(false)
         moveTest2:          SetAnimation(player, playerImgSheet)
-        moveTest2:          SetMoveDirection(0,45,6)
-        moveTest3:          SetAnimation(player, playerImgSheet)
-        moveTest3:          SetMoveDirection(0,-45,6)
+        moveTest2:          SetNPCCollidable(true)
+
 
         colorFade1:         SetFade(0,0,0,0.25,4)
         colorFade1:         SetDrawable(rectangle1)
@@ -111,6 +111,7 @@ class Introduction is Cinematic
         cineSequencer:AddCineEvent(moveTest1, false)
         cineSequencer:AddCineEvent(colorFade1, true)
         cineSequencer:AddCineEvent(dialogue2, true)
+        cineSequencer:AddCineEvent(moveTest2, true)
 
     end
 end
