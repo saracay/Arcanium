@@ -509,11 +509,6 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"Forest Path 3",
-	 "x":789,
-	 "y":468
-	},
-	{
 	 "name":"Forest Path 1",
 	 "x":245,
 	 "y":0

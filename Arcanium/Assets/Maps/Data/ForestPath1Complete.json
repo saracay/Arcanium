@@ -428,29 +428,8 @@
                  "width":32,
                  "x":128,
                  "y":418
-                }, 
-                {
-                 "height":289,
-                 "id":49,
-                 "name":"Interactable River 2",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":128,
-                 "x":468,
-                 "y":-3
-                }, 
-                {
-                 "height":194,
-                 "id":59,
-                 "name":"Interactable River 1",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":127,
-                 "x":467,
-                 "y":318
-                }],
+                }
+               ],
          "opacity":1,
          "type":"objectgroup",
          "visible":false,
@@ -493,6 +472,17 @@
  "nextlayerid":11,
  "nextobjectid":60,
  "orientation":"orthogonal",
+ "pointsofinterest":[
+	{
+	 "name":"Forest Path 2",
+	 "x":244,
+	 "y":582
+	},
+       {
+       "name":"Campfire",
+       "x":158,
+       "y":196
+       }],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
  "tileheight":32,

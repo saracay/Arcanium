@@ -484,16 +484,6 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"Forest Path 2",
-	 "x":244,
-	 "y":582
-	},
-	{
-	 "name":"Campfire",
-	 "x":158,
-	 "y":196
-	},
-	{
 	 "name":"River",
 	 "x":605,
 	 "y":319

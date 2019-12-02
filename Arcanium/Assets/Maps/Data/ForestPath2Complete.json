@@ -496,6 +496,22 @@
  "nextlayerid":12,
  "nextobjectid":50,
  "orientation":"orthogonal",
+ "pointsofinterest":[
+	{
+	 "name":"Forest Path 3",
+	 "x":789,
+	 "y":468
+	},
+	{
+	 "name":"Forest Path 1",
+	 "x":245,
+	 "y":0
+	},
+	{
+	 "name":"Goblin Camp",
+	 "x":245,
+	 "y":60
+	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
  "tileheight":32,
