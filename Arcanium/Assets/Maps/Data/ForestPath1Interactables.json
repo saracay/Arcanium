@@ -5,7 +5,7 @@
             "type": "dialogue",
             "dialogue": [
                "There seems to be no way to cross the river.",
-               "Use Rock Blast to create a path across?"
+               "You use Rock Blast to create a path across."
             ]
         },
         {
@@ -14,14 +14,6 @@
             "dialogue": [
                 "Tiny pebbles and fish lay at the bottom of the river.",
                 "It is too deep for you to wade across."
-            ]
-        },
-        {
-            "name": "Interactable Campfire",
-            "type": "dialogue",
-            "dialogue": [
-                "The embers in the campfire glow softly.",
-                "The campfire seems to have been in use recently."
             ]
         }
     ]
