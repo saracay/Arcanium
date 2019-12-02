@@ -38,7 +38,7 @@ class Animation
     end
 
     action ChangeFrame(text frameImg)
-        if frame > 3
+        if frame > 8
             frame = 1
         end
         sprite1:Load(sheet:GetDrawable(frameImg + " frame " + frame)) 
