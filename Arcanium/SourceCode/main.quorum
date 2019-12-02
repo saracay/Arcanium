@@ -26,6 +26,7 @@ use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.ImageSheet
 use Libraries.Game.Graphics.Camera
 use Libraries.Interface.Layouts.ManualLayout
+use Libraries.Compute.Random
 
 class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
@@ -151,10 +152,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
-        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
-        InitializePlayer(player1)
-        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializePlayer(player1)
+//        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
         
 
         //==TEST CALLS==
@@ -171,7 +172,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAudioTest()
         //TitleScreenTest()
         //CineSequencerTest()
-        //DebugMenuTest()
+        DebugMenuTest() 
         //InitializeWhiteRoom()
         //KeyBindTest()
 //        PrologueTown town
@@ -335,21 +336,138 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if monitor:IsKeyPressed(keys:W)
             newY = newY + plyrSpeed * seconds
             direction = "up"
-            Array<text> enemies
-            enemies:Add("Goblin")
-            CombatTest(enemies)
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
             direction = "down"
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
         if monitor:IsKeyPressed(keys:D)
             newX = newX + plyrSpeed * seconds
             direction = "right"
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
         if monitor:IsKeyPressed(keys:A)
             newX = newX - plyrSpeed * seconds
             direction = "left"
+
+            if currentMap:name:Contains("ForestPath")   // random encounters
+                Random random
+                integer randomInt = random:RandomInteger(999)
+
+                if randomInt <= 1
+                    integer whichEncounter = random:RandomInteger(4)
+
+                    Array<text> enemies
+                    if whichEncounter = 0
+                        enemies:Add("Goblin")
+                        enemies:Add("Goblin Shaman")
+                        enemies:Add("Goblin")
+                    elseif whichEncounter = 1
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                        enemies:Add("Wolf")
+                    elseif whichEncounter = 2
+                        enemies:Add("Slime")
+                        enemies:Add("Slime")
+                    elseif whichEncounter = 3
+                        enemies:Add("Goblin")
+                        enemies:Add("Wolf")
+                    else    //whichEncounter = 5
+                        enemies:Add("Orc")
+                    end
+
+                    CombatTest(enemies)
+                end
+            end
         end
 
         // Checks if PLAYER is out of bounds
