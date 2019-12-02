@@ -80,11 +80,12 @@ class MapTransitionBehavior is Behavior
             main:LoadAboveLayer(nextMap, mapName)
             main:SetMap(nextMap)
 
-            if mapName not= maps:PROLOGUE_TOWN_MAP
+            if mapName not= maps:PROLOGUE_TOWN_MAP or mapName:Contains("ForestPath") = false
                 main:StopAllAudio()
             end
 
             if not (musicName = "")
+                main:audioManager:AddAudio(musicName, "ogg", "music")
                 main:PlayAudio(musicName)
             end
 

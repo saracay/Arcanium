@@ -99,9 +99,9 @@ class GameAudioManager
             repeat audioList:GetSize() times
                 if audioList:Get(i):GetName() = name
                     if audioList:Get(i):GetType() = "effect"
-                        audioList:Get(i):PlayAudio(systemEffectVolume)
+                        audioList:Get(i):PlayAudio(systemEffectVolume, false)
                     else
-                        audioList:Get(i):PlayAudio(systemMusicVolume)
+                        audioList:Get(i):PlayAudio(systemMusicVolume, true)
                     end
                 end
                 i = i + 1

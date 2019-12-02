@@ -26,8 +26,11 @@ class GameSound is Audio
         Load(file)
     end
 
-    action PlayAudio(number systemVolume)
+    action PlayAudio(number systemVolume, boolean enableLooping)
         SetVolume(GetMinVolume() * systemVolume)
+        if enableLooping = true
+            EnableLooping()
+        end
         Play()
     end
 
