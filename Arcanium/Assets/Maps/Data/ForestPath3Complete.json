@@ -836,12 +836,12 @@
 	},
 	{
 	 "name":"Shield",
-	 "x":422,
+	 "x":432,
 	 "y":289
 	},
 	{
 	 "name":"Axe",
-	 "x":451,
+	 "x":461,
 	 "y":323
 	}],
  "renderorder":"right-down",

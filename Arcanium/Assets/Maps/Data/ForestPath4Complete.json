@@ -440,7 +440,7 @@
  "pointsofinterest":[
 	{
 	 "name":"Town",
-	 "x":759,
+	 "x":769,
 	 "y":53
 	},
 	{
@@ -455,7 +455,7 @@
 	},
 	{
 	 "name":"Fallen Goblin 2",
-	 "x":672,
+	 "x":682,
 	 "y":114
 	}],
  "renderorder":"right-down",
