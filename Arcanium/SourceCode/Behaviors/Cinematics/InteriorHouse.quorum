@@ -23,7 +23,7 @@ class InteriorHouse is Cinematic
     //Dialogue
     Array<text> dialogueText1
     Array<text> dialogueText2
-    Array<text> dialogueText3
+//    Array<text> dialogueText3
 
     //Cinematic Behaviors
     PanCameraBehavior   cameraPan1
@@ -90,10 +90,10 @@ class InteriorHouse is Cinematic
         dialogue2:      SetCamera(main:GetCamera2D())
         dialogue2:      SetLog(dialogueText2)
 
-        dialogue3:      SetRemovalArray(main:GetRemovalArray())
-        dialogue3:      SetGame(main)
-        dialogue3:      SetCamera(main:GetCamera2D())
-        dialogue3:      SetLog(dialogueText3)
+//        dialogue3:      SetRemovalArray(main:GetRemovalArray())
+//        dialogue3:      SetGame(main)
+//        dialogue3:      SetCamera(main:GetCamera2D())
+//        dialogue3:      SetLog(dialogueText3)
 
         moveNPC1:       SetAnimation(player, playerImgSheet)
         moveNPC1:       SetMoveDirection(110,0, 0.4)

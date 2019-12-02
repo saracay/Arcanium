@@ -50,13 +50,6 @@
       ]
     },
     {
-      "name": "Interactable Bed 2",
-      "type": "dialogue",
-      "dialogue": [
-        "You consider taking a nap, but you avoid the temptation."
-      ]
-    },
-    {
       "name": "Interactable Clock",
       "type": "dialogue",
       "dialogue": [
