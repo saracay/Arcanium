@@ -11,7 +11,8 @@ class ForestClearing is Cinematic
     GameStateManager manager 
     Main main
     CinematicSequencer cineSequencer
-
+    MapList maps
+    
     //Actors
     Animation player
     text playerImgSheet = "Hero"
@@ -31,13 +32,25 @@ class ForestClearing is Cinematic
 
     PanCameraBehavior   cameraPan1
     ColorFadeBehavior   colorFade1
+    RemoveObjectBehavior remove1
     DisplayLogBehavior  dialogue1
     DisplayLogBehavior  dialogue2
     DisplayLogBehavior  dialogue3
     MoveNPCBehavior     moveNPC1
     MoveNPCBehavior     moveNPC2
     MoveNPCBehavior     moveNPC3
+    MoveNPCBehavior     moveNPC4
+    MoveNPCBehavior     moveBoy1
+    MoveNPCBehavior     moveBoy2
+    MoveNPCBehavior     moveBoy3
+    MoveNPCBehavior     moveBoy4
+    MoveNPCBehavior     moveBoy5
+
     WaitForBehavior     wait1
+    WaitForBehavior     wait2
+    WaitForBehavior     wait3
+    WaitForBehavior     wait4
+
     PlaySoundBehavior   sound1
 
     action Run()
@@ -60,21 +73,29 @@ class ForestClearing is Cinematic
         //Boy
         boy:LoadImageSheet(boyImgSheet)
         boy:LoadFrame(boyImgSheet)
-        boy:sprite1:SetPosition(-40, 330)
+        boy:sprite1:SetPosition(-40, 355)
         main:Add(boy:sprite1)
 
-        //PostProcessing
-        rectangle1:SetColor(0,0,0,1)    
-        rectangle1:LoadFilledRectangle(800,800)
-        main:Add(rectangle1)
+
 
         //Camera
         main:GetCamera2D():SetPosition(400,360,0)
 
         //Dialogue
         dialogueText1:Add("You wake up in a daze to the sound of cicadas, beneath a thick canopy of leaves. As you sit up, a searing headache overcomes you.")
-        dialogueText2:Add("Then you hear a rustle from near")
-        
+        dialogueText2:Add("Wait! It’s alright I won’t hurt you.") 
+        dialogueText3:Add("You were the kid from earlier right?")
+        dialogueText3:Add("The kid shyly nods")
+
+        main:LoadAboveLayer(main:GetMap(), maps:FOREST_CLEARING_MAP)
+
+        //PostProcessing
+        rectangle1:SetColor(0,0,0,1)    
+        rectangle1:LoadFilledRectangle(800,800)
+        main:Add(rectangle1)
+
+        remove1:SetDrawable(rectangle1)
+
     end
 
     action BehaviorSetup()
@@ -95,16 +116,39 @@ class ForestClearing is Cinematic
         moveNPC3:       SetAnimation(player, playerImgSheet)
         moveNPC3:       SetMoveDirection(-80,0, 1)
 
+        moveNPC4:       SetAnimation(player, playerImgSheet)
+        moveNPC4:       SetMoveDirection(0, 20, 0.3)
+
+        moveBoy1:       SetAnimation(boy, boyImgSheet)
+        moveBoy1:       SetMoveDirection(70, 0, 2)
+
+        moveBoy2:       SetAnimation(boy, boyImgSheet)
+        moveBoy2:       SetMoveDirection(0, -50, 0.5)
+
+        moveBoy3:       SetAnimation(boy, boyImgSheet)
+        moveBoy3:       SetMoveDirection(70, 0, 1.2)
+
         wait1:          SetWaitDuration(0.5)
+        wait2:          SetWaitDuration(0.5)
+        wait3:          SetWaitDuration(1)
+
     end
     
     action EnqueueBehaviors()
         cineSequencer:AddCineEvent(colorFade1, true)
+        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(dialogue1, true)
         cineSequencer:AddCineEvent(moveNPC1, true)
         cineSequencer:AddCineEvent(moveNPC2, true)
         cineSequencer:AddCineEvent(wait1, true)
         cineSequencer:AddCineEvent(moveNPC3, true)
+        cineSequencer:AddCineEvent(wait2, true)
+        cineSequencer:AddCineEvent(moveBoy1, true)
+        cineSequencer:AddCineEvent(wait3, true)
+        cineSequencer:AddCineEvent(moveBoy2, true)
+        cineSequencer:AddCineEvent(moveBoy3, false)
+        cineSequencer:AddCineEvent(dialogue2, true)
+
 
     end
         
