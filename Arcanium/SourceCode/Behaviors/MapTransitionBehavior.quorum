@@ -32,7 +32,9 @@ class MapTransitionBehavior is Behavior
     action Run(BehaviorEvent event)
         output "YO"
         if mapName = maps:PROLOGUE_TOWN_MAP
-            // here is where you play the cutscene
+            output "playing prologue town cutscene"
+            PrologueTown prologueTown
+            prologueTown:Run()
         end
 
         if mapName not= "Not Ready Yet"
