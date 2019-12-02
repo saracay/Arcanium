@@ -30,14 +30,13 @@ class MapTransitionBehavior is Behavior
     boolean isFinished = false
 
     action Run(BehaviorEvent event)
+        // Get the MAIN for level loading
+        Main main = cast(Main, manager:GetGame())
         output "YO"
 
         if mapName not= "Not Ready Yet"
             // Debugging output
             output "Transition to " + mapName
-
-                // Get the MAIN for level loading
-            Main main = cast(Main, manager:GetGame())
 
             // here will be the logic that will control for every map if it can be loaded
             // this mainly matters for maps where there are no physical collision obstacles from the map transition collider
@@ -81,7 +80,10 @@ class MapTransitionBehavior is Behavior
             main:LoadAboveLayer(nextMap, mapName)
             main:SetMap(nextMap)
 
-            main:StopAllAudio()
+            if mapName not= maps:PROLOGUE_TOWN_MAP
+                main:StopAllAudio()
+            end
+
             if not (musicName = "")
                 main:PlayAudio(musicName)
             end
@@ -93,6 +95,11 @@ class MapTransitionBehavior is Behavior
             isFinished = true
         else
             output "This transition is unavailable."
+        end
+
+        if mapName = maps:INTERIOR_HOUSE_MAP
+            main:audioManager:AddAudio("4371-skye-cuillin-by-kevin-macleod", "wav", "music")
+            main:audioManager:PlayAudio("4371-skye-cuillin-by-kevin-macleod")
         end
 
         if mapName = maps:PROLOGUE_TOWN_MAP

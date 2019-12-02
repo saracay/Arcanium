@@ -116,7 +116,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     boolean doneCreating = false
 
     //For audio
-    GameAudioManager audioManager
+    public GameAudioManager audioManager
 
     //For Cutscenes
     CinematicSequencer cineSequencer
@@ -1356,6 +1356,8 @@ action BeginGameSequence
     InitializeMap(currentMap, maps:INTRODUCTION_MAP)
     InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
     InitializePlayer(player1)
+    audioManager:AddAudio("Virtutes Vocis", "wav", "music")
+    audioManager:PlayAudio("Virtutes Vocis")
 
     Introduction intro
     intro:Run()
