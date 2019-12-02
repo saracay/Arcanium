@@ -27,7 +27,7 @@ class ColorFadeBehavior is Behavior
         Color d
         
         currTime = 0
-        output "WaitForBehavior"
+        output "ColorFadeBehavior"
         currRed = drawable:GetColor():GetRed()
         currGreen = drawable:GetColor():GetGreen()
         currBlue = drawable:GetColor():GetBlue()
@@ -35,14 +35,6 @@ class ColorFadeBehavior is Behavior
     end
 
     action Update(number seconds)
-
-
-        //  currRed/Red = .5 - > 1 in 5 seconds
-        //  1/5 * 
-        //  Red - currRed = .5
-        // currTime/maxTime = % of the way there we are
-
-        
 
         if(currTime <= maxTime)
           currTime = currTime + seconds
