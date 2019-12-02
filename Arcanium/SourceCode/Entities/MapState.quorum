@@ -19,9 +19,23 @@ class MapState
     Drawable rectangle1
     Color color
 
-
     // introduction map
-    number jewelsTouched = 0
+    number jewelsTouched = 0 
+
+    // forest path 1 map
+    boolean riverCrossed = false
+
+    // forest path 2 map
+    boolean treeBurned = false
+
+    // forest path 3 map
+    boolean firePutOut = false
+
+    // forest path 4 map
+    boolean logPile1Moved = false
+
+    // forest path 4 half complete map
+    boolean logPile2Moved = false
 
     on create
         SetupCinematicEffects()
@@ -36,6 +50,21 @@ class MapState
             Introduction2 introduction2
             introduction2:Run()
         end
+
+        if mapName = maps:FOREST_PATH_1_MAP 
+        end
+
+        if mapName = maps:FOREST_PATH_2_MAP
+        end
+
+        if mapName = maps:FOREST_PATH_3_MAP
+        end
+
+        if mapName = maps:FOREST_PATH_4_MAP
+        end
+
+        if mapName = maps:FOREST_PATH_4_MAP_HALF_COMPLETE
+        end
     end
 
     action SetupCinematicEffects
@@ -47,4 +76,25 @@ class MapState
         jewelsTouched = jewelsTouched + 1
         output "jewels touched: " + jewelsTouched
     end
+
+    action SetRiverCrossed(boolean riverCrossed)
+        me:riverCrossed = riverCrossed
+    end
+
+    action SetTreeBurned(boolean treeBurned)
+        me:treeBurned = treeBurned
+    end
+
+    action SetFirePutOut(boolean firePutOut)
+        me:firePutOut = firePutOut
+    end
+
+    action SetLogPile1Moved(boolean logPile1Moved)
+        me:logPile1Moved = logPile1Moved
+    end
+
+    action SetLogPile2Moved(boolean logPile2Moved)
+        me:logPile2Moved = logPile2Moved
+    end
+
 end
