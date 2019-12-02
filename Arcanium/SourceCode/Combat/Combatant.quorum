@@ -4,6 +4,7 @@ use Libraries.Compute.Random
 use Libraries.Game.Game
 use Libraries.Interface.Item2D
 use Libraries.Game.Graphics.Camera
+use Libraries.Game.GameStateManager
 
 class Combatant
 
@@ -21,6 +22,8 @@ class Combatant
     Battle battle
     Array<Item2D> removalArray
     BehaviorQueue behaviorQueue
+
+    GameStateManager manager
 
     /*When initialized the currentElementsEffectiveness array is given 
     6 undefined values, it also cannot grow larger or smaller*/
@@ -73,7 +76,7 @@ class Combatant
             updateMessage:SetGame(game)
             updateMessage:SetLog(log)
             updateMessage:SetRemovalArray(removalArray)
-            updateMessage:SetCamera(camera)
+            updateMessage:SetCamera(manager:GetGame():GetCamera2D())
             behaviorQueue:AddBehavior(updateMessage)
             
             // deal damage behavior
@@ -98,7 +101,7 @@ class Combatant
             updateMessage2:SetGame(game)
             updateMessage2:SetLog(log2)
             updateMessage2:SetRemovalArray(removalArray)
-            updateMessage2:SetCamera(camera)
+            updateMessage2:SetCamera(manager:GetGame():GetCamera2D())
             behaviorQueue:AddBehavior(updateMessage2)
 
             //Leeching attack
@@ -126,7 +129,7 @@ class Combatant
                 updateMessage3:SetGame(game)
                 updateMessage3:SetLog(log3)
                 updateMessage3:SetRemovalArray(removalArray)
-                updateMessage3:SetCamera(camera)
+                updateMessage3:SetCamera(manager:GetGame():GetCamera2D())
                 behaviorQueue:AddBehavior(updateMessage3)
             end
         end
@@ -140,7 +143,7 @@ class Combatant
             updateMessage4:SetGame(game)
             updateMessage4:SetLog(statusResults)
             updateMessage4:SetRemovalArray(removalArray)
-            updateMessage4:SetCamera(camera)
+            updateMessage4:SetCamera(manager:GetGame():GetCamera2D())
             behaviorQueue:AddBehavior(updateMessage4)
         end
     end
@@ -170,7 +173,7 @@ class Combatant
         updateMessage:SetGame(game)
         updateMessage:SetLog(log)
         updateMessage:SetRemovalArray(removalArray)
-        updateMessage:SetCamera(camera)
+        updateMessage:SetCamera(manager:GetGame():GetCamera2D())
         behaviorQueue:AddBehavior(updateMessage)
 
         // heal behavior
@@ -190,7 +193,7 @@ class Combatant
         updateMessage2:SetGame(game)
         updateMessage2:SetLog(log2)
         updateMessage2:SetRemovalArray(removalArray)
-        updateMessage2:SetCamera(camera)
+        updateMessage2:SetCamera(manager:GetGame():GetCamera2D())
         behaviorQueue:AddBehavior(updateMessage2)
     end
 
@@ -361,7 +364,7 @@ class Combatant
                     updateMessage:SetGame(game)
                     updateMessage:SetLog(log)
                     updateMessage:SetRemovalArray(removalArray)
-                    updateMessage:SetCamera(camera)
+                    updateMessage:SetCamera(manager:GetGame():GetCamera2D())
                     behaviorQueue:AddBehavior(updateMessage)
                 else
                     integer damageReceived = 0
@@ -389,7 +392,7 @@ class Combatant
                     updateMessage:SetGame(game)
                     updateMessage:SetLog(log)
                     updateMessage:SetRemovalArray(removalArray)
-                    updateMessage:SetCamera(camera)
+                    updateMessage:SetCamera(manager:GetGame():GetCamera2D())
                     behaviorQueue:AddBehavior(updateMessage)
                 end
             end
