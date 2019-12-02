@@ -473,11 +473,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
                     if currentMap:name = maps:INTRODUCTION_MAP
                         mapState:UpdateJewelsTouched()
                     end
-
-                    // interior house map
-                    if currentMap:name = maps:INTERIOR_HOUSE_MAP
-                        mapState:UpdateTomeTouched()
-                    end
                 end
             end
         end
