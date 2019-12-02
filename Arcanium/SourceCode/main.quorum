@@ -40,7 +40,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     public BehaviorQueue behaviorQueue
 
     //Queue for removing objects
-    Array<Item2D> removalArray
+    public Array<Item2D> removalArray
     public Button debugTest // for Title Screen
     public Drawable Arcanium // for Title Screen
 
@@ -116,7 +116,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     boolean doneCreating = false
 
     //For audio
-    GameAudioManager audioManager
+    public GameAudioManager audioManager
 
     //For Cutscenes
     CinematicSequencer cineSequencer
@@ -288,8 +288,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
             Add(currMap:interactables:Get(i))
             AddKeyboardListener(currMap:interactables:Get(i))
             currMap:interactables:Get(i):SetRequiredCompleted(currMap:completedInteractables:Get(i))
-            InteractableData data = currMap:interactableData:Get(i)
-            currMap:interactables:Get(i):CreateDialogueBehavior(data)
             i = i + 1
         end
         // ===== Ryan: Ending Changes =====
@@ -333,6 +331,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if monitor:IsKeyPressed(keys:W)
             newY = newY + plyrSpeed * seconds
             direction = "up"
+            Array<text> enemies
+            enemies:Add("Goblin")
+            CombatTest(enemies)
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
@@ -471,11 +472,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
                     // introduction map
                     if currentMap:name = maps:INTRODUCTION_MAP
                         mapState:UpdateJewelsTouched()
-                    end
-
-                    // interior house map
-                    if currentMap:name = maps:INTERIOR_HOUSE_MAP
-                        mapState:UpdateTomeTouched()
                     end
                 end
             end
@@ -708,8 +704,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
 
     action CombatTest(Array<text> enemies)
-        camera:SetPosition(400, 300, 0)
-		
+	
         Array<number> currentElementsEffectiveness
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(0.7)
@@ -724,7 +719,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         currentElementTokens:Add(4)
         currentElementTokens:Add(4)
         currentElementTokens:Add(4)
-        player1:SetStats("<Player>", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
+        player1:SetStats("Hero", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
         player1:SetGame(me)
         player1:SetRemovalArray(removalArray)
         player1:SetBehaviorQueue(behaviorQueue)
@@ -735,7 +730,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
         battle:SetRemovalArray(removalArray)
         battle:SetBehaviorQueue(behaviorQueue)  
         battle:SetCamera(camera)
-        battle:LoadLevel()
         battle:Initialize(player1, enemies)
         inCombat = true
 
@@ -1362,6 +1356,8 @@ action BeginGameSequence
     InitializeMap(currentMap, maps:INTRODUCTION_MAP)
     InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
     InitializePlayer(player1)
+    audioManager:AddAudio("Virtutes Vocis", "wav", "music")
+    audioManager:PlayAudio("Virtutes Vocis")
 
     Introduction intro
     intro:Run()

@@ -8,45 +8,45 @@ use Libraries.Game.Graphics.Color
 use Libraries.Game.Graphics.Label
 use Libraries.Interface.Controls.Button
 use Libraries.Game.Graphics.Camera
+use Libraries.Game.GameStateManager
 
 class DisplayLogBehavior is Behavior
     
+    GameStateManager manager
     Game game
     Array<Item2D> removalArray
     Array<text> log
     Array<Button> buttons
     Array<Label> labels
-    Drawable displayBox = undefined
+    Drawable displayBox
     Color color
     boolean finished = false
     Camera camera = undefined
     
     action Run(BehaviorEvent event)
-        Main main = cast(Main, game)
+        Main main = cast(Main, manager:GetGame())
         main:lockMovement = true
 
         if log:GetSize() = 0
             finished = true
         end
-
-        if displayBox = undefined
-            Drawable newBox
-            displayBox = newBox
-            displayBox:LoadFilledRectangle(800, 180, color:LightGray())
-            displayBox:SetPosition(camera:GetPosition():GetX()-camera:GetWidth()/2, camera:GetPosition():GetY()-camera:GetHeight()/2)
-            game:Add(displayBox)
-        end
         
+        displayBox:Load("Assets/Sprites/dialogue-box.png")
+        displayBox:Scale(3.53)
+        displayBox:SetPosition(camera:GetPosition():GetX()-camera:GetWidth()/2-110, camera:GetPosition():GetY()-camera:GetHeight()/2-30)
+        game:Add(displayBox)
+
         integer counter = 0
         
         repeat while counter < log:GetSize()
+            Color color
+
             Label label
             label:SetText(log:Get(counter))
-            label:SetFontSize(20)
             label:SetPosition(-1000, -1000)
-            label:SetHorizontalMargins(5)
-            label:SetFontSize(22)
-            label:SetMaximumWidth(camera:GetWidth())
+            label:SetHorizontalMargins(15)
+            label:SetFontSize(36)
+            label:SetMaximumWidth(camera:GetWidth() - 50)
             labels:Add(label)
             displayBox:Add(label)
 
@@ -72,7 +72,7 @@ class DisplayLogBehavior is Behavior
         end
 
         if labels:GetSize() > 0
-            labels:Get(0):SetPosition(10, displayBox:GetHeight() - 30)
+            labels:Get(0):SetPosition(135, 140)
         end
     end
     
@@ -85,9 +85,10 @@ class DisplayLogBehavior is Behavior
         repeat while counter < buttons:GetSize()
             removalArray:Add(buttons:Get(counter))
             removalArray:Add(labels:Get(counter))
-            removalArray:Add(displayBox)            
             counter = counter + 1
         end
+
+        removalArray:Add(displayBox)
     end
 
     action IsFinished returns boolean
@@ -104,10 +105,6 @@ class DisplayLogBehavior is Behavior
     
     action SetRemovalArray(Array<Item2D> array)
         removalArray = array
-    end
-
-    action SetDisplayBox(Drawable item)
-        displayBox = item
     end
 
     action SetCamera(Camera gameCamera)

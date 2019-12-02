@@ -1327,14 +1327,19 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
+	 "name":"Forest",
+	 "x":700,
 	 "y":0
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"My House",
+	 "x":257,
+	 "y":1206
+	},
+	{
+	 "name":"Fountain",
+	 "x":786,
+	 "y":437
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

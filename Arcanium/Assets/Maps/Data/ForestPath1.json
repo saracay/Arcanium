@@ -419,17 +419,6 @@
          "name":"Interactables",
          "objects":[
                 {
-                 "height":26,
-                 "id":7,
-                 "name":"Interactable Campfire",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":128,
-                 "y":418
-                }, 
-                {
                  "height":645,
                  "id":49,
                  "name":"Interactable River",
@@ -495,14 +484,9 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
-	 "y":0
-	},
-	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"River",
+	 "x":605,
+	 "y":319
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

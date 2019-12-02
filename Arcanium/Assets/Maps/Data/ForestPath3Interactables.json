@@ -1,26 +1,11 @@
 {
     "interactables": [
         {
-            "name": "Axe Interactable",
-            "type": "dialogue",
-            "dialogue": [
-               "The metal on the axe is nearly flawless aside from the few chips on the edges."
-            ]
-        },
-        {
-            "name": "Shield Interactable",
-            "type": "dialogue",
-            "dialogue": [
-                "Dents and scratches are scattered across the wooden shield.",
-                "The shield looks different from the ones crafted in the village."
-            ]
-        },
-        {
             "name": "Fire Interactable",
             "type": "dialogue",
             "dialogue": [
                 "The flames in front of you are hot enough to burn your skin even from a distance.",
-                "Use Waterbolt to put out the fire?"
+                "You use Waterbolt to put out the fire."
             ]
         }
     ]

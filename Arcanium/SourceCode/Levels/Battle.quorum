@@ -11,14 +11,15 @@ use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Game.InputMonitor
 use Libraries.Interface.Behaviors.Behavior
 use Libraries.Game.Graphics.Camera
+use Libraries.Game.GameStateManager
 
-class Battle is Level
+class Battle
     
+    Game game
     Camera camera = undefined
-    BehaviorQueue behaviorQueue = undefined
-    Array<Item2D> removalArray = undefined
+    BehaviorQueue behaviorQueue
+    Array<Item2D> removalArray
     Behavior previousBehavior
-    Array<Item2D> currentPage
     Array<Combatant> combatants
     Array<Label> statusInfo
     Array<Label> statusNames
@@ -26,14 +27,11 @@ class Battle is Level
     Array<Drawable> sprites
     Array<text> log
     Drawable background
-    Game game
+    Drawable dialogueBackground
     Color color
     Label playerMana
+    boolean created = false
     
-    on create
-        //background:Load("Assets\Maps\Battle.png")
-    end
-
     action SetGame(Game newGame)
         game = newGame
     end
@@ -48,41 +46,53 @@ class Battle is Level
 
     action Initialize(Player player, Array<text> enemyTeam)
 
-        player:SetBattle(me)
+        number cameraX = camera:GetPosition():GetX()-camera:GetWidth()/2
+        number cameraY = camera:GetPosition():GetY()-camera:GetHeight()/2
 
+        background:Load("Assets/Sprites/combat-background.png")
+        background:Scale(0.65)
+        background:SetPosition(cameraX-110, cameraY-30)
+        game:Add(background)
+
+//        Main main = cast(Main, game)
+//        main:SetCurrentAnim("air", "Air")
+
+        player:SetBattle(me)
         combatants:Add(player)
 
-        //placeholder for player sprite, just loads a square instead for now
-        Drawable playerSquare
-        playerSquare:LoadFilledRectangle(150, 150, color:Blue())
-        playerSquare:SetPosition(50, 200)
-        game:Add(playerSquare)
-        sprites:Add(playerSquare)
+        Drawable playerSprite
+        playerSprite:Load("Assets/Sprites/hero-battle.png")
+        playerSprite:Scale(2)
+        playerSprite:FlipX()
+        playerSprite:SetPosition(cameraX+50, cameraY+170)
+        game:Add(playerSprite)
+        sprites:Add(playerSprite)
 
         //displays player health and mana
         Drawable playerHealthBackground
-        playerHealthBackground:LoadFilledRectangle(140, 70, color:LightGray())
-        playerHealthBackground:SetPosition(225, 275)
+        playerHealthBackground:Load("Assets/Sprites/info-box.png")
+        playerHealthBackground:SetScale(5, 2.2)
+        playerHealthBackground:SetPosition(cameraX+170, cameraY+200)
         game:Add(playerHealthBackground)
         statusWindows:Add(playerHealthBackground)
 
         Label playerName
         playerName:SetText(player:GetName())
-        playerName:SetPosition(230, 325)
-        playerName:SetFontSize(16)
+        playerName:SetPosition(cameraX+230, cameraY+275)
+        playerName:SetFontSize(20)
         game:Add(playerName)
         statusNames:Add(playerName)
 
         Label playerHealth
         playerHealth:SetText("Health: " + player:GetCurrentHP() + "/" + player:GetMaxHP())
-        playerHealth:SetPosition(230, 305)
-        playerHealth:SetFontSize(16)
+        playerHealth:SetPosition(cameraX+230, cameraY+255)
+        playerHealth:SetFontSize(20)
         game:Add(playerHealth)
         statusInfo:Add(playerHealth)
 
         playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
-        playerMana:SetPosition(230, 285)
-        playerMana:SetFontSize(16)
+        playerMana:SetPosition(cameraX+230, cameraY+235)
+        playerMana:SetFontSize(20)
         game:Add(playerMana)
 
         integer counter = 0
@@ -106,32 +116,49 @@ class Battle is Level
         end
         
         integer combatantIndex = 1
-        Math math
 
         repeat while combatantIndex < combatants:GetSize()
             Drawable enemySprite
-            enemySprite:LoadFilledCircle(50, color:Red())
-            enemySprite:SetPosition(400 + 120 * (combatantIndex - 1), 400 + 50 * ((combatantIndex - 1) mod 2))
+            if combatants:Get(combatantIndex):GetName() = "Goblin" 
+                enemySprite:Load("Assets/Sprites/goblin-combat.png")
+                enemySprite:Scale(2)
+            elseif combatants:Get(combatantIndex):GetName() = "Goblin Shaman"
+                enemySprite:Load("Assets/Sprites/shaman-combat.png")
+                enemySprite:Scale(2)
+            elseif combatants:Get(combatantIndex):GetName() = "Wolf"
+                enemySprite:Load("Assets/Sprites/Wolf.png")
+                enemySprite:Scale(2)
+                enemySprite:FlipX()
+            elseif combatants:Get(combatantIndex):GetName() = "Slime"
+                enemySprite:Load("Assets/Sprites/slime.png")
+                enemySprite:Scale(2)
+            elseif combatants:Get(combatantIndex):GetName() = "Orc"
+                enemySprite:Load("Assets/Sprites/orc.png")
+                enemySprite:Scale(2)
+            end
+
+            enemySprite:SetPosition(cameraX + 400 + 120 * (combatantIndex - 1), cameraY + 350 + 50 * ((combatantIndex - 1) mod 2))
             game:Add(enemySprite)
             sprites:Add(enemySprite)
 
             Drawable enemyHealthBackground
-            enemyHealthBackground:LoadFilledRectangle(140, 40, color:LightGray())
-            enemyHealthBackground:SetPosition(225, 495 - 50 * (combatantIndex - 1))
+            enemyHealthBackground:Load("Assets/Sprites/info-box.png")
+            enemyHealthBackground:SetScale(5, 1.5)
+            enemyHealthBackground:SetPosition(cameraX + 120, cameraY + 495 - 70 * (combatantIndex - 1))
             game:Add(enemyHealthBackground)
             statusWindows:Add(enemyHealthBackground)
 
             Label enemyName
             enemyName:SetText(combatants:Get(combatantIndex):GetName())
-            enemyName:SetPosition(230, 520 - 50 * (combatantIndex - 1))
-            enemyName:SetFontSize(16)
+            enemyName:SetPosition(cameraX+180, cameraY + 540 - 70 * (combatantIndex - 1))
+            enemyName:SetFontSize(20)
             game:Add(enemyName)
             statusNames:Add(enemyName)
 
             Label enemyHealth
             enemyHealth:SetText("Health: " + combatants:Get(combatantIndex):GetCurrentHP() + "/" + combatants:Get(combatantIndex):GetMaxHP())
-            enemyHealth:SetPosition(230, 500 - 50 * (combatantIndex - 1))
-            enemyHealth:SetFontSize(16)
+            enemyHealth:SetPosition(cameraX + 180, cameraY + 520 - 70 * (combatantIndex - 1))
+            enemyHealth:SetFontSize(20)
             game:Add(enemyHealth)
             statusInfo:Add(enemyHealth)
 
@@ -143,7 +170,11 @@ class Battle is Level
         text enemiesLog = "An enemy "
         repeat while counter < combatants:GetSize()
             if counter = combatants:GetSize() - 1
-                enemiesLog = enemiesLog + "and " + combatants:Get(counter):GetName() + " attacked!"
+                if counter not= 0
+                    enemiesLog = enemiesLog + "and " + combatants:Get(counter):GetName() + " attacked!"
+                else
+                    enemiesLog = enemiesLog + combatants:Get(counter):GetName() + " attacked!"
+                end
             else
                 enemiesLog = enemiesLog + combatants:Get(counter):GetName() + ", "
             end
@@ -152,8 +183,9 @@ class Battle is Level
         end
         log:Add(enemiesLog)
 
-        Drawable dialogueBackground
-        dialogueBackground:LoadFilledRectangle(800, 180, color:LightGray())
+        dialogueBackground:Load("Assets/Sprites/dialogue-box.png")
+        dialogueBackground:SetPosition(cameraX-110, cameraY-30)
+        dialogueBackground:Scale(3.53)
         game:Add(dialogueBackground)
 
         DisplayLogBehavior logBehavior
@@ -174,6 +206,7 @@ class Battle is Level
         behavior:SetCombatants(combatants)
         behavior:SetPlayerMana(playerMana)
         behavior:SetStatusInfo(statusInfo)
+        behavior:SetStatusNames(statusNames)
         behavior:SetStatusWindows(statusWindows)
         behavior:SetSprites(sprites)
         behaviorQueue:AddBehavior(behavior)
@@ -209,6 +242,59 @@ class Battle is Level
         behaviorQueue:AddBehavior(behavior)
     end
 
+    action EndCombat
+        GameStateManager manager
+        Main main = cast(Main, manager:GetGame())
+        main:behaviorQueue:StopBehaviors()
+
+        Array<text> endLog
+        endLog:Add("You defeated all enemies! The battle is won!")
+
+        DisplayLogBehavior logBehavior
+        logBehavior:SetGame(game)
+        logBehavior:SetLog(endLog)
+        logBehavior:SetRemovalArray(removalArray)
+        logBehavior:SetCamera(camera)
+        main:behaviorQueue:AddBehavior(logBehavior)
+
+        integer counter = 0
+        repeat while counter < statusInfo:GetSize()
+            if statusInfo:Get(counter) not= undefined
+                main:Remove(statusInfo:Get(counter))
+            end
+
+            counter = counter + 1
+        end
+        counter = 0
+        repeat while counter < statusNames:GetSize()
+            if statusNames:Get(counter) not= undefined
+                main:Remove(statusNames:Get(counter))
+            end
+
+            counter = counter + 1
+        end
+        counter = 0
+        repeat while counter < statusWindows:GetSize()
+            if statusWindows:Get(counter) not= undefined
+                main:Remove(statusWindows:Get(counter))
+            end
+
+            counter = counter + 1
+        end
+        counter = 0
+        repeat while counter < sprites:GetSize()
+            if sprites:Get(counter) not= undefined
+                main:Remove(sprites:Get(counter))
+            end
+
+            counter = counter + 1
+        end
+        main:Remove(background)
+        main:Remove(dialogueBackground)
+
+        main:inCombat = false
+    end
+
     action GetCombatants returns Array<Combatant>
         return combatants
     end
@@ -225,20 +311,12 @@ class Battle is Level
         behaviorQueue = queue
     end
 
-    action SetCurrentPage(Array<Item2D> array)
-        currentPage = array
-    end
-
     action SetPreviousBehavior(Behavior behavior)
         previousBehavior = behavior
     end
 
     action GetPreviousBehavior returns Behavior
         return previousBehavior
-    end
-
-    action GetCurrentPage returns Array<Item2D>
-        return currentPage
     end
 
 end

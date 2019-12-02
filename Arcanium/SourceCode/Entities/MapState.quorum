@@ -11,8 +11,6 @@ use Libraries.Game.GameStateManager
 
 class MapState
     MapList maps
-//    GameStateManager manager 
-//    Main main
 
     // cinematic effects
     CinematicSequencer cineSequencer
@@ -48,10 +46,5 @@ class MapState
     action UpdateJewelsTouched
         jewelsTouched = jewelsTouched + 1
         output "jewels touched: " + jewelsTouched
-    end
-
-    action UpdateTomeTouched
-        tomeTouched = true
-        output "tome touched: " + tomeTouched
     end
 end

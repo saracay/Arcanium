@@ -16,7 +16,7 @@ class PlaySoundBehavior is Behavior
     
 
     action Run (BehaviorEvent event)
-        sound:PlayAudio(volume)
+        sound:PlayAudio(volume, false)
         finished = true
     end
 

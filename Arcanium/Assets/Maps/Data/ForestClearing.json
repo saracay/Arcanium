@@ -329,14 +329,9 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
+	 "name":"Forest Path 1",
 	 "x":0,
-	 "y":0
-	},
-	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "y":311
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

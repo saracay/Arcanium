@@ -60,6 +60,8 @@ class Interactable is Drawable, KeyboardListener
     public Behavior currentBehavior                // Behavior to trigger
     text typeOfBehavior = ""                // Behavior type ID
 
+    MapList maps
+
     // Initializer of an INTERACTABLE Object
     action CreateInteractable(text setName, text spritePath, integer width, integer height, number setX, number setY, boolean physicsOn)
         name = setName                      // Sets the name of the Interactable
@@ -180,6 +182,9 @@ class Interactable is Drawable, KeyboardListener
         MapTransitionBehavior temp
         temp:SetTransition(oldMap, newMapName)
         temp:SetCoordinates(newX, newY)
+        if (newMapName = maps:FOREST_CLEARING_MAP)
+            musicName = "zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785"
+        end
         temp:SetMusic(musicName)
         SetInteractableBehavior(temp, "transition")
     end

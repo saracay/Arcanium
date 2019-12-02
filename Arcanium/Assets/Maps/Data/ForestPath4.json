@@ -55,17 +55,6 @@
          "name":"Interactables",
          "objects":[
                 {
-                 "height":65,
-                 "id":1,
-                 "name":"Interactable Log Pile 2",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":34,
-                 "x":352,
-                 "y":192
-                }, 
-                {
                  "height":62,
                  "id":2,
                  "name":"Interactable Log Pile 1",
@@ -75,28 +64,6 @@
                  "width":32,
                  "x":290,
                  "y":482
-                }, 
-                {
-                 "height":42,
-                 "id":24,
-                 "name":"Dead Goblin 2 Interactable",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":37,
-                 "x":275,
-                 "y":179
-                }, 
-                {
-                 "height":44,
-                 "id":25,
-                 "name":"Dead Goblin 1 Interactable",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":49,
-                 "x":702,
-                 "y":462
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -417,14 +384,14 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
-	 "y":0
+	 "name":"Forest Path 3",
+	 "x":467,
+	 "y":589
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"Log Pile 1",
+	 "x":382,
+	 "y":383
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
