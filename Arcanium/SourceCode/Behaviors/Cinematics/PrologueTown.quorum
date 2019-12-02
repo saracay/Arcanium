@@ -11,6 +11,9 @@ class PrologueTown is Cinematic
     GameStateManager manager 
     Main main
     CinematicSequencer cineSequencer
+    Map tempMap
+    MapList maps
+    ForestClearing forestClearing
 
     //Actors
     Animation player
@@ -46,6 +49,8 @@ class PrologueTown is Cinematic
     WaitForBehavior     wait4
     WaitForBehavior     wait5
     WaitForBehavior     wait6
+
+    MapTransitionBehavior transition1
 
     action Run()
         ActorSetup()
@@ -126,6 +131,9 @@ class PrologueTown is Cinematic
         wait5:          SetWaitDuration(4)
         wait6:          SetWaitDuration(9.5)
 
+        transition1:        SetTransition(tempMap, maps:INTERIOR_HOUSE_MAP)
+        transition1:        SetCinematic(forestClearing)
+
     end
 
     action EnqueueBehaviors()
@@ -143,7 +151,7 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(move1Goblin4, false)
         cineSequencer:AddCineEvent(wait6, true)
         cineSequencer:AddCineEvent(cameraPan2, true)
-        
+        cineSequencer:AddCineEvent(transition1, true)
     end
 
 end

@@ -1,0 +1,111 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.Game.GameStateManager
+use Libraries.Game.Graphics.Color
+
+class ForestClearing is Cinematic
+    
+    GameStateManager manager 
+    Main main
+    CinematicSequencer cineSequencer
+
+    //Actors
+    Animation player
+    text playerImgSheet = "Hero"
+
+    Animation boy
+    text boyImgSheet = "Boy"
+
+    //PostProcessing
+    Drawable rectangle1
+    Color fade1
+
+    //Dialogue
+    Array<text> dialogueText1
+    Array<text> dialogueText2
+    Array<text> dialogueText3
+
+
+    PanCameraBehavior   cameraPan1
+    ColorFadeBehavior   colorFade1
+    DisplayLogBehavior  dialogue1
+    DisplayLogBehavior  dialogue2
+    DisplayLogBehavior  dialogue3
+    MoveNPCBehavior     moveNPC1
+    MoveNPCBehavior     moveNPC2
+    MoveNPCBehavior     moveNPC3
+    WaitForBehavior     wait1
+    PlaySoundBehavior   sound1
+
+    action Run()
+        ActorSetup()
+        BehaviorSetup()
+        EnqueueBehaviors()
+        
+        cineSequencer:PlayCineSequence()
+    end
+
+    action ActorSetup()
+        main = cast(Main, manager:GetGame())
+        cineSequencer = main:GetCineSequencer()
+
+        //Player
+        player = main:GetPlayer():playerSprite
+        player:sprite1:SetCollidable(false)
+        player:sprite1:SetPosition(414, 398)
+
+        //Boy
+        boy:LoadImageSheet(boyImgSheet)
+        boy:LoadFrame(boyImgSheet)
+        boy:sprite1:SetPosition(-40, 330)
+        main:Add(boy:sprite1)
+
+        //PostProcessing
+        rectangle1:SetColor(0,0,0,1)    
+        rectangle1:LoadFilledRectangle(800,800)
+        main:Add(rectangle1)
+
+        //Camera
+        main:GetCamera2D():SetPosition(400,360,0)
+
+        //Dialogue
+        dialogueText1:Add("You wake up in a daze to the sound of cicadas, beneath a thick canopy of leaves. As you sit up, a searing headache overcomes you.")
+        dialogueText2:Add("Then you hear a rustle from near")
+        
+    end
+
+    action BehaviorSetup()
+        colorFade1:     SetDrawable(rectangle1)
+        colorFade1:     SetFade(0, 0, 0, 0, 3)
+
+        dialogue1:      SetRemovalArray(main:GetRemovalArray())
+        dialogue1:      SetGame(main)
+        dialogue1:      SetCamera(main:GetCamera2D())
+        dialogue1:      SetLog(dialogueText1)
+
+        moveNPC1:       SetAnimation(player, playerImgSheet)
+        moveNPC1:       SetMoveDirection(0,-60, 1)
+
+        moveNPC2:       SetAnimation(player, playerImgSheet)
+        moveNPC2:       SetMoveDirection(80,0, 0.5)
+
+        moveNPC3:       SetAnimation(player, playerImgSheet)
+        moveNPC3:       SetMoveDirection(-80,0, 1)
+
+        wait1:          SetWaitDuration(0.5)
+    end
+    
+    action EnqueueBehaviors()
+        cineSequencer:AddCineEvent(colorFade1, true)
+        cineSequencer:AddCineEvent(dialogue1, true)
+        cineSequencer:AddCineEvent(moveNPC1, true)
+        cineSequencer:AddCineEvent(moveNPC2, true)
+        cineSequencer:AddCineEvent(wait1, true)
+        cineSequencer:AddCineEvent(moveNPC3, true)
+
+    end
+        
+end
