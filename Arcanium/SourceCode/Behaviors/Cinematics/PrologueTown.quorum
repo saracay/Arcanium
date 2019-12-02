@@ -305,6 +305,7 @@ class PrologueTown is Cinematic
 
         transition1:    SetTransition(tempMap, maps:FOREST_CLEARING_MAP)
         transition1:    SetCinematic(forestClearing)
+        transition1:    SetMusic("zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785")
 
         combat:SetEnemyList(enemies)
              
