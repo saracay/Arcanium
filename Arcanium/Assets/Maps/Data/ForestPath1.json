@@ -495,14 +495,19 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
-	 "y":0
+	 "name":"Forest Path 2",
+	 "x":244,
+	 "y":582
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"Campfire",
+	 "x":158,
+	 "y":196
+	},
+	{
+	 "name":"River",
+	 "x":605,
+	 "y":319
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

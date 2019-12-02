@@ -825,14 +825,29 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
+	 "name":"Forest Path 4",
+	 "x":469,
 	 "y":0
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"Forest Path 2",
+	 "x":0,
+	 "y":469
+	},
+	{
+	 "name":"Flames",
+	 "x":273,
+	 "y":310
+	},
+	{
+	 "name":"Shield",
+	 "x":422,
+	 "y":289
+	},
+	{
+	 "name":"Axe",
+	 "x":451,
+	 "y":323
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

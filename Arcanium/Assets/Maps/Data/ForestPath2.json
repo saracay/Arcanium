@@ -509,14 +509,24 @@
  "orientation":"orthogonal",
  "pointsofinterest":[
 	{
-	 "name":"TestPOI0",
-	 "x":0,
+	 "name":"Forest Path 3",
+	 "x":789,
+	 "y":468
+	},
+	{
+	 "name":"Forest Path 1",
+	 "x":245,
 	 "y":0
 	},
 	{
-	 "name":"TestPOI1",
-	 "x":200,
-	 "y":200
+	 "name":"Tree",
+	 "x":631,
+	 "y":11
+	},
+	{
+	 "name":"Goblin Camp",
+	 "x":245,
+	 "y":60
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
