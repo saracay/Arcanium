@@ -96,18 +96,7 @@
                  "width":16.6667,
                  "x":391.333,
                  "y":331.333
-                }, 
-                {
-                 "height":64.6667,
-                 "id":29,
-                 "name":"Interactable Bed 2",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":36,
-                 "x":444,
-                 "y":160
-                }, 
+                },  
                 {
                  "height":63.3333,
                  "id":30,

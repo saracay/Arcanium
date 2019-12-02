@@ -52,6 +52,8 @@ class Interactable is Drawable, KeyboardListener
     // List of variables for INTERACTABLE
     text name = "NPC-01"                    // Name of Interactable	
     boolean currentlyInteracting = false    // Check if Interacting
+    public boolean requiredCompleted = true        // used to check if the required object has been interacted with 
+        // set to true so that actions won't halt, but the data file will tell us to initialize any required items to false
     Color color                             // Used for setting colors
 
     // List of varibles for BEHAVIORs
@@ -180,5 +182,9 @@ class Interactable is Drawable, KeyboardListener
         temp:SetCoordinates(newX, newY)
         temp:SetMusic(musicName)
         SetInteractableBehavior(temp, "transition")
+    end
+
+    action SetRequiredCompleted(boolean completed)
+        requiredCompleted = completed
     end
 end
