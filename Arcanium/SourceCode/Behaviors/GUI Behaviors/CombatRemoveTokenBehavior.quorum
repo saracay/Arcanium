@@ -33,9 +33,14 @@ class CombatRemoveTokenBehavior is Behavior
 
         if currentTokens > 0
             currentTokens = currentTokens - 1
-            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:White())
 
-            spellID = spellID - elementID
+            if currentTokens = 0
+                spellID = 9000000
+            else
+                spellID = spellID - elementID
+            end
+
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:White())
 
             integer counter = 0
 
@@ -83,12 +88,25 @@ class CombatRemoveTokenBehavior is Behavior
                 labels:Get(3):SetText("Multi-target: N/A")
             end
         else
-            Dispose()
-        end
-    end
+            spellID = 9000000
+            currentTokens = 0
 
-    action Dispose
-        backButton:Activate()
+            integer counter = 0
+
+            repeat while counter < otherBehaviors:GetSize()
+                otherBehaviors:Get(counter):SetSpellID(spellID)
+                otherBehaviors:Get(counter):SetCurrentTokens(currentTokens)
+
+                counter = counter + 1
+            end
+
+            labels:Get(0):SetText("Name: N/A")
+            labels:Get(1):SetText("Base Damage: N/A")
+            labels:Get(2):SetText("Mana Cost: N/A")
+            labels:Get(3):SetText("Multi-target: N/A")
+
+            backButton:Activate()
+        end
     end
 
     action SetBackButton(MenuButton button)

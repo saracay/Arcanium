@@ -16,7 +16,7 @@ class PreviousMenuPageBehavior is Behavior
     action Run(BehaviorEvent event)
         if currentIndex > 0
             integer counter = 0
-            
+
             repeat while counter < pages:Get(currentIndex):GetSize()
                 pages:Get(currentIndex):Get(counter):SetPosition(-1000, -1000)
 
