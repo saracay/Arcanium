@@ -107,6 +107,7 @@ class InteriorHouse is Cinematic
         moveNPC3:       SetMoveDirection(0,0, 0)
         moveNPC3:       SetNPCCollidable(true)
         sound1:SetSound("Assets\Audio\Effects\AAAGH1.wav")
+        sound1:SetVolume(0.05)
         
     end
 
