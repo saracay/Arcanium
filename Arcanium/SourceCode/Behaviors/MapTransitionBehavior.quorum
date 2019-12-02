@@ -19,6 +19,7 @@ use Libraries.Containers.Array
 class MapTransitionBehavior is Behavior
     // List of variables for MAPTRANSITIONBEHAVIOR
     GameStateManager manager            // Used to get MAIN
+    MapList maps                        // all of the map names
     Map currentMap                      // Current MAP
     text mapName = ""                   // New map name
     number playerX = 0                  // New Player X coordinate
@@ -29,14 +30,20 @@ class MapTransitionBehavior is Behavior
     boolean isFinished = false
 
     action Run(BehaviorEvent event)
+        output "YO"
+
         if mapName not= "Not Ready Yet"
             // Debugging output
             output "Transition to " + mapName
 
-            // Get the MAIN for level loading
+                // Get the MAIN for level loading
             Main main = cast(Main, manager:GetGame())
 
-// ================ Ryan: Starting Changes ================
+            // here will be the logic that will control for every map if it can be loaded
+            // this mainly matters for maps where there are no physical collision obstacles from the map transition collider
+            // example: in the introduction, you cannot go to the interior house until touching all of the jewels
+
+    // ================ Ryan: Starting Changes ================
             main:AddToRemove(main:GetMap():map)
             main:AddToRemove(main:GetMap():aboveLayer)
             i = 0
@@ -87,12 +94,15 @@ class MapTransitionBehavior is Behavior
         else
             output "This transition is unavailable."
         end
-// ================= Ryan: Ending Changes =================
 
+        if mapName = maps:PROLOGUE_TOWN_MAP
+            output "playing prologue town cutscene"
+            PrologueTown prologueTown
+            prologueTown:Run()
+        end
     end
-
+    
     // Initializer of MAPTRANSITIONBEHAVIOR 
-    // EDITED: will no longer need this newList parameter because the map carries all of the information about all of the layers already
     action SetTransition(Map oldMap, text newName)
         currentMap = oldMap
         mapName = newName

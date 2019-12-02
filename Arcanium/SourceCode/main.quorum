@@ -40,7 +40,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     public BehaviorQueue behaviorQueue
 
     //Queue for removing objects
-    Array<Item2D> removalArray
+    public Array<Item2D> removalArray
     public Button debugTest // for Title Screen
     public Drawable Arcanium // for Title Screen
 
@@ -121,6 +121,12 @@ class Main is Game, CollisionListener2D, KeyboardListener
     //For Cutscenes
     CinematicSequencer cineSequencer
 
+    //For game Sequencer
+    MapState mapState
+    // introduction level
+    public number introductionJewelsTouched = 0
+
+    // bedroom level
     //For Transition to Combat
     boolean inCombat = false
 
@@ -143,10 +149,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-        //InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
-        //InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
-        //InitializePlayer(player1)
-        //LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializePlayer(player1)
+//        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
         
 
         //==TEST CALLS==
@@ -163,11 +169,12 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAudioTest()
         //TitleScreenTest()
         //CineSequencerTest()
-        DebugMenuTest()
+        //DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
         //PrologueTown town
         //town:Run()
+        BeginGameSequence()
 
     end
 
@@ -179,6 +186,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         // Check if Behaviors are queued
         behaviorQueue:Update(seconds)
         cineSequencer:Update(seconds)
+        mapState:Update(seconds, currentMap:name)
 
         if (not inCombat) and cineSequencer:IsFinished() and player1:playerSprite:sprite1:IsLoaded() and (not lockMovement)
             PlayerMovement(seconds)
@@ -279,9 +287,12 @@ class Main is Game, CollisionListener2D, KeyboardListener
         repeat currMap:interactables:GetSize() times
             Add(currMap:interactables:Get(i))
             AddKeyboardListener(currMap:interactables:Get(i))
+            currMap:interactables:Get(i):SetRequiredCompleted(currMap:completedInteractables:Get(i))
             i = i + 1
         end
-// ===== Ryan: Ending Changes =====
+        // ===== Ryan: Ending Changes =====
+
+	AddCollisionListener(me)	
     end
 
     action LoadAboveLayer(Map currMap, Text mapName)
@@ -320,6 +331,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         if monitor:IsKeyPressed(keys:W)
             newY = newY + plyrSpeed * seconds
             direction = "up"
+            Array<text> enemies
+            enemies:Add("Goblin")
+            CombatTest(enemies)
         end
         if monitor:IsKeyPressed(keys:S)
             newY = newY - plyrSpeed * seconds
@@ -449,6 +463,16 @@ class Main is Game, CollisionListener2D, KeyboardListener
             elseif not entering
                 if newItemB:IsInteracting()
                     newItemB:ToggleInteraction()
+                end
+
+                // checks any incompleted interactables that are required
+                if newItemB:requiredCompleted = false
+                    newItemB:SetRequiredCompleted(true)
+
+                    // introduction map
+                    if currentMap:name = maps:INTRODUCTION_MAP
+                        mapState:UpdateJewelsTouched()
+                    end
                 end
             end
         end
@@ -680,8 +704,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //==============================================================================
 
     action CombatTest(Array<text> enemies)
-        camera:SetPosition(400, 300, 0)
-		
+	
         Array<number> currentElementsEffectiveness
         currentElementsEffectiveness:Add(1.0)
         currentElementsEffectiveness:Add(0.7)
@@ -696,7 +719,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         currentElementTokens:Add(4)
         currentElementTokens:Add(4)
         currentElementTokens:Add(4)
-        player1:SetStats("<Player>", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
+        player1:SetStats("Hero", 2000, 2000, 5, 5, 0, 1, 1, currentElementsEffectiveness, currentElementTokens)
         player1:SetGame(me)
         player1:SetRemovalArray(removalArray)
         player1:SetBehaviorQueue(behaviorQueue)
@@ -707,7 +730,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
         battle:SetRemovalArray(removalArray)
         battle:SetBehaviorQueue(behaviorQueue)  
         battle:SetCamera(camera)
-        battle:LoadLevel()
         battle:Initialize(player1, enemies)
         inCombat = true
 
@@ -1261,6 +1283,86 @@ end
     end
 /***********************************************************************
                      End of Maria's debug menu section.
+***********************************************************************/
+
+/***********************************************************************
+                     GAME SEQUENCE TEST - LISEL
+  This section serves as a way to test how our game will actually run:
+    - Loads in the maps in the correct order
+    - Saves the states of maps when necessary
+    - Initializes and sets bools used for Interactables / achievement
+        tracking
+    - Loads in appropriate cutscenes
+***********************************************************************/
+
+// pseudocode to plan out functionalities
+
+// load in the introduction scene where player learns all elements
+    // if player touches all elements, load in the interior house
+        // fade out the level for a few seconds, then black, then fade in interior house
+// loads in the village scene (does not happen in our code, only happens when player exits the house)
+    // does the intetrnasitionsrior house state have to be saved?
+// map transition with the player getting knocked out 
+// load the forest clearing map
+// load the forest path 1 map
+    // save the state of whether or not the obstacle has been completed
+    // river interactable will have a bool that determines if it has been completed
+    // if player interacts with river interactales
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the obstacle's completed to true (so that the map will never load again with the uncompleted obstacle)
+        // load the player
+// load the forest path 2 map
+    // if player interacts with the burnable tree interactable
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the interactable's completed to true
+        // load the player
+// load the forest path 3 map
+    // initial state of obstacle completed is false
+    // if player interacts with fire interactables
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the interactable's complete to true
+        // load the player
+// load the forest path 4 map
+    // initial state of obstacle completed is false
+    // if player interacts with log 1 interactables
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the half completed obstacle
+        // set the interactable's half complete to true
+        // load the player
+    // if player interacts with the log 2 interactables
+        // save the location of the player
+        // fade to black
+        // play sound effect
+        // load in the new map with the completed obstacle
+        // set the interactable's complete to true
+        // load the player    
+// load the village ruins
+    // after reaching a certain spot, load the transition to refugee camp cutscene
+// load the refugee camp
+    // load cutscene where son finds his father
+
+action BeginGameSequence
+    InitializeMap(currentMap, maps:INTRODUCTION_MAP)
+    InitializeInteractables(currentMap, maps:INTRODUCTION_MAP)
+    InitializePlayer(player1)
+
+    Introduction intro
+    intro:Run()
+end 
+
+/***********************************************************************
+                     END OF GAME SEQUENCE TEST
 ***********************************************************************/
 end
 

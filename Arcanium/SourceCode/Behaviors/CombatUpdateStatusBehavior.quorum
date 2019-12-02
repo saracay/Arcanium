@@ -10,11 +10,13 @@ use Libraries.Game.Graphics.Camera
 class CombatUpdateStatusBehavior is Behavior
     
     Game game
+    Battle battle
     Array<Item2D> removalArray
     Camera camera = undefined
     BehaviorQueue behaviorQueue
     Array<Combatant> combatants
     Label playerMana
+    Array<Label> statusNames
     Array<Label> statusInfo
     Array<Drawable> statusWindows
     Array<Drawable> sprites
@@ -40,6 +42,9 @@ class CombatUpdateStatusBehavior is Behavior
 
                 combatants:Set(counter, undefined)
 
+                removalArray:Add(statusNames:Get(counter))
+                statusNames:Set(counter, undefined)
+
                 removalArray:Add(statusWindows:Get(counter))
                 statusWindows:Set(counter, undefined)
 
@@ -53,10 +58,22 @@ class CombatUpdateStatusBehavior is Behavior
             counter = counter + 1
         end
 
+        CheckCombatOver()
         finished = true
     end
 
-    action Dispose
+    action CheckCombatOver
+        integer counter = 1
+        boolean enemiesRemain = false
+
+        repeat while counter < combatants:GetSize()
+            if combatants:Get(counter) not= undefined
+                enemiesRemain = true
+            end
+
+            counter = counter + 1
+        end
+
         if combatants:Get(0) = undefined
             behaviorQueue:StopBehaviors()
 
@@ -71,6 +88,8 @@ class CombatUpdateStatusBehavior is Behavior
             behaviorQueue:AddBehavior(gameOverMessage)
 
 //            need behavior to end game after displaying Game Over text
+        elseif not enemiesRemain
+            battle:EndCombat()
         end
     end
 
@@ -80,6 +99,10 @@ class CombatUpdateStatusBehavior is Behavior
 
     action SetGame(Game newGame)
         game = newGame
+    end
+
+    action SetBattle(Battle newBattle)
+        battle = newBattle
     end
 
     action SetRemovalArray(Array<Item2D> newArray)
@@ -100,6 +123,10 @@ class CombatUpdateStatusBehavior is Behavior
 
     action SetPlayerMana(Label newLabel)
         playerMana = newLabel
+    end
+
+    action SetStatusNames(Array<Label> newArray)
+        statusNames = newArray
     end
 
     action SetStatusInfo(Array<Label> newArray)

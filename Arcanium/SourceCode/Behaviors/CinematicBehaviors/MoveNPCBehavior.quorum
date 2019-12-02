@@ -17,6 +17,7 @@ class MoveNPCBehavior is Behavior
     number maxTime = 0
     number currTime = 0
     number elapsedTime = 0
+    integer frame = 0
     Math math
     boolean finished = false
     boolean isCollidable = false
@@ -26,6 +27,9 @@ class MoveNPCBehavior is Behavior
         currTime = 0   
         if(setCollidable = true)
             npc:sprite1:SetCollidable(isCollidable)
+        end
+        if(frame not= 0)
+            npc:SetFrame(frame)
         end
         output "MoveCameraBehavior"
     end
@@ -88,6 +92,10 @@ class MoveNPCBehavior is Behavior
     action SetNPCCollidable(boolean collision)
         isCollidable = collision
         setCollidable = true
+    end
+
+    action SetFrame(integer tempFrame)
+        frame = tempFrame
     end
 
 end

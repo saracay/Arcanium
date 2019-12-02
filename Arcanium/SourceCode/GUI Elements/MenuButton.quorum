@@ -5,6 +5,7 @@ use Libraries.Game.Game
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
 use Libraries.Containers.Array
+use Libraries.Interface.AccessibilityManager
 
 class MenuButton is Button, FocusListener
 // make MenuButton change focus when moused over
@@ -15,6 +16,10 @@ class MenuButton is Button, FocusListener
     Array<Item2D> targets
     boolean horizontal = false
     boolean noIndicator = true
+
+//    on create
+//        Hide()
+//    end
 
     action Dispose
         integer counter = 0
@@ -27,15 +32,13 @@ class MenuButton is Button, FocusListener
     end
 
     action GainedFocus(FocusEvent event)
-        parent:Button:GainedFocus(event)
-
         integer counter = 0
 
         repeat while counter < targets:GetSize()
             if horizontal and targets:Get(counter) not= undefined
                 indicators:Get(counter):SetPosition(targets:Get(counter):GetX() - 30, targets:Get(counter):GetY())
             elseif targets:Get(counter) not= undefined
-                indicators:Get(counter):SetPosition(targets:Get(counter):GetX() + targets:Get(counter):GetWidth()/2 - 10, targets:Get(counter):GetY() + targets:Get(counter):GetHeight()+ 30)
+                indicators:Get(counter):SetPosition(targets:Get(counter):GetX() + targets:Get(counter):GetWidth()/2 + 5, targets:Get(counter):GetY() + targets:Get(counter):GetHeight() + 60)
             end
 
             counter = counter + 1
@@ -65,8 +68,24 @@ class MenuButton is Button, FocusListener
     action SetTarget(Item2D item)
         targets:Add(item)
 
+//        if item is MenuButton
+//            Hide()
+//
+//            Drawable background
+//            background:Load("Assets/Sprites/button-background.png")
+//            background:Scale(0.5, 0.8)
+//            background:SetPosition(item:GetX()-43, item:GetY()-15)
+//            game:Add(background)
+//        end
+
         Drawable indicator
-        indicator:LoadFilledCircle(10, color:Red())
+        if horizontal
+            indicator:Load("Assets/Sprites/selection-horizontal.png")
+            indicator:Scale(1.2)
+        else
+            indicator:Load("Assets/Sprites/selection-vertical.png")
+            indicator:Scale(1.2)
+        end
         indicator:SetPosition(-1000, -1000)
         game:Add(indicator)
         indicators:Add(indicator)
@@ -79,7 +98,13 @@ class MenuButton is Button, FocusListener
 
         repeat while counter < targets:GetSize()
             Drawable indicator
-            indicator:LoadFilledCircle(10, color:Red())
+            if horizontal
+                indicator:Load("Assets/Sprites/selection-horizontal.png")
+                indicator:Scale(1.2)
+            else
+                indicator:Load("Assets/Sprites/selection-vertical.png")
+                indicator:Scale(1.2)
+            end
             indicator:SetPosition(-1000, -1000)
             game:Add(indicator)
             indicators:Add(indicator)

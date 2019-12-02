@@ -60,7 +60,7 @@ class Introduction2 is Cinematic
         player = main:GetPlayer():playerSprite
 
         //Camera
-        main:GetCamera2D():SetPosition(400,-200,0)
+//        main:GetCamera2D():SetPosition(400,-200,0)
         
         dialogue2Text:Add("As you touch the final orb, a power courses through your body. A voice calls to you once more...")
         dialogue2Text:Add("?: A gift of power...")
@@ -101,7 +101,7 @@ class Introduction2 is Cinematic
         cineSequencer:AddCineEvent(dialogue2, true)
         cineSequencer:AddCineEvent(colorFade2, true)
         cineSequencer:AddCineEvent(dialogue3, true)
-        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(transition1, true)
+        cineSequencer:AddCineEvent(remove1, false)
     end
 end

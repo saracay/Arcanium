@@ -22,7 +22,7 @@ class NextLogBehavior is Behavior
     action Run(BehaviorEvent event)
         if currentIndex < labels:GetSize() - 1
             labels:Get(currentIndex):SetPosition(-1000, -1000)
-            labels:Get(currentIndex + 1):SetPosition(10, displayBox:GetHeight() - 30)
+            labels:Get(currentIndex + 1):SetPosition(135, 140)
             game:SetFocus(buttons:Get(currentIndex + 1))
         else
             labels:Get(currentIndex):SetPosition(-1000, -1000)

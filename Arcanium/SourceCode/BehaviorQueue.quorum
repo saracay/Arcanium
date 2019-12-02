@@ -52,6 +52,8 @@ class BehaviorQueue
             currentBehavior:Dispose()
             currentBehavior = undefined
         end
-        queue:Empty()
+        if not queue:IsEmpty()
+            queue:Empty()
+        end
     end
 end

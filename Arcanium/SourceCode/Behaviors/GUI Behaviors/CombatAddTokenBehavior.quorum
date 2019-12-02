@@ -12,9 +12,11 @@ class CombatAddTokenBehavior is Behavior
     
     Game game
     Battle battle
+    CombatRemoveTokenBehavior removeBehavior
     Array<CombatAddTokenBehavior> otherBehaviors
     Array<Drawable> tokenDrawables
     Array<Label> labels
+    Array<MenuButton> buttons
     MenuButton doneButton
     integer maxTokens = 0
     integer currentTokens = 0
@@ -65,6 +67,9 @@ class CombatAddTokenBehavior is Behavior
 
             counter = counter + 1
         end
+        removeBehavior:SetSpellID(spellID)
+        removeBehavior:SetCurrentTokens(currentTokens)
+        removeBehavior:SetElementID(elementID)
 
         Spell tempSpell
         tempSpell:FillSpell(spellID)
@@ -76,20 +81,30 @@ class CombatAddTokenBehavior is Behavior
             multiTarget = "No"
         end
 
-        labels:Get(0):SetText("Current Spell:, Name: " + tempSpell:GetName() + ", Base Damage: " + tempSpell:GetBaseDamage() 
-                                + ", Mana Cost: " + tempSpell:GetManaCost() + ", Multi-target: " + multiTarget)
-        labels:Get(1):SetText("Name: " + tempSpell:GetName())
-        labels:Get(2):SetText("Base Damage: " + tempSpell:GetBaseDamage())
-        labels:Get(3):SetText("Mana Cost: " + tempSpell:GetManaCost())
-        labels:Get(4):SetText("Multi-target: " + multiTarget)
+        counter = 0
+        repeat while counter < buttons:GetSize()
+            buttons:Get(counter):SetName("Current Spell:, Name: " + tempSpell:GetName() + ", Base Damage: " + tempSpell:GetBaseDamage() 
+                                + ", Mana Cost: " + tempSpell:GetManaCost() + ", Multi-target: " + multiTarget + ".")
+
+            counter = counter + 1
+        end
+
+        labels:Get(0):SetText("Name: " + tempSpell:GetName())
+        labels:Get(1):SetText("Base Damage: " + tempSpell:GetBaseDamage())
+        labels:Get(2):SetText("Mana Cost: " + tempSpell:GetManaCost())
+        labels:Get(3):SetText("Multi-target: " + multiTarget)
 
         if currentTokens = maxTokens
-            Dispose()
+            doneButton:Activate()
         end
     end
 
-    action Dispose
-        doneButton:Activate()
+    action SetRemoveBehavior(CombatRemoveTokenBehavior newBehavior)
+        removeBehavior = newBehavior
+    end
+
+    action SetButtons(Array<MenuButton> newButtons)
+        buttons = newButtons
     end
 
     action SetDoneButton(MenuButton button)
