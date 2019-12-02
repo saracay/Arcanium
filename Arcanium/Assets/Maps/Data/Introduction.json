@@ -601,17 +601,17 @@
 	},
 	{
 	 "name":"Blue Jewel",
-	 "x":483,
+	 "x":493,
 	 "y":545
 	},
 	{
 	 "name":"Green Jewel",
-	 "x":256,
+	 "x":246,
 	 "y":417
 	},
 	{
 	 "name":"Brown Jewel",
-	 "x":547,
+	 "x":557,
 	 "y":417
 	},
 	{
@@ -621,7 +621,7 @@
 	},
 	{
 	 "name":"Black Jewel",
-	 "x":482,
+	 "x":492,
 	 "y":258
 	}],
  "renderorder":"right-down",

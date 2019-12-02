@@ -483,8 +483,13 @@
  "pointsofinterest":[
 	{
 	 "name":"Town",
-	 "x":523,
+	 "x":553,
 	 "y":0
+	},
+	{
+	 "name":"Book",
+	 "x":485,
+	 "y":380
 	},
 	{
 	 "name":"Kitchenette",
@@ -493,7 +498,7 @@
 	},
 	{
 	 "name":"Bed",
-	 "x":480,
+	 "x":550,
 	 "y":320
 	}],
  "renderorder":"right-down",
