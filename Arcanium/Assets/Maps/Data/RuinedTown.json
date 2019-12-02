@@ -1328,17 +1328,17 @@
  "pointsofinterest":[
 	{
 	 "name":"Forest",
-	 "x":379,
+	 "x":700,
 	 "y":0
 	},
 	{
 	 "name":"My House",
 	 "x":257,
-	 "y":1246
+	 "y":1206
 	},
 	{
 	 "name":"Fountain",
-	 "x":816,
+	 "x":786,
 	 "y":437
 	}],
  "renderorder":"right-down",

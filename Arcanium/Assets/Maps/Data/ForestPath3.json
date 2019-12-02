@@ -826,27 +826,27 @@
  "pointsofinterest":[
 	{
 	 "name":"Forest Path 4",
-	 "x":449,
+	 "x":469,
 	 "y":0
 	},
 	{
 	 "name":"Forest Path 2",
 	 "x":0,
-	 "y":449
+	 "y":469
 	},
 	{
 	 "name":"Flames",
-	 "x":303,
-	 "y":290
+	 "x":273,
+	 "y":310
 	},
 	{
 	 "name":"Shield",
-	 "x":452,
+	 "x":422,
 	 "y":289
 	},
 	{
 	 "name":"Axe",
-	 "x":481,
+	 "x":451,
 	 "y":323
 	}],
  "renderorder":"right-down",

@@ -596,32 +596,32 @@
  "pointsofinterest":[
 	{
 	 "name":"Red Jewel",
-	 "x":288,
+	 "x":318,
 	 "y":545
 	},
 	{
 	 "name":"Blue Jewel",
-	 "x":513,
+	 "x":483,
 	 "y":545
 	},
 	{
 	 "name":"Green Jewel",
-	 "x":226,
+	 "x":256,
 	 "y":417
 	},
 	{
 	 "name":"Brown Jewel",
-	 "x":577,
+	 "x":547,
 	 "y":417
 	},
 	{
 	 "name":"White Jewel",
-	 "x":287,
+	 "x":317,
 	 "y":257
 	},
 	{
 	 "name":"Black Jewel",
-	 "x":512,
+	 "x":482,
 	 "y":258
 	}],
  "renderorder":"right-down",

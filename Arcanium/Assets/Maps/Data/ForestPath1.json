@@ -496,17 +496,17 @@
  "pointsofinterest":[
 	{
 	 "name":"Forest Path 2",
-	 "x":224,
-	 "y":632
+	 "x":244,
+	 "y":582
 	},
 	{
 	 "name":"Campfire",
-	 "x":128,
+	 "x":158,
 	 "y":196
 	},
 	{
 	 "name":"River",
-	 "x":545,
+	 "x":605,
 	 "y":319
 	}],
  "renderorder":"right-down",

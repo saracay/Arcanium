@@ -483,17 +483,17 @@
  "pointsofinterest":[
 	{
 	 "name":"Town",
-	 "x":513,
+	 "x":523,
 	 "y":0
 	},
 	{
 	 "name":"Kitchenette",
-	 "x":160,
-	 "y":429
+	 "x":180,
+	 "y":389
 	},
 	{
 	 "name":"Bed",
-	 "x":444,
+	 "x":480,
 	 "y":320
 	}],
  "renderorder":"right-down",

@@ -1172,18 +1172,18 @@
  "pointsofinterest":[
 	{
 	 "name":"Forest",
-	 "x":379,
+	 "x":700,
 	 "y":0
 	},
 	{
 	 "name":"My House",
 	 "x":257,
-	 "y":1246
+	 "y":1206
 	},
 	{
 	 "name":"Inn",
 	 "x":1057,
-	 "y":1281
+	 "y":1241
 	}],
  "renderorder":"right-down",
  "tiledversion":"1.2.5",
