@@ -51,19 +51,35 @@ class MapState
             introduction2:Run()
         end
 
-        if mapName = maps:FOREST_PATH_1_MAP 
+        // TO-DO: save the hero's position
+        if mapName = maps:FOREST_PATH_1_MAP and riverCrossed = true
+            // rerender with forest path 1 complete map
+            ForestPath1ObstacleComplete cine
+            cine:Run()
         end
 
-        if mapName = maps:FOREST_PATH_2_MAP
+        if mapName = maps:FOREST_PATH_2_MAP and treeBurned = true
+            // rerender with forest path 2 complete map
+            ForestPath2ObstacleComplete cine
+            cine:Run()
         end
 
-        if mapName = maps:FOREST_PATH_3_MAP
+        if mapName = maps:FOREST_PATH_3_MAP and firePutOut = true
+            // rerender with forest path 3 complete map
+            ForestPath3ObstacleComplete cine
+            cine:Run()
         end
 
-        if mapName = maps:FOREST_PATH_4_MAP
+        if mapName = maps:FOREST_PATH_4_MAP and logPile1Moved = true
+            // rerender with forest path 4 half complete map
+            ForestPath4Obstacle1Complete cine
+            cine:Run()
         end
 
-        if mapName = maps:FOREST_PATH_4_MAP_HALF_COMPLETE
+        if mapName = maps:FOREST_PATH_4_MAP_HALF_COMPLETE and logPile2Moved = true
+            // rerender with forest path 4 complete map
+            ForestPath4Obstacle2Complete cine
+            cine:Run()
         end
     end
 

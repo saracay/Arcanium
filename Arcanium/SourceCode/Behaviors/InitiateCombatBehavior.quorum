@@ -11,12 +11,18 @@ class InitiateCombatBehavior is Behavior
     Interactable object = undefined
     Array<text> enemyList
 
+    boolean finished = false
+
     action Run(BehaviorEvent event)
         Main main = cast(Main, manager:GetGame())
         if object not= undefined
             main:AddToRemove(object)
         end
+        if(object not= undefined)
+            main:AddToRemove(object)
+        end
         main:CombatTest(enemyList)
+        finished = true
     end
 
     action SetInteractable(Interactable newObject)
@@ -25,5 +31,9 @@ class InitiateCombatBehavior is Behavior
 
     action SetEnemyList(Array<text> newEnemyList)
         enemyList = newEnemyList
+    end
+
+    action isFinished returns boolean
+        return finished
     end
 end

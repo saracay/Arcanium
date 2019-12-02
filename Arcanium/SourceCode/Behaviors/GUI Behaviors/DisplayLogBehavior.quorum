@@ -30,10 +30,11 @@ class DisplayLogBehavior is Behavior
         if log:GetSize() = 0
             finished = true
         end
-        
+
+        camera = manager:GetGame():GetCamera2D()
         displayBox:Load("Assets/Sprites/dialogue-box.png")
         displayBox:Scale(3.53)
-        displayBox:SetPosition(camera:GetPosition():GetX()-camera:GetWidth()/2-110, camera:GetPosition():GetY()-camera:GetHeight()/2-30)
+        displayBox:SetPosition(cast(integer, camera:GetPosition():GetX()-camera:GetWidth()/2)-110, cast(integer, camera:GetPosition():GetY()-camera:GetHeight()/2)-30)
         game:Add(displayBox)
 
         integer counter = 0

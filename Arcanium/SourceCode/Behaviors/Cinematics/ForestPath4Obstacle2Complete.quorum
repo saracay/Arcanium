@@ -1,0 +1,60 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Containers.Array
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.Game.GameStateManager
+use Libraries.Game.Graphics.Color
+
+class ForestPath4Obstacle2Complete is Cinematic
+    GameStateManager manager 
+    Main main
+    CinematicSequencer cineSequencer
+    Map tempMap
+    MapList maps
+
+    //NPCs
+    Animation player
+    text playerImgSheet = "Hero"
+
+    //PostProcessing
+    Drawable rectangle1
+    Color blue
+
+    //Cinematic Behaviors
+    WaitForBehavior     wait1
+    WaitForBehavior     wait2      
+    RemoveObjectBehavior remove1
+    ColorFadeBehavior   colorFade1
+    ColorFadeBehavior   colorFade2
+    MapTransitionBehavior transition1
+
+    public action Run ()
+        ActorSetup()
+        BehaviorSetup()
+        EnqueueBehaviors()
+
+        cineSequencer:PlayCineSequence()
+    end
+
+    private action ActorSetup()
+        blue:SetColor(0,0,0,0.25)
+        rectangle1:LoadFilledRectangle(800,800,blue)
+        main:Add(rectangle1)
+    end
+
+    private action BehaviorSetup()
+        colorFade2:         SetFade(0,0,0,1, 6)
+        colorFade2:         SetDrawable(rectangle1)
+        transition1:        SetTransition(tempMap, maps:FOREST_PATH_4_MAP_COMPLETE)
+        colorFade1:     SetDrawable(rectangle1)
+        colorFade1:     SetFade(0, 0, 0, 0, 8)
+    end
+
+    private action EnqueueBehaviors()
+        cineSequencer:AddCineEvent(colorFade2, true)
+        cineSequencer:AddCineEvent(transition1, true)
+        cineSequencer:AddCineEvent(remove1, false)
+        cineSequencer:AddCineEvent(colorFade1, true)
+    end
+end

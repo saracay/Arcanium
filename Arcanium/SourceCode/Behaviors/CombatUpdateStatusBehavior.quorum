@@ -20,8 +20,16 @@ class CombatUpdateStatusBehavior is Behavior
     Array<Label> statusInfo
     Array<Drawable> statusWindows
     Array<Drawable> sprites
+    Array<Drawable> backgrounds
+    Array<CombatMainPageBehavior> playerTurns
     boolean finished = false
+    boolean checkForVictory = false
     Player player
+    Array<boolean> flags
+
+    action SetFlags(Array<boolean> newArray)
+        flags = newArray
+    end
 
     action Run(BehaviorEvent event)
 
@@ -58,7 +66,10 @@ class CombatUpdateStatusBehavior is Behavior
             counter = counter + 1
         end
 
-        CheckCombatOver()
+        if checkForVictory
+            CheckCombatOver()
+        end
+
         finished = true
     end
 
@@ -89,7 +100,34 @@ class CombatUpdateStatusBehavior is Behavior
 
 //            need behavior to end game after displaying Game Over text
         elseif not enemiesRemain
-            battle:EndCombat()
+//            Array<text> endLog
+//            endLog:Add("You defeated all enemies! The battle is won!")
+//
+//            DisplayLogBehavior logBehavior
+//            logBehavior:SetGame(game)
+//            logBehavior:SetLog(endLog)
+//            logBehavior:SetRemovalArray(removalArray)
+//            logBehavior:SetCamera(camera)
+//            behaviorQueue:AddBehavior(logBehavior)
+
+            statusInfo:Add(playerMana)
+            backgrounds:Get(0):SetPosition(-1000, -1000)
+
+            CombatEndBattleBehavior endBehavior
+            endBehavior:SetGame(game)
+            endBehavior:SetBattle(battle)
+            endBehavior:SetRemovalArray(removalArray)
+            endBehavior:SetBehaviorQueue(behaviorQueue)
+            endBehavior:SetStatusInfo(statusInfo)
+            endBehavior:SetStatusNames(statusNames)
+            endBehavior:SetStatusWindows(statusWindows)
+            endBehavior:SetSprites(sprites)
+            endBehavior:SetBackgrounds(backgrounds)
+            behaviorQueue:AddBehavior(endBehavior)
+
+            flags:Set(0, true)
+            battle:Dispose()
+            game:SetFocus(player:playerSprite:sprite1)
         end
     end
 
@@ -139,5 +177,17 @@ class CombatUpdateStatusBehavior is Behavior
 
     action SetSprites(Array<Drawable> newArray)
         sprites = newArray
+    end
+
+    action SetBackgrounds(Array<Drawable> newArray)
+        backgrounds = newArray
+    end
+
+    action SetCheckForVictory(boolean bool)
+        checkForVictory = bool
+    end
+
+    action SetPlayerTurns(Array<CombatMainPageBehavior> newArray)
+        playerTurns = newArray
     end
 end
