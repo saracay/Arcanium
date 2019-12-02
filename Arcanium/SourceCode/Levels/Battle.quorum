@@ -170,7 +170,11 @@ class Battle
         text enemiesLog = "An enemy "
         repeat while counter < combatants:GetSize()
             if counter = combatants:GetSize() - 1
-                enemiesLog = enemiesLog + "and " + combatants:Get(counter):GetName() + " attacked!"
+                if counter not= 0
+                    enemiesLog = enemiesLog + "and " + combatants:Get(counter):GetName() + " attacked!"
+                else
+                    enemiesLog = enemiesLog + combatants:Get(counter):GetName() + " attacked!"
+                end
             else
                 enemiesLog = enemiesLog + combatants:Get(counter):GetName() + ", "
             end

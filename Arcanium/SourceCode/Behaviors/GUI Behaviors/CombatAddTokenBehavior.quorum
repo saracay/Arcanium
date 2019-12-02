@@ -95,12 +95,8 @@ class CombatAddTokenBehavior is Behavior
         labels:Get(3):SetText("Multi-target: " + multiTarget)
 
         if currentTokens = maxTokens
-            Dispose()
+            doneButton:Activate()
         end
-    end
-
-    action Dispose
-        doneButton:Activate()
     end
 
     action SetRemoveBehavior(CombatRemoveTokenBehavior newBehavior)
