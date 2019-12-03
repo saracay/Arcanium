@@ -30,6 +30,11 @@ class ColorFadeBehavior is Behavior
         Color d
         
         if(addDrawable)
+            if(drawable:GetName() = "ArcaniumLogo")
+                drawable:SetPosition(main:GetCamera2D():GetPosition():GetX()-400, main:GetCamera2D():GetPosition():GetY()-150)
+            else
+                drawable:SetPosition(main:GetCamera2D():GetPosition():GetX()-400, main:GetCamera2D():GetPosition():GetY()-300)
+            end
             main:Add(drawable)
         end
 

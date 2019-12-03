@@ -108,7 +108,16 @@ class PrologueTown is Cinematic
     InitiateCombatBehavior combat
     Array<text> enemies
 
-    
+    RemoveObjectBehavior remove1
+    RemoveObjectBehavior remove2
+    RemoveObjectBehavior remove3
+    RemoveObjectBehavior remove4
+    RemoveObjectBehavior remove5
+    RemoveObjectBehavior remove6
+    RemoveObjectBehavior remove7
+    RemoveObjectBehavior remove8
+    RemoveObjectBehavior remove9
+    RemoveObjectBehavior remove10
 
     action Run()
         ActorSetup()
@@ -309,6 +318,17 @@ class PrologueTown is Cinematic
         transition1:    SetCinematic(forestClearing)
         transition1:    SetMusic("zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785")
 
+        remove1:        SetDrawable(boy:sprite1)
+        remove2:        SetDrawable(goblin1:sprite1)
+        remove3:        SetDrawable(goblin2:sprite1)
+        remove4:        SetDrawable(goblin3:sprite1)
+        remove5:        SetDrawable(goblin4:sprite1)
+        remove6:        SetDrawable(goblin5:sprite1)
+        remove7:        SetDrawable(goblin6:sprite1)
+        remove8:        SetDrawable(man1:sprite1)
+        remove9:        SetDrawable(man2:sprite1)
+        remove10:       SetDrawable(woman1:sprite1)
+
         combat:SetEnemyList(enemies)
              
     end
@@ -351,6 +371,17 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(move4Boy, true)
         cineSequencer:AddCineEvent(dialogue4, true)
         cineSequencer:AddCineEvent(transition1, true)
+        cineSequencer:AddCineEvent(remove1, false)
+        cineSequencer:AddCineEvent(remove2, false)
+        cineSequencer:AddCineEvent(remove3, false)
+        cineSequencer:AddCineEvent(remove4, false)
+        cineSequencer:AddCineEvent(remove5, false)
+        cineSequencer:AddCineEvent(remove6, false)
+        cineSequencer:AddCineEvent(remove7, false)
+        cineSequencer:AddCineEvent(remove8, false)
+        cineSequencer:AddCineEvent(remove9, false)
+        cineSequencer:AddCineEvent(remove10, true)
+
     end
 
 end
