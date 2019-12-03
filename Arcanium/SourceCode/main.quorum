@@ -133,6 +133,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
     boolean playerStatsInitialized = false
     public boolean lockMovement = false
 
+    // for combat
+    public Array<text> enemies
+
     integer TPindex = 0
 
 //==============================================================================
@@ -170,14 +173,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest(fireball, Fireball)
         //InitializeAudioTest()
-        TitleScreenTest()
+//        TitleScreenTest()
         //CineSequencerTest()
 //        DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
 //        PrologueTown town
 //        town:Run()
-//        BeginGameSequence()
+        BeginGameSequence()
 
     end
 
@@ -195,6 +198,14 @@ class Main is Game, CollisionListener2D, KeyboardListener
             PlayerMovement(seconds)
         else
             DisableInteraction()
+        end
+
+        if currentMap:name = maps:PROLOGUE_TOWN_MAP and cineSequencer:IsFinished() 
+            enemies:Add("Goblin")
+            enemies:Add("Goblin Shaman")
+            enemies:Add("Goblin")
+            CombatTest(enemies)
+            mapState:SetFirstBattleComplete(true)
         end
         
         // Center player collision box on player sprite
@@ -349,7 +360,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
                 if randomInt <= 1
                     integer whichEncounter = random:RandomInteger(4)
 
-                    Array<text> enemies
                     if whichEncounter = 0
                         enemies:Add("Goblin")
                         enemies:Add("Goblin Shaman")

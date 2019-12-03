@@ -22,6 +22,9 @@ class MapState
     // introduction map
     number jewelsTouched = 0 
 
+    // prologue town
+    boolean firstBattleComplete = false
+
     // forest path 1 map
     boolean riverCrossed = false
 
@@ -116,6 +119,14 @@ class MapState
 
     action SetLogPile2Moved(boolean logPile2Moved)
         me:logPile2Moved = logPile2Moved
+    end
+
+    action SetFirstBattleComplete(boolean firstBattleComplete)
+        me:firstBattleComplete = firstBattleComplete
+    end
+
+    action GetFirstBattleComplete returns boolean
+        return firstBattleComplete
     end
 
 end
