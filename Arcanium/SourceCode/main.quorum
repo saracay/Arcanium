@@ -42,7 +42,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //Queue for removing objects
     public Array<Item2D> removalArray
-    public Button debugTest // for Title Screen
+    public MenuButton debugTest // for Title Screen
     public Drawable Arcanium // for Title Screen
 
     //Entities
@@ -170,9 +170,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest(fireball, Fireball)
         //InitializeAudioTest()
-        //TitleScreenTest()
+        TitleScreenTest()
         //CineSequencerTest()
-        DebugMenuTest()
+//        DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
 //        PrologueTown town
@@ -216,7 +216,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //                             CUSTOM ACTIONS
 //==============================================================================
 
-    action AddToRemove(Drawable object)
+    action AddToRemove(Item2D object)
         removalArray:Add(object)
     end
 
@@ -1365,11 +1365,16 @@ action TitleScreenTest
     Add(Arcanium)
 
     TitleScreenBehavior testing1
-    debugTest:SetPosition(300,200)
-    debugTest:SetName("Debug Menu")
+    debugTest:SetGame(me)
+    debugTest:SetPosition(350,200)
+    debugTest:SetName("Start Game")
+    debugTest:SetHorizontal(true)
+    debugTest:SetPretty(true)
+    debugTest:SetTarget(debugTest)
     Add(debugTest)
     debugTest:SetBehavior(testing1)
 
+    SetFocus(debugTest)
 end
 /***********************************************************************
                   Maria's DEBUG MENU testing section.
