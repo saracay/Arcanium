@@ -419,6 +419,12 @@ class CombatMainPageBehavior is Behavior, MainPage
             Label currentManaCost
             Label currentMultiTarget
 
+            Drawable spellInfoBackground
+            spellInfoBackground:Load("Assets/Sprites/info-box.png")
+            spellInfoBackground:Scale(6.5, 4)
+            spellInfoBackground:SetPosition(-1000, -1000)
+            game:Add(spellInfoBackground)
+
             MenuButton currentSpellInfo
             currentSpellButtons:Add(currentSpellInfo)
             currentSpellInfo:SetPosition(-1000, -1000)
@@ -519,14 +525,9 @@ class CombatMainPageBehavior is Behavior, MainPage
             xPositions:Get(1):Add(-1000)
             yPositions:Get(1):Add(-1000)
 
-            Drawable spellInfoBackground
-            spellInfoBackground:Load("Assets/Sprites/info-box.png")
-            spellInfoBackground:Scale(6.5, 4)
-            spellInfoBackground:SetPosition(-1000, -1000)
             pages:Get(1):Add(spellInfoBackground)
             xPositions:Get(1):Add(cast(integer, cameraX + 500))
             yPositions:Get(1):Add(cast(integer, cameraY + 120))
-            game:Add(spellInfoBackground)
 
             labels:Add(currentSpellName)
             labels:Add(currentBaseDamage)
