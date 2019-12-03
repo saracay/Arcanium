@@ -86,17 +86,6 @@
                  "width":9,
                  "x":789,
                  "y":515
-                }, 
-                {
-                 "height":12,
-                 "id":4,
-                 "name":"ForestPath3",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":447,
-                 "y":-1
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -383,11 +372,6 @@
  "nextobjectid":34,
  "orientation":"orthogonal",
  "pointsofinterest":[
-	{
-	 "name":"Forest Path 3",
-	 "x":467,
-	 "y":589
-	},
 	{
 	 "name":"Log Pile 1",
 	 "x":382,

@@ -82,7 +82,7 @@ class MapTransitionBehavior is Behavior
             main:LoadAboveLayer(nextMap, mapName)
             main:SetMap(nextMap)
 
-            if mapName not= maps:PROLOGUE_TOWN_MAP and mapName:Contains("ForestPath") = false
+            if mapName:Contains("ForestPath") = false
                 main:StopAllAudio()
             end
 
@@ -112,8 +112,17 @@ class MapTransitionBehavior is Behavior
 
         if mapName = maps:PROLOGUE_TOWN_MAP
             output "playing prologue town cutscene"
+            main:audioManager:AddAudio("3561-crisis-by-kevin-macleod", "ogg", "music")
+            main:audioManager:PlayAudio("3561-crisis-by-kevin-macleod")
             PrologueTown prologueTown
             prologueTown:Run()
+        end
+
+        if mapName = maps:RUINED_TOWN_MAP
+            main:audioManager:AddAudio("3440-bittersweet-by-kevin-macleod", "ogg", "music")
+            main:audioManager:PlayAudio("3440-bittersweet-by-kevin-macleod")
+            RuinedTown ruinedTown
+            ruinedTown:Run()
         end
 
     end
