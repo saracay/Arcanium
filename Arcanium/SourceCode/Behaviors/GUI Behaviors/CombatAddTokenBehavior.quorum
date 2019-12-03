@@ -44,7 +44,7 @@ class CombatAddTokenBehavior is Behavior
         elseif elementID = water
             tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Blue())
         elseif elementID = earth
-            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Gray())
+            tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:CustomColor(0.686, 0.424, 0.243, 1))
         elseif elementID = wind
             tokenDrawables:Get(currentTokens):LoadFilledCircle(20, color:Green())
         elseif elementID = light

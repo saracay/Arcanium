@@ -111,10 +111,20 @@ class CombatMainPageBehavior is Behavior, MainPage
             spellButton:SetPosition(cameraX + 650, cameraY + 115)
             spellButton:SetName("Spells")
             spellButton:SetHorizontal(true)
+            spellButton:SetPretty(true)
             spellButton:SetTarget(spellButton)
             game:Add(spellButton)
 
             MenuButton runButton
+            CombatRunBehavior runBehavior
+            runBehavior:SetGame(game)
+            runBehavior:SetRemovalArray(removalArray)
+            runBehavior:SetBehaviorQueue(behaviorQueue)
+            runBehavior:SetCamera(camera)
+            runBehavior:SetCombatants(combatants)
+            runBehavior:SetBattle(battle)
+            runBehavior:SetMainPage(me)
+            runButton:SetBehavior(runBehavior)
             pages:Get(0):Add(runButton)
             xPositions:Get(0):Add(cast(integer, cameraX + 650))
             yPositions:Get(0):Add(cast(integer, cameraY + 50))
@@ -122,22 +132,25 @@ class CombatMainPageBehavior is Behavior, MainPage
             runButton:SetPosition(cameraX + 650, cameraY + 65)
             runButton:SetName("Run")
             runButton:SetHorizontal(true)
+            runButton:SetPretty(true)
             runButton:SetTarget(runButton)
             game:Add(runButton)
 
             counter = 0
             repeat while counter < combatants:GetSize()
-                MenuButton button
-                button:SetGame(game)
-                button:SetName(combatantInfo:Get(counter))
-                button:SetPosition(-1000, -1000)
-                button:SetHorizontal(false)
-                button:SetTarget(sprites:Get(counter))
-                game:Add(button)
+                if combatants:Get(counter) not= undefined
+                    MenuButton button
+                    button:SetGame(game)
+                    button:SetName(combatantInfo:Get(counter))
+                    button:SetPosition(-1000, -1000)
+                    button:SetHorizontal(false)
+                    button:SetTarget(sprites:Get(counter))
+                    game:Add(button)
 
-                pages:Get(0):Add(button)
-                xPositions:Get(0):Add(-1000)
-                yPositions:Get(0):Add(-1000)
+                    pages:Get(0):Add(button)
+                    xPositions:Get(0):Add(-1000)
+                    yPositions:Get(0):Add(-1000)
+                end
 
                 counter = counter + 1
             end
@@ -195,9 +208,10 @@ class CombatMainPageBehavior is Behavior, MainPage
             toTargetingPage:SetDamageBehaviors(damageBehaviors)
             doneCombiningButton:SetGame(game)
             doneCombiningButton:SetBehavior(toTargetingPage)
-            doneCombiningButton:SetName("Done Combining")
+            doneCombiningButton:SetName("Cast")
             doneCombiningButton:SetPosition(-1000, -1000)
             doneCombiningButton:SetHorizontal(true)
+            doneCombiningButton:SetPretty(true)
             doneCombiningButton:SetTarget(doneCombiningButton)
             game:Add(doneCombiningButton)
 
@@ -214,6 +228,7 @@ class CombatMainPageBehavior is Behavior, MainPage
             concentrateButton:SetName("Concentrate")
             concentrateButton:SetPosition(-1000, -1000)
             concentrateButton:SetHorizontal(true)
+            concentrateButton:SetPretty(true)
             concentrateButton:SetTarget(concentrateButton)
             game:Add(concentrateButton)
 
@@ -231,6 +246,7 @@ class CombatMainPageBehavior is Behavior, MainPage
             removeTokenButton:SetName("Back")
             removeTokenButton:SetPosition(-1000, -1000)
             removeTokenButton:SetHorizontal(true)
+            removeTokenButton:SetPretty(true)
             removeTokenButton:SetTarget(removeTokenButton)
             game:Add(removeTokenButton)
 
@@ -248,12 +264,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             fireBehavior:SetButtons(currentSpellButtons)
             fireButton:SetBehavior(fireBehavior)
             pages:Get(1):Add(fireButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 100))
+            xPositions:Get(1):Add(cast(integer, cameraX + 75))
             yPositions:Get(1):Add(cast(integer, cameraY + 100))
             fireButton:SetGame(game)
             fireButton:SetName("Fire")
             fireButton:SetPosition(-1000, -1000)
             fireButton:SetHorizontal(true)
+            fireButton:SetPretty(true)
             fireButton:SetTarget(fireButton)
             game:Add(fireButton)
 
@@ -271,12 +288,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             waterBehavior:SetButtons(currentSpellButtons)
             waterButton:SetBehavior(waterBehavior)
             pages:Get(1):Add(waterButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 100))
+            xPositions:Get(1):Add(cast(integer, cameraX + 75))
             yPositions:Get(1):Add(cast(integer, cameraY + 50))
             waterButton:SetGame(game)
             waterButton:SetName("Water")
             waterButton:SetPosition(-1000, -1000)
             waterButton:SetHorizontal(true)
+            waterButton:SetPretty(true)
             waterButton:SetTarget(waterButton)
             game:Add(waterButton)
 
@@ -294,12 +312,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             earthBehavior:SetButtons(currentSpellButtons)
             earthButton:SetBehavior(earthBehavior)
             pages:Get(1):Add(earthButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 200))
+            xPositions:Get(1):Add(cast(integer, cameraX + 225))
             yPositions:Get(1):Add(cast(integer, cameraY + 100))
             earthButton:SetGame(game)
             earthButton:SetName("Earth")
             earthButton:SetPosition(-1000, -1000)
             earthButton:SetHorizontal(true)
+            earthButton:SetPretty(true)
             earthButton:SetTarget(earthButton)
             game:Add(earthButton)
 
@@ -317,12 +336,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             windBehavior:SetButtons(currentSpellButtons)
             windButton:SetBehavior(windBehavior)
             pages:Get(1):Add(windButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 200))
+            xPositions:Get(1):Add(cast(integer, cameraX + 225))
             yPositions:Get(1):Add(cast(integer, cameraY + 50))
             windButton:SetGame(game)
             windButton:SetName("Wind")
             windButton:SetPosition(-1000, -1000)
             windButton:SetHorizontal(true)
+            windButton:SetPretty(true)
             windButton:SetTarget(windButton)
             game:Add(windButton)
 
@@ -340,12 +360,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             lightBehavior:SetButtons(currentSpellButtons)
             lightButton:SetBehavior(lightBehavior)
             pages:Get(1):Add(lightButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 300))
+            xPositions:Get(1):Add(cast(integer, cameraX + 375))
             yPositions:Get(1):Add(cast(integer, cameraY + 100))
             lightButton:SetGame(game)
             lightButton:SetName("Light")
             lightButton:SetPosition(-1000, -1000)
             lightButton:SetHorizontal(true)
+            lightButton:SetPretty(true)
             lightButton:SetTarget(lightButton)
             game:Add(lightButton)
 
@@ -363,12 +384,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             darkBehavior:SetButtons(currentSpellButtons)
             darkButton:SetBehavior(darkBehavior)
             pages:Get(1):Add(darkButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 300))
+            xPositions:Get(1):Add(cast(integer, cameraX + 375))
             yPositions:Get(1):Add(cast(integer, cameraY + 50))
             darkButton:SetGame(game)
             darkButton:SetName("Dark")
             darkButton:SetPosition(-1000, -1000)
             darkButton:SetHorizontal(true)
+            darkButton:SetPretty(true)
             darkButton:SetTarget(darkButton)
             game:Add(darkButton)
 
@@ -385,6 +407,7 @@ class CombatMainPageBehavior is Behavior, MainPage
             spellsBackButton:SetName("Back")
             spellsBackButton:SetPosition(-1000, -1000)
             spellsBackButton:SetHorizontal(true)
+            spellsBackButton:SetPretty(true)
             spellsBackButton:SetTarget(spellsBackButton)
             game:Add(spellsBackButton)
 
@@ -395,6 +418,12 @@ class CombatMainPageBehavior is Behavior, MainPage
             Label currentBaseDamage
             Label currentManaCost
             Label currentMultiTarget
+
+            Drawable spellInfoBackground
+            spellInfoBackground:Load("Assets/Sprites/info-box.png")
+            spellInfoBackground:Scale(6.5, 4)
+            spellInfoBackground:SetPosition(-1000, -1000)
+            game:Add(spellInfoBackground)
 
             MenuButton currentSpellInfo
             currentSpellButtons:Add(currentSpellInfo)
@@ -423,18 +452,18 @@ class CombatMainPageBehavior is Behavior, MainPage
 
             // adds Done Combining Button to page
             pages:Get(1):Add(doneCombiningButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 400))
-            yPositions:Get(1):Add(cast(integer, cameraY + 115))
+            xPositions:Get(1):Add(cast(integer, cameraX + 525))
+            yPositions:Get(1):Add(cast(integer, cameraY + 100))
 
             // adds Concentrate Button to page
             pages:Get(1):Add(concentrateButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 400))
-            yPositions:Get(1):Add(cast(integer, cameraY + 65))
+            xPositions:Get(1):Add(cast(integer, cameraX + 575))
+            yPositions:Get(1):Add(cast(integer, cameraY + 50))
 
             // adds Remove Token Button to page
             pages:Get(1):Add(removeTokenButton)
-            xPositions:Get(1):Add(cast(integer, cameraX + 400))
-            yPositions:Get(1):Add(cast(integer, cameraY + 15))
+            xPositions:Get(1):Add(cast(integer, cameraX + 675))
+            yPositions:Get(1):Add(cast(integer, cameraY + 100))
 
             // adds Current Spell Info Button to page (for accessibility)
             pages:Get(1):Add(currentSpellInfo)
@@ -443,17 +472,19 @@ class CombatMainPageBehavior is Behavior, MainPage
 
             counter = 0
             repeat while counter < combatants:GetSize()
-                MenuButton button
-                button:SetGame(game)
-                button:SetName(combatantInfo:Get(counter))
-                button:SetPosition(-1000, -1000)
-                button:SetHorizontal(false)
-                button:SetTarget(sprites:Get(counter))
-                game:Add(button)
+                if combatants:Get(counter) not= undefined
+                    MenuButton button
+                    button:SetGame(game)
+                    button:SetName(combatantInfo:Get(counter))
+                    button:SetPosition(-1000, -1000)
+                    button:SetHorizontal(false)
+                    button:SetTarget(sprites:Get(counter))
+                    game:Add(button)
 
-                pages:Get(1):Add(button)
-                xPositions:Get(1):Add(-1000)
-                yPositions:Get(1):Add(-1000)
+                    pages:Get(1):Add(button)
+                    xPositions:Get(1):Add(-1000)
+                    yPositions:Get(1):Add(-1000)
+                end
 
                 counter = counter + 1
             end
@@ -494,6 +525,10 @@ class CombatMainPageBehavior is Behavior, MainPage
             xPositions:Get(1):Add(-1000)
             yPositions:Get(1):Add(-1000)
 
+            pages:Get(1):Add(spellInfoBackground)
+            xPositions:Get(1):Add(cast(integer, cameraX + 500))
+            yPositions:Get(1):Add(cast(integer, cameraY + 120))
+
             labels:Add(currentSpellName)
             labels:Add(currentBaseDamage)
             labels:Add(currentManaCost)
@@ -511,19 +546,19 @@ class CombatMainPageBehavior is Behavior, MainPage
             yPositions:Get(1):Add(-1000)
             pages:Get(1):Add(currentSpell)
             xPositions:Get(1):Add(cast(integer, cameraX + 600))
-            yPositions:Get(1):Add(cast(integer, cameraY + 120))
+            yPositions:Get(1):Add(cast(integer, cameraY + 120 + 150))
             pages:Get(1):Add(currentSpellName)
             xPositions:Get(1):Add(cast(integer, cameraX + 600))
-            yPositions:Get(1):Add(cast(integer, cameraY + 100))
+            yPositions:Get(1):Add(cast(integer, cameraY + 100 + 150))
             pages:Get(1):Add(currentBaseDamage)
             xPositions:Get(1):Add(cast(integer, cameraX + 600))
-            yPositions:Get(1):Add(cast(integer, cameraY + 80))
+            yPositions:Get(1):Add(cast(integer, cameraY + 80 + 150))
             pages:Get(1):Add(currentManaCost)
             xPositions:Get(1):Add(cast(integer, cameraX + 600))
-            yPositions:Get(1):Add(cast(integer, cameraY + 60))
+            yPositions:Get(1):Add(cast(integer, cameraY + 60 + 150))
             pages:Get(1):Add(currentMultiTarget)
             xPositions:Get(1):Add(cast(integer, cameraX + 600))
-            yPositions:Get(1):Add(cast(integer, cameraY + 40))
+            yPositions:Get(1):Add(cast(integer, cameraY + 40 + 150))
 
             /***********************************************************************
 
@@ -595,12 +630,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             singleTargetBackButton:SetName("Back")
             singleTargetBackButton:SetPosition(-1000, -1000)
             singleTargetBackButton:SetHorizontal(true)
+            singleTargetBackButton:SetPretty(true)
             singleTargetBackButton:SetTarget(singleTargetBackButton)
             game:Add(singleTargetBackButton)
 
             pages:Get(2):Add(singleTargetBackButton)
-            xPositions:Get(2):Add(cast(integer, cameraX + 400))
-            yPositions:Get(2):Add(cast(integer, cameraY + 15))
+            xPositions:Get(2):Add(cast(integer, cameraX + 675))
+            yPositions:Get(2):Add(cast(integer, cameraY + 100))
 
             pages:Get(2):Add(currentSpellInfo2)
             xPositions:Get(2):Add(-1000)
@@ -631,22 +667,25 @@ class CombatMainPageBehavior is Behavior, MainPage
                 counter = counter + 1
             end
 
+            pages:Get(2):Add(spellInfoBackground)
+            xPositions:Get(2):Add(cast(integer, cameraX + 500))
+            yPositions:Get(2):Add(cast(integer, cameraY + 120))
 
             pages:Get(2):Add(currentSpell)
             xPositions:Get(2):Add(cast(integer, cameraX + 600))
-            yPositions:Get(2):Add(cast(integer, cameraY + 120))
+            yPositions:Get(2):Add(cast(integer, cameraY + 120 + 150))
             pages:Get(2):Add(currentSpellName)
             xPositions:Get(2):Add(cast(integer, cameraX + 600))
-            yPositions:Get(2):Add(cast(integer, cameraY + 100))
+            yPositions:Get(2):Add(cast(integer, cameraY + 100 + 150))
             pages:Get(2):Add(currentBaseDamage)
             xPositions:Get(2):Add(cast(integer, cameraX + 600))
-            yPositions:Get(2):Add(cast(integer, cameraY + 80))
+            yPositions:Get(2):Add(cast(integer, cameraY + 80 + 150))
             pages:Get(2):Add(currentManaCost)
             xPositions:Get(2):Add(cast(integer, cameraX + 600))
-            yPositions:Get(2):Add(cast(integer, cameraY + 60))
+            yPositions:Get(2):Add(cast(integer, cameraY + 60 + 150))
             pages:Get(2):Add(currentMultiTarget)
             xPositions:Get(2):Add(cast(integer, cameraX + 600))
-            yPositions:Get(2):Add(cast(integer, cameraY + 40))
+            yPositions:Get(2):Add(cast(integer, cameraY + 40 + 150))
 
             /***********************************************************************
 
@@ -757,12 +796,13 @@ class CombatMainPageBehavior is Behavior, MainPage
             multiTargetBackButton:SetName("Back")
             multiTargetBackButton:SetPosition(-1000, -1000)
             multiTargetBackButton:SetHorizontal(true)
+            multiTargetBackButton:SetPretty(true)
             multiTargetBackButton:SetTarget(multiTargetBackButton)
             game:Add(multiTargetBackButton)
 
             pages:Get(3):Add(multiTargetBackButton)
-            xPositions:Get(3):Add(cast(integer, cameraX + 400))
-            yPositions:Get(3):Add(cast(integer, cameraY + 15))
+            xPositions:Get(3):Add(cast(integer, cameraX + 675))
+            yPositions:Get(3):Add(cast(integer, cameraY + 100))
 
             counter = 0
 
@@ -791,21 +831,25 @@ class CombatMainPageBehavior is Behavior, MainPage
                 counter = counter + 1
             end
 
+            pages:Get(3):Add(spellInfoBackground)
+            xPositions:Get(3):Add(cast(integer, cameraX + 500))
+            yPositions:Get(3):Add(cast(integer, cameraY + 120))
+
             pages:Get(3):Add(currentSpell)
             xPositions:Get(3):Add(cast(integer, cameraX + 600))
-            yPositions:Get(3):Add(cast(integer, cameraY + 120))
+            yPositions:Get(3):Add(cast(integer, cameraY + 120 + 150))
             pages:Get(3):Add(currentSpellName)
             xPositions:Get(3):Add(cast(integer, cameraX + 600))
-            yPositions:Get(3):Add(cast(integer, cameraY + 100))
+            yPositions:Get(3):Add(cast(integer, cameraY + 100 + 150))
             pages:Get(3):Add(currentBaseDamage)
             xPositions:Get(3):Add(cast(integer, cameraX + 600))
-            yPositions:Get(3):Add(cast(integer, cameraY + 80))
+            yPositions:Get(3):Add(cast(integer, cameraY + 80 + 150))
             pages:Get(3):Add(currentManaCost)
             xPositions:Get(3):Add(cast(integer, cameraX + 600))
-            yPositions:Get(3):Add(cast(integer, cameraY + 60))
+            yPositions:Get(3):Add(cast(integer, cameraY + 60 + 150))
             pages:Get(3):Add(currentMultiTarget)
             xPositions:Get(3):Add(cast(integer, cameraX + 600))
-            yPositions:Get(3):Add(cast(integer, cameraY + 40))
+            yPositions:Get(3):Add(cast(integer, cameraY + 40 + 150))
         end
     end
 
@@ -824,6 +868,11 @@ class CombatMainPageBehavior is Behavior, MainPage
         repeat while outerCounter < pages:GetSize()
             innerCounter = 0
             repeat while innerCounter < pages:Get(outerCounter):GetSize()
+                if pages:Get(outerCounter):Get(innerCounter) is MenuButton
+                    MenuButton tempButton = cast(MenuButton, pages:Get(outerCounter):Get(innerCounter))
+                    tempButton:Dispose()
+                end
+
                 removalArray:Add(pages:Get(outerCounter):Get(innerCounter))
 
                 innerCounter = innerCounter + 1

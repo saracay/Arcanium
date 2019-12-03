@@ -42,7 +42,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //Queue for removing objects
     public Array<Item2D> removalArray
-    public Button debugTest // for Title Screen
+    public MenuButton debugTest // for Title Screen
     public Drawable Arcanium // for Title Screen
 
     //Entities
@@ -129,8 +129,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     // bedroom level
     //For Transition to Combat
-    boolean inCombat = false
-
+    public boolean inCombat = false
+    boolean playerStatsInitialized = false
     public boolean lockMovement = false
 
     integer TPindex = 0
@@ -170,9 +170,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAnimTest()
         //InitializeSpellAnimTest(fireball, Fireball)
         //InitializeAudioTest()
-        //TitleScreenTest()
+        TitleScreenTest()
         //CineSequencerTest()
-        DebugMenuTest() 
+//        DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
 //        PrologueTown town
@@ -216,7 +216,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //                             CUSTOM ACTIONS
 //==============================================================================
 
-    action AddToRemove(Drawable object)
+    action AddToRemove(Item2D object)
         removalArray:Add(object)
     end
 
@@ -365,6 +365,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -399,6 +400,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -433,6 +435,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -467,6 +470,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -888,6 +892,26 @@ class Main is Game, CollisionListener2D, KeyboardListener
 	if not inCombat
             inCombat = true
 
+            if not playerStatsInitialized
+                InitializePlayerStats()
+                playerStatsInitialized = true
+            end
+
+            player1:SetCurrentHP(player1:GetMaxHP())
+            player1:SetCurrentMP(player1:GetMaxMP())
+            player1:ClearAllStatus()
+
+            Battle battle
+            battle:SetGame(me)
+            battle:SetRemovalArray(removalArray)
+            battle:SetBehaviorQueue(behaviorQueue)  
+            battle:SetCamera(camera)
+            battle:Initialize(player1, enemies)
+            battle:Run(undefined)
+        end
+    end
+
+    action InitializePlayerStats
             Array<number> currentElementsEffectiveness
             currentElementsEffectiveness:Add(1.0)
             currentElementsEffectiveness:Add(0.7)
@@ -907,15 +931,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
             player1:SetRemovalArray(removalArray)
             player1:SetBehaviorQueue(behaviorQueue)
             player1:SetCamera(camera)
-
-            Battle battle
-            battle:SetGame(me)
-            battle:SetRemovalArray(removalArray)
-            battle:SetBehaviorQueue(behaviorQueue)  
-            battle:SetCamera(camera)
-            battle:Initialize(player1, enemies)
-            battle:Run(undefined)
-        end
     end
     
     action CineSequencerTest()
@@ -1350,11 +1365,16 @@ action TitleScreenTest
     Add(Arcanium)
 
     TitleScreenBehavior testing1
-    debugTest:SetPosition(300,200)
-    debugTest:SetName("Debug Menu")
+    debugTest:SetGame(me)
+    debugTest:SetPosition(350,200)
+    debugTest:SetName("Start Game")
+    debugTest:SetHorizontal(true)
+    debugTest:SetPretty(true)
+    debugTest:SetTarget(debugTest)
     Add(debugTest)
     debugTest:SetBehavior(testing1)
 
+    SetFocus(debugTest)
 end
 /***********************************************************************
                   Maria's DEBUG MENU testing section.

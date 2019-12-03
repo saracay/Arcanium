@@ -9,9 +9,11 @@ class TitleScreenBehavior is Behavior
 GameStateManager manager
     action Run (BehaviorEvent event)
         Main main = cast(Main, manager:GetGame())
-        main:DebugMenuTest()
+        main:BeginGameSequence()
         main:AddToRemove(main:Arcanium)
-        main:Remove(main:debugTest)
-        
+
+        MenuButton button = cast(MenuButton, event:GetItem())
+        button:Dispose()
+        main:AddToRemove(button)
     end
 end

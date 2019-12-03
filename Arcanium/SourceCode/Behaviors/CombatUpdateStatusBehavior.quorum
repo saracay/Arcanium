@@ -36,7 +36,9 @@ class CombatUpdateStatusBehavior is Behavior
         player = cast(Player, combatants:Get(0))
         integer counter = 0
 
-        playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
+        if player not= undefined
+            playerMana:SetText("Mana: " + player:GetCurrentMP() + "/" + player:GetMaxMP())
+        end
 
         repeat while counter < statusWindows:GetSize()
             if (combatants:Get(counter) not= undefined) and (not combatants:Get(counter):CheckDefeated())
@@ -46,9 +48,8 @@ class CombatUpdateStatusBehavior is Behavior
                     removalArray:Add(playerMana)
                 else
                     player:AddExperience(combatants:Get(counter):GetExperienceValue(), combatants:Get(counter):GetLevel())
+                    combatants:Set(counter, undefined)
                 end
-
-                combatants:Set(counter, undefined)
 
                 removalArray:Add(statusNames:Get(counter))
                 statusNames:Set(counter, undefined)
@@ -74,9 +75,9 @@ class CombatUpdateStatusBehavior is Behavior
     end
 
     action CheckCombatOver
-        integer counter = 1
         boolean enemiesRemain = false
 
+        integer counter = 1
         repeat while counter < combatants:GetSize()
             if combatants:Get(counter) not= undefined
                 enemiesRemain = true
@@ -85,31 +86,7 @@ class CombatUpdateStatusBehavior is Behavior
             counter = counter + 1
         end
 
-        if combatants:Get(0) = undefined
-            behaviorQueue:StopBehaviors()
-
-            Array<text> gameOver
-            gameOver:Add(player:GetName() + " was defeated! Game over!")
-
-            DisplayLogBehavior gameOverMessage
-            gameOverMessage:SetGame(game)
-            gameOverMessage:SetLog(gameOver)
-            gameOverMessage:SetRemovalArray(removalArray)
-            gameOverMessage:SetCamera(camera)
-            behaviorQueue:AddBehavior(gameOverMessage)
-
-//            need behavior to end game after displaying Game Over text
-        elseif not enemiesRemain
-//            Array<text> endLog
-//            endLog:Add("You defeated all enemies! The battle is won!")
-//
-//            DisplayLogBehavior logBehavior
-//            logBehavior:SetGame(game)
-//            logBehavior:SetLog(endLog)
-//            logBehavior:SetRemovalArray(removalArray)
-//            logBehavior:SetCamera(camera)
-//            behaviorQueue:AddBehavior(logBehavior)
-
+        if combatants:Get(0) = undefined or not enemiesRemain
             statusInfo:Add(playerMana)
             backgrounds:Get(0):SetPosition(-1000, -1000)
 

@@ -57,7 +57,7 @@
                 {
                  "height":42,
                  "id":24,
-                 "name":"Dead Goblin 2 Interactable",
+                 "name":"Dead Goblin 1 Interactable",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -68,7 +68,7 @@
                 {
                  "height":44,
                  "id":25,
-                 "name":"Dead Goblin 1 Interactable",
+                 "name":"Dead Goblin 2 Interactable",
                  "rotation":0,
                  "type":"",
                  "visible":true,

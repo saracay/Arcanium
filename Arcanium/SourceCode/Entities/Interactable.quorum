@@ -173,6 +173,25 @@ class Interactable is Drawable, KeyboardListener
     action CreateMapTransitionBehavior(Map oldMap, text newMapName, number newX, number newY, text musicName)
         MapTransitionBehavior temp
         temp:SetTransition(oldMap, newMapName)
+        if newMapName = maps:FOREST_PATH_1_MAP
+            newX = 795
+            newY = 320
+        end
+
+        if newMapName = maps:FOREST_PATH_2_MAP
+            newX = 245
+            newY = 0
+        end
+
+        if newMapName = maps:FOREST_PATH_3_MAP
+            newX = 0    
+            newY = 500
+        end
+
+        if newMapName = maps:FOREST_PATH_4_MAP
+            newX = 467
+            newY = 600
+        end
         temp:SetCoordinates(newX, newY)
         if (newMapName = maps:FOREST_CLEARING_MAP)
             musicName = "zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785"

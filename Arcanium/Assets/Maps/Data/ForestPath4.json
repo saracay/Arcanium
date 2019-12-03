@@ -54,17 +54,17 @@
          "id":5,
          "name":"Interactables",
          "objects":[
-                {
-                 "height":62,
-                 "id":2,
-                 "name":"Interactable Log Pile 1",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":290,
-                 "y":482
-                }],
+              {
+               "height":116,
+               "id":35,
+               "name":"Interactable Log Pile 1",
+               "rotation":0,
+               "type":"",
+               "visible":true,
+               "width":32,
+               "x":353,
+               "y":156
+              }],
          "opacity":1,
          "type":"objectgroup",
          "visible":false,
