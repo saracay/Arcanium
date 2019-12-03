@@ -13,8 +13,6 @@ class PrologueTown is Cinematic
     CinematicSequencer cineSequencer
     Map tempMap
     MapList maps
-    ForestClearing forestClearing
-    PrologueTown2 prologueTown2
 
     //Actors
     Animation player
@@ -316,10 +314,6 @@ class PrologueTown is Cinematic
         dialogue4:      SetCamera(main:GetCamera2D())
         dialogue4:      SetLog(dialogue4Text)
 
-        transition1:    SetTransition(tempMap, maps:PROLOGUE_TOWN_MAP)
-        transition1:    SetCinematic(prologueTown2)
-//        transition1:    SetMusic("zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785")
-
         remove1:        SetDrawable(boy:sprite1)
         remove2:        SetDrawable(goblin1:sprite1)
         remove3:        SetDrawable(goblin2:sprite1)
@@ -372,8 +366,8 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(move3Boy, true)
         cineSequencer:AddCineEvent(move4Boy, true)
         cineSequencer:AddCineEvent(dialogue4, true)
-//        cineSequencer:AddCineEvent(wait11, true)
-//        cineSequencer:AddCineEvent(remove1, false)
+        cineSequencer:AddCineEvent(wait11, true)
+        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(remove2, false)
         cineSequencer:AddCineEvent(remove3, false)
         cineSequencer:AddCineEvent(remove4, false)
@@ -383,7 +377,6 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(remove8, false)
         cineSequencer:AddCineEvent(remove9, false)
         cineSequencer:AddCineEvent(remove10, true) 
-//        cineSequencer:AddCineEvent(transition1, false)
 
      
     end

@@ -54,6 +54,11 @@ class MapState
             introduction2:Run()
         end
 
+        if mapName = maps:PROLOGUE_TOWN_MAP and firstBattleComplete = true
+            PrologueTown2 prologueTown2
+            prologueTown2:Run()
+        end
+
         // TO-DO: save the hero's position
         if mapName = maps:FOREST_PATH_1_MAP and riverCrossed = true
             // rerender with forest path 1 complete map

@@ -205,6 +205,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
             enemies:Add("Goblin Shaman")
             enemies:Add("Goblin")
             CombatTest(enemies)
+        end
+
+        if currentMap:name = maps:PROLOGUE_TOWN_MAP and cineSequencer:IsFinished() and not inCombat
             mapState:SetFirstBattleComplete(true)
         end
         
