@@ -56,30 +56,35 @@ class MapState
             // rerender with forest path 1 complete map
             ForestPath1ObstacleComplete cine
             cine:Run()
+            riverCrossed = false
         end
 
         if mapName = maps:FOREST_PATH_2_MAP and treeBurned = true
             // rerender with forest path 2 complete map
             ForestPath2ObstacleComplete cine
             cine:Run()
+            treeBurned = false
         end
 
         if mapName = maps:FOREST_PATH_3_MAP and firePutOut = true
             // rerender with forest path 3 complete map
             ForestPath3ObstacleComplete cine
             cine:Run()
+            firePutOut = false
         end
 
         if mapName = maps:FOREST_PATH_4_MAP and logPile1Moved = true
             // rerender with forest path 4 half complete map
             ForestPath4Obstacle1Complete cine
             cine:Run()
+            logPile1Moved = false
         end
 
         if mapName = maps:FOREST_PATH_4_MAP_HALF_COMPLETE and logPile2Moved = true
             // rerender with forest path 4 complete map
             ForestPath4Obstacle2Complete cine
             cine:Run()
+            logPile2Moved = false
         end
     end
 

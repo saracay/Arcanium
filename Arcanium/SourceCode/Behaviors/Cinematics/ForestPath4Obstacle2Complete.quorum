@@ -19,12 +19,15 @@ class ForestPath4Obstacle2Complete is Cinematic
 
     //PostProcessing
     Drawable rectangle1
+    Drawable rectangle2
     Color blue
+    Color clear
 
     //Cinematic Behaviors
     WaitForBehavior     wait1
     WaitForBehavior     wait2      
     RemoveObjectBehavior remove1
+    RemoveObjectBehavior remove2
     ColorFadeBehavior   colorFade1
     ColorFadeBehavior   colorFade2
     MapTransitionBehavior transition1
@@ -38,23 +41,34 @@ class ForestPath4Obstacle2Complete is Cinematic
     end
 
     private action ActorSetup()
-        blue:SetColor(0,0,0,0.25)
-        rectangle1:LoadFilledRectangle(800,800,blue)
+        //Required Calls
+        main = cast(Main, manager:GetGame())
+        cineSequencer = main:GetCineSequencer()
+
+        blue:SetColor(0,0,0,1)
+        clear:SetColor(0,0,0,0)
+        rectangle1:LoadFilledRectangle(800,800,clear)
+        rectangle2:LoadFilledRectangle(800,800,blue)
         main:Add(rectangle1)
+
     end
 
     private action BehaviorSetup()
-        colorFade2:         SetFade(0,0,0,1, 6)
-        colorFade2:         SetDrawable(rectangle1)
         transition1:        SetTransition(tempMap, maps:FOREST_PATH_4_MAP_COMPLETE)
-        colorFade1:     SetDrawable(rectangle1)
-        colorFade1:     SetFade(0, 0, 0, 0, 8)
+        colorFade1:         SetDrawable(rectangle1)
+        colorFade1:         SetFade(0, 0, 0, 1, 2)
+        colorFade2:         SetDrawable(rectangle2)
+        colorFade2:         SetFade(0, 0 ,0, 0, 2)
+        colorFade2:         AddDuringScene(main)
+        remove1:            SetDrawable(rectangle1)
+        remove2:            SetDrawable(rectangle2)  
     end
 
     private action EnqueueBehaviors()
-        cineSequencer:AddCineEvent(colorFade2, true)
-        cineSequencer:AddCineEvent(transition1, true)
-        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(colorFade1, true)
+        cineSequencer:AddCineEvent(transition1, true)
+        cineSequencer:AddCineEvent(remove1, true)
+        cineSequencer:AddCineEvent(colorFade2, true)
+        cineSequencer:AddCineEvent(remove2, true)
     end
 end

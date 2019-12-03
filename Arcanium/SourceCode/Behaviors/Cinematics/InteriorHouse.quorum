@@ -45,6 +45,7 @@ class InteriorHouse is Cinematic
     end
 
     private action ActorSetup()
+        //Required Calls
         main = cast(Main, manager:GetGame())
         cineSequencer = main:GetCineSequencer()
         player = main:GetPlayer():playerSprite

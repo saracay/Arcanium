@@ -22,10 +22,17 @@ class ColorFadeBehavior is Behavior
     number currAlpha = 0
 
     boolean finished = false
+    boolean addDrawable = false
+
+    Main main = undefined
 
     action Run (BehaviorEvent event)
         Color d
         
+        if(addDrawable)
+            main:Add(drawable)
+        end
+
         currTime = 0
         output "ColorFadeBehavior"
         currRed = drawable:GetColor():GetRed()
@@ -59,6 +66,11 @@ class ColorFadeBehavior is Behavior
     
     action SetDrawable(Drawable draw)
         drawable = draw
+    end
+
+    action AddDuringScene(Main currMain)  
+        main = currMain
+        addDrawable = true
     end
 
     action IsFinished returns boolean

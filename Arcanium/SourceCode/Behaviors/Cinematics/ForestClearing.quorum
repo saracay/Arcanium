@@ -77,6 +77,7 @@ class ForestClearing is Cinematic
     end
 
     action ActorSetup()
+        //Required Calls
         main = cast(Main, manager:GetGame())
         cineSequencer = main:GetCineSequencer()
 

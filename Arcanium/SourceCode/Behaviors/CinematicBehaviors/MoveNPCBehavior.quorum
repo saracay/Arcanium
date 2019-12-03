@@ -22,6 +22,8 @@ class MoveNPCBehavior is Behavior
     boolean finished = false
     boolean isCollidable = false
     boolean setCollidable = false
+    boolean setDirection = false
+    boolean setFrame = false
 
     action Run (BehaviorEvent event)
         currTime = 0   
@@ -31,8 +33,12 @@ class MoveNPCBehavior is Behavior
         end
         if(frame not= 0)
             npc:SetFrame(frame)
+            npc:LoadFrame2(npcName)
         end
-        output "MoveCameraBehavior"
+        if(setDirection)
+            npc:ChangeFrames(npcName, direction)
+        end
+        output "MoveNPCBehavior"
     end
 
     action Update(number seconds)
@@ -67,9 +73,11 @@ class MoveNPCBehavior is Behavior
             end
           end
         else
-            //Set to standing frame
-            npc:SetFrame(99)
-            npc:ChangeFrames(npcName, direction)
+            if(setDirection = false and setFrame = false)
+                //Set to standing frame
+                npc:SetFrame(99)
+                npc:ChangeFrames(npcName, direction) 
+            end
             finished = true
         end
 
@@ -98,6 +106,12 @@ class MoveNPCBehavior is Behavior
 
     action SetFrame(integer tempFrame)
         frame = tempFrame
+        setFrame = true
+    end
+
+    action SetDirection(text tempDirection)
+        direction = tempDirection
+        setDirection = true
     end
 
 end
