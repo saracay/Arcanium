@@ -178,14 +178,33 @@ class Interactable is Drawable, KeyboardListener
             newY = 320
         end
 
+        // when going back to a completed map
+        if newMapName = maps:FOREST_PATH_1_MAP_COMPLETE
+            output "hewwo map complete"
+            newX = 245
+            newY = 600
+        end
+
         if newMapName = maps:FOREST_PATH_2_MAP
             newX = 245
             newY = 0
         end
 
+        // when going back to a completed map
+        if newMapName = maps:FOREST_PATH_2_MAP_COMPLETE
+            newX = 800
+            newY = 500
+        end
+
         if newMapName = maps:FOREST_PATH_3_MAP
             newX = 0    
             newY = 500
+        end
+
+        // when going back to a completed map
+        if newMapName = maps:FOREST_PATH_3_MAP_COMPLETE
+            newX = 467
+            newY = 0
         end
 
         if newMapName = maps:FOREST_PATH_4_MAP
