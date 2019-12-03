@@ -129,8 +129,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     // bedroom level
     //For Transition to Combat
-    boolean inCombat = false
-
+    public boolean inCombat = false
+    boolean playerStatsInitialized = false
     public boolean lockMovement = false
 
     integer TPindex = 0
@@ -172,7 +172,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
         //InitializeAudioTest()
         //TitleScreenTest()
         //CineSequencerTest()
-        DebugMenuTest() 
+        DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
 //        PrologueTown town
@@ -365,6 +365,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -399,6 +400,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -433,6 +435,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -467,6 +470,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
                         enemies:Add("Goblin")
                         enemies:Add("Wolf")
                     else    //whichEncounter = 5
+                        enemies:Add("Goblin Shaman")
                         enemies:Add("Orc")
                     end
 
@@ -888,6 +892,26 @@ class Main is Game, CollisionListener2D, KeyboardListener
 	if not inCombat
             inCombat = true
 
+            if not playerStatsInitialized
+                InitializePlayerStats()
+                playerStatsInitialized = true
+            end
+
+            player1:SetCurrentHP(player1:GetMaxHP())
+            player1:SetCurrentMP(player1:GetMaxMP())
+            player1:ClearAllStatus()
+
+            Battle battle
+            battle:SetGame(me)
+            battle:SetRemovalArray(removalArray)
+            battle:SetBehaviorQueue(behaviorQueue)  
+            battle:SetCamera(camera)
+            battle:Initialize(player1, enemies)
+            battle:Run(undefined)
+        end
+    end
+
+    action InitializePlayerStats
             Array<number> currentElementsEffectiveness
             currentElementsEffectiveness:Add(1.0)
             currentElementsEffectiveness:Add(0.7)
@@ -907,15 +931,6 @@ class Main is Game, CollisionListener2D, KeyboardListener
             player1:SetRemovalArray(removalArray)
             player1:SetBehaviorQueue(behaviorQueue)
             player1:SetCamera(camera)
-
-            Battle battle
-            battle:SetGame(me)
-            battle:SetRemovalArray(removalArray)
-            battle:SetBehaviorQueue(behaviorQueue)  
-            battle:SetCamera(camera)
-            battle:Initialize(player1, enemies)
-            battle:Run(undefined)
-        end
     end
     
     action CineSequencerTest()
