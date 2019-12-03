@@ -8,33 +8,20 @@ class TeleportBehavior is Behavior
     Pass me the name of the current map and the index of the POI you want
 */
     Player player
-    text mapName = ""
-    integer poiIndex = 0
+    TeleportToMenuBehavior menu
 
-    number newX = 0
-    number newY = 0
+    integer newX = 0
+    integer newY = 0
     
+    boolean exit = false
     boolean finished = false
 
     action Run (BehaviorEvent event)
-        JavaScriptObjectNotation mapData
-        File data
-
-        data:SetPath("Assets\Maps\Data\" + mapName  + ".json")
-        if (data:Exists())
-            mapData:Read(data)
-            JavaScriptObjectNotation poiData = mapData:GetObject("pointsofinterest")
-
-            if poiIndex < poiData:GetSize()
-
-                number newX = cast(number, poiData:Get(poiIndex):GetValue("x"))
-                number newY = cast(number, poiData:Get(poiIndex):GetValue("y"))
-output "Teleporting player to coordinates (" + newX + ", " + newY + ")"
-                player:playerSprite:sprite3:SetPosition(newX, newY)
-            else
-                output "Point of interest doesn't exist"
-            end
+        if not exit
+            player:playerSprite:sprite3:SetPosition(newX, newY)
         end
+
+        menu:Dispose()
 
         finished = true
     end
@@ -43,24 +30,23 @@ output "Teleporting player to coordinates (" + newX + ", " + newY + ")"
         return finished
     end
 
+    action SetMenu(TeleportToMenuBehavior newMenu)
+        menu = newMenu
+    end
+
     action SetPlayer(Player p)
         player = p
     end
 
-    action SetX(number x)
+    action SetX(integer x)
         newX = x
     end
 
-    action SetY(number y)
+    action SetY(integer y)
         newY = y
     end
 
-    action SetPOIIndex(integer poi)
-        poiIndex = poi
+    action SetExit(boolean bool)
+        exit = bool
     end
-
-    action SetMapName(text map)
-        mapName = map
-    end
-
 end

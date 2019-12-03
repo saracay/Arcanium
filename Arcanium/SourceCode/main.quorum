@@ -478,6 +478,9 @@ class Main is Game, CollisionListener2D, KeyboardListener
                 end
             end
         end
+        if monitor:IsKeyPressed(keys:ESCAPE)
+            OpenTeleportMenu()
+        end
 
         // Checks if PLAYER is out of bounds
         if newY < 0
@@ -1039,14 +1042,25 @@ class Main is Game, CollisionListener2D, KeyboardListener
         audioManager:PlayAudio("MidnightTale")
     end
 
-    action TeleportTest(integer index)
-        BehaviorEvent bevent
-        TeleportBehavior tpBehavior
-        tpBehavior:SetPlayer(player1)
-        tpBehavior:SetMapName(currentMap:name)
-        tpBehavior:SetPOIIndex(index)
-        tpBehavior:Run(bevent)
+    action OpenTeleportMenu
+        lockMovement = true
+
+        TeleportToMenuBehavior behavior
+        behavior:SetGame(me)
+        behavior:SetPlayer(player1)
+        behavior:SetCurrentMap(currentMap)
+        behavior:SetRemovalArray(removalArray)
+        behavior:Run(undefined)
     end
+
+//    action TeleportTest(integer index)
+//        BehaviorEvent bevent
+//        TeleportBehavior tpBehavior
+//        tpBehavior:SetPlayer(player1)
+//        tpBehavior:SetMapName(currentMap:name)
+//        tpBehavior:SetPOIIndex(index)
+//        tpBehavior:Run(bevent)
+//    end
 
     action InteractablesTest()
     /***********************************************************************
