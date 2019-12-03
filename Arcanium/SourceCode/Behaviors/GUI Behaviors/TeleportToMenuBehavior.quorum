@@ -58,10 +58,12 @@ class TeleportToMenuBehavior is Behavior
                 interestPointButton:SetDescription("Teleports the player to the " + name)
 
                 TeleportBehavior behavior
+                behavior:SetGame(game)
                 behavior:SetPlayer(player)
                 behavior:SetMenu(me)
                 behavior:SetX(newX)
                 behavior:SetY(newY)
+                behavior:SetCurrentMap(currentMap)
 
                 interestPointButton:SetBehavior(behavior)
                 buttons:Add(interestPointButton)
