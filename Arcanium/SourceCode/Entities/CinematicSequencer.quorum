@@ -82,7 +82,8 @@ class CinematicSequencer
             currentBehavior = undefined
             
         end
-        
+
+        finished = true
         runningBehaviors:Empty()
         waitCheckQueue:Empty()
         queue:Empty()

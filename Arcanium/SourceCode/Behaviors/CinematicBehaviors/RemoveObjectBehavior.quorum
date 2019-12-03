@@ -13,8 +13,9 @@ class RemoveObjectBehavior is Behavior
     action Run (BehaviorEvent event)
         Main main = cast(Main, manager:GetGame())
         output "RemoveObjectBehavior"
-        main:AddToRemove(drawable)
         finished = true
+        main:AddToRemove(drawable)
+        
     end
 
     action SetDrawable(Drawable toRemove)

@@ -90,7 +90,7 @@ class PrologueTown is Cinematic
     WaitForBehavior     wait9
     WaitForBehavior     wait10
     WaitForBehavior     wait11
-    WaitForBehavior     wait12
+
 
     DisplayLogBehavior  dialogue1
     DisplayLogBehavior  dialogue2
@@ -293,6 +293,7 @@ class PrologueTown is Cinematic
         wait8:          SetWaitDuration(1)
         wait9:          SetWaitDuration(3)
         wait10:         SetWaitDuration(1)
+        wait11:         SetWaitDuration(1)
 
         dialogue1:      SetRemovalArray(main:GetRemovalArray())
         dialogue1:      SetGame(main)
@@ -329,7 +330,7 @@ class PrologueTown is Cinematic
         remove9:        SetDrawable(man2:sprite1)
         remove10:       SetDrawable(woman1:sprite1)
 
-        combat:SetEnemyList(enemies)
+        combat:SetEnemyList(enemies)   
              
     end
 
@@ -370,7 +371,7 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(move3Boy, true)
         cineSequencer:AddCineEvent(move4Boy, true)
         cineSequencer:AddCineEvent(dialogue4, true)
-        cineSequencer:AddCineEvent(transition1, true)
+        cineSequencer:AddCineEvent(wait11, true)
         cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(remove2, false)
         cineSequencer:AddCineEvent(remove3, false)
@@ -380,8 +381,10 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(remove7, false)
         cineSequencer:AddCineEvent(remove8, false)
         cineSequencer:AddCineEvent(remove9, false)
-        cineSequencer:AddCineEvent(remove10, true)
+        cineSequencer:AddCineEvent(remove10, true) 
+        cineSequencer:AddCineEvent(transition1, false)
 
+     
     end
 
 end
