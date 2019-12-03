@@ -421,7 +421,18 @@
          "id":9,
          "name":"Interactables",
          "objects":[
-                {
+              {
+                 "height":82,
+                 "id":45,
+                 "name":"Burnable Tree Interactable",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":55,
+                 "x":661,
+                 "y":547
+              },
+              {
                  "height":17,
                  "id":4,
                  "name":"Goblin Camp Interactable",
@@ -453,17 +464,6 @@
                  "width":11,
                  "x":202,
                  "y":543
-                }, 
-                {
-                 "height":82,
-                 "id":45,
-                 "name":"Burnable Tree Interactable",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":55,
-                 "x":661,
-                 "y":547
                 }],
          "opacity":1,
          "type":"objectgroup",

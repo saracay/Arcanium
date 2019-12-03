@@ -54,17 +54,17 @@
          "id":5,
          "name":"Interactables",
          "objects":[ 
-                {
-                 "height":44,
-                 "id":25,
-                 "name":"Dead Goblin 1 Interactable",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":49,
-                 "x":702,
-                 "y":462
-                }, 
+              {
+                     "height":42,
+                     "id":24,
+                     "name":"Dead Goblin 1 Interactable",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":37,
+                     "x":275,
+                     "y":179
+              }, 
                 {
                  "height":61,
                  "id":36,
