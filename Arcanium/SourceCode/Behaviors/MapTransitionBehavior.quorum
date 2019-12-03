@@ -105,6 +105,11 @@ class MapTransitionBehavior is Behavior
             main:audioManager:PlayAudio("4371-skye-cuillin-by-kevin-macleod")
         end
 
+        if mapName = maps:FOREST_CLEARING_MAP
+            main:audioManager:AddAudio("zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785", "ogg", "music")
+            main:audioManager:PlayAudio("zapsplat_nature_forest_ambience_summer_creek_close_by_loud_insects_cicada_australia_27785")
+        end
+
         if mapName = maps:PROLOGUE_TOWN_MAP
             output "playing prologue town cutscene"
             PrologueTown prologueTown
