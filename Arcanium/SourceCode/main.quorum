@@ -44,6 +44,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
     public Array<Item2D> removalArray
     public MenuButton debugTest // for Title Screen
     public Drawable Arcanium // for Title Screen
+    public Drawable TitleBackground
 
     //Entities
     Map currentMap
@@ -152,10 +153,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-//        InitializeMap(currentMap, maps:PROLOGUE_TOWN_MAP)
-//        InitializeInteractables(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        InitializeMap(currentMap, maps:RUINED_TOWN_MAP)
+//        InitializeInteractables(currentMap, maps:RUINED_TOWN_MAP)
 //        InitializePlayer(player1)
-//        LoadAboveLayer(currentMap, maps:PROLOGUE_TOWN_MAP)
+//        LoadAboveLayer(currentMap, maps:RUINED_TOWN_MAP)
         
 
         //==TEST CALLS==
@@ -175,7 +176,7 @@ class Main is Game, CollisionListener2D, KeyboardListener
 //        DebugMenuTest()
         //InitializeWhiteRoom()
         //KeyBindTest()
-//        PrologueTown town
+//        RuinedTown town
 //        town:Run()
 //        BeginGameSequence()
 
@@ -680,6 +681,10 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     action GetCineSequencer returns CinematicSequencer
         return cineSequencer
+    end
+
+    action GetInCombat returns boolean
+        return inCombat
     end
 
 
@@ -1374,6 +1379,10 @@ action TitleScreenTest
     me:SetLayout(layout)
     File file
     file:SetPath("/Assets/ImageSheets/Arcanium3.png")
+    TitleBackground:Load("/Assets/ImageSheets/back.png")
+    TitleBackground:SetPosition(0,-150)
+    TitleBackground:SetColor(0,0.2,0.2,0.5)
+    Add(TitleBackground)
     Arcanium:Load(file)
     Arcanium:SetPosition(100,250)
     Add(Arcanium)

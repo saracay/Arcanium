@@ -39,7 +39,6 @@ class ColorFadeBehavior is Behavior
         end
 
         currTime = 0
-        output "ColorFadeBehavior"
         currRed = drawable:GetColor():GetRed()
         currGreen = drawable:GetColor():GetGreen()
         currBlue = drawable:GetColor():GetBlue()

@@ -23,7 +23,6 @@ class PanCameraBehavior is Behavior
         Main main = cast(Main, manager:GetGame())
         camera = main:GetCamera2D()
         initZoom = camera:GetZoom()
-        output "PanCameraBehavior"
     end
 
     action Update(number seconds)

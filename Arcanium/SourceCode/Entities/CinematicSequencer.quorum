@@ -17,6 +17,7 @@ class CinematicSequencer
     boolean isFinished = true
 
     action Update(number seconds)
+        
         if runningBehaviors:IsEmpty()
             return now
         end
@@ -28,19 +29,15 @@ class CinematicSequencer
         Iterator<Behavior> i = runningBehaviors:GetIterator()
         repeat while i:HasNext()
             Behavior runningBehavior = i:Next()
-
             if runningBehavior:IsFinished() 
-                
                 runningBehaviors:Remove(i:GetCurrent())
                 runningBehavior:Dispose()
-                output "finished"
             else
                runningBehavior:Update(seconds)
             end
 
             if currentWaitCheck = true and not queue:IsEmpty()
                 if currentBehavior:IsFinished()
-                    output "Next Behavior"
                     NextBehavior()
                 end
             else
@@ -60,7 +57,6 @@ class CinematicSequencer
             if queue:IsEmpty()
                 currentBehavior = undefined
                 if runningBehaviors:IsEmpty()
-                    output "CineSequencer is Finished"
                     isFinished = true
                 end
                 

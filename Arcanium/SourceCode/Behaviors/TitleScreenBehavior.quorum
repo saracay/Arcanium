@@ -6,14 +6,23 @@ use Libraries.Containers.Array
 use Libraries.Interface.Controls.Button
 
 class TitleScreenBehavior is Behavior
-GameStateManager manager
+    
+    GameStateManager manager
+    boolean finished = false
+
     action Run (BehaviorEvent event)
         Main main = cast(Main, manager:GetGame())
         main:BeginGameSequence()
         main:AddToRemove(main:Arcanium)
+        main:AddToRemove(main:TitleBackground)
 
         MenuButton button = cast(MenuButton, event:GetItem())
         button:Dispose()
         main:AddToRemove(button)
+        finished = true
+    end
+
+    action IsFinished() returns boolean
+        return finished
     end
 end

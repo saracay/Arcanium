@@ -206,10 +206,10 @@ class ForestClearing is Cinematic
     
     action EnqueueBehaviors()
         cineSequencer:AddCineEvent(colorFade1, true)
+        cineSequencer:AddCineEvent(remove1, true)
         cineSequencer:AddCineEvent(dialogue1, true)
         cineSequencer:AddCineEvent(moveNPC1, true)
         cineSequencer:AddCineEvent(moveNPC2, true)
-        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(wait1, true)
         cineSequencer:AddCineEvent(moveNPC3, true)
         cineSequencer:AddCineEvent(wait2, true)

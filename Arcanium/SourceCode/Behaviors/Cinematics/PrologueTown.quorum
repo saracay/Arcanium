@@ -372,7 +372,8 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(move4Boy, true)
         cineSequencer:AddCineEvent(dialogue4, true)
         cineSequencer:AddCineEvent(wait11, true)
-        cineSequencer:AddCineEvent(remove1, false)
+        cineSequencer:AddCineEvent(combat, true)
+//        cineSequencer:AddCineEvent(remove1, false)
         cineSequencer:AddCineEvent(remove2, false)
         cineSequencer:AddCineEvent(remove3, false)
         cineSequencer:AddCineEvent(remove4, false)
@@ -382,9 +383,7 @@ class PrologueTown is Cinematic
         cineSequencer:AddCineEvent(remove8, false)
         cineSequencer:AddCineEvent(remove9, false)
         cineSequencer:AddCineEvent(remove10, true) 
-        cineSequencer:AddCineEvent(transition1, false)
-
-     
+        
     end
 
 end

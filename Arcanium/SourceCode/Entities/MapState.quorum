@@ -10,6 +10,8 @@ use Libraries.Game.GameStateManager
 // used to keep track of actions that need to be done before a map is completed 
 
 class MapState
+    GameStateManager manager 
+    Main main = undefined
     MapList maps
 
     // cinematic effects
@@ -21,6 +23,9 @@ class MapState
 
     // introduction map
     number jewelsTouched = 0 
+
+    // prologue map
+    boolean firstBattleStarted = false
 
     // forest path 1 map
     boolean riverCrossed = false
@@ -37,18 +42,36 @@ class MapState
     // forest path 4 half complete map
     boolean logPile2Moved = false
 
+    boolean gotMain = false
+
     on create
         SetupCinematicEffects()
     end
 
     action Update(number seconds, text mapName)
+    
+        if gotMain = false
+            main = cast(Main, manager:GetGame())
+            gotMain = true
+        end
+
         // Check if map conditions have been met for things like cutscenes, map completion conditions, etc.
         if  mapName = maps:INTRODUCTION_MAP and jewelsTouched = 6
             output "condition met for introduction!" 
             jewelsTouched = jewelsTouched + 1
-
+            
             Introduction2 introduction2
             introduction2:Run()
+        end
+
+        if mapName = maps:PROLOGUE_TOWN_MAP and main:GetInCombat() = true
+            firstBattleStarted = true
+        end
+
+        if mapName = maps:PROLOGUE_TOWN_MAP  and firstBattleStarted = true and main:GetInCombat() = false
+            firstBattleStarted = false
+            PrologueTown2 cine
+            cine:Run()
         end
 
         // TO-DO: save the hero's position
@@ -118,4 +141,11 @@ class MapState
         me:logPile2Moved = logPile2Moved
     end
 
+    action SetFirstBattleStarted(boolean firstBattleStarted)
+        me:firstBattleStarted = firstBattleStarted
+    end
+
+    action GetFirstBattleStarted returns boolean
+        return firstBattleStarted
+    end
 end

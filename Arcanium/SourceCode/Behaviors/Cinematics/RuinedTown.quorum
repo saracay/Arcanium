@@ -101,6 +101,7 @@ class RuinedTown is Cinematic
     WaitForBehavior     wait15
     WaitForBehavior     wait16
     WaitForBehavior     wait17
+    WaitForBehavior     wait18
 
     DisplayLogBehavior  dialogue1
     DisplayLogBehavior  dialogue2
@@ -200,12 +201,12 @@ class RuinedTown is Cinematic
         dialogue5Text:Add("THOMAS: My son is still out there, Jakob. We must keep searching.")
         dialogue6Text:Add("JAKOB: If we have not found him by now...")
         dialogue7Text:Add("THOMAS: He is alive. I know it.")
-        dialogue8Text:Add("KID: Dad?")
+        dialogue8Text:Add("BOY: Dad?")
         dialogue9Text:Add("THOMAS: You're safe! I thought I'd lost you!")
         dialogue9Text:Add("THOMAS: How are you here? We looked everywhere.")
-        dialogue9Text:Add("KID: He saved my life.")
+        dialogue9Text:Add("BOY: He saved my life.")
         dialogue9Text:Add("THOMAS: Who?")
-        dialogue10Text:Add("KID: He was here earlier...")
+        dialogue10Text:Add("BOY: He was here earlier...")
         dialogue11Text:Add("JAKOB: Thomas, they may come back. We must leave soon.")
         dialogue12Text:Add("THOMAS: Let's go son.")
         dialogue13Text:Add("You watch them walk down the road, on their way with hopes to rebuild what was lost.")
@@ -353,6 +354,8 @@ class RuinedTown is Cinematic
         wait15:         SetWaitDuration(1)
         wait16:         SetWaitDuration(1)
         wait17:         SetWaitDuration(5)
+        wait18:         SetIndefinite()
+
 
 
         dialogue1:      SetRemovalArray(main:GetRemovalArray())
@@ -551,6 +554,7 @@ class RuinedTown is Cinematic
         cineSequencer:AddCineEvent(fadeInLogo, true)
         cineSequencer:AddCineEvent(wait17, true)
         cineSequencer:AddCineEvent(dialogue16, true)
+        cineSequencer:AddCineEvent(wait18, true)
 
 
     end

@@ -55,12 +55,12 @@ class PrologueTown2 is Cinematic
         player:SetFrame(4)
         player:ChangeFrame(playerImgSheet)
         
-        boy:LoadImageSheet(boyImgSheet)
-        boy:LoadFrame(boyImgSheet)
-        boy:sprite1:SetPosition(901, 130)
-        boy:SetFrame(4)
-        boy:ChangeFrame(boyImgSheet)
-        main:Add(boy:sprite1)
+//        boy:LoadImageSheet(boyImgSheet)
+//        boy:LoadFrame(boyImgSheet)
+//        boy:sprite1:SetPosition(901, 130)
+//        boy:SetFrame(4)
+//        boy:ChangeFrame(boyImgSheet)
+//        main:Add(boy:sprite1)
 
         dialogue1Text:Add("After slaying the goblins, you can still feel bits raw magical energy escaping through your finger tips")
         dialogue1Text:Add("HERO: How... did I just do that?")

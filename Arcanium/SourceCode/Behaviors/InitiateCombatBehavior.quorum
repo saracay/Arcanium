@@ -23,6 +23,7 @@ class InitiateCombatBehavior is Behavior
         end
         main:CombatTest(enemyList)
         finished = true
+        output finished
     end
 
     action SetInteractable(Interactable newObject)
@@ -33,7 +34,7 @@ class InitiateCombatBehavior is Behavior
         enemyList = newEnemyList
     end
 
-    action isFinished returns boolean
+    action IsFinished returns boolean
         return finished
     end
 end
