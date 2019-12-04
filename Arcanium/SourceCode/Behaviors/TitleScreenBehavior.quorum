@@ -11,15 +11,16 @@ class TitleScreenBehavior is Behavior
     boolean finished = false
 
     action Run (BehaviorEvent event)
-        Main main = cast(Main, manager:GetGame())
-        main:BeginGameSequence()
-        main:AddToRemove(main:Arcanium)
-        main:AddToRemove(main:TitleBackground)
-
-        MenuButton button = cast(MenuButton, event:GetItem())
-        button:Dispose()
-        main:AddToRemove(button)
-        finished = true
+        if(finished = false)
+            Main main = cast(Main, manager:GetGame())
+            MenuButton button = cast(MenuButton, event:GetItem())
+            button:Dispose()
+            main:AddToRemove(button)
+            main:AddToRemove(main:Arcanium)
+            main:AddToRemove(main:TitleBackground)
+            main:BeginGameSequence()
+            finished = true
+        end
     end
 
     action IsFinished() returns boolean
