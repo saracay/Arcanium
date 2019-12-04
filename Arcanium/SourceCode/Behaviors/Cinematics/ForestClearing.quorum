@@ -91,6 +91,7 @@ class ForestClearing is Cinematic
         boy:LoadImageSheet(boyImgSheet)
         boy:LoadFrame(boyImgSheet)
         boy:sprite1:SetPosition(-40, 355)
+        boy:sprite1:SetScale(0.7)
         main:Add(boy:sprite1)
 
         //Camera

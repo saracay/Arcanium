@@ -134,14 +134,14 @@
     },
     {
       "spellID": 9020000,
-      "name": "High Tide",
+      "name": "Crashing Wave",
       "baseDamage": 150,
       "appliedStatusCodes": [],
       "curedStatusCodes": [],
       "multiTarget": true,
       "canHeal": false,
       "canDamage": true,
-      "manaCost": 3
+      "manaCost": 2
     },
     {
       "spellID": 9011000,
