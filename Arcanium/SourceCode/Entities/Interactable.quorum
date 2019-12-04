@@ -135,6 +135,11 @@ class Interactable is Drawable, KeyboardListener
                     temp1:DuplicateDisplayLog(temp2)
 
                     main:behaviorQueue:AddBehavior(temp1)
+
+                    if (main:currentCollision not= undefined)
+                        main:currentDialogue = temp1
+                    end
+
                     currentlyInteracting = false
                 elseif currentBehavior is InitiateCombatBehavior
                     BehaviorEvent newEvent

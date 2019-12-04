@@ -439,18 +439,7 @@
          "draworder":"topdown",
          "id":8,
          "name":"Interactables",
-         "objects":[
-                {
-                 "height":645,
-                 "id":49,
-                 "name":"Interactable River",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":128,
-                 "x":468,
-                 "y":-3
-                }, 
+         "objects":[ 
                 {
                  "height":32,
                  "id":56,

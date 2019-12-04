@@ -125,8 +125,8 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
     //For game Sequencer
     MapState mapState
-    // introduction level
-    public number introductionJewelsTouched = 0
+    public CollisionEvent2D currentCollision = undefined
+    public DisplayLogBehavior currentDialogue = undefined
 
     // bedroom level
     //For Transition to Combat
@@ -153,11 +153,11 @@ class Main is Game, CollisionListener2D, KeyboardListener
         CreateBackground()
 		
         // ***These 3 must be commented out for DebugMenuTest() -Maria***
-//        InitializeMap(currentMap, maps:RUINED_TOWN_MAP)
-//        InitializeInteractables(currentMap, maps:RUINED_TOWN_MAP)
+//        InitializeMap(currentMap, maps:FOREST_CLEARING_MAP)
+//        InitializeInteractables(currentMap, maps:FOREST_CLEARING_MAP)
 //        InitializePlayer(player1)
-//        LoadAboveLayer(currentMap, maps:RUINED_TOWN_MAP)
-        
+//        LoadAboveLayer(currentMap, maps:FOREST_CLEARING_MAP)
+//        
 
         //==TEST CALLS==
 //        Array<text> enemies
@@ -200,6 +200,40 @@ class Main is Game, CollisionListener2D, KeyboardListener
         
         // Center player collision box on player sprite
         UpdatePlayerCollision()
+
+        if currentCollision not= undefined // if we are colliding with a required interactable
+            if currentDialogue not= undefined and currentDialogue:IsFinished()
+                output "current behavior is display log behavior"
+                    // introduction map
+                    if currentMap:name = maps:INTRODUCTION_MAP
+                        mapState:UpdateJewelsTouched()
+                    end
+
+                    // forest path 1 map
+                    if currentMap:name = maps:FOREST_PATH_1_MAP
+                        mapState:SetRiverCrossed(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_2_MAP
+                        mapState:SetTreeBurned(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_3_MAP
+                        mapState:SetFirePutOut(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_4_MAP
+                        mapState:SetLogPile1Moved(true)
+                    end
+
+                    if currentMap:name = maps:FOREST_PATH_4_MAP_HALF_COMPLETE
+                        mapState:SetLogPile2Moved(true)
+                    end
+
+                    currentCollision = undefined
+                    currentDialogue = undefined
+                end
+        end
 
         // ScriptedAnimTest(seconds)
         // SpellAnim(seconds, Fireball)
@@ -613,40 +647,21 @@ class Main is Game, CollisionListener2D, KeyboardListener
 
             if entering and not alreadyInteracting
                 newItemB:ToggleInteraction()
+                // checks any incompleted interactables that are required
+                if newItemB:requiredCompleted = false
+                    output "setting the current collision"
+                    newItemB:SetRequiredCompleted(true)
+                    currentCollision = event
+                end
+
             elseif not entering
                 if newItemB:IsInteracting()
                     newItemB:ToggleInteraction()
                 end
 
-                // checks any incompleted interactables that are required
-                if newItemB:requiredCompleted = false
-                    newItemB:SetRequiredCompleted(true)
-
-                    // introduction map
-                    if currentMap:name = maps:INTRODUCTION_MAP
-                        mapState:UpdateJewelsTouched()
-                    end
-
-                    // forest path 1 map
-                    if currentMap:name = maps:FOREST_PATH_1_MAP
-                        mapState:SetRiverCrossed(true)
-                    end
-
-                    if currentMap:name = maps:FOREST_PATH_2_MAP
-                        mapState:SetTreeBurned(true)
-                    end
-
-                    if currentMap:name = maps:FOREST_PATH_3_MAP
-                        mapState:SetFirePutOut(true)
-                    end
-
-                    if currentMap:name = maps:FOREST_PATH_4_MAP
-                        mapState:SetLogPile1Moved(true)
-                    end
-
-                    if currentMap:name = maps:FOREST_PATH_4_MAP_HALF_COMPLETE
-                        mapState:SetLogPile2Moved(true)
-                    end
+                if currentCollision not= undefined
+                    currentCollision = undefined
+                    newItemB:SetRequiredCompleted(false)
                 end
             end
         end

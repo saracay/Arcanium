@@ -8,14 +8,6 @@
                "There seems to be no way to cross the river.",
                "You use Rock Blast to create a path across."
             ]
-        },
-        {
-            "name": "Interactable River",
-            "type": "dialogue",
-            "dialogue": [
-                "Tiny pebbles and fish lay at the bottom of the river.",
-                "It is too deep for you to wade across."
-            ]
         }
     ]
 }
